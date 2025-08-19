@@ -1,0 +1,285 @@
+  #profile-button{
+    display: flex !important;
+    width: 50%;
+    height:40%;
+    position: absolute;
+    margin-left: 60%;
+    margin-top: -9%;
+  }  
+
+ /* Normal CSS media query */
+
+@media (max-width: 768px) {
+  #profile-info img {
+  margin-left: 40px !important;
+  }
+  
+ #profile-card{
+     background-color: #EFEFEF;
+   margin-left: 30px;
+   margin-top: 0px !important;
+
+  }
+
+  
+#profile-card h2{
+    margin-top:-100px !important ;
+margin-left: 35% !important;
+
+  }
+
+  #profile-card p{
+    margin-left: 35% !important;
+  }
+  #detail-date{
+     margin-left: -30px !important;
+  }
+
+ 
+  #detail-gen{
+ /* margin-top: 10px; */
+    margin-left: -20px;
+  }
+  #detail-digital{
+ width:100% !important;
+  height: auto;
+  margin-top: -35px;
+  margin-left: 40%;
+  margin-right: -50px;
+  }
+   
+  #detail-digital span{
+    width:30% !important;
+display: flex !important;
+  }
+
+  #profile-button{
+    display: flex !important;
+    width: 40%;
+    height:40%;
+    margin-left: 70% !important;
+  }
+  #profile-edit{
+     width: 100%;
+    height:30%;
+    margin-left: -40px;
+  }
+
+  #profile-share{
+    margin-top: -50px;
+     width: 100%;
+    height:10% !important;
+    margin-right: -20px;
+  }
+
+  #pernonal-information{
+    width: 100%;
+    height: 25%;
+    font-size: 25px;
+  }
+  #contact{
+    margin-left: -40px;
+  }
+
+  #contact svg{
+width: 60%;
+margin-top: -10px;
+  }
+#contact h3{
+  font-size: 20px;
+}
+
+#bio-page h3{ 
+  font-size: 20px;
+}
+#bio-page svg{
+  width: 60%;
+margin-top: -10px;
+}
+#bio-video h3{
+  font-size: 20px;
+}
+#bio-video svg{
+  width: 60%;
+margin-top: -10px;  
+}
+#gallary h3{
+    font-size: 20px;
+}
+#gallary svg{
+  width: 60%;
+margin-top: -10px;  
+}
+  #contact-no{
+    margin-left: -20px;
+  }
+
+  #contact-site{
+    margin-left: 20px;
+  }
+
+  #contact-address{
+    margin-left: 5px; 
+  }
+  .contact-head #edit-button{
+    font-size: 20px;
+ margin-top: -10px;
+  }
+
+#award-container{
+  width: 100%;
+    background-color: #EFEFEF;
+}
+
+#award-header{
+    font-size: 15px;
+}
+#award{
+    font-size: 18px;
+    margin-left: -10px;
+    margin-top: -20px;
+}
+
+#award-image{
+    margin-left: 20% !important;
+    margin-top: -30px;
+}
+
+#award-certificate{
+  margin-left: 90px !important;
+}
+
+#award-date span{
+    margin-top: -10px;
+    margin-left: -5px;
+}
+
+#award-date svg{
+    margin-top: -15px;
+     margin-left: -95px;
+}
+
+#view-cirtificate svg{
+  width: 5%;
+ margin-top: -16px;
+  margin-left: -160%;
+}
+
+#view-cirtificate span{
+  width: 25%;
+  margin-left: 5px;
+   margin-top: -15px;
+}
+
+#view-cirtificate{
+  margin-left: -100%;
+  gap: 1px;
+}
+#event-heading{
+  font-size: 20px;
+}
+
+#event-img{
+  width: 100%;
+  height: 120%;
+}
+
+.function-button #plus-button{
+  margin-top: -30px;
+}
+.function-button #edit-button{
+  margin-top: -30px;
+}
+/* .work-experience h3{
+  margin-top: -10px;
+  font-size: 15px;
+} */
+
+.work-experience-item{
+  width: 100%;
+  height: 70px;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20%;
+  
+}
+.work-experincemain svg{
+ width: 60%;
+margin-top: -10px;  
+}
+.work-experience h3{
+   font-size: 20px;
+}
+
+#digital-cme h3{
+  font-size: 15.5px;
+}
+
+#digital-cme svg{
+ width: 70%;
+ margin-right: -10px;
+ margin-top: 10px;
+}
+  .work-experience-item img {
+    width: 50px;
+    height: 50px;
+    margin-left: -50px;
+  }
+  #award h3{
+    font-size: 16px;
+  }
+  #award svg{
+     width: 80%;
+margin-right: -10px;
+  }
+  #event-heading h3{
+    font-size: 18px;
+  }
+  #event-heading svg{
+     width: 80%;
+margin-right: -10px;
+  }
+.work-experience-item h4{
+  width: 100%;
+margin-top: -70px;
+font-size: 15px;
+}
+  .work-experience-item p{
+    margin-top: 15px;
+    margin-left: 10px;
+  }
+
+  .work-experience-heading{
+    width: 50% !important;
+    height: 100%;
+    font-size: 18px;
+    margin-top: -80px;
+  }
+.work-experience-heading svg{
+  margin-top: 70px !important;  
+  margin-bottom: -60px;
+}
+#award-item{
+  margin-top: -50px;
+}
+  .case-study h3{
+    font-size: 15.5px;
+  }
+   .case-study svg{
+     width: 70%;
+     margin-right: -10px;
+   
+   }
+
+}
+
+
+@media  (max-width:480px), (min-width:480px) {
+  #profile-button{
+    display: flex !important;
+    width: 50%;
+    height:40%;
+    
+  }  
+  
+}

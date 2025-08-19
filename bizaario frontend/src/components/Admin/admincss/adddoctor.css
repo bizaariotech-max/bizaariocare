@@ -1,0 +1,80 @@
+
+
+
+.adddoctor
+{
+margin-left: 19.5vw;
+margin-top: 10px;
+}
+.cardicons
+{
+    width: 57px;
+height: 57px;
+flex-shrink: 0;
+aspect-ratio: 1/1;
+}
+
+.profile-header h3{
+    padding-left: 16px;
+    margin-top: 20px;
+color: #000;
+font-family: Roboto;
+font-size: 26px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+.profile-header p{
+    padding-left: 16px;
+ color: rgba(0, 0, 0, 0.50);
+font-family: Roboto;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+.rightsection
+{
+    color: '#fff';
+    border-radius: 3.5;
+    box-shadow: 6;
+    width: 550;
+    padding-Top:"30px";
+    display: 'flex';
+    flex-Direction: 'column';
+    justify-Content: 'center',-;
+}
+
+@media (min-width: 1500px) {
+  .doctorform {
+    margin-left: -200px;
+  
+  }
+
+}
+
+
+/* Base styles */
+.custom-data-grid {
+  height: 600px !important; /* Override inline/SX styles */
+  border-radius: 8px !important;
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable !important;
+}
+
+/* Column headers */
+.custom-data-grid .MuiDataGrid-columnHeaders {
+  background-color: #4d7bf3 !important;
+  color: black !important;
+  font-weight: bold !important;
+}
+
+/* Large screen adjustments */
+@media (min-width: 1500px) {
+  .custom-data-grid {
+    height: 800px !important;
+    max-width: 1400px !important;
+    min-width: 700px !important;
+    margin-left: -80px;
+  }
+}
