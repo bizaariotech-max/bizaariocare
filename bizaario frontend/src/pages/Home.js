@@ -1,5 +1,6 @@
 import React from 'react'
 import Hero from '../components/hero/Hero'
+import '../assets/css/home.css'
 
 // import MedicalBoard from '../components/medical-board/MedicalBoard'
 // import New from '../components/NewsAndArticles'

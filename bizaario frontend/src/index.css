@@ -638,12 +638,12 @@ section .common-btn-outline:hover {
 
 @media screen and (min-width:991px) {
   :is(.content-1, .content-2) h2 {
-    font-size: 44px;
+    /* font-size: 44px; */
     font-weight: 500;
   }
 
   .our-team h2 {
-    font-size: 44px;
+    /* font-size: 44px; */
     font-weight: 500;
   }
 
@@ -858,3 +858,9 @@ form.contact-form-fields textarea::placeholder {
   border-radius: 20px; /* Round corners */
   overflow: hidden;
 }
+
+
+
+/* html {
+  overflow-y: scroll;
+} */

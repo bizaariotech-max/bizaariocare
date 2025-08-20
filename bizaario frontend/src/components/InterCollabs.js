@@ -31,7 +31,7 @@ const InterCollabs = () => {
                         Ethiopia
                     </button>
                   </div>
-                <div className="bg-white ">{renderContent()}</div>
+                <div >{renderContent()}</div>
             </div>
         </section>
       </>

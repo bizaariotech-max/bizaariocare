@@ -20,15 +20,11 @@
 }
 
 @media screen and (max-width:767px) {
-
     .content-1,
     .content-2 {
-
         padding: 15px;
         border-radius: 10px;
     }
-
-
 }
 
 .team-card {
@@ -44,20 +40,19 @@
     color: #7b7b7f;
 }
 
-@media screen and (min-width:991px) {
-    :is(.content-1, .content-2) h2 {
-        font-size: 44px;
-        font-weight: 500;
-    }
 
-    .our-team h2 {
-        font-size: 44px;
-        font-weight: 500;
-    }
+:is(.content-1, .content-2) h2 {
+    /* font-size: 44px; */
+    font-weight: 500;
+}
 
-    .news-section .title {
-        font-size: 36px;
-    }
+.our-team h2 {
+    /* font-size: 44px; */
+    font-weight: 500;
+}
+
+.news-section .title {
+    font-size: 36px;
 }
 
 .team-grid {
@@ -69,18 +64,15 @@
 
 @media screen and (max-width:768px) {
     .team-grid {
-
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
-
     }
 }
 
-@media screen and (max-width:420px) {
-    .team-grid {
-
-        grid-template-columns: repeat(1, 1fr);
-        gap: 20px;
-
-    }
+@media screen and (max-width: 420px) {
+  .team-grid {
+    display: grid; /* Required for grid to work */
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+  }
 }

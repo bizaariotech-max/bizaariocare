@@ -1,0 +1,27 @@
+/* Default for large screens */
+header {
+  padding-left: 60%;  /* keep as you had */
+  display: flex;
+  align-items: center;
+}
+
+/* Tablet screens (below 1200px) */
+@media (max-width: 1199px) {
+  .header {
+    margin-left: 30%;   /* reduce margin */
+  }
+  .header input[type="text"] {
+    width: 180px;       /* shrink search bar */
+  }
+}
+
+/* Mobile screens (below 768px) */
+@media (max-width: 768px) {
+  .header {
+    margin-left: 10%;   /* further reduce margin */
+  }
+  .header input[type="text"] {
+    width: 140px;       /* smaller search bar */
+    font-size: 14px;    /* adjust text size */
+  }
+}

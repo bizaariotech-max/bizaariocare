@@ -59,119 +59,83 @@ const ChevronDownIcon = () => (
   return (
     <div>
          {/* Header */}
-              <header className="bg-white shadow-sm px-6 lg:px-9 py-3 flex h-18 flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-0 justify-between">
-                {/* Search Bar */}
-                <div className="flex items-center w-full lg:w-auto">
-                  <div className="flex w-full lg:w-auto" style={{paddingLeft:"60%"}}>
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      className="w-80 max-w-full px-5 py-4 h-14 bg-[#E9EBFF] rounded-l-lg text-sm placeholder:text-black/50 outline-none"
-                    />
-                    <button className="px-5 py-0 h-14 bg-[#F86F03] rounded-r-lg hover:bg-[#e5630a] transition-colors">
-                      <SearchIcon />
-                    </button>
-                  </div>
-                </div>
-      
-                {/* Right Side Controls */}
-                <div className="flex items-center gap-4 lg:gap-8">
-                  {/* Language Selector */}
-                  <div className="flex items-center gap-3 px-3 py-2 border border-[#F86F03] rounded-lg cursor-pointer hover:bg-[#F86F03]/10 transition-colors">
-                    <div className="w-4 h-4 bg-[#525FE1] rounded-sm flex items-center justify-center">
-                      <span className="text-white text-xs">अ</span>
-                    </div>
-                    <span className="text-black/50 text-sm">English</span>
-                    <ChevronDownIcon />
-                  </div>
-      
-                  {/* Notifications */}
-                  <div className="flex items-center gap-4">
-                    <div className="relative cursor-pointer" aria-label="Notifications">
-                      <BellIcon />
-                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#FFA41B] rounded-full flex items-center justify-center">
-                        <span className="text-white text-[10px] font-normal">1</span>
-                      </div>
-                    </div>
-                    <div className="relative cursor-pointer" aria-label="Messages">
-                      <MailIcon />
-                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#FFA41B] rounded-full flex items-center justify-center">
-                        <span className="text-white text-[10px] font-normal">5</span>
-                      </div>
-                    </div>
-                  </div>
-      
-                  {/* Divider */}
-                  <div className="w-px h-12 bg-black/20"></div>
-      
-                  {/* User Profile */}
-                  <div className="flex items-center gap-3 cursor-pointer">
-                    <div
-                      className="w-12 h-12 bg-gray-300 rounded-full bg-cover bg-center"
-                      style={{
-                        backgroundImage: `url(${doctordetails.user.profile_pic})`,
-                      }}
-                       onClick={() => setIsOpen(!isOpen)}
-                      aria-label="User profile picture"
-                    ></div>
-                    <div>
-                      <div className="text-black text-sm">Hello {doctordetails.user.firstName}</div>
-                      <div className="text-black/50 text-sm">Doctor</div>
-                    </div>
-
-                     {/* Dropdown Menu */}
-      {isOpen && (
-       <div
-  ref={dropdownRef}
-  className="absolute right-6 mt-60 w-48 bg-white shadow-xl rounded-xl border border-gray-200 z-50 transform origin-top-right transition-all duration-200 ease-out scale-95 hover:scale-100"
->
-  <ul className="py-2">
-    <li onClick={()=>navigate('/editdoctorprofile')} className="px-0 py-2 flex items-center gap-3 hover:bg-gray-50 cursor-pointer transition-colors duration-150">
-      <svg
-        className="w-5 h-5 text-blue-500"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path d="M5.121 17.804A9.937 9.937 0 0112 15c2.21 0 4.21.721 5.879 1.927M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-      Profile
-    </li>
-
-    <li className="px-0 py-3 flex items-center gap-3 hover:bg-gray-50 cursor-pointer transition-colors duration-150">
-      <svg
-        className="w-5 h-5 text-green-500"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path d="M10.325 4.317a1 1 0 011.35-.936l.123.048 1.56.624a8.018 8.018 0 014.69 7.58 8.018 8.018 0 01-4.69 7.58l-1.56.624a1 1 0 01-1.348-.915V4.31z" />
-      </svg>
-      Settings
-    </li>
-
-    <li className="px-0 py-3 flex items-center gap-3 hover:bg-red-50 cursor-pointer transition-colors duration-150 text-red-600">
-      <svg
-        className="w-5 h-5 text-red-500"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path d="M17 16l4-4m0 0l-4-4m4 4H7" />
-      </svg>
-      Logout
-    </li>
-  </ul>
+         <header className="bg-white shadow-sm px-4 sm:px-6 lg:px-9 py-3 flex flex-col lg:flex-row items-stretch lg:items-center gap-3 sm:gap-4 justify-between relative">
+  {/* Search Bar */}
+ <div className="w-full lg:w-auto flex flex-row items-center order-2 lg:order-1 pl-12 sm:pl-8  lg:pl-80">
+  <input
+    type="text"
+    placeholder="Search..."
+    className="w-52 sm:w-72 md:w-80 px-3 py-2 sm:px-5 sm:py-4 h-10 sm:h-14 bg-[#E9EBFF] rounded-l-lg text-sm placeholder:text-black/50 outline-none"
+  />
+  <button className="px-3 sm:px-5 h-10 sm:h-14 bg-[#F86F03] rounded-r-lg hover:bg-[#e5630a] transition-colors flex items-center justify-center">
+    <SearchIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+  </button>
 </div>
 
-      )}
 
-                  </div>
-                </div>
-              </header>
+  {/* Right Controls */}
+  <div className="flex flex-row flex-wrap items-center gap-3 sm:gap-4 lg:gap-8 order-3 lg:order-2 w-full lg:w-auto justify-between lg:justify-end mt-2 lg:mt-0">
+    {/* Language Selector */}
+    <div className="flex items-center gap-2 px-2 sm:px-3 py-2 border border-[#F86F03] rounded-lg cursor-pointer hover:bg-[#F86F03]/10 transition-colors">
+      <div className="w-4 h-4 bg-[#525FE1] rounded-sm flex items-center justify-center"><span className="text-white text-xs">अ</span></div>
+      <span className="text-black/50 text-xs sm:text-sm">English</span>
+      <ChevronDownIcon />
+    </div>
+    {/* Notifications */}
+    <div className="flex items-center gap-3 sm:gap-4">
+      <div className="relative cursor-pointer" aria-label="Notifications">
+        <BellIcon />
+        <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#FFA41B] rounded-full flex items-center justify-center">
+          <span className="text-white text-[10px] font-normal">1</span>
+        </div>
+      </div>
+      <div className="relative cursor-pointer" aria-label="Messages">
+        <MailIcon />
+        <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#FFA41B] rounded-full flex items-center justify-center">
+          <span className="text-white text-[10px] font-normal">5</span>
+        </div>
+      </div>
+    </div>
+    {/* Divider: only desktop */}
+    <div className="hidden sm:block w-px h-8 sm:h-12 bg-black/20"></div>
+    {/* Profile */}
+    <div className="flex items-center gap-2 sm:gap-3 cursor-pointer relative"
+         onClick={() => setIsOpen(!isOpen)} aria-label="User profile picture">
+      <div
+        className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-300 rounded-full bg-cover bg-center"
+        style={{ backgroundImage: `url(${doctordetails.user.profile_pic})` }}
+      ></div>
+      {/* Hide text on xs screens to avoid overflow */}
+      <div className=" xs:block">
+        <div className="text-black text-xs sm:text-sm truncate max-w-[auto]">{`Hello ${doctordetails.user.firstName}`}</div>
+        <div className="text-black/50 text-xs sm:text-sm truncate max-w-[auto]">Doctor</div>
+      </div>
+      {isOpen && (
+        <div
+          ref={dropdownRef}
+          className="absolute right-0 top-14 sm:right-2 mt-2 w-44 sm:w-48 bg-white shadow-xl rounded-xl border border-gray-200 z-50"
+        >
+          <ul className="py-2">
+            <li onClick={()=>navigate('/editdoctorprofile')}
+                className="px-0 py-2 flex items-center gap-3 hover:bg-gray-50 cursor-pointer transition-colors duration-150">
+              <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5.121 17.804A9.937 9.937 0 0112 15c2.21 0 4.21.721 5.879 1.927M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              Profile
+            </li>
+            <li className="px-0 py-3 flex items-center gap-3 hover:bg-gray-50 cursor-pointer transition-colors duration-150">
+              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M10.325 4.317a1 1 0 011.35-.936l.123.048 1.56.624a8.018 8.018 0 014.69 7.58 8.018 8.018 0 01-4.69 7.58l-1.56.624a1 1 0 01-1.348-.915V4.31z" /></svg>
+              Settings
+            </li>
+            <li className="px-0 py-3 flex items-center gap-3 hover:bg-red-50 cursor-pointer transition-colors duration-150 text-red-600">
+              <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7" /></svg>
+              Logout
+            </li>
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+</header>
+
     </div>
   )
 }

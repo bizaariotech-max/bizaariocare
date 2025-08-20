@@ -10,21 +10,24 @@ const MedicalBoardCard2 = () => {
      const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 3000 },
-            items: 3
+            items: 3,
+            showDots:true
         },
         desktop: {
             breakpoint: { max: 3000, min: 1024 },
             items: 3, 
-             partialVisibilityGutter: 20
+             partialVisibilityGutter: 20,
+             showDots:true
         },
         tablet: {
             breakpoint: { max: 1024, min: 767 },
-            items: 2
+            items: 2,
+            showDots:true
         },
         mobile: {
             breakpoint: { max: 767, min: 0 },
             items: 1,
-            // showDots:true
+            showDots:true
         }
     };
 
@@ -32,7 +35,7 @@ return (
 <>
         <Carousel
             // removeArrowOnDeviceType={["tablet", "mobile"]}
-            showDots={false}
+            showDots={true}
             responsive={responsive}
             // autoPlay={false}
             // autoPlaySpeed={3000}

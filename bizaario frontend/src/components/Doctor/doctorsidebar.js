@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-
+import '../Doctor/stylingcss/sidebar.css'
 function Doctorsidebar() {
 
     const navigate=useNavigate()
@@ -157,7 +157,7 @@ function cn(...classes) {
 }
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
-    <div>
+    <div >
 
          <button
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#525FE1] text-white rounded-lg"
@@ -189,43 +189,48 @@ function cn(...classes) {
             {/* <h3 className="text-white text-base font-semibold mb-4">Dashboard</h3> */}
             <div className="space-y-0">
               {/* Dashboard Active */}
-              <div onClick={()=>navigate('/doctordashboard')} className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
+              <div onClick={()=>navigate('/doctordashboard')} className="flex items-center gap-3 px-3 py-3  rounded-lg   cursor-pointer">
                 <DashboardIcon />
-                <span className="text-[white] text-sm font-semibold hover:text-[blue]">Dashboard</span>
+                <span className="text-[white] text-sm font-semibold ">Dashboard</span>
               </div>
 
-               <div onClick={()=>navigate('/createnewcourse')} className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
+               <div onClick={()=>navigate('/createnewcourse')} className="flex items-center gap-3 px-3 py-3  rounded-lg   cursor-pointer">
                 <CreateCourseIcon />
-                <span className="text-[white] text-sm font-semibold hover:text-[blue]">Create New Course</span>
+                <span className="text-[white] text-sm font-semibold ">Create New Course</span>
               </div>
 
-                <div onClick={()=>navigate('/createdigitalcme')} className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
+                <div onClick={()=>navigate('/createdigitalcme')} className="flex items-center gap-3 px-3 py-3  rounded-lg   cursor-pointer">
                 <CreateDigitalCMEIcon />
-                <span className="text-[white] text-sm font-semibold hover:text-[blue]">Create Digital CME</span>
+                <span className="text-[white] text-sm font-semibold ">Create Digital CME</span>
               </div>
 
-               <div onClick={()=>navigate('/createdigitalcmequestionbank')} className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
+               <div onClick={()=>navigate('/createdigitalcmequestionbank')} className="flex items-center gap-3 px-3 py-3  rounded-lg   cursor-pointer">
                 <CreateCourseIcon />
-                <span className="text-[white] text-sm font-semibold hover:text-[blue]">Create Question Bank</span>
+                <span className="text-[white] text-sm font-semibold ">Create Question Bank</span>
               </div>
 
-                <div onClick={()=>navigate('/createsubadmin')} className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
+                <div onClick={()=>navigate('/createsubadmin')} className="flex items-center gap-3 px-3 py-3  rounded-lg   cursor-pointer">
                 <CreateCourseIcon />
-                <span className="text-[white] text-sm font-semibold hover:text-[blue]">Create Sub-Admin</span>
+                <span className="text-[white] text-sm font-semibold ">Create Sub-Admin</span>
               </div>
 
-               {/* <div className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white cursor-pointer">
+               {/* <div className="flex items-center gap-3 px-3 py-3  rounded-lg  cursor-pointer">
                 <DashboardIcon />
                 <span className="text-[black] text-sm font-semibold">Dashboard</span>
               </div> */}
 
               {/* Referral Services */}
-              <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <ServicesIcon />
-                  <span className="text-white text-sm font-semibold hover:text-[blue]">Referral Services</span>
+                {/* <div className="flex items-center gap-3 px-3 py-3  rounded-lg   cursor-pointer">
+              
+                
+              </div> */}
+              <div className="flex items-center justify-between px-3 py-3 rounded-lg   cursor-pointer"> 
+                    <ServicesIcon />  
+                <div className="flex items-center gap-3"> 
+                  <span className=" text-sm font-semibold Referral-Services-btn">Referral Services</span>
+                  <ChevronDownIcon />
                 </div>
-                <ChevronDownIcon />
+                
               </div>
             </div>
           </div>

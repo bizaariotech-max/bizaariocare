@@ -16,6 +16,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import {  IconButton,  Tooltip } from '@mui/material';
 import { Checkbox, FormGroup } from '@mui/material';
 import api from '../../api'
+import Swal from 'sweetalert2';
+import { State, City } from "country-state-city";
 
 
 
@@ -27,6 +29,28 @@ export function Editdoctorprofile() {
 
 const doctordetails=JSON.parse(localStorage.getItem("user"))
 
+const[user,setuser]=useState({})
+
+const getdoctorby_id=async()=>
+{
+  try {
+    const resp=await api.get(`doctor/getdoctorbyid/${doctordetails.user._id}`)
+    setuser(resp.data.doctor)
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
+useEffect(()=>
+{
+  getdoctorby_id()
+},[])
+
+console.log(user);
+
+
 
 
 // ================================edit doctor start==================================================
@@ -37,9 +61,12 @@ const[doctorprofile,setdoctorprofile] =useState({profile_pic:[],profile_pic_prev
 
   useEffect(()=>
   {
-    setdoctorprofile(doctordetails.user)
+    setdoctorprofile(user)
 
-  },[])
+  },[user])
+
+
+  
 
     const fileInputRef = useRef(null);
 
@@ -113,14 +140,288 @@ const updateprofile=async()=>
 
     if(resp.status===200)
     {
-      alert("done")
+       Swal.fire({
+        icon:"success",
+        title:"Profile Updated",
+        text:"Doctor Profile Updated Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
     }
-    
+    handleClose()
   } catch (error) {
+     Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
     console.log(error);
     
   }
 }
+
+// ===========================edit doctor personal information=======================================
+
+
+const[doctorprofilepersonal,setdoctorprofilepersonal] =useState({phone_number:"",email:"",website: '',
+                                  country: '',address1: '',address2: '',city:"",state :'',
+                                             postal_code:""});
+
+ useEffect(() => {
+  if (user && Object.keys(user).length > 0) {
+    setdoctorprofilepersonal(user);
+  }
+}, [user]);
+
+
+  
+
+
+
+ const [showpersonal, setShowpersonal] = useState(false);
+
+  const handleShowpersonal = () => setShowpersonal(true);
+  const handleClosepersonal = () => setShowpersonal(false);
+
+
+
+  const handleChangepersonal = (e) => {
+  const { name, value, checked, type } = e.target;
+
+  setdoctorprofilepersonal((prev) => {
+    // If dropdown/multiple select returns an array directly
+    if (Array.isArray(value)) {
+      return { ...prev, [name]: value };
+    }
+
+    // If the state field is already an array (checkbox group)
+    if (Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add
+        : prev[name].filter((item) => item !== value); // Remove
+      return { ...prev, [name]: updated };
+    }
+
+     // If this is a checkbox group for an array field
+    if (type === "checkbox" && Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add to array
+        : prev[name].filter((item) => item !== value); // Remove from array
+      return { ...prev, [name]: updated };
+    }
+
+    // If this is a single checkbox (boolean)
+    if (type === "checkbox") {
+      return { ...prev, [name]: checked };
+    }
+
+    // Normal single-value field
+    return { ...prev, [name]: type === "checkbox" ? checked : value };
+  });
+};
+
+ const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  // Load all Indian states on mount
+  useEffect(() => {
+    setStates(State.getStatesOfCountry("IN"));
+  }, []);
+
+  // Load cities when state changes
+  useEffect(() => {
+    if (doctorprofilepersonal.state) {
+      const stateData = states.find((st) => st.name === doctorprofilepersonal.state);
+      if (stateData) {
+        setCities(City.getCitiesOfState("IN", stateData.isoCode));
+      }
+    } else {
+      setCities([]);
+    }
+  }, [doctorprofilepersonal.state, states]);
+
+
+
+
+const updateprofilepresonal=async()=>
+{
+  try {
+    const resp = await api.put(`doctor/updatedoctor/${doctordetails.user._id}`,doctorprofilepersonal);
+
+    if(resp.status===200)
+    {
+       Swal.fire({
+        icon:"success",
+        title:"Profile Updated",
+        text:"Doctor Personal Details Updated Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
+    }
+    handleClosepersonal()
+    
+  } catch (error) {
+     Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
+    console.log(error);
+    
+  }
+}
+
+
+
+//==================================== edit doctor bio============================================
+
+
+
+  const [doctorprofilebio, setdoctorprofilebio] = useState({ bio: "" });
+  const maxChars = 1200;
+
+  const handleChangebio = (e) => {
+    const input = e.target.value;
+    if (input.length <= maxChars) {
+      setdoctorprofilebio({ ...doctorprofilebio, bio: input });
+    }
+  };
+
+
+ useEffect(() => {
+  if (user && Object.keys(user).length > 0) {
+    setdoctorprofilebio(user);
+  }
+}, [user]);
+
+
+ const [showbio, setShowbio] = useState(false);
+
+  const handleShowbio = () => setShowbio(true);
+  const handleClosebio = () => setShowbio(false);
+
+
+const updateprofilebio=async()=>
+{
+  try {
+    const resp = await api.put(`doctor/updatedoctor/${doctordetails.user._id}`,doctorprofilebio);
+
+    if(resp.status===200)
+    {
+       Swal.fire({
+        icon:"success",
+        title:"Profile Updated",
+        text:"Doctor Bio Updated Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
+    }
+    handleClosebio()
+    
+  } catch (error) {
+     Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
+    console.log(error);
+    
+  }
+}
+
+
+//======================================= bio video update===========================================
+
+  const [doctorprofilebiovideo, setdoctorprofilebiovideo] = useState({ bio_video: "" });
+ 
+  
+  const handleChangebiovideo = (e) => {
+    const input = e.target.value;
+ 
+      setdoctorprofilebiovideo({ ...doctorprofilebiovideo, bio_video: input });
+    
+  };
+
+
+ useEffect(() => {
+  if (user && Object.keys(user).length > 0) {
+    setdoctorprofilebiovideo(user);
+  }
+}, [user]);
+
+
+ const [showbiovideo, setShowbiovideo] = useState(false);
+
+  const handleShowbiovideo = () => setShowbiovideo(true);
+  const handleClosebiovideo = () => setShowbiovideo(false);
+
+
+const updateprofilebiovideo=async()=>
+{
+  try {
+    const resp = await api.put(`doctor/updatedoctor/${doctordetails.user._id}`,doctorprofilebiovideo);
+
+    if(resp.status===200)
+    {
+       Swal.fire({
+        icon:"success",
+        title:"Profile Updated",
+        text:"Doctor Bio Video Updated Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
+    }
+    handleClosebiovideo()
+    
+  } catch (error) {
+     Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
+    console.log(error);
+    
+  }
+}
+
+
+
 
 
   return (
@@ -140,7 +441,7 @@ const updateprofile=async()=>
     {/* Profile Info */}
       <div className="flex flex-col sm:flex-row items-start sm:items-start sm:gap-6 text-start sm:text-left" id="profile-info">
       <img
-        src={doctordetails?.user?.profile_pic[0]}
+        src={user?.profile_pic?.[0]}
         alt="Dr. Dominic Stonehart"
         className="h-20 w-20 sm:h-28 sm:w-28 rounded-full object-cover flex-shrink-0"
         />
@@ -148,13 +449,13 @@ const updateprofile=async()=>
         <div className="flex-1 space-y-3 mt-4 sm:mt-0 text-left" id="profile-card">
         <div className=" profil-info space-y-2">
           <h2 className="mt-0 mr-10 ml-1 sm:mt-2 mb-1 sm:mb-3 text-lg sm:text-2xl font-semibold text-black" >
-           Dr. {doctordetails?.user?.firstName} {doctordetails?.user?.lastName}
+           Dr. {user?.firstName} {user?.lastName}
           </h2>
           <p className="text-black/75 text-sm sm:text-base">
-           {doctordetails?.user?.qualification?doctordetails.user.qualification.join(','):"MBBS [Consultant Cardiologist]"}   
+           {user?.qualification?user.qualification.join(','):"MBBS [Consultant Cardiologist]"}   
           </p>
           <p className="text-black/75 text-sm">
-           Specializes in:{doctordetails?.user?.medical_specialty?doctordetails.user.medical_specialty:"Interventional Cardiology, Heart Failure Management, Preventive Cardiology"}  
+           Specializes in:{user?.medical_specialty?user.medical_specialty:"Interventional Cardiology, Heart Failure Management, Preventive Cardiology"}  
           </p>
         </div>
 
@@ -164,7 +465,7 @@ const updateprofile=async()=>
             <img src={image} className="h-5 w-5" fill="currentColor" viewBox="0 0 20 21">
             
             </img>
-          <span>{doctordetails?.user?.dateOfBirth? new Date(doctordetails.user.dateOfBirth).toLocaleDateString()
+          <span>{user?.dateOfBirth? new Date(user.dateOfBirth).toLocaleDateString()
             : "01/01/1990"}
         </span>
 
@@ -175,14 +476,14 @@ const updateprofile=async()=>
             <img src={image1} className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 20 21">
              
             </img>
-            <span>{doctordetails.user.gender}</span>
+            <span>{user.gender}</span>
           </div>
 
           <div id="detail-digital"  className="flex items-start sm:items-center sm:text-base sm:flex  gap-2">
             <img  src={image2} className="h-5 w-5" fill="currentColor" viewBox="0 0 20 21">
             
             </img>
-            <span>{doctordetails?.user?.subscription.join(',')}</span>
+            <span>{user?.subscription?.join(',')}</span>
           </div>
         </div>
       </div>
@@ -201,6 +502,10 @@ const updateprofile=async()=>
   </div>
 </div>
 
+
+{/*================================= personal information ============================================*/}
+
+
           {/* Personal Information */}
           <div id="personal-detail" className="space-y-8">
             <h2 id="pernonal-information" className="text-3xl font-semibold text-black" >Personal Information's</h2>
@@ -209,7 +514,7 @@ const updateprofile=async()=>
             <div id="contact-detail" className="rounded-lg bg-[#EFEFEF] p-8" >
               <div id="contact" className="contact-head flex items-start justify-between mb-6">
                 <h3 className="text-2xl ml-0 font-medium text-black">Contact Details</h3>
-                <button className="p-2">
+                <button className="p-2" onClick={handleShowpersonal}>
                   <svg className=" edit-button h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
                   </svg>
@@ -222,7 +527,7 @@ const updateprofile=async()=>
       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 20 21">
         <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M17.5012 9.66663C17.5012 5.98477 14.5164 3 10.8345 3M11.6677 6.43832C12.8392 6.73978 13.7613 7.66198 14.0628 8.83338M13.3861 12.3756C13.8387 11.772 14.6582 11.5786 15.333 11.916L16.3625 12.4307C17.0347 12.7669 17.3988 13.5113 17.2514 14.2483L16.9357 15.8269C16.7799 16.606 16.0935 17.1789 15.3041 17.0896C9.25149 16.405 4.09619 11.2496 3.41152 5.19708C3.32222 4.40765 3.89518 3.72123 4.67422 3.56543L6.2528 3.24971C6.9898 3.10231 7.73426 3.46641 8.07038 4.13865L8.58508 5.16812C8.9225 5.8429 8.72908 6.66241 8.1255 7.11507C7.73242 7.40988 7.49276 7.88342 7.68271 8.33656C8.33558 9.89405 10.6071 12.1655 12.1646 12.8184C12.6177 13.0084 13.0912 12.7687 13.3861 12.3756Z" />
       </svg>
-      <span className="text-lg text-black/70">+91 5252525252</span>
+      <span className="text-lg text-black/70">{user?.phone_number}</span>
     </div>
 
     <div id="contact-mail" className="flex items-center gap-2  sm:justify-start">
@@ -230,14 +535,14 @@ const updateprofile=async()=>
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.33203 6.33329L8.4987 10.2083C9.38761 10.8749 10.6098 10.8749 11.4987 10.2083L16.6654 6.33325" />
         <path strokeLinecap="round" strokeWidth={2} d="M15.8333 4.66675H4.16667C3.24619 4.66675 2.5 5.41294 2.5 6.33341V14.6667C2.5 15.5872 3.24619 16.3334 4.16667 16.3334H15.8333C16.7538 16.3334 17.5 15.5872 17.5 14.6667V6.33341C17.5 5.41294 16.7538 4.66675 15.8333 4.66675Z" />
       </svg>
-      <span className="text-lg text-black/70">rjvijs42@gmail.com</span>
+      <span className="text-lg text-black/70">{user?.email}</span>
     </div>
 
     <div id="contact-site" className="flex items-center gap-2  sm:justify-start">
       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 20 21">
         <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M17.5 10.5C17.5 14.6422 14.1422 18 10 18M17.5 10.5C17.5 6.35787 14.1422 3 10 3M17.5 10.5C17.5 11.8807 14.1422 13 10 13C5.85787 13 2.5 11.8807 2.5 10.5M17.5 10.5C17.5 9.11925 14.1422 8 10 8C5.85787 8 2.5 9.11925 2.5 10.5M10 18C5.85787 18 2.5 14.6422 2.5 10.5M10 18C8.61925 18 7.5 14.6422 7.5 10.5C7.5 6.35787 8.61925 3 10 3M10 18C11.3807 18 12.5 14.6422 12.5 10.5C12.5 6.35787 11.3807 3 10 3M10 3C5.85787 3 2.5 6.35787 2.5 10.5" />
       </svg>
-      <span className="text-lg text-black/70">www.papayapalette.com</span>
+      <span className="text-lg text-black/70">{user?.website}</span>
     </div>
   </div>
 
@@ -248,60 +553,61 @@ const updateprofile=async()=>
       <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M9.9987 10.5001C10.9192 10.5001 11.6654 9.75391 11.6654 8.83341C11.6654 7.91294 10.9192 7.16675 9.9987 7.16675C9.0782 7.16675 8.33203 7.91294 8.33203 8.83341C8.33203 9.75391 9.0782 10.5001 9.9987 10.5001Z" />
     </svg>
     <span className="text-lg text-black/70">
-      H-Block, Sector-63, Noida, Uttar Pradesh, 201301, India
+      {user?.address1},{user?.address2}, {user?.city}, {user?.state}, {user.postal_code} {user?.country}
     </span>
   </div>
             </div>
 
             </div>
 
+
+{/*=================================== bio section =============================================== */}
+
+
             {/* Bio */}
             <div className="rounded-lg bg-[#EFEFEF] p-8">
               <div id="bio-page" className="flex items-center justify-between mb-4">
                 <h3 className="text-2xl font-medium text-black">Bio</h3>
-                <button className="p-2">
+                <button className="p-2" onClick={handleShowbio}>
                   <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
                   </svg>
                 </button>
               </div>
               <p className="text-lg text-black/70 leading-relaxed">
-                Dr. Stonehart is a qualified and experienced Cardiologist with a strong commitment to patient care and clinical excellence. 
-                With 15+ years of experience, they focus on accurate diagnosis, personalized treatment, and overall well-being of patients. 
-                Known for a patient-first approach, Dr. Stonehart combines evidence-based medicine with cutting-edge technologies to deliver 
-                personalized treatment plans tailored to each patient's unique needs. He/she is also actively involved in continuing medical 
-                education (CME) and has contributed to several clinical case studies and medical publications. Dr. Stonehart has been associated 
-                with leading hospitals and cardiac centers, and is recognized for building lasting relationships with patients through compassionate 
-                communication and comprehensive follow-up care. Passionate about heart health awareness, Dr. Stonehart often participates in 
-                community outreach programs and public health talks.
+               {user?.bio}
               </p>
             </div>
+
+  {/*======================================== bio video ===========================================*/}
+
 
             {/* Bio Video */}
             <div className="rounded-lg bg-[#EFEFEF] p-8">
               <div id="bio-video"  className="flex items-center justify-between mb-6">
                 <h3 className="text-2xl font-medium text-black">Bio Video</h3>
-                <button className="p-2">
+                <button className="p-2" onClick={handleShowbiovideo}>
                   <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
                   </svg>
                 </button>
               </div>
-              <div className="relative">
-                <img
-                  src="https://api.builder.io/api/v1/image/assets/TEMP/b4442216d84ab5e6644599cdf6020a0995d0f56f?width=1744"
-                  alt="Bio Video"
-                  className="w-full max-w-4xl h-96 object-cover rounded-lg"
-                />
-                <button className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-16 w-16 rounded-full bg-white flex items-center justify-center shadow-lg">
-                    <svg className="h-8 w-8 text-primary ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 18L21 12L9 6v12z" />
-                    </svg>
-                  </div>
-                </button>
-              </div>
+           <div className="relative w-full h-screen">
+              <iframe
+              title="bio video"
+                src={doctorprofilebiovideo.bio_video}
+                className="absolute top-0 left-0 w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              ></iframe>
             </div>
+
+            </div>
+
+
+{/* ===============================galarry section ============================================== */}
+
 
             {/* Gallery */}
             <SectionWithImages title="Gallery" />
@@ -635,10 +941,360 @@ const updateprofile=async()=>
           </Button>
         </Modal.Footer> */}
       </Modal>
+
+
+
+
+{/*==================== personal information update modal =========================================*/}
+
+ <Modal show={showpersonal} onHide={handleClosepersonal} centered size="lg"  dialogClassName="custom-modal">
+        <Modal.Body style={{padding:"20px 50px "}}>
+            <button
+      type="button"
+      onClick={handleClosepersonal}
+     style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      border: "2px solid black",
+      borderRadius: "50%",  // fully round
+      background: "transparent",
+      fontSize: "2rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      width: "35px",
+      height: "35px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+
+    >
+      &times; {/* or use a bootstrap icon */}
+    </button>
+          <Modal.Title style={{fontWeight:"bold"}}>Update Personal Details</Modal.Title>
+        
+
+    <div className="row mt-4">
+        <div className="col-md-6 mb-3 position-relative">
+        <label className="form-label fw-bold">Phone Number</label>
+
+        <input name="phone_number" type="text" className="form-control ps-5"
+         defaultValue={doctorprofilepersonal.phone_number} onChange={handleChangepersonal}/>
+
+        <svg
+          className="position-absolute"
+          style={{ left: "25px", top: "75%", transform: "translateY(-50%)", width: "20px", height: "20px", color: "#555" }}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 20 21"
+        >
+          <path
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M17.5012 9.66663C17.5012 5.98477 14.5164 3 10.8345 3M11.6677 6.43832C12.8392 6.73978 13.7613 7.66198 14.0628 8.83338M13.3861 12.3756C13.8387 11.772 14.6582 11.5786 15.333 11.916L16.3625 12.4307C17.0347 12.7669 17.3988 13.5113 17.2514 14.2483L16.9357 15.8269C16.7799 16.606 16.0935 17.1789 15.3041 17.0896C9.25149 16.405 4.09619 11.2496 3.41152 5.19708C3.32222 4.40765 3.89518 3.72123 4.67422 3.56543L6.2528 3.24971C6.9898 3.10231 7.73426 3.46641 8.07038 4.13865L8.58508 5.16812C8.9225 5.8429 8.72908 6.66241 8.1255 7.11507C7.73242 7.40988 7.49276 7.88342 7.68271 8.33656C8.33558 9.89405 10.6071 12.1655 12.1646 12.8184C12.6177 13.0084 13.0912 12.7687 13.3861 12.3756Z"
+          />
+        </svg>
+      </div>
+
+           <div className="col-md-6 mb-3 position-relative">
+        <label className="form-label fw-bold">Email Id</label>
+
+        <input name="email" type="text" className="form-control ps-5"
+         defaultValue={doctorprofilepersonal.email} onChange={handleChangepersonal}/>
+
+        <svg
+          className="position-absolute"
+          style={{ left: "25px", top: "75%", transform: "translateY(-50%)", width: "20px", height: "20px", color: "#555" }}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 20 21"
+        >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.33203 6.33329L8.4987 10.2083C9.38761 10.8749 10.6098 10.8749 11.4987 10.2083L16.6654 6.33325" />
+        <path strokeLinecap="round" strokeWidth={2} d="M15.8333 4.66675H4.16667C3.24619 4.66675 2.5 5.41294 2.5 6.33341V14.6667C2.5 15.5872 3.24619 16.3334 4.16667 16.3334H15.8333C16.7538 16.3334 17.5 15.5872 17.5 14.6667V6.33341C17.5 5.41294 16.7538 4.66675 15.8333 4.66675Z" />
+        </svg>
+      </div>
  
+           <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold">Website</label>
+            <input name="website" type="text" className="form-control ps-5"
+             defaultValue={doctorprofilepersonal.website} onChange={handleChangepersonal}/>
+             <svg
+          className="position-absolute"
+          style={{ left: "25px", top: "75%", transform: "translateY(-50%)", width: "20px", height: "20px", color: "#555" }}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 20 21"
+        >
+              <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M17.5 10.5C17.5 14.6422 14.1422 18 10 18M17.5 10.5C17.5 6.35787 14.1422 3 10 3M17.5 10.5C17.5 11.8807 14.1422 13 10 13C5.85787 13 2.5 11.8807 2.5 10.5M17.5 10.5C17.5 9.11925 14.1422 8 10 8C5.85787 8 2.5 9.11925 2.5 10.5M10 18C5.85787 18 2.5 14.6422 2.5 10.5M10 18C8.61925 18 7.5 14.6422 7.5 10.5C7.5 6.35787 8.61925 3 10 3M10 18C11.3807 18 12.5 14.6422 12.5 10.5C12.5 6.35787 11.3807 3 10 3M10 3C5.85787 3 2.5 6.35787 2.5 10.5" />
+          </svg>
+          </div>
+         <div className="col-md-6 mb-3">
+  <label className="form-label fw-bold">Select Country</label>
+  <select
+    name="country"
+    className="form-control"
+    defaultValue={doctorprofilepersonal.country}
+    onChange={handleChangepersonal}
+  >
+    <option value="">-- Select Country --</option>
+    <option value="India">India</option>
+    <option value="United States">United States</option>
+    <option value="United Kingdom">United Kingdom</option>
+    <option value="Canada">Canada</option>
+    <option value="Australia">Australia</option>
+    <option value="Germany">Germany</option>
+    <option value="France">France</option>
+    <option value="Japan">Japan</option>
+    <option value="China">China</option>
+    <option value="Brazil">Brazil</option>
+    <option value="South Africa">South Africa</option>
+    {/* add more countries as needed */}
+  </select>
+</div>
+
+        <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Address 1</label>
+            <input name="address1" type="text" className="form-control" 
+             defaultValue={doctorprofilepersonal.address1} onChange={handleChangepersonal}/>
+          </div>
+           <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Address 2</label>
+            <input name="address2" type="text" className="form-control" 
+             defaultValue={doctorprofilepersonal.address2} onChange={handleChangepersonal}/>
+          </div>
+
+          
+         <div className="col-md-6 mb-3">
+        <label className="form-label fw-bold">State</label>
+        <select
+          name="state"
+          className="form-control"
+          value={doctorprofilepersonal.state}
+          onChange={handleChangepersonal}
+        >
+          <option value="">{doctorprofilepersonal.state}</option>
+          <option value="">-- Select State --</option>
+          {states.map((state) => (
+            <option key={state.isoCode} value={state.name}>
+              {state.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* City Dropdown */}
+      <div className="col-md-6 mb-3">
+        <label className="form-label fw-bold">City</label>
+        <select
+          name="city"
+          className="form-control"
+          value={doctorprofilepersonal.city}
+          onChange={handleChangepersonal}
+          disabled={!doctorprofilepersonal.state}
+        >
+              <option value="">{doctorprofilepersonal.city}</option>
+          <option value="">-- Select City --</option>
+          {cities.map((city) => (
+            <option key={city.name} value={city.name}>
+              {city.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+         
+          
+            <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Postal Code</label>
+            <input name="postal_code" type="text" className="form-control" 
+             defaultValue={doctorprofilepersonal.postal_code} onChange={handleChangepersonal}/>
+          </div>
+
+
+
+        <div className="text-center mt-3">
+  <button 
+    onClick={updateprofilepresonal} 
+    className="btn btn-sm" 
+    style={{ backgroundColor: "#F86F03", color: "white", borderRadius: "5px", width: "80px",padding:"8px" }}
+  >
+    Update
+  </button>
+</div>
+
+          </div>
+    
+  
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+ 
+
+{/*========================= bio update modal ==================================================*/}
+
+<Modal show={showbio} onHide={handleClosebio} centered size="lg"  dialogClassName="custom-modal">
+        <Modal.Body style={{padding:"20px 50px "}}>
+            <button
+      type="button"
+      onClick={handleClosebio}
+     style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      border: "2px solid black",
+      borderRadius: "50%",  // fully round
+      background: "transparent",
+      fontSize: "2rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      width: "35px",
+      height: "35px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+
+    >
+      &times; {/* or use a bootstrap icon */}
+    </button>
+      <Modal.Title style={{fontWeight:"bold"}}>Update Bio</Modal.Title>
+          <div className="row mt-3">
+  <div className="col-md-12 mb-3 position-relative">
+    <label className="form-label fw-bold">Bio</label>
+    <textarea
+      name="bio"
+      className="form-control"
+      rows="8"
+      value={doctorprofilebio.bio || ""}  // ✅ fallback to empty string
+      onChange={handleChangebio}
+    />
+
+   <p style={{ textAlign: "right",fontWeight:"bold",color:doctorprofilebio?.bio?.length>1100 ? "red":"black" }}>
+        {doctorprofilebio?.bio?.length}/{maxChars}
+      </p>
+  </div>
+
+
+  
+    <div className="text-center mt-3">
+  <button 
+    onClick={updateprofilebio} 
+    className="btn btn-sm" 
+    style={{ backgroundColor: "#F86F03", color: "white", borderRadius: "5px", width: "80px",padding:"8px" }}
+  >
+    Update
+  </button>
+</div>
+
+          </div>
+    
+  
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+
+
+
+{/*========================= bio video modal=================================================== */}
+
+<Modal show={showbiovideo} onHide={handleClosebiovideo} centered size="lg"  dialogClassName="custom-modal">
+        <Modal.Body style={{padding:"20px 50px "}}>
+            <button
+      type="button"
+      onClick={handleClosebiovideo}
+     style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      border: "2px solid black",
+      borderRadius: "50%",  // fully round
+      background: "transparent",
+      fontSize: "2rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      width: "35px",
+      height: "35px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+
+    >
+      &times; {/* or use a bootstrap icon */}
+    </button>
+      <Modal.Title style={{fontWeight:"bold"}}>Update Bio Video</Modal.Title>
+      <div className="row mt-3">
+      <div className="col-md-12 mb-3 position-relative">
+            <label className="form-label fw-bold">Bio Video Link</label>
+            <input name="website" type="text" className="form-control"
+             defaultValue={doctorprofilebiovideo.bio_video} onChange={handleChangebiovideo}/>
+            
+          </div>
+
+
+  
+    <div className="text-center mt-3">
+  <button 
+    onClick={updateprofilebiovideo} 
+    className="btn btn-sm" 
+    style={{ backgroundColor: "#F86F03", color: "white", borderRadius: "5px", width: "80px",padding:"8px" }}
+  >
+    Update
+  </button>
+</div>
+
+          </div>
+    
+  
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

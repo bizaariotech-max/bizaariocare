@@ -118,10 +118,7 @@
   color: #5867dd;
 }
 
-div#navbarNav ul {
-  animation: growDown 400ms ease-in-out forwards;
-  transform-origin: top center;
-}
+
 
 #navbarNav ul li:hover a {
 
@@ -131,6 +128,19 @@ div#navbarNav ul {
 
 #navbarNav ul li:hover {
   text-decoration: none;
+}
+@media (max-width: 1200px) {
+  div#navbarNav ul {
+  animation: growDown 400ms ease-in-out forwards;
+  transform-origin: top center;
+}
+    div#navbarNav ul li {
+        padding: 5px 12px;
+        border-bottom: 1px solid #e3e3e3;
+    }
+        div#navbarNav ul {
+        padding-bottom: 25px;
+    }
 }
 
 @keyframes growDown {
@@ -191,4 +201,8 @@ div#navbarNav ul {
   visibility: visible;
 }
 
-
+#mainNavbar{
+  position: sticky;
+  top: 0;
+z-index: 9999;
+}

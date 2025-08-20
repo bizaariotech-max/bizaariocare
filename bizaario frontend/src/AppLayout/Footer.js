@@ -5,6 +5,9 @@ import {
   FaTelegramPlane,
   FaInstagram,
   FaBitcoin,
+  FaLinkedinIn,
+   FaTwitter, 
+   FaYoutube 
 } from "react-icons/fa";
 import { MdOutlinePhoneInTalk } from "react-icons/md";
 import { MdOutlineMailOutline } from "react-icons/md";
@@ -14,10 +17,11 @@ import { FaFigma } from "react-icons/fa";
 import "../assets/css/footer.css";
 // import "../assets/css/header.css";
 import footerLogo from '../assets/images/footer-logo.png'
-import socialIcon1 from '../assets/images/icons/social-icons/social.svg'
-import socialIcon2 from '../assets/images/icons/social-icons/social-1.svg'
-import socialIcon3 from '../assets/images/icons/social-icons/social-2.svg'
-import socialIcon4 from '../assets/images/icons/social-icons/social-3.svg'
+// import socialIcon1 from '../assets/images/icons/social-icons/social.svg'
+// import socialIcon2 from '../assets/images/icons/social-icons/social-1.svg'
+// import socialIcon3 from '../assets/images/icons/social-icons/social-2.svg'
+// import socialIcon4 from '../assets/images/icons/social-icons/social-3.svg'
+
 import { NavLink } from 'react-router'
 
 
@@ -41,17 +45,17 @@ const Footer = () => {
               producing quality work.
             </p>
             <h6 className="fw-bold">Follow us</h6>
-            <div className="d-flex gap-3 mt-2">
-              {/* <FaFacebookF className="social-icon" />
-              <FaTelegramPlane className="social-icon" />
-              <FaInstagram className="social-icon" />
-             <FaFigma className="social-icon"/> */}
-             
-                  <NavLink to="/"><img src={socialIcon1} alt="" /></NavLink>
-                  <NavLink to="/"><img src={socialIcon2} alt="" /></NavLink>
-                  <NavLink to="/"><img src={socialIcon3} alt="" /></NavLink>
-                  <NavLink to="/"><img src={socialIcon4} alt="" /></NavLink>
-             
+            <div className="d-flex gap-3 mt-2"> 
+                <a href="#">
+                    <FaFacebookF size={18} color="#000000" /></a>
+                <a href="#">
+                    <FaInstagram size={18} color="#000000" /></a>
+                <a href="#">
+                    <FaLinkedinIn size={18} color="#000000" /></a>
+                <a href="#">
+                    <FaTwitter size={18} color="#000000" /></a>
+                <a href="#">
+                    <FaYoutube size={18} color="#000000" /></a> 
             </div>
           </div>
  

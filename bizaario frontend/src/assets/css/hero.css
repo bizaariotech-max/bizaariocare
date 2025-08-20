@@ -12,7 +12,7 @@
 
 }
 
-/* *********owl-slider********* */
+/* ********owl-slider******** */
 :is(#hero-slider, #testmonital-card-owl) .owl-dots .owl-dot.active span,
 .owl-theme .owl-dots .owl-dot:hover span {
   background: var(--secondary)
@@ -56,6 +56,27 @@ button.owl-next {
   background-position: top;
 }
 
+
+
+.hero-btns {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.rounded-buttons {
+  display: flex;
+  gap: 40px;
+
+}
+
+
+
+@media screen and (max-width: 768px) {
+.banner-bg {
+  height: 55vh;
+}
+}
 @media screen and (min-width:1024px) {
   .banner-bg {
     height: 90vh;
@@ -141,36 +162,17 @@ button.owl-next {
   max-width: 100%;
 }
 
-.hero-btns {
-  display: flex;
-  gap: 40px;
-  margin-bottom: 50px;
-}
-
-.rounded-buttons {
-  display: flex;
-  gap: 40px;
-
-}
-
-
-
-
 @media screen and (max-width:768px) {
   .pill-button {
     padding: 15px 16px;
     max-width: 170px;
   }
 
-  /* .hero-text {
-    padding-bottom: 20px;
-  } */
-
   .hero-btns,
   .rounded-buttons {
     /* display: flex; */
     gap: 20px;
-    padding-bottom: 30px;
+    margin-bottom: 30px;
   }
 }
 
@@ -187,10 +189,6 @@ button.owl-next {
     font-size: 32px;
   }
 }
-
-
-
-
 
 @media screen and (max-width: 991px) {
   .banner-bg {
@@ -225,14 +223,6 @@ button.owl-next {
   }
 }
 
-/* .hero-swiper  .swiper-pagination {
-  bottom: -50px;
-}
-.hero-swiper .swiper{
-  overflow: auto;
-} */
-
-
 .nav-btn-style2:hover {
   border-color: var(--secondary);
   color: var(--secondary);
@@ -259,7 +249,6 @@ button.owl-next {
 }
 
 .hero-slick-slider .slick-dots li.slick-active button:before {
-  /* background-color: #f86f03; */
   color: #F86F03;
   ;
   font-size: 14px;
@@ -275,21 +264,41 @@ button.owl-next {
   bottom: -35px;
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1024px) {
 
-  .main-banner .hero-slick-slider .hero-btns .nav-btn-style2,
+  /* .main-banner .hero-slick-slider .hero-btns .nav-btn-style2,
   .main-banner .hero-slick-slider .hero-btns .nav-btn-style {
     padding: 7px 24px;
     font-size: 24px;
     border: 2px solid var(--secondary)
-  }
+  } */
+   .hero-btns2 .nav-btn-style2 ,.hero-btns2  .nav-btn-style {
+    padding: 7px 24px;
+    font-size: 24px;
+    border: 2px solid var(--secondary)
+  } 
+
+
+.nav-btn-style,  .main-banner .nav-btn-style2 {
+      /* padding: 7px 24px;
+      font-size: 24px;
+      border: 2px solid var(--secondary) */
+}
 }
 
 
 
-@media screen and (min-width: 991px) {
+
+@media screen and (max-width: 768px) {
+    .hero-btns2, .rounded-buttons {
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+}
+
+
+/* @media screen and (min-width: 991px) {
   .hero-slick-slider .pill-button {
-    padding: 13px 76px; /* ✅ normal space */
-  }
-}
-
+    padding: 13px 76px;
+  }
+} */

@@ -46,7 +46,7 @@ return (
                 </div>
 
                 <div className="row">
-                      <div className="bg-white ">{renderContent()}</div>
+                      <div >{renderContent()}</div>
                 </div>
                 
             {/* <div className="row">

@@ -62,7 +62,7 @@ const add_doctor = async (req, res) => {
  const updatedoctor = async (req, res) => {
   try {
     const id = req.params._id;
-
+ 
     // Find existing doctor data
     const existingDoctor = await adddoctormodal.findById(id);
 
@@ -80,7 +80,7 @@ const add_doctor = async (req, res) => {
 
     const updatedata = { ...req.body, profile_pic: profileimage };
 
-    const resp = await adddoctormodal.findByIdAndUpdate(id, updatedata, { new: true });
+    const resp = await adddoctormodal.findByIdAndUpdate(id, updatedata, { new: true,upsert: true });
 
     res.status(200).json(resp);
   } catch (error) {
@@ -176,5 +176,19 @@ const viewdoctor=async(req,res)=>
   }
 }
 
+const viewdoctorby_id=async(req,res)=>
+{
+  try {
+    const id=req.params._id
+ 
+    const resp=await adddoctormodal.findById({_id:id})
+    res.status(200).send({message:"data fetch",doctor:resp})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
 
-  module.exports={add_doctor,logindoctor,changePassword,viewdoctor,updatedoctor}
+
+  module.exports={add_doctor,logindoctor,changePassword,viewdoctor,updatedoctor,viewdoctorby_id}

@@ -8,13 +8,11 @@ function cn(...classes) {
 }
 
 // SVG Icon components
-
 const ChevronDownIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
-
 const PlayIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <polygon points="5,3 19,12 5,21" fill="currentColor"/>
@@ -32,18 +30,11 @@ const UploadIcon = () => (
 
 
 export default function Doctordashboard() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-
-
-
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
   return (
     <div className="min-h-screen bg-[#F6F7FF] font-sans">
   <Doctorsidebar/>
-    <Doctorheader/>
-
-     
-
+    <Doctorheader/> 
       {/* Main Content */}
       <div className={cn("transition-all duration-300", "lg:ml-64")}>
      
@@ -102,32 +93,35 @@ function KnowledgeBankSection() {
       <div className="mb-8 lg:mb-16">
         <h2 className="text-lg lg:text-xl font-medium mb-8 lg:mb-12">Knowledge Bank Data Filter</h2>
 
-      <div className="flex flex-row items-center gap-2 sm:gap-3 mb-8 flex-nowrap ">
-  <div className="flex flex-row gap-2 sm:gap-2 flex-1 min-w-0 flex-shrink-0">
-    <FilterDropdown text="Select Medical Specialty" className="text-xs sm:text-sm" />
-    <FilterDropdown text="Select Archive" className="text-xs sm:text-sm" />
-    <FilterDropdown text="Select Doctor" className="text-xs sm:text-sm" />
-  </div>
-
-  <div className="flex flex-row items-center gap-2 sm:gap-4 flex-shrink-0">
-    <div className="flex items-center gap-3 sm:gap-6">
-      <div className="flex items-center gap-1 sm:gap-2">
-        <div className="w-4 h-4 sm:w-6 sm:h-6 border-2 border-white rounded-sm"></div>
-        <span className="text-xs sm:text-sm">Digital CMEs</span>
+<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
+      {/* Dropdowns: Stack on small, row on larger */}
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 flex-1 min-w-0 ">
+        <FilterDropdown text="Select Medical Specialty" className="text-xs sm:text-sm w-full sm:w-auto" />
+        <FilterDropdown2 text="Select Doctor" className="text-xs sm:text-sm w-full sm:w-auto" />
+        <FilterDropdown3 text="Select Archive" className="text-xs sm:text-sm w-full sm:w-auto" />
       </div>
-      <div className="flex items-center gap-1 sm:gap-2">
-        <div className="w-4 h-4 sm:w-6 sm:h-6 border-2 border-white rounded-sm"></div>
-        <span className="text-xs sm:text-sm">Unique Case Studies</span>
+
+      {/* Right Controls: checkboxes + button */}
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 lg:ml-auto">
+        {/* Checkboxes */}
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white rounded-sm"></div>
+            <span className="text-xs sm:text-sm">Digital CMEs</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white rounded-sm"></div>
+            <span className="text-xs sm:text-sm">Unique Case Studies</span>
+          </label>
+        </div>
+
+        {/* Publish Button */}
+        <button className="flex items-center justify-center gap-2 bg-[#F86F03] px-3 py-2 sm:px-4 sm:py-3 rounded-lg hover:bg-[#e5630a] transition-colors text-xs sm:text-sm font-normal w-full sm:w-auto">
+          <UploadIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span>Publish New Content</span>
+        </button>
       </div>
-    </div>
-
-    <button className="flex items-center gap-1 sm:gap-2 bg-[#F86F03] px-2 py-2 sm:px-4 sm:py-3 rounded-lg hover:bg-[#e5630a] transition-colors">
-      <UploadIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-      <span className="text-xs sm:text-sm font-normal">Publish New Content</span>
-    </button>
-  </div>
-</div>
-
+    </div> 
       </div>
 
       <div
@@ -152,8 +146,39 @@ function KnowledgeBankSection() {
 function FilterDropdown({ text }) {
   return (
     <div className="flex items-center gap-3 bg-white rounded-lg px-4 lg:px-6 py-3 text-black/50 text-sm cursor-pointer hover:shadow-md transition-shadow min-w-0">
-      <span className="flex-1 truncate">{text}</span>
-      <ChevronDownIcon />
+      {/* <span className="flex-1 truncate">{text}</span> 
+      <ChevronDownIcon /> */}
+
+        <select name="myOptions" id="mySelect">
+          <option value="option1">{text}</option>
+          <option value="option2"> Medical Specialty 1</option>
+          <option value="option3">Medical Specialty 2</option>
+          <option value="option4">Medical Specialty 3</option>
+        </select>
+    </div>
+  );
+}
+function FilterDropdown2({ text }) {
+  return (
+    <div className="flex items-center gap-3 bg-white rounded-lg px-4 lg:px-6 py-3 text-black/50 text-sm cursor-pointer hover:shadow-md transition-shadow min-w-0">
+        <select name="myOptions" id="mySelect">
+          <option value="option1">{text}</option>
+          <option value="option2">Doctor 1</option>
+          <option value="option3">Doctor 2 </option>
+          <option value="option4">Doctor 3 </option>
+        </select>
+    </div>
+  );
+}
+function FilterDropdown3({ text }) {
+  return (
+    <div className="flex items-center gap-3 bg-white rounded-lg px-4 lg:px-6 py-3 text-black/50 text-sm cursor-pointer hover:shadow-md transition-shadow min-w-0">
+        <select name="myOptions" id="mySelect">
+          <option value="option1">{text}</option>
+          <option value="option2">Archive 1</option>
+          <option value="option3">Archive 2</option>
+          <option value="option4">Archive 3</option>
+        </select>
     </div>
   );
 }
@@ -276,7 +301,7 @@ function StatCard({ title, value, change, color, chart }) {
                 stroke={color}
                 strokeWidth="7"
                 fill="none"
-                strokeDasharray={`${2 * Math.PI * 30 * 0.3} ${2 * Math.PI * 30}`}
+                // strokeDasharray={${2 * Math.PI * 30 * 0.3} ${2 * Math.PI * 30}}
                 strokeLinecap="round"
               />
             </svg>
@@ -555,6 +580,6 @@ function LiveSessionsSection() {
           <button className="bg-[#F86F03] text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-[#e5630a] transition-colors">Join Now</button>
         </div>
       </div>
-    </div>
-  );
+    </div>
+  );
 }

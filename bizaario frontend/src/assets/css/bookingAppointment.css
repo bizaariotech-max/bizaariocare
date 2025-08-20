@@ -35,8 +35,8 @@ td.rdp-day.rdp-selected {
     align-items: center;
 }
 
-.rdp-selected .rdp-day_button {
-    border: 0;
+.booking-appointment-container .rdp-selected .rdp-day_button {
+    border: 0 !important;
 }
 
 .rdp-root {
@@ -150,6 +150,53 @@ button.btn-close {
     z-index: 998;
 }
 
-.booking-appointment-container .rdp-selected .rdp-day_button {
-    border: 0 !important;
+.booking-appointment-container .rdp-month_grid {
+    border-collapse: separate !important;
+    border-spacing: 8px !important;
+}
+
+
+
+.booking-appointment-container td.rdp-day.rdp-disabled {
+    background-color: #e6e6e6 !important;
+}
+
+.booking-appointment-container .calander-card {
+    /* border-color: #EFEFEF; */
+    border: 1px solid #EFEFEF;
+    border-radius: 20px;
+    padding: 10px 6px;
+}
+
+@media screen and (max-width: 768px) {
+    button.rdp-button_previous {
+        left: 12px;
+    }
+
+    button.rdp-button_next {
+        right: 12px;
+    }
+
+    .booking-appointment-container .calander-card {
+        border: 0;
+    }
+
+    td.rdp-day button {
+        font-size: 13px;
+        padding: 0;
+    }
+
+    .booking-appointment-container .rdp-month_grid {
+        border-spacing: 5px !important;
+    }
+
+    /* .booking-appointment-container .rdp-month_grid td.rdp-day button.rdp-day_button {
+        height: 18px !important;
+        width: 28px !important;
+    } */
+
+        .booking-appointment-container .calander-card {
+        border: transparent;
+        }
+
 }
