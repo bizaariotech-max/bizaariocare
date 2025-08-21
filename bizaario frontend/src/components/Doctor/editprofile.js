@@ -3,7 +3,7 @@ import image from "../../assets1/Vector (2).png"
 import image1 from "../../assets1/gender-female-svgrepo-com 1.png"
 import image2 from "../../assets1/subscriptions-svgrepo-com 1.png"
 import image3 from "../../assets1/schedule-icon 1.png"
-// import "../Doctor/stylingcss/editprofile.css"
+import "../Doctor/stylingcss/editprofile.css"
 import Doctorheader from "./doctorheader";
 import Doctorsidebar from "./doctorsidebar";
 import { Modal, Button, Form } from "react-bootstrap";
@@ -421,6 +421,93 @@ const updateprofilebiovideo=async()=>
 }
 
 
+//======================================= add image update===========================================
+
+  const [doctorprofileaddgallary, setdoctorprofileaddgallary] = useState({ image_gallary: [],image_gallary_preview:[]});
+ 
+  
+   const handleaddimagegallary = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (files.length > 0) {
+        const previewUrls = files.map((file) => URL.createObjectURL(file));
+
+        setdoctorprofileaddgallary((prev) => ({
+        ...prev,
+        image_gallary: [...(prev.image_gallary || []), ...files],
+        image_gallary_preview: [...(prev.image_gallary_preview || []), ...previewUrls],
+        }));
+    }
+    };
+
+
+ useEffect(() => {
+  if (user && Object.keys(user).length > 0) {
+    setdoctorprofileaddgallary(user);
+  }
+}, [user]);
+
+
+
+
+ const [showimagegalarry, setShowimagegallary] = useState(false);
+
+  const handleShowimagegalarry = () => setShowimagegallary(true);
+  const handleCloseimagegalarry = () => setShowimagegallary(false);
+
+
+const addimagegallary=async()=>
+{
+  try {
+    const resp = await api.put(`doctor/addimagegallary/${doctordetails.user._id}`,doctorprofileaddgallary,
+      {headers: {
+                "Content-Type": "multipart/form-data",
+              }
+            }
+    );
+
+    if(resp.status===200)
+    {
+       Swal.fire({
+        icon:"success",
+        title:"Profile Updated",
+        text:"Doctor Bio Video Updated Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
+    }
+    handleClosebiovideo()
+    
+  } catch (error) {
+     Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
+    console.log(error);
+    
+  }
+}
+
+
+//================================ update image gallary===========================================
+
+
+ const [showimagegalarryupdate, setShowimagegallaryupdate] = useState(false);
+
+  const handleShowimagegalarryupdate = () => setShowimagegallaryupdate(true);
+  const handleCloseimagegalarryupdate = () => setShowimagegallaryupdate(false);
+
+
 
 
 
@@ -610,7 +697,46 @@ const updateprofilebiovideo=async()=>
 
 
             {/* Gallery */}
-            <SectionWithImages title="Gallery" />
+            {/* <SectionWithImages title="Gallery" /> */}
+
+ <div className="rounded-lg bg-[#EFEFEF] p-8">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-2xl font-medium text-black">Gallery</h3>
+        <div id="gallary" className="flex items-center gap-4">
+          <button className="p-2" onClick={handleShowimagegalarry}>
+            <svg id="plus-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M8 16H16M16 16H24M16 16V24M16 16V8" />
+            </svg>
+          </button>
+          <button className="p-2" onClick={handleShowimagegalarryupdate}>
+            <svg id="edit-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+  <div className="gallery-image grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mb-6">
+  {user?.image_gallary?.length > 0 ? (
+    user.image_gallary.map((imgUrl, index) => (
+      <div key={index} className="aspect-[4/3] rounded-lg overflow-hidden">
+        <img
+          src={imgUrl}
+          alt={`Gallery ${index + 1}`}
+          className="w-full h-full object-cover"
+        />
+      </div>
+    ))
+  ) : (
+    <p className="col-span-full text-center text-gray-500">
+      No images available
+    </p>
+  )}
+</div>
+
+    </div>
+
+
+
 
             {/* Work Experience */}
     <div  className=" bg-[#EFEFEF] rounded-lg p-6">
@@ -1276,6 +1402,161 @@ const updateprofilebiovideo=async()=>
         </Modal.Footer> */}
       </Modal>
 
+
+{/*================================= upload image modal =========================================*/}
+
+<Modal show={showimagegalarry} onHide={handleCloseimagegalarry} centered size="lg"  dialogClassName="custom-modal">
+        <Modal.Body style={{padding:"20px 50px "}}>
+            <button
+      type="button"
+      onClick={handleCloseimagegalarry}
+     style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      border: "2px solid black",
+      borderRadius: "50%",  // fully round
+      background: "transparent",
+      fontSize: "2rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      width: "35px",
+      height: "35px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+
+    >
+      &times; {/* or use a bootstrap icon */}
+    </button>
+      <Modal.Title style={{fontWeight:"bold"}}>Update More</Modal.Title>
+      <div className="row mt-3">
+     <div class="upload-drop-zone">
+    <div class="upload-drop-icon">&#8682;</div>
+    <div class="upload-instructions">
+      <strong>Drag or Drop Your Photo &amp; Video</strong>
+      <div class="upload-or">Or</div>
+      <label class="upload-browse">
+        <input multiple type="file" hidden onChange={handleaddimagegallary} />
+        <span>Browse the File</span>
+      </label>
+      <div class="upload-info">
+        Upload in PDF, JPEG, PNG, .jpg, .gif format<br/>
+        (Not more than 20MB)
+      </div>
+    </div>
+  </div>
+
+
+  
+    <div className="text-center mt-3">
+  <button 
+    onClick={addimagegallary} 
+    className="btn btn-sm" 
+    style={{ backgroundColor: "#F86F03", color: "white", borderRadius: "5px", width: "80px",padding:"8px" }}
+  >
+    Add
+  </button>
+</div>
+
+          </div>
+    
+  
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+
+
+{/*======================= update image gallary =================================================*/}
+
+<Modal show={showimagegalarryupdate} onHide={handleCloseimagegalarryupdate} centered size="lg"  dialogClassName="custom-modal">
+        <Modal.Body style={{padding:"20px 50px "}}>
+            <button
+      type="button"
+      onClick={handleCloseimagegalarryupdate}
+     style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      border: "2px solid black",
+      borderRadius: "50%",  // fully round
+      background: "transparent",
+      fontSize: "2rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      width: "35px",
+      height: "35px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+
+    >
+      &times; {/* or use a bootstrap icon */}
+    </button>
+      <Modal.Title style={{fontWeight:"bold"}}>Update Gallery</Modal.Title>
+      <div className="row mt-3">
+   
+
+    <div className="text-center mt-3">
+
+<div className="gallery-image grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mb-6">
+  {user?.image_gallary?.length > 0 ? (
+    user.image_gallary.map((imgUrl, index) => (
+      <div
+        key={index}
+        className="relative aspect-[4/3] rounded-lg overflow-hidden group"
+      >
+        {/* Delete button */}
+        <button
+          // onClick={() => handleDelete(imgUrl)}
+          className="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-lg font-bold w-6 h-6 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition"
+        >
+          ×
+        </button>
+
+        {/* Image */}
+        <img
+          src={imgUrl}
+          alt={`Gallery ${index + 1}`}
+          className="w-full h-full object-cover"
+        />
+      </div>
+    ))
+  ) : (
+    <p className="col-span-full text-center text-gray-500">
+      No images available
+    </p>
+  )}
+</div>
+
+
+  </div>
+
+          </div>
+    
+  
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+
     </>
   );
 }
@@ -1361,7 +1642,7 @@ function SectionWithImages({ title }) {
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-2xl font-medium text-black">{title}</h3>
         <div id="gallary" className="flex items-center gap-4">
-          <button className="p-2">
+          <button className="p-2" >
             <svg id="plus-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M8 16H16M16 16H24M16 16V24M16 16V8" />
             </svg>

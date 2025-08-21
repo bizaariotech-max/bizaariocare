@@ -68,6 +68,8 @@ const add_doctor = async (req, res) => {
 
     let profileimage = existingDoctor.profile_pic; // default to existing images
 
+ 
+    
     if (req.files && req.files.length > 0) {
       profileimage = []; // reset only if new files are uploaded
       for (let file of req.files) {
@@ -85,6 +87,50 @@ const add_doctor = async (req, res) => {
     res.status(200).json(resp);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+
+const addimagegallary = async (req, res) => {
+  try {
+    const id = req.params._id;
+
+    // Find existing doctor data
+    const existingDoctor = await adddoctormodal.findById(id);
+
+    if (!existingDoctor) {
+      return res.status(404).json({ error: "Doctor not found" });
+    }
+
+    const imagegallary = existingDoctor.image_gallary || []; // default to empty if not set
+
+    const newimage = [];
+    if (req.files && req.files.length > 0) {
+      for (let file of req.files) {
+        const result = await cloudinary.uploader.upload(file.path);
+        newimage.push(result.secure_url);
+
+        // Optionally delete file from local server
+        // fs.unlinkSync(file.path);
+      }
+    }
+
+    // FIX: Spread new images instead of nesting
+    const updatedata = { 
+      ...req.body, 
+      image_gallary: [...imagegallary, ...newimage] 
+    };
+
+    const resp = await adddoctormodal.findByIdAndUpdate(
+      id, 
+      updatedata, 
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json(resp);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Something went wrong" });
   }
 };
@@ -191,4 +237,6 @@ const viewdoctorby_id=async(req,res)=>
 }
 
 
-  module.exports={add_doctor,logindoctor,changePassword,viewdoctor,updatedoctor,viewdoctorby_id}
+  module.exports={add_doctor,logindoctor,changePassword,viewdoctor,updatedoctor,viewdoctorby_id,
+    addimagegallary
+  }

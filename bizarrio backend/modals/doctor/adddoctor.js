@@ -12,6 +12,7 @@ const adddoctorschema=new mongoose.Schema({
   country: {type:String},
   bio: {type:String},
   bio_video: {type:String},
+  image_gallary: {type:Array},
   website: {type:String},
   phone_number: {type:String},
   dateOfBirth: {type:String},
