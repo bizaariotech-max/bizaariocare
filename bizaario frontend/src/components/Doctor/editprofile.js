@@ -696,9 +696,9 @@ const addupcomingevents=async()=>
         className="h-20 w-20 sm:h-28 sm:w-28 rounded-full object-cover flex-shrink-0"
         />
 
-        <div className="flex-1 space-y-3 mt-4 sm:mt-0 text-left" id="profile-card">
+        <div className="flex-1 space-y-3 mt-0 sm:mt-0 text-left" id="profile-card">
         <div className=" profil-info space-y-2">
-          <h2 className="mt-0 mr-10 ml-1 sm:mt-2 mb-1 sm:mb-3 text-lg sm:text-2xl font-semibold text-black" >
+          <h2 className="mt-0 mr-10 ml-0 sm:mt-0 mb-1 sm:mb-3 text-lg sm:text-2xl font-semibold text-black" >
            Dr. {user?.firstName} {user?.lastName}
           </h2>
           <p className="text-black/75 text-sm sm:text-base">
