@@ -136,6 +136,46 @@ const addimagegallary = async (req, res) => {
 };
 
 
+const deleteimagefromgallary = async (req, res) => {
+  try {
+    const id = req.params._id;
+    const index = parseInt(req.params.index, 10);
+
+    // Find existing doctor data
+    const existingDoctor = await adddoctormodal.findById(id);
+
+    if (!existingDoctor) {
+      return res.status(404).json({ error: "Doctor not found" });
+    }
+
+    if (
+      isNaN(index) ||
+      index < 0 ||
+      index >= existingDoctor.image_gallary.length
+    ) {
+      return res.status(400).json({ message: "Invalid index" });
+    }
+
+    // Remove the image at that index
+    const deletedImage = existingDoctor.image_gallary[index];
+    existingDoctor.image_gallary.splice(index, 1);
+
+    // Save updated document
+    await existingDoctor.save();
+
+    res.status(200).json({
+      message: "Image deleted successfully",
+      deletedImage,
+      updatedDoctor: existingDoctor,
+    });
+  } catch (error) {
+    console.error("Delete image error:", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+
+
 
 
 
@@ -238,5 +278,5 @@ const viewdoctorby_id=async(req,res)=>
 
 
   module.exports={add_doctor,logindoctor,changePassword,viewdoctor,updatedoctor,viewdoctorby_id,
-    addimagegallary
+    addimagegallary,deleteimagefromgallary
   }

@@ -507,6 +507,18 @@ const addimagegallary=async()=>
   const handleShowimagegalarryupdate = () => setShowimagegallaryupdate(true);
   const handleCloseimagegalarryupdate = () => setShowimagegallaryupdate(false);
 
+  const handleDelete=async(index)=>
+  {
+    try {
+      const resp=await api.put(`doctor/deleteimagefromgallary/${doctordetails.user._id}/${index}`)
+      alert("image deleted")
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+   
+  }
 
 
 
@@ -1478,7 +1490,7 @@ const addimagegallary=async()=>
 
 {/*======================= update image gallary =================================================*/}
 
-<Modal show={showimagegalarryupdate} onHide={handleCloseimagegalarryupdate} centered size="lg"  dialogClassName="custom-modal">
+<Modal show={showimagegalarryupdate} onHide={handleCloseimagegalarryupdate} centered size="xl"  dialogClassName="custom-modal">
         <Modal.Body style={{padding:"20px 50px "}}>
             <button
       type="button"
@@ -1514,22 +1526,27 @@ const addimagegallary=async()=>
     user.image_gallary.map((imgUrl, index) => (
       <div
         key={index}
-        className="relative aspect-[4/3] rounded-lg overflow-hidden group"
+        className="relative  aspect-[4/3] rounded-md overflow-hidden border shadow-sm"
       >
-        {/* Delete button */}
-        <button
-          // onClick={() => handleDelete(imgUrl)}
-          className="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-lg font-bold w-6 h-6 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition"
-        >
-          ×
-        </button>
-
         {/* Image */}
         <img
           src={imgUrl}
           alt={`Gallery ${index + 1}`}
           className="w-full h-full object-cover"
         />
+
+        {/* Delete button */}
+        <button
+          onClick={() => handleDelete(index)}
+          className="absolute top-0 right-0 p-1 flex items-center justify-center bg-white rounded-bl-md hover:bg-red-100 transition"
+        >
+          <span
+            className="material-icons"
+            style={{ color: "red", fontSize: "22px" }}
+          >
+            delete
+          </span>
+        </button>
       </div>
     ))
   ) : (
@@ -1538,6 +1555,8 @@ const addimagegallary=async()=>
     </p>
   )}
 </div>
+
+
 
 
   </div>
