@@ -18,6 +18,8 @@ import { Checkbox, FormGroup } from '@mui/material';
 import api from '../../api'
 import Swal from 'sweetalert2';
 import { State, City } from "country-state-city";
+import { event } from "jquery";
+import UniqueLoader from '../loader';
 
 
 
@@ -26,6 +28,8 @@ export function cn(...classes) {
 }
 
 export function Editdoctorprofile() {
+
+  const[loading,setloading]=useState(false)
 
 const doctordetails=JSON.parse(localStorage.getItem("user"))
 
@@ -129,6 +133,7 @@ const[doctorprofile,setdoctorprofile] =useState({profile_pic:[],profile_pic_prev
 const updateprofile=async()=>
 {
   try {
+    setloading(true)
     const resp = await api.put(`doctor/updatedoctor/${doctordetails.user._id}`,
   doctorprofile,
   {
@@ -166,6 +171,9 @@ const updateprofile=async()=>
     })
     console.log(error);
     
+  }finally
+  {
+    setloading(false)
   }
 }
 
@@ -511,9 +519,152 @@ const addimagegallary=async()=>
   {
     try {
       const resp=await api.put(`doctor/deleteimagefromgallary/${doctordetails.user._id}/${index}`)
-      alert("image deleted")
+       Swal.fire({
+        icon:"success",
+        title:"Profile Updated",
+        text:"Doctor Image Gallary Updated Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
       
     } catch (error) {
+      Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
+      console.log(error);
+      
+    }
+   
+  }
+
+
+  //======================================= add upcoming events===========================================
+
+  const [doctorprofileaddupcomingevents, setdoctorprofileaddupcomingevents] = useState({ upcoming_events: [],upcoming_events_preview:[]});
+ 
+  
+   const handleaddupcomingevents = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (files.length > 0) {
+        const previewUrls = files.map((file) => URL.createObjectURL(file));
+
+        setdoctorprofileaddupcomingevents((prev) => ({
+        ...prev,
+        upcoming_events: [...(prev.upcoming_events || []), ...files],
+        upcoming_events_preview: [...(prev.upcoming_events_preview || []), ...previewUrls],
+        }));
+    }
+    };
+
+
+ useEffect(() => {
+  if (user && Object.keys(user).length > 0) {
+    setdoctorprofileaddupcomingevents(user);
+  }
+}, [user]);
+
+
+
+
+  const [showupcomingevents, setshowupcomingevents] = useState(false);
+
+  const handleShowupcomingevents = () => setshowupcomingevents(true);
+  const handleCloseupcomingevents = () => setshowupcomingevents(false);
+
+
+const addupcomingevents=async()=>
+{
+  try {
+    const resp = await api.put(`doctor/addupcomingevents/${doctordetails.user._id}`,doctorprofileaddupcomingevents,
+      {headers: {
+                "Content-Type": "multipart/form-data",
+              }
+            }
+    );
+
+    if(resp.status===200)
+    {
+       Swal.fire({
+        icon:"success",
+        title:"Upcoming Events Updated",
+        text:"Upcoming Events Added Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
+    }
+    handleClosebiovideo()
+    
+  } catch (error) {
+     Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
+    console.log(error);
+    
+  }
+}
+
+
+
+
+  //================================= update upcoming events ========================================
+
+
+  const [showupcomingeventsupdate, setshowupcomingeventsupdate] = useState(false);
+
+  const handleShowupcomingeventsupdate = () => setshowupcomingeventsupdate(true);
+  const handleCloseupcomingeventsupdate = () => setshowupcomingeventsupdate(false);
+ 
+
+  const handleDeleteupcomingevents=async(index)=>
+  {
+    try {
+      const resp=await api.put(`doctor/deleteupcomingevents/${doctordetails.user._id}/${index}`)
+       Swal.fire({
+        icon:"success",
+        title:"Upcoming Event Deleted",
+        text:"Upcoming Events Deleted Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
+      
+    } catch (error) {
+      Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
       console.log(error);
       
     }
@@ -836,29 +987,42 @@ const addimagegallary=async()=>
               </div>
             </div>
 
-            {/* Upcoming Events */}
+{/* ================================Upcoming Events============================================== */}
+
+
             <div className="rounded-lg bg-[#EFEFEF] p-8">
               <div id="event-heading"  className="flex items-center justify-between mb-8">
                 <h3 className="text-2xl font-medium text-black">Upcoming Events</h3>
                 <div id="event" className="flex items-center gap-4">
-                  <button className="p-2">
+                  <button className="p-2" onClick={handleShowupcomingevents}>
                     <svg id="plus-button" className="h-8 w-8 " fill="none" stroke="currentColor" viewBox="0 0 32 32">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M8 16H16M16 16H24M16 16V24M16 16V8" />
                     </svg>
                   </button>
-                  <button className="p-2">
+                  <button className="p-2" onClick={handleShowupcomingeventsupdate}>
                     <svg id="edit-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
                     </svg>
                   </button>
                 </div>
               </div>
-              <img
+              {/* <img
                 src="https://api.builder.io/api/v1/image/assets/TEMP/78cd663e8fbd2f1e31e98694bf3785684e685deb?width=1494"
                 alt="Upcoming Events"
                 className="w-full max-w-4xl h-90 object-cover rounded-lg sm:w-full sm:h-full"
                 id="event-img"
-              />
+              /> */}
+              {
+                user?.upcoming_events?.map((item,index)=>
+                (
+                   <img
+                src={item}
+                alt="Upcoming Events"
+                className="w-full max-w-xl h-90 object-cover rounded-lg sm:w-full sm:h-full"
+                id="event-img"
+              /> 
+                ))
+              }
             </div>
 
             {/* Digital CME Contents */}
@@ -986,11 +1150,11 @@ const addimagegallary=async()=>
 
           <div className="col-md-6 mb-3">
             <label className="form-label fw-bold">Specialty</label>
-            <input name="medical_specialty" type="text" className="form-control"  defaultValue={doctorprofile.medical_specialty} />
+            <input name="medical_specialty" type="text" className="form-control"  defaultValue={doctorprofile.medical_specialty}  onChange={handleChange}/>
           </div>
           <div className="col-md-6 mb-3">
             <label className="form-label fw-bold">Date Of Birth</label>
-            <input name="dateOfBirth" type="date" className="form-control"  defaultValue={doctorprofile.dateOfBirth} />
+            <input name="dateOfBirth" type="date" className="form-control"  defaultValue={doctorprofile.dateOfBirth}  onChange={handleChange}/>
           </div>
          <div className="col-md-6 mb-3">
   <label className="form-label d-block mb-2 fw-bold">Gender</label>
@@ -1002,6 +1166,7 @@ const addimagegallary=async()=>
       className="form-check-input"
       value="male"
       defaultChecked={doctorprofile.gender === "Male"}
+       onChange={handleChange}
     />
     <label htmlFor="male" className="form-check-label">Male</label>
   </div>
@@ -1039,6 +1204,7 @@ const addimagegallary=async()=>
       className="form-check-input"
       value="Digital CME"
       defaultChecked={doctorprofile.subscription?.includes("Digital CME")}
+       onChange={handleChange}
     />
     <label htmlFor="digitalCME" className="form-check-label">Digital CME</label>
   </div>
@@ -1050,6 +1216,7 @@ const addimagegallary=async()=>
       className="form-check-input"
       value="Innovative Cases"
       defaultChecked={doctorprofile.subscription?.includes("Innovative Cases")}
+       onChange={handleChange}
     />
     <label htmlFor="innovativeCases" className="form-check-label">Innovative Cases</label>
   </div>
@@ -1575,6 +1742,187 @@ const addimagegallary=async()=>
           </Button>
         </Modal.Footer> */}
       </Modal>
+
+{/*========================= add upcoming events modal============================================= */}
+
+<Modal show={showupcomingevents} onHide={handleCloseupcomingevents} centered size="lg"  dialogClassName="custom-modal">
+        <Modal.Body style={{padding:"20px 50px "}}>
+            <button
+      type="button"
+      onClick={handleCloseupcomingevents}
+     style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      border: "2px solid black",
+      borderRadius: "50%",  // fully round
+      background: "transparent",
+      fontSize: "2rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      width: "35px",
+      height: "35px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+
+    >
+      &times; {/* or use a bootstrap icon */}
+    </button>
+      <Modal.Title style={{fontWeight:"bold"}}>Update More</Modal.Title>
+      <div className="row mt-3">
+     <div class="upload-drop-zone">
+    <div class="upload-drop-icon">&#8682;</div>
+    <div class="upload-instructions">
+      <strong>Drag or Drop Your Photo &amp; Video</strong>
+      <div class="upload-or">Or</div>
+      <label class="upload-browse">
+        <input multiple type="file" hidden onChange={handleaddupcomingevents} />
+        <span>Browse the File</span>
+      </label>
+      <div class="upload-info">
+        Upload in PDF, JPEG, PNG, .jpg, .gif format<br/>
+        (Not more than 20MB)
+      </div>
+    </div>
+  </div>
+
+
+  
+    <div className="text-center mt-3">
+  <button 
+    onClick={addupcomingevents} 
+    className="btn btn-sm" 
+    style={{ backgroundColor: "#F86F03", color: "white", borderRadius: "5px", width: "80px",padding:"8px" }}
+  >
+    Add
+  </button>
+</div>
+
+          </div>
+    
+  
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+
+
+  {/*========================== update upcoming events =========================================*/}
+
+  <Modal show={showupcomingeventsupdate} onHide={handleCloseupcomingeventsupdate} centered size="xl"  dialogClassName="custom-modal">
+        <Modal.Body style={{padding:"20px 50px "}}>
+            <button
+      type="button"
+      onClick={handleCloseupcomingeventsupdate}
+     style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      border: "2px solid black",
+      borderRadius: "50%",  // fully round
+      background: "transparent",
+      fontSize: "2rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      width: "35px",
+      height: "35px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+
+    >
+      &times; {/* or use a bootstrap icon */}
+    </button>
+      <Modal.Title style={{fontWeight:"bold"}}>Update Events</Modal.Title>
+      <div className="row mt-3">
+   
+
+    <div className="text-center mt-3">
+
+<div className="gallery-image grid grid-cols-1 gap-6 mb-6"> 
+  {user?.upcoming_events?.length > 0 ? (
+    user.upcoming_events.map((imgUrl, index) => (
+      <div
+        key={index}
+        className="relative w-full h-72 rounded-md overflow-hidden border shadow-sm"
+      >
+        {/* Image */}
+        <img
+          src={imgUrl}
+          alt={`Gallery ${index + 1}`}
+          className="w-full h-full object-cover"
+        />
+
+        {/* Delete button */}
+        <button
+          onClick={() => handleDeleteupcomingevents(index)}
+          className="absolute top-0 right-0 p-2 flex items-center justify-center bg-white rounded-bl-md hover:bg-red-100 transition"
+        >
+          <span
+            className="material-icons"
+            style={{ color: "red", fontSize: "26px" }}
+          >
+            delete
+          </span>
+        </button>
+      </div>
+    ))
+  ) : (
+    <p className="col-span-full text-center text-gray-500">
+      No images available
+    </p>
+  )}
+</div>
+
+
+
+
+
+  </div>
+
+          </div>
+    
+  
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+
+
+
+
+       {loading && (
+  <div
+    style={{
+      position: 'fixed',
+      inset: 0,
+      background: 'rgba(255, 255, 255, 0.6)',
+      zIndex: 9999,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <UniqueLoader />
+  </div>
+)}
 
     </>
   );

@@ -175,7 +175,87 @@ const deleteimagefromgallary = async (req, res) => {
 };
 
 
+const addupcomingevents = async (req, res) => {
+  try {
+    const id = req.params._id;
 
+    // Find existing doctor data
+    const existingDoctor = await adddoctormodal.findById(id);
+
+    if (!existingDoctor) {
+      return res.status(404).json({ error: "Doctor not found" });
+    }
+
+    const upcoming_events = existingDoctor.upcoming_events || []; // default to empty if not set
+
+    const newimage = [];
+    if (req.files && req.files.length > 0) {
+      for (let file of req.files) {
+        const result = await cloudinary.uploader.upload(file.path);
+        newimage.push(result.secure_url);
+
+        // Optionally delete file from local server
+        // fs.unlinkSync(file.path);
+      }
+    }
+
+    // FIX: Spread new images instead of nesting
+    const updatedata = { 
+      ...req.body, 
+      upcoming_events: [...upcoming_events, ...newimage] 
+    };
+
+    const resp = await adddoctormodal.findByIdAndUpdate(
+      id, 
+      updatedata, 
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json(resp);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+
+const deleteupcomingevents = async (req, res) => {
+  try {
+    const id = req.params._id;
+    const index = parseInt(req.params.index, 10);
+
+    // Find existing doctor data
+    const existingDoctor = await adddoctormodal.findById(id);
+
+    if (!existingDoctor) {
+      return res.status(404).json({ error: "Doctor not found" });
+    }
+
+    if (
+      isNaN(index) ||
+      index < 0 ||
+      index >= existingDoctor.upcoming_events.length
+    ) {
+      return res.status(400).json({ message: "Invalid index" });
+    }
+
+    // Remove the image at that index
+    const deletedImage = existingDoctor.upcoming_events[index];
+    existingDoctor.upcoming_events.splice(index, 1);
+
+    // Save updated document
+    await existingDoctor.save();
+
+    res.status(200).json({
+      message: "Image deleted successfully",
+      deletedImage,
+      updatedDoctor: existingDoctor,
+    });
+  } catch (error) {
+    console.error("Delete image error:", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
 
 
 
@@ -278,5 +358,5 @@ const viewdoctorby_id=async(req,res)=>
 
 
   module.exports={add_doctor,logindoctor,changePassword,viewdoctor,updatedoctor,viewdoctorby_id,
-    addimagegallary,deleteimagefromgallary
+    addimagegallary,deleteimagefromgallary,addupcomingevents,deleteupcomingevents
   }
