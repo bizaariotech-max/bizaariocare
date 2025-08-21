@@ -19,6 +19,7 @@ import Createsubadmin from "./components/Doctor/createsubadmin";
 import { Editdoctorprofile } from "./components/Doctor/editprofile";
 import Layout from "./AppLayout/Layout";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Updateworkexperience from "./components/Doctor/updateworkexperience";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
         <Route path="/createdigitalcmequestionbank" element={<Createdititalcmequestionbank/>}></Route> 
         <Route path="/createsubadmin" element={<Createsubadmin/>}></Route> 
         <Route path="/editdoctorprofile" element={<Editdoctorprofile/>}></Route> 
+        <Route path="/editdoctorworkexperience" element={<Updateworkexperience/>}></Route> 
       </Routes>
       {/* <Doctordashboard/> */}
       

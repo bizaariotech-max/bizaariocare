@@ -257,6 +257,123 @@ const deleteupcomingevents = async (req, res) => {
   }
 };
 
+// work experience and awards/achievements functions
+const add_work_experience = async (req, res) => {
+  try {
+    const id = req.params._id;
+    const {doctor_id,hospital_name,from_year,to_year,designation,major_achievements} = req.body;
+
+    const doctor = await adddoctormodal.findById(id);
+    if (!doctor) return res.status(404).json({ message: "Doctor not found" });
+
+      const new_workexperience=[]
+    // Push new work experience into array
+    new_workexperience.push({
+      doctor_id,hospital_name,from_year,to_year,designation,major_achievements
+    });
+
+    const updateworkexperience=[...doctor.work_experience,...new_workexperience]
+
+  const resp = await adddoctormodal.findByIdAndUpdate(
+  id,
+  { $set: { work_experience: updateworkexperience } },
+  { new: true, upsert: true }
+);
+
+    res
+      .status(200)
+      .json({ message: "Work experience added successfully", doctor });
+  } catch (error) {
+    console.error("Error adding work experience:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+const edit_work_experience = async (req, res) => {
+  try {
+  
+    
+    const doctorId = req.params._id; 
+     const index = parseInt(req.params.index, 10); 
+    const { hospital_name,from_year,to_year,designation,major_achievements } =  req.body;
+    
+
+    const doctor = await adddoctormodal.findById({_id:doctorId});
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    // Check index validity
+    if (index < 0 || index >= doctor.work_experience.length) {
+      return res.status(400).json({ message: "Invalid work experience index" });
+    }
+
+    // Update fields
+    doctor.work_experience[index].hospital_name = hospital_name;
+    doctor.work_experience[index].from_year = from_year;
+    doctor.work_experience[index].to_year = to_year;
+    doctor.work_experience[index].designation = designation;
+    doctor.work_experience[index].major_achievements = major_achievements;
+
+    await doctor.save();
+
+    res.status(200).json({
+      message: "Work experience updated successfully",
+      doctor,
+    });
+  } catch (error) {
+    console.error("Error editing work experience:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+
+
+//======================= add awards_and_achievements================================
+
+const add_awards_achievements = async (req, res) => {
+  try {
+    const id = req.params._id;
+    const { title, year, organization, description, link_of_award } = req.body;
+
+    const doctor = await adddoctormodal.findById(id);
+    if (!doctor) return res.status(404).json({ message: "Doctor not found" });
+
+    // Upload award photo if file is provided
+    let photoUrl = null;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      photoUrl = result.secure_url;    
+    }
+
+    // Create award object
+    const newAward = {
+      title,
+      year,
+      organization,
+      description,
+      link_of_award,
+      photo_of_award: photoUrl,
+    };
+
+    doctor.awards_and_achievements.push(newAward);
+    await doctor.save();
+
+    res
+      .status(201)
+      .json({
+        message: "Award/Achievement added successfully",
+        award: newAward,
+      });
+  } catch (error) {
+    console.error("Error adding award:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 
 
 const logindoctor = async (req, res) => {
@@ -358,5 +475,6 @@ const viewdoctorby_id=async(req,res)=>
 
 
   module.exports={add_doctor,logindoctor,changePassword,viewdoctor,updatedoctor,viewdoctorby_id,
-    addimagegallary,deleteimagefromgallary,addupcomingevents,deleteupcomingevents
+    addimagegallary,deleteimagefromgallary,addupcomingevents,deleteupcomingevents,add_work_experience,
+    add_awards_achievements,edit_work_experience
   }

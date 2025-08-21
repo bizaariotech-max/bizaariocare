@@ -32,6 +32,28 @@ const adddoctorschema=new mongoose.Schema({
   clinic_geo_location:{type:String},
   subscription:{type:Array},
   ischangedpassword:{type:Boolean,default:"true"},
+
+    work_experience: [
+      {
+        doctor_id:{type:String},
+        hospital_name: { type: String },
+        from_year: { type: String },
+        to_year: { type: String },
+        designation: { type: String },
+        major_achievements:{ type: String }
+      },
+    ],
+    awards_and_achievements: [
+      {
+        title: { type: String },
+        year: { type: Number },
+        organization: { type: String },
+        description: { type: String },
+        link_of_award: { type: String },
+        photo_of_award: { type: String },
+      },
+    ],
+
 },{timestamps:true})
 
 

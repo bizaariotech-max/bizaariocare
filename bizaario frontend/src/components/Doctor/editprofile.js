@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 import { State, City } from "country-state-city";
 import { event } from "jquery";
 import UniqueLoader from '../loader';
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -28,6 +29,9 @@ export function cn(...classes) {
 }
 
 export function Editdoctorprofile() {
+
+  const navigate=useNavigate()
+
 
   const[loading,setloading]=useState(false)
 
@@ -263,6 +267,7 @@ const[doctorprofilepersonal,setdoctorprofilepersonal] =useState({phone_number:""
 const updateprofilepresonal=async()=>
 {
   try {
+    setloading(true)
     const resp = await api.put(`doctor/updatedoctor/${doctordetails.user._id}`,doctorprofilepersonal);
 
     if(resp.status===200)
@@ -294,6 +299,9 @@ const updateprofilepresonal=async()=>
     })
     console.log(error);
     
+  }finally
+  {
+    setloading(false)
   }
 }
 
@@ -330,6 +338,7 @@ const updateprofilepresonal=async()=>
 const updateprofilebio=async()=>
 {
   try {
+    setloading(true)
     const resp = await api.put(`doctor/updatedoctor/${doctordetails.user._id}`,doctorprofilebio);
 
     if(resp.status===200)
@@ -361,6 +370,9 @@ const updateprofilebio=async()=>
     })
     console.log(error);
     
+  }finally
+  {
+    setloading(false)
   }
 }
 
@@ -394,6 +406,7 @@ const updateprofilebio=async()=>
 const updateprofilebiovideo=async()=>
 {
   try {
+    setloading(true)
     const resp = await api.put(`doctor/updatedoctor/${doctordetails.user._id}`,doctorprofilebiovideo);
 
     if(resp.status===200)
@@ -425,6 +438,9 @@ const updateprofilebiovideo=async()=>
     })
     console.log(error);
     
+  }finally
+  {
+    setloading(false)
   }
 }
 
@@ -467,6 +483,7 @@ const updateprofilebiovideo=async()=>
 const addimagegallary=async()=>
 {
   try {
+    setloading(true)
     const resp = await api.put(`doctor/addimagegallary/${doctordetails.user._id}`,doctorprofileaddgallary,
       {headers: {
                 "Content-Type": "multipart/form-data",
@@ -503,6 +520,9 @@ const addimagegallary=async()=>
     })
     console.log(error);
     
+  }finally
+  {
+    setloading(false)
   }
 }
 
@@ -518,6 +538,7 @@ const addimagegallary=async()=>
   const handleDelete=async(index)=>
   {
     try {
+      setloading(true)
       const resp=await api.put(`doctor/deleteimagefromgallary/${doctordetails.user._id}/${index}`)
        Swal.fire({
         icon:"success",
@@ -544,6 +565,10 @@ const addimagegallary=async()=>
     })
       console.log(error);
       
+    }
+    finally
+    {
+      setloading(false)
     }
    
   }
@@ -587,6 +612,7 @@ const addimagegallary=async()=>
 const addupcomingevents=async()=>
 {
   try {
+    setloading(true)
     const resp = await api.put(`doctor/addupcomingevents/${doctordetails.user._id}`,doctorprofileaddupcomingevents,
       {headers: {
                 "Content-Type": "multipart/form-data",
@@ -624,6 +650,10 @@ const addupcomingevents=async()=>
     console.log(error);
     
   }
+  finally
+  {
+    setloading(false)
+  }
 }
 
 
@@ -641,6 +671,7 @@ const addupcomingevents=async()=>
   const handleDeleteupcomingevents=async(index)=>
   {
     try {
+      setloading(true)
       const resp=await api.put(`doctor/deleteupcomingevents/${doctordetails.user._id}/${index}`)
        Swal.fire({
         icon:"success",
@@ -667,9 +698,216 @@ const addupcomingevents=async()=>
     })
       console.log(error);
       
+    }finally
+    {
+      setloading(false)
     }
    
   }
+
+
+  // ===========================edit doctor work experience information=======================================
+
+
+const[doctorprofileworkexperience,setdoctorprofileworkexperience] =useState({doctor_id:"",hospital_name:"",from_year:"",
+                                      to_year: '',designation: '',major_achievements: ''});
+
+ useEffect(() => {
+  if (user && Object.keys(user).length > 0) {
+    setdoctorprofileworkexperience(user);
+    setdoctorprofileworkexperience({...doctorprofileworkexperience,doctor_id:user._id})
+  }
+}, [user]);
+
+
+
+ const [showworkexperience, setshowworkexperience] = useState(false);
+
+  const handleshowworkexperience = () => setshowworkexperience(true);
+  const handlecloseworkexperience = () => setshowworkexperience(false);
+
+
+
+  const handlechangeworkexperience = (e) => {
+  const { name, value, checked, type } = e.target;
+
+  setdoctorprofileworkexperience((prev) => {
+    // If dropdown/multiple select returns an array directly
+    if (Array.isArray(value)) {
+      return { ...prev, [name]: value };
+    }
+
+    // If the state field is already an array (checkbox group)
+    if (Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add
+        : prev[name].filter((item) => item !== value); // Remove
+      return { ...prev, [name]: updated };
+    }
+
+     // If this is a checkbox group for an array field
+    if (type === "checkbox" && Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add to array
+        : prev[name].filter((item) => item !== value); // Remove from array
+      return { ...prev, [name]: updated };
+    }
+
+    // If this is a single checkbox (boolean)
+    if (type === "checkbox") {
+      return { ...prev, [name]: checked };
+    }
+
+    // Normal single-value field
+    return { ...prev, [name]: type === "checkbox" ? checked : value };
+  });
+};
+
+
+
+const updateworkexperience=async()=>
+{
+  try {
+    setloading(true)
+    const resp = await api.put(`doctor/addworkexperience/${doctordetails.user._id}`,doctorprofileworkexperience);
+
+    if(resp.status===200)
+    {
+       Swal.fire({
+        icon:"success",
+        title:"Profile Updated",
+        text:"Doctor Work Experience Added Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
+    }
+    handleClosepersonal()
+    
+  } catch (error) {
+     Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
+    console.log(error);
+    
+  }finally
+  {
+    setloading(false)
+  }
+}
+
+
+
+  // ===========================edit doctor award and rewards information=======================================
+
+
+const[doctorprofileaward,setdoctorprofileaward] =useState({doctor_id:"",award_title:"",awarding_body:"",
+                                      date: '',venue: '',award_mage: [],picture_gallary:[],video_url:""});
+
+ useEffect(() => {
+  if (user && Object.keys(user).length > 0) {
+    setdoctorprofileaward(user);
+    setdoctorprofileaward({...setdoctorprofileaward,doctor_id:user._id})
+  }
+}, [user]);
+
+
+
+ const [showaward, setshowaward] = useState(false);
+
+  const handleshowaward = () => setshowaward(true);
+  const handlecloseaward = () => setshowaward(false);
+
+
+
+  const handlechangeaward = (e) => {
+  const { name, value, checked, type } = e.target;
+
+  setdoctorprofileworkexperience((prev) => {
+    // If dropdown/multiple select returns an array directly
+    if (Array.isArray(value)) {
+      return { ...prev, [name]: value };
+    }
+
+    // If the state field is already an array (checkbox group)
+    if (Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add
+        : prev[name].filter((item) => item !== value); // Remove
+      return { ...prev, [name]: updated };
+    }
+
+     // If this is a checkbox group for an array field
+    if (type === "checkbox" && Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add to array
+        : prev[name].filter((item) => item !== value); // Remove from array
+      return { ...prev, [name]: updated };
+    }
+
+    // If this is a single checkbox (boolean)
+    if (type === "checkbox") {
+      return { ...prev, [name]: checked };
+    }
+
+    // Normal single-value field
+    return { ...prev, [name]: type === "checkbox" ? checked : value };
+  });
+};
+
+
+
+const updateaward=async()=>
+{
+  try {
+    setloading(true)
+    const resp = await api.put(`doctor/addworkexperience/${doctordetails.user._id}`,doctorprofileworkexperience);
+
+    if(resp.status===200)
+    {
+       Swal.fire({
+        icon:"success",
+        title:"Profile Updated",
+        text:"Doctor Work Experience Added Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
+    }
+    handleClosepersonal()
+    
+  } catch (error) {
+     Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
+    console.log(error);
+    
+  }finally
+  {
+    setloading(false)
+  }
+}
+
 
 
 
@@ -901,7 +1139,9 @@ const addupcomingevents=async()=>
 
 
 
-            {/* Work Experience */}
+{/*=============================== Work Experience ===============================================*/}
+
+
     <div  className=" bg-[#EFEFEF] rounded-lg p-6">
       {/* Header */}
       <div className="work-experience flex items-center justify-between mb-8">
@@ -909,7 +1149,7 @@ const addupcomingevents=async()=>
         <h3 className=" text-2xl font-semibold text-black">Work Experience</h3>
         </div>
         <div className="work-experincemain flex items-center gap-3">
-          <button  className=" hover:bg-gray-200 p-2 rounded-full">
+          <button  className=" hover:bg-gray-200 p-2 rounded-full" onClick={handleshowworkexperience}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 32 32"
@@ -925,7 +1165,7 @@ const addupcomingevents=async()=>
               />
             </svg>
           </button>
-          <button className="hover:bg-gray-200 p-2 rounded-full">
+          <button className="hover:bg-gray-200 p-2 rounded-full" onClick={()=>navigate('/editdoctorworkexperience')}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 32 32"
@@ -945,7 +1185,7 @@ const addupcomingevents=async()=>
       </div>
 
       {/* Items */}
-      <div id="award-item" className=" space-y-6">
+      {/* <div id="award-item" className=" space-y-6">
         <WorkExperienceItem
           logo="https://api.builder.io/api/v1/image/assets/TEMP/1b856e809c7235f840a5c224f76e47c868c95e60?width=96"
           title="AIIMS, New Delhi"
@@ -961,15 +1201,37 @@ const addupcomingevents=async()=>
           title="Apollo Hospitals, Chennai"
           role="Senior Cardiologist (2017–Present)"
         />
+      </div> */}
+
+    {
+  user?.work_experience?.map((item, index) => (
+    <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+      <img
+        src="https://api.builder.io/api/v1/image/assets/TEMP/1b856e809c7235f840a5c224f76e47c868c95e60?width=96"
+        alt="hospital"
+        style={{ width: "50px", height: "50px", marginRight: "12px" }}
+      />
+      <div>
+        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{item.hospital_name}</span>
+        <br />
+        <span style={{ fontSize: "14px" }}>
+          {item.designation} ({new Date(item.from_year).toLocaleDateString()} - {new Date(item.to_year).toLocaleDateString()})
+        </span>
       </div>
     </div>
+  ))
+}
 
-            {/* Awards & Certificates */}
+    </div>
+
+{/*============================= Awards & Certificates=========================================== */}
+
+
             <div className="rounded-lg bg-[#EFEFEF] p-8">
               <div  id="award" className="flex items-center justify-between mb-8">
                 <h3 className="text-2xl font-medium text-black">Awards & Certificates</h3>
                 <div className="flex items-center gap-4">
-                  <button className="p-2">
+                  <button className="p-2" onClick={handleshowaward}>
                     <svg id="plus-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M8 16H16M16 16H24M16 16V24M16 16V8" />
                     </svg>
@@ -1778,7 +2040,7 @@ const addupcomingevents=async()=>
       <strong>Drag or Drop Your Photo &amp; Video</strong>
       <div class="upload-or">Or</div>
       <label class="upload-browse">
-        <input multiple type="file" hidden onChange={handleaddupcomingevents} />
+        <input name="upcoming_events" multiple type="file" hidden onChange={handleaddupcomingevents} />
         <span>Browse the File</span>
       </label>
       <div class="upload-info">
@@ -1906,6 +2168,178 @@ const addupcomingevents=async()=>
       </Modal>
 
 
+{/*============================= add work experience============================================ */}
+
+<Modal show={showworkexperience} onHide={handlecloseworkexperience} centered size="lg"  dialogClassName="custom-modal">
+        <Modal.Body style={{padding:"20px 50px "}}>
+            <button
+      type="button"
+      onClick={handlecloseworkexperience}
+     style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      border: "2px solid black",
+      borderRadius: "50%",  // fully round
+      background: "transparent",
+      fontSize: "2rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      width: "35px",
+      height: "35px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+
+    >
+      &times; {/* or use a bootstrap icon */}
+    </button>
+          <Modal.Title style={{fontWeight:"bold"}}>Add Work Experience</Modal.Title>
+        
+ 
+          <div className="row mt-4">
+          <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Hospital Name</label>
+            <input name="hospital_name" type="text" className="form-control" defaultValue={doctorprofileworkexperience.hospital_name} onChange={handlechangeworkexperience} />
+          </div>
+         
+          <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">From Year</label>
+            <input name="from_year" type="date" className="form-control"  defaultValue={doctorprofileworkexperience.from_year}  onChange={handlechangeworkexperience}/>
+          </div>
+
+           <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">To Year</label>
+            <input name="to_year" type="date" className="form-control"  defaultValue={doctorprofileworkexperience.to_year}  onChange={handlechangeworkexperience}/>
+          </div>
+
+           <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Designation</label>
+            <input name="designation" type="text" className="form-control" defaultValue={doctorprofileworkexperience.designation} onChange={handlechangeworkexperience} />
+          </div>
+
+           <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Major Achievements</label>
+            <input name="major_achievements" type="text" className="form-control" defaultValue={doctorprofileworkexperience.major_achievements} onChange={handlechangeworkexperience}/>
+          </div>
+  
+
+
+
+        <div className="text-center mt-3">
+  <button 
+    onClick={updateworkexperience} 
+    className="btn btn-sm" 
+    style={{ backgroundColor: "#F86F03", color: "white", borderRadius: "5px", width: "80px",padding:"8px" }}
+  >
+    Update
+  </button>
+</div>
+
+          </div>
+    
+  
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+
+{/*===================================== add award ==================================================*/}
+
+<Modal show={showaward} onHide={handlecloseaward} centered size="lg"  dialogClassName="custom-modal">
+        <Modal.Body style={{padding:"20px 50px "}}>
+            <button
+      type="button"
+      onClick={handlecloseaward}
+     style={{
+      position: "absolute",
+      top: 10,
+      right: 10,
+      border: "2px solid black",
+      borderRadius: "50%",  // fully round
+      background: "transparent",
+      fontSize: "2rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      width: "35px",
+      height: "35px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+
+    >
+      &times; {/* or use a bootstrap icon */}
+    </button>
+          <Modal.Title style={{fontWeight:"bold"}}>Add Our Reward </Modal.Title>
+        
+ 
+          <div className="row mt-4">
+          <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Award Title</label>
+            <input name="hospital_name" type="text" className="form-control" defaultValue={doctorprofileworkexperience.hospital_name} onChange={handlechangeworkexperience} />
+          </div>
+
+          <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Awarding Body</label>
+            <input name="hospital_name" type="text" className="form-control" defaultValue={doctorprofileworkexperience.hospital_name} onChange={handlechangeworkexperience} />
+          </div>
+          
+         
+          <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Date</label>
+            <input name="from_year" type="date" className="form-control"  defaultValue={doctorprofileworkexperience.from_year}  onChange={handlechangeworkexperience}/>
+          </div>
+
+          <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Venue</label>
+            <input name="hospital_name" type="text" className="form-control" defaultValue={doctorprofileworkexperience.hospital_name} onChange={handlechangeworkexperience} />
+          </div>
+
+          
+
+           <div className="col-md-6 mb-3">
+            <label className="form-label fw-bold">Video Url</label>
+            <input name="designation" type="text" className="form-control" defaultValue={doctorprofileworkexperience.designation} onChange={handlechangeworkexperience} />
+          </div>
+
+         
+  
+
+
+
+        <div className="text-center mt-3">
+  <button 
+    onClick={updateworkexperience} 
+    className="btn btn-sm" 
+    style={{ backgroundColor: "#F86F03", color: "white", borderRadius: "5px", width: "80px",padding:"8px" }}
+  >
+    Update
+  </button>
+</div>
+
+          </div>
+    
+  
+
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
 
 
        {loading && (
@@ -1953,19 +2387,7 @@ const addupcomingevents=async()=>
 
 //============================== functin for other fields====================================================
 
-// Helper Components
-function WorkExperienceItem({ logo, title, role }) {
-  return (
-    <div className=" work-experience-item sm:w-full sm:h-full sm:gap-2 flex ml-10 flex-wrap justify-start gap-4">
-      <img src={logo} alt={title} className="h-12 w-12 rounded-full object-cover"
-       />
-      <div>
-        <h4 className="text-lg font-semibold text-black">{title}</h4>
-        <p className="text-xs sm:text-sm text-black/50">{role}</p>
-      </div>
-    </div>
-  );
-}
+
 
 function AwardItem() {
   return (

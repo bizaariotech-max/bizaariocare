@@ -1,5 +1,5 @@
 const express=require('express')
-const {add_doctor, logindoctor, changePassword, viewdoctor, updatedoctor, viewdoctorby_id, addimagegallary, deleteimagefromgallary, addupcomingevents, deleteupcomingevents} = require('../../controllers/doctor/adddoctor')
+const {add_doctor, logindoctor, changePassword, viewdoctor, updatedoctor, viewdoctorby_id, addimagegallary, deleteimagefromgallary, addupcomingevents, deleteupcomingevents, add_awards_achievements, add_work_experience, edit_work_experience} = require('../../controllers/doctor/adddoctor')
 const upload = require('../../middlewares/siglefile')
 const { add_course, viewcourse, viewcoursebyuserid, delete_course } = require('../../controllers/doctor/createcourse')
 const { add_digitalcme, viewcme, delete_digitalcme } = require('../../controllers/doctor/createdigitalcme')
@@ -17,6 +17,12 @@ router.put('/addimagegallary/:_id',upload.any('image_gallary'),addimagegallary)
 router.put('/deleteimagefromgallary/:_id/:index',deleteimagefromgallary)
 router.put('/addupcomingevents/:_id',upload.any('upcoming_events'),addupcomingevents)
 router.put('/deleteupcomingevents/:_id/:index',deleteupcomingevents)
+//* Work Experience Routes 
+router.put('/addworkexperience/:_id', add_work_experience)
+router.put('/updateworkexperience/:_id/:index',edit_work_experience)
+// * Awards & Achievements Routes
+router.put("/addawards/:_id",upload.any("doctors_award_image"),add_awards_achievements);
+
 router.get('/getalldoctor',viewdoctor)
 router.get('/getdoctorbyid/:_id',viewdoctorby_id)
 router.post('/login',logindoctor)
