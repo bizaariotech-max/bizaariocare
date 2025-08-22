@@ -203,12 +203,11 @@ const addupcomingevents = async (req, res) => {
       event_image: newimage,
     };
 
-    // push new event into the array
-    upcoming_events.push(newEvent);
+   
 
     const resp = await adddoctormodal.findByIdAndUpdate(
       id, 
-      { $set: { upcoming_events} },
+       { $push: { upcoming_events: newEvent } },
       { new: true, upsert: true }
     );
 
