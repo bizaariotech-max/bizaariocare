@@ -68,7 +68,7 @@ const adddoctorschema=new mongoose.Schema({
         instructions_for_attendees: { type: String },
         currency: { type: String },
         fee: { type: String },
-        event_image:[]
+        event_image:{type:Array}
       },
     ],
 

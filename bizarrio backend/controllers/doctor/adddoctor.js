@@ -194,20 +194,21 @@ const addupcomingevents = async (req, res) => {
         const result = await cloudinary.uploader.upload(file.path);
         newimage.push(result.secure_url);
 
-        // Optionally delete file from local server
-        // fs.unlinkSync(file.path);
       }
     }
 
     // FIX: Spread new images instead of nesting
-    const updatedata = { 
-      ...req.body, 
-      upcoming_events: [...upcoming_events, ...newimage] 
+    const newEvent = {
+      ...req.body,
+      event_image: newimage,
     };
+
+    // push new event into the array
+    upcoming_events.push(newEvent);
 
     const resp = await adddoctormodal.findByIdAndUpdate(
       id, 
-      updatedata, 
+      { $set: { upcoming_events} },
       { new: true, upsert: true }
     );
 

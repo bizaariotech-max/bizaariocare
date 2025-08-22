@@ -17,7 +17,7 @@ router.post('/adddoctor',upload.any('profile_pic'), add_doctor)
 router.put('/updatedoctor/:_id',upload.any('profile_pic'),updatedoctor)
 router.put('/addimagegallary/:_id',upload.any('image_gallary'),addimagegallary)
 router.put('/deleteimagefromgallary/:_id/:index',deleteimagefromgallary)
-router.put('/addupcomingevents/:_id',upload.any('upcoming_events'),addupcomingevents)
+router.put('/addupcomingevents/:_id',upload.any('event_image'),addupcomingevents)
 router.put('/deleteupcomingevents/:_id/:index',deleteupcomingevents)
 router.put('/addawards/:_id',uploadFields,add_awards_achievements)
 //* Work Experience Routes 

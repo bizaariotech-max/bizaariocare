@@ -876,10 +876,20 @@ const updateaward=async()=>
     }
     };
 
+   const generateEventId = () => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let eventId = "";
+  for (let i = 0; i < 6; i++) { // length = 8 (you can change)
+    eventId += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return eventId;
+};
+
 
  useEffect(() => {
   if (user && Object.keys(user).length > 0) {
     setdoctorprofileaddupcomingevents(user);
+    setdoctorprofileaddupcomingevents({...doctorprofileaddupcomingevents,doctor_id:user._id})
   }
 }, [user]);
 
@@ -888,7 +898,11 @@ const updateaward=async()=>
 
   const [showupcomingevents, setshowupcomingevents] = useState(false);
 
-  const handleShowupcomingevents = () => setshowupcomingevents(true);
+  const handleShowupcomingevents = () => 
+    {
+      setshowupcomingevents(true);
+      setdoctorprofileaddupcomingevents({...doctorprofileaddupcomingevents,event_id:generateEventId()})
+    }
   const handleCloseupcomingevents = () => setshowupcomingevents(false);
 
 
@@ -1311,17 +1325,26 @@ const addupcomingevents=async()=>
                 className="w-full max-w-4xl h-90 object-cover rounded-lg sm:w-full sm:h-full"
                 id="event-img"
               /> */}
-              {
-                user?.upcoming_events?.map((item,index)=>
-                (
-                   <img
-                src={item}
-                alt="Upcoming Events"
-                className="w-full max-w-xl h-90 object-cover rounded-lg sm:w-full sm:h-full"
-                id="event-img"
-              /> 
-                ))
-              }
+                 {
+            user?.upcoming_events?.map((item, index) => (
+              <div key={index} style={{ display: "flex", alignItems: "flex-start", marginBottom: "15px" }}>
+                <img
+                  src={item.event_image[0]}
+                  alt="hospital"
+                  style={{ width: "100px", height: "100px", marginRight: "12px",borderRadius:"5%" }}
+                />
+                <div>
+                  <span style={{ fontWeight: "bold", fontSize: "18px" }}>{item.event_title}</span>
+                  <br />
+                   <span>{item.venue}</span><br></br>
+                  <span style={{ fontSize: "14px" }}>
+                   {new Date(item.start_date).toLocaleDateString()} to {new Date(item.end_date).toLocaleDateString()}<br></br>
+                  {item.start_time} to {item.end_time}
+                  </span>
+                </div>
+              </div>
+            ))
+          }
             </div>
 
         
@@ -2074,7 +2097,7 @@ const addupcomingevents=async()=>
         <div className="col-md-6 mb-3 position-relative">
         <label className="form-label fw-bold">Event ID</label>
 
-        <input name="event_id" type="text" className="form-control"
+        <input name="event_id" type="text" className="form-control" readOnly
          defaultValue={doctorprofileaddupcomingevents.event_id} onChange={handleChangeupcomingevents}/>
 
       
