@@ -5,6 +5,7 @@ const path = require('path');
 const connect = require('./connectdb');
 const bodyParser = require('body-parser');
 require('dotenv').config();
+const logMiddleware=require('./middlewares/logmiddleware')
 
 
 const app=express();
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); // Increase l
 
 app.use(express.json({ limit: '50mb' }));
 
+app.use(logMiddleware);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(cors())

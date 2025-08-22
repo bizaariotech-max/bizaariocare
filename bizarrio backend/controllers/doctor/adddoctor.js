@@ -334,44 +334,177 @@ const edit_work_experience = async (req, res) => {
 
 //======================= add awards_and_achievements================================
 
+
+
 const add_awards_achievements = async (req, res) => {
   try {
     const id = req.params._id;
-    const { title, year, organization, description, link_of_award } = req.body;
+    const existingDoctor = await adddoctormodal.findById(id);
 
-    const doctor = await adddoctormodal.findById(id);
-    if (!doctor) return res.status(404).json({ message: "Doctor not found" });
-
-    // Upload award photo if file is provided
-    let photoUrl = null;
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
-      photoUrl = result.secure_url;    
+    if (!existingDoctor) {
+      return res.status(404).json({ error: "Doctor not found" });
     }
 
-    // Create award object
-    const newAward = {
-      title,
-      year,
-      organization,
-      description,
-      link_of_award,
-      photo_of_award: photoUrl,
+    let awards_and_achievements = existingDoctor.awards_and_achievements || [];
+
+    let photo_of_award = [];
+    let picture_gallary = [];
+
+    if (req.files && req.files.length > 0) {
+      const imagefield = req.files.filter(f => f.fieldname.includes("award_image"));
+      const imagefield1 = req.files.filter(f => f.fieldname.includes("picture_gallary"));
+
+      for (let file of imagefield) {
+        const result = await cloudinary.uploader.upload(file.path);
+        photo_of_award.push(result.secure_url);
+        // fs.unlink(file.path, () => {});
+      }
+
+      for (let file of imagefield1) {
+        const result = await cloudinary.uploader.upload(file.path);
+        picture_gallary.push(result.secure_url);
+        // fs.unlink(file.path, () => {});
+      }
+    }
+
+    const updateaward = {
+      ...req.body,
+      award_image: photo_of_award,
+      picture_gallary: picture_gallary
     };
 
-    doctor.awards_and_achievements.push(newAward);
+    const updatedata = [...awards_and_achievements, updateaward];
+
+    const updatedDoctor = await adddoctormodal.findByIdAndUpdate(
+      id,
+      { awards_and_achievements: updatedata },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json(updatedDoctor);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+
+const deleteimagefrom_awardimage = async (req, res) => {
+  try {
+    const { _id, awardIndex, imageIndex } = req.params;
+ 
+    const doctor = await adddoctormodal.findById(_id);
+    if (!doctor) return res.status(404).json({ error: "Doctor not found" });
+
+    const award = doctor.awards_and_achievements[awardIndex];
+    if (!award) return res.status(400).json({ error: "Invalid award index" });
+
+    if (!award.award_image || imageIndex >= award.award_image.length) {
+      return res.status(400).json({ error: "Invalid image index" });
+    }
+
+    const deletedImage = award.award_image[imageIndex];
+    award.award_image.splice(imageIndex, 1);
+
     await doctor.save();
 
-    res
-      .status(201)
-      .json({
-        message: "Award/Achievement added successfully",
-        award: newAward,
-      });
+    res.status(200).json({
+      message: "Image deleted successfully",
+      deletedImage,
+      updatedDoctor: doctor,
+    });
   } catch (error) {
-    console.error("Error adding award:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Delete award image error:", error);
+    res.status(500).json({ error: "Something went wrong" });
   }
+};
+
+const deleteimagefrom_picturegallary = async (req, res) => {
+  try {
+    const { _id, awardIndex, imageIndex } = req.params;
+ 
+    const doctor = await adddoctormodal.findById(_id);
+    if (!doctor) return res.status(404).json({ error: "Doctor not found" });
+
+    const award = doctor.awards_and_achievements[awardIndex];
+    if (!award) return res.status(400).json({ error: "Invalid award index" });
+
+    if (!award.picture_gallary || imageIndex >= award.picture_gallary.length) {
+      return res.status(400).json({ error: "Invalid image index" });
+    }
+
+    const deletedImage = award.picture_gallary[imageIndex];
+    award.picture_gallary.splice(imageIndex, 1);
+
+    await doctor.save();
+
+    res.status(200).json({
+      message: "Image deleted successfully",
+      deletedImage,
+      updatedDoctor: doctor,
+    });
+  } catch (error) {
+    console.error("Delete award image error:", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+
+
+const update_awards_achievements = async (req, res) => {
+ try {
+      const { _id, awardIndex } = req.params;
+      const index = parseInt(awardIndex, 10);
+
+      const doctor = await adddoctormodal.findById(_id);
+      if (!doctor) return res.status(404).json({ error: "Doctor not found" });
+
+      const award = doctor.awards_and_achievements[index];
+      if (!award) return res.status(400).json({ error: "Invalid award index" });
+
+      // Handle uploaded files
+      let newAwardImages = [];
+      let newGalleryImages = [];
+
+      if (req.files && req.files.length > 0) {
+        const awardFiles = req.files.filter(f => f.fieldname.includes("award_image"));
+        const galleryFiles = req.files.filter(f => f.fieldname.includes("picture_gallary"));
+
+        for (let file of awardFiles) {
+          const result = await cloudinary.uploader.upload(file.path);
+          newAwardImages.push(result.secure_url);
+          fs.unlinkSync(file.path);
+        }
+
+        for (let file of galleryFiles) {
+          const result = await cloudinary.uploader.upload(file.path);
+          newGalleryImages.push(result.secure_url);
+          fs.unlinkSync(file.path);
+        }
+      }
+
+      // Update text fields
+      award.award_title = req.body.award_title || award.award_title;
+      award.awarding_body = req.body.awarding_body || award.awarding_body;
+      award.date = req.body.date || award.date;
+      award.venue = req.body.venue || award.venue;
+      award.video_url = req.body.video_url || award.video_url;
+
+      // Add new images if any
+      if (newAwardImages.length > 0) award.award_image.push(...newAwardImages);
+      if (newGalleryImages.length > 0) award.picture_gallary.push(...newGalleryImages);
+
+      await doctor.save();
+
+      res.status(200).json({
+        message: "Award updated successfully",
+        updatedDoctor: doctor,
+      });
+    } catch (error) {
+      console.error("Update award error:", error);
+      res.status(500).json({ error: "Something went wrong" });
+    }
 };
 
 
@@ -476,5 +609,6 @@ const viewdoctorby_id=async(req,res)=>
 
   module.exports={add_doctor,logindoctor,changePassword,viewdoctor,updatedoctor,viewdoctorby_id,
     addimagegallary,deleteimagefromgallary,addupcomingevents,deleteupcomingevents,add_work_experience,
-    add_awards_achievements,edit_work_experience
+    add_awards_achievements,edit_work_experience,add_awards_achievements,deleteimagefrom_awardimage,
+    update_awards_achievements,deleteimagefrom_picturegallary
   }

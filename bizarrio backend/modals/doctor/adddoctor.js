@@ -13,7 +13,6 @@ const adddoctorschema=new mongoose.Schema({
   bio: {type:String},
   bio_video: {type:String},
   image_gallary: {type:Array},
-  upcoming_events: {type:Array},
   website: {type:String},
   phone_number: {type:String},
   dateOfBirth: {type:String},
@@ -45,12 +44,31 @@ const adddoctorschema=new mongoose.Schema({
     ],
     awards_and_achievements: [
       {
-        title: { type: String },
-        year: { type: Number },
-        organization: { type: String },
-        description: { type: String },
-        link_of_award: { type: String },
-        photo_of_award: { type: String },
+        doctor_id:{type:String},
+        award_title: { type: String },
+        awarding_body: { type: String },
+        date: { type: String },
+        venue: { type: String },
+        award_image: { type: Array },
+        picture_gallary: { type: Array },
+        video_url:{type:String}
+      },
+    ],
+      upcoming_events: [
+      {
+        doctor_id:{type:String},
+        event_id: {type: String},
+        event_type: {type: String },
+        event_title: { type: String },
+        venue: { type: String },
+        start_date: { type: String },
+        end_date: { type: String },
+        start_time: { type: String },
+        end_time: { type: String },
+        instructions_for_attendees: { type: String },
+        currency: { type: String },
+        fee: { type: String },
+        event_image:[]
       },
     ],
 

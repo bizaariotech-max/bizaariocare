@@ -20,6 +20,8 @@ import { Editdoctorprofile } from "./components/Doctor/editprofile";
 import Layout from "./AppLayout/Layout";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Updateworkexperience from "./components/Doctor/updateworkexperience";
+import Updateupcomingevent from "./components/Doctor/updateupcomingevents";
+import Updateawards from "./components/Doctor/updateawards_certificates";
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
         <Route path="/createsubadmin" element={<Createsubadmin/>}></Route> 
         <Route path="/editdoctorprofile" element={<Editdoctorprofile/>}></Route> 
         <Route path="/editdoctorworkexperience" element={<Updateworkexperience/>}></Route> 
+        <Route path="/editupcomingevents" element={<Updateupcomingevent/>}></Route>
+        <Route path="/editawards" element={<Updateawards/>}></Route> 
       </Routes>
       {/* <Doctordashboard/> */}
       

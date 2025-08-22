@@ -36,6 +36,10 @@ export function Editdoctorprofile() {
   const[loading,setloading]=useState(false)
 
 const doctordetails=JSON.parse(localStorage.getItem("user"))
+const token=localStorage.getItem("token")
+
+console.log(token);
+
 
 const[user,setuser]=useState({})
 
@@ -143,6 +147,7 @@ const updateprofile=async()=>
   {
     headers: {
       "Content-Type": "multipart/form-data",
+      "Authorization": `Bearer ${token}`
     },
   }
 );
@@ -574,136 +579,10 @@ const addimagegallary=async()=>
   }
 
 
-  //======================================= add upcoming events===========================================
-
-  const [doctorprofileaddupcomingevents, setdoctorprofileaddupcomingevents] = useState({ upcoming_events: [],upcoming_events_preview:[]});
- 
-  
-   const handleaddupcomingevents = (e) => {
-    const files = Array.from(e.target.files);
-
-    if (files.length > 0) {
-        const previewUrls = files.map((file) => URL.createObjectURL(file));
-
-        setdoctorprofileaddupcomingevents((prev) => ({
-        ...prev,
-        upcoming_events: [...(prev.upcoming_events || []), ...files],
-        upcoming_events_preview: [...(prev.upcoming_events_preview || []), ...previewUrls],
-        }));
-    }
-    };
-
-
- useEffect(() => {
-  if (user && Object.keys(user).length > 0) {
-    setdoctorprofileaddupcomingevents(user);
-  }
-}, [user]);
-
-
-
-
-  const [showupcomingevents, setshowupcomingevents] = useState(false);
-
-  const handleShowupcomingevents = () => setshowupcomingevents(true);
-  const handleCloseupcomingevents = () => setshowupcomingevents(false);
-
-
-const addupcomingevents=async()=>
-{
-  try {
-    setloading(true)
-    const resp = await api.put(`doctor/addupcomingevents/${doctordetails.user._id}`,doctorprofileaddupcomingevents,
-      {headers: {
-                "Content-Type": "multipart/form-data",
-              }
-            }
-    );
-
-    if(resp.status===200)
-    {
-       Swal.fire({
-        icon:"success",
-        title:"Upcoming Events Updated",
-        text:"Upcoming Events Added Successfully...",
-        showConfirmButton:true,
-        customClass: {
-        confirmButton: 'my-swal-button',
-      },
-      }).then(()=>
-      {
-        window.location.reload()
-      })
-    }
-    handleClosebiovideo()
-    
-  } catch (error) {
-     Swal.fire({
-      icon:"error",
-      title:"error ",
-      text:error.response.data.message,
-      showConfirmButton:true,
-        customClass: {
-        confirmButton: 'my-swal-button',
-      },
-    })
-    console.log(error);
-    
-  }
-  finally
-  {
-    setloading(false)
-  }
-}
-
-
-
-
-  //================================= update upcoming events ========================================
-
-
-  const [showupcomingeventsupdate, setshowupcomingeventsupdate] = useState(false);
-
-  const handleShowupcomingeventsupdate = () => setshowupcomingeventsupdate(true);
-  const handleCloseupcomingeventsupdate = () => setshowupcomingeventsupdate(false);
  
 
-  const handleDeleteupcomingevents=async(index)=>
-  {
-    try {
-      setloading(true)
-      const resp=await api.put(`doctor/deleteupcomingevents/${doctordetails.user._id}/${index}`)
-       Swal.fire({
-        icon:"success",
-        title:"Upcoming Event Deleted",
-        text:"Upcoming Events Deleted Successfully...",
-        showConfirmButton:true,
-        customClass: {
-        confirmButton: 'my-swal-button',
-      },
-      }).then(()=>
-      {
-        window.location.reload()
-      })
-      
-    } catch (error) {
-      Swal.fire({
-      icon:"error",
-      title:"error ",
-      text:error.response.data.message,
-      showConfirmButton:true,
-        customClass: {
-        confirmButton: 'my-swal-button',
-      },
-    })
-      console.log(error);
-      
-    }finally
-    {
-      setloading(false)
-    }
-   
-  }
+
+ 
 
 
   // ===========================edit doctor work experience information=======================================
@@ -812,7 +691,7 @@ const updateworkexperience=async()=>
 
 
 const[doctorprofileaward,setdoctorprofileaward] =useState({doctor_id:"",award_title:"",awarding_body:"",
-                                      date: '',venue: '',award_mage: [],picture_gallary:[],video_url:""});
+                                      date: '',venue: '',award_image: [],picture_gallary:[],video_url:""});
 
  useEffect(() => {
   if (user && Object.keys(user).length > 0) {
@@ -829,11 +708,36 @@ const[doctorprofileaward,setdoctorprofileaward] =useState({doctor_id:"",award_ti
   const handlecloseaward = () => setshowaward(false);
 
 
+const handlechangeawardimage = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (files.length > 0) {
+  
+        setdoctorprofileaward((prev) => ({
+        ...prev,
+        award_image: [...(prev.award_image || []), ...files],
+        }));
+    }
+    };
+
+    const handlechangepicturegallary = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (files.length > 0) {
+  
+        setdoctorprofileaward((prev) => ({
+        ...prev,
+        picture_gallary: [...(prev.picture_gallary || []), ...files],
+
+        }));
+    }
+    };
+
 
   const handlechangeaward = (e) => {
   const { name, value, checked, type } = e.target;
 
-  setdoctorprofileworkexperience((prev) => {
+  setdoctorprofileaward((prev) => {
     // If dropdown/multiple select returns an array directly
     if (Array.isArray(value)) {
       return { ...prev, [name]: value };
@@ -871,7 +775,12 @@ const updateaward=async()=>
 {
   try {
     setloading(true)
-    const resp = await api.put(`doctor/addworkexperience/${doctordetails.user._id}`,doctorprofileworkexperience);
+    const resp = await api.put(`doctor/addawards/${doctordetails.user._id}`,doctorprofileaward,
+       {headers: {
+                "Content-Type": "multipart/form-data",
+              }
+            }
+    );
 
     if(resp.status===200)
     {
@@ -907,6 +816,130 @@ const updateaward=async()=>
     setloading(false)
   }
 }
+
+
+
+ //======================================= add upcoming events===========================================
+
+  
+ const [doctorprofileaddupcomingevents, setdoctorprofileaddupcomingevents] = useState({doctor_id:"",
+  event_id:"",event_type:"",event_title:"",venue:"",start_date:"",end_date:"",start_time:"",
+  end_time:"",instructions_for_attendees:"",currency:"",fee:"", event_image: [],events_preview:[]});
+ 
+  
+   const handleChangeupcomingevents = (e) => {
+  const { name, value, checked, type } = e.target;
+
+  setdoctorprofileaddupcomingevents((prev) => {
+    // If dropdown/multiple select returns an array directly
+    if (Array.isArray(value)) {
+      return { ...prev, [name]: value };
+    }
+
+    // If the state field is already an array (checkbox group)
+    if (Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add
+        : prev[name].filter((item) => item !== value); // Remove
+      return { ...prev, [name]: updated };
+    }
+
+     // If this is a checkbox group for an array field
+    if (type === "checkbox" && Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add to array
+        : prev[name].filter((item) => item !== value); // Remove from array
+      return { ...prev, [name]: updated };
+    }
+
+    // If this is a single checkbox (boolean)
+    if (type === "checkbox") {
+      return { ...prev, [name]: checked };
+    }
+
+    // Normal single-value field
+    return { ...prev, [name]: type === "checkbox" ? checked : value };
+  });
+};
+
+   const handleaddupcomingevents = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (files.length > 0) {
+        const previewUrls = files.map((file) => URL.createObjectURL(file));
+
+        setdoctorprofileaddupcomingevents((prev) => ({
+        ...prev,
+        event_image: [...(prev.event_image || []), ...files],
+        events_preview: [...(prev.events_preview || []), ...previewUrls],
+        }));
+    }
+    };
+
+
+ useEffect(() => {
+  if (user && Object.keys(user).length > 0) {
+    setdoctorprofileaddupcomingevents(user);
+  }
+}, [user]);
+
+
+
+
+  const [showupcomingevents, setshowupcomingevents] = useState(false);
+
+  const handleShowupcomingevents = () => setshowupcomingevents(true);
+  const handleCloseupcomingevents = () => setshowupcomingevents(false);
+
+
+const addupcomingevents=async()=>
+{
+  try {
+    setloading(true)
+    const resp = await api.put(`doctor/addupcomingevents/${doctordetails.user._id}`,doctorprofileaddupcomingevents,
+      {headers: {
+                "Content-Type": "multipart/form-data",
+              }
+            }
+    );
+
+    if(resp.status===200)
+    {
+       Swal.fire({
+        icon:"success",
+        title:"Upcoming Events Updated",
+        text:"Upcoming Events Added Successfully...",
+        showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+      }).then(()=>
+      {
+        window.location.reload()
+      })
+    }
+    handleClosebiovideo()
+    
+  } catch (error) {
+     Swal.fire({
+      icon:"error",
+      title:"error ",
+      text:error.response.data.message,
+      showConfirmButton:true,
+        customClass: {
+        confirmButton: 'my-swal-button',
+      },
+    })
+    console.log(error);
+    
+  }
+  finally
+  {
+    setloading(false)
+  }
+}
+
+
 
 
 
@@ -1148,7 +1181,7 @@ const updateaward=async()=>
         <div className="work-experience-heading ">
         <h3 className=" text-2xl font-semibold text-black">Work Experience</h3>
         </div>
-        <div className="work-experincemain flex items-center gap-3">
+        <div className="work-experincemain flex items-center gap-4">
           <button  className=" hover:bg-gray-200 p-2 rounded-full" onClick={handleshowworkexperience}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1184,24 +1217,8 @@ const updateaward=async()=>
         </div>
       </div>
 
-      {/* Items */}
-      {/* <div id="award-item" className=" space-y-6">
-        <WorkExperienceItem
-          logo="https://api.builder.io/api/v1/image/assets/TEMP/1b856e809c7235f840a5c224f76e47c868c95e60?width=96"
-          title="AIIMS, New Delhi"
-          role="Resident Cardiologist (2012–2015)"
-        />
-        <WorkExperienceItem
-          logo="https://api.builder.io/api/v1/image/assets/TEMP/37d612ef2d04bd57f62d9badeba6f3eabec40bbd?width=96"
-          title="Fortis Heart Institute, Delhi"
-          role="Visiting Consultant (2015–2017)"
-        />
-        <WorkExperienceItem
-          logo="https://api.builder.io/api/v1/image/assets/TEMP/ab51d5d6f6aed86b4b2f0be8e8f967b08496c725?width=96"
-          title="Apollo Hospitals, Chennai"
-          role="Senior Cardiologist (2017–Present)"
-        />
-      </div> */}
+  
+      
 
     {
   user?.work_experience?.map((item, index) => (
@@ -1236,7 +1253,7 @@ const updateaward=async()=>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M8 16H16M16 16H24M16 16V24M16 16V8" />
                     </svg>
                   </button>
-                  <button className="p-2">
+                  <button className="p-2" onClick={()=>navigate('/editawards')}>
                     <svg id="edit-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
                     </svg>
@@ -1244,8 +1261,28 @@ const updateaward=async()=>
                 </div>
               </div>
               <div className="space-y-6">
-                <AwardItem />
-                <AwardItem />
+               {
+            user?.awards_and_achievements?.map((item, index) => (
+              <div key={index} style={{ display: "flex", alignItems: "flex-start", marginBottom: "15px" }}>
+                <img
+                  src={item.award_image[0]}
+                  alt="hospital"
+                  style={{ width: "100px", height: "100px", marginRight: "12px",borderRadius:"5%" }}
+                />
+                <div>
+                  <span style={{ fontWeight: "bold", fontSize: "18px" }}>{item.award_title}</span>
+                  <br />
+                   <span>{item.awarding_body}</span><br></br>
+                  <span style={{ fontSize: "14px" }}>
+                   {new Date(item.date).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+            ))
+          }
+
+
+               
               </div>
             </div>
 
@@ -1261,7 +1298,7 @@ const updateaward=async()=>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M8 16H16M16 16H24M16 16V24M16 16V8" />
                     </svg>
                   </button>
-                  <button className="p-2" onClick={handleShowupcomingeventsupdate}>
+                  <button className="p-2" onClick={()=>navigate('/editupcomingevents')}>
                     <svg id="edit-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
                     </svg>
@@ -1287,11 +1324,9 @@ const updateaward=async()=>
               }
             </div>
 
-            {/* Digital CME Contents */}
-            <SectionWithVideoGrid title="Digital CME Contents" />
+        
 
-            {/* Innovative Case Studies */}
-            <SectionWithCaseStudies title="Innovative Case Studies" />
+           
           </div>
         </div>
       </div>
@@ -2034,13 +2069,112 @@ const updateaward=async()=>
     </button>
       <Modal.Title style={{fontWeight:"bold"}}>Update More</Modal.Title>
       <div className="row mt-3">
+
+      
+        <div className="col-md-6 mb-3 position-relative">
+        <label className="form-label fw-bold">Event ID</label>
+
+        <input name="event_id" type="text" className="form-control"
+         defaultValue={doctorprofileaddupcomingevents.event_id} onChange={handleChangeupcomingevents}/>
+
+      
+      </div>
+
+           <div className="col-md-6 mb-3 position-relative">
+        <label className="form-label fw-bold">Event Type</label>
+          <select
+    name="event_type"
+    className="form-control"
+    defaultValue={doctorprofileaddupcomingevents.event_type}
+    onChange={handleChangeupcomingevents}
+  >
+    <option value="">-- Select Type --</option>
+    <option value="India">OPD</option>
+    <option value="United States">CME</option>
+  
+  </select>
+
+        
+      </div>
+ 
+           <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold">Event Title</label>
+            <input name="event_title" type="text" className="form-control"
+             defaultValue={doctorprofileaddupcomingevents.event_title} onChange={handleChangeupcomingevents}/>
+        
+          </div>
+
+             <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold">Venue</label>
+            <input name="venue" type="text" className="form-control"
+             defaultValue={doctorprofileaddupcomingevents.venue} onChange={handleChangeupcomingevents}/>
+        
+          </div>
+
+          <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold">Start Date</label>
+            <input name="start_date" type="date" className="form-control"
+             defaultValue={doctorprofileaddupcomingevents.start_date} onChange={handleChangeupcomingevents}/>
+        
+          </div>
+
+          <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold">End Date</label>
+            <input name="end_date" type="date" className="form-control"
+             defaultValue={doctorprofileaddupcomingevents.end_date} onChange={handleChangeupcomingevents}/>
+        
+          </div>
+
+          <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold">Start Time</label>
+            <input name="start_time" type="date-time" className="form-control"
+             defaultValue={doctorprofileaddupcomingevents.start_time} onChange={handleChangeupcomingevents}/>
+        
+          </div>
+
+          <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold">End Time</label>
+            <input name="end_time" type="date-time" className="form-control"
+             defaultValue={doctorprofileaddupcomingevents.end_time} onChange={handleChangeupcomingevents}/>
+        
+          </div>
+
+           <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold"> Instructions For Attendees</label>
+            <input name="instructions_for_attendees" type="date-time" className="form-control"
+             defaultValue={doctorprofileaddupcomingevents.instructions_for_attendees} onChange={handleChangeupcomingevents}/>
+        
+          </div>
+           <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold"> Currency</label>
+                 <select
+                name="currency"
+                className="form-control"
+                defaultValue={doctorprofileaddupcomingevents.currency}
+                onChange={handleChangeupcomingevents}
+              >
+                <option value="">-- Select Currency --</option>
+                <option value="India">OPD</option>
+                <option value="United States">CME</option>
+              
+              </select>
+        
+          </div>
+           <div className="col-md-6 mb-3 position-relative">
+            <label className="form-label fw-bold"> Fee</label>
+            <input name="fee" type="date-time" className="form-control"
+             defaultValue={doctorprofileaddupcomingevents.fee} onChange={handleChangeupcomingevents}/>
+        
+          </div>
+  
+        <label className="form-label fw-bold">Event Image</label>
      <div class="upload-drop-zone">
     <div class="upload-drop-icon">&#8682;</div>
     <div class="upload-instructions">
       <strong>Drag or Drop Your Photo &amp; Video</strong>
       <div class="upload-or">Or</div>
       <label class="upload-browse">
-        <input name="upcoming_events" multiple type="file" hidden onChange={handleaddupcomingevents} />
+        <input name="event_image" multiple type="file" hidden onChange={handleaddupcomingevents} />
         <span>Browse the File</span>
       </label>
       <div class="upload-info">
@@ -2078,94 +2212,6 @@ const updateaward=async()=>
       </Modal>
 
 
-  {/*========================== update upcoming events =========================================*/}
-
-  <Modal show={showupcomingeventsupdate} onHide={handleCloseupcomingeventsupdate} centered size="xl"  dialogClassName="custom-modal">
-        <Modal.Body style={{padding:"20px 50px "}}>
-            <button
-      type="button"
-      onClick={handleCloseupcomingeventsupdate}
-     style={{
-      position: "absolute",
-      top: 10,
-      right: 10,
-      border: "2px solid black",
-      borderRadius: "50%",  // fully round
-      background: "transparent",
-      fontSize: "2rem",
-      cursor: "pointer",
-      fontWeight: "bold",
-      width: "35px",
-      height: "35px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-
-    >
-      &times; {/* or use a bootstrap icon */}
-    </button>
-      <Modal.Title style={{fontWeight:"bold"}}>Update Events</Modal.Title>
-      <div className="row mt-3">
-   
-
-    <div className="text-center mt-3">
-
-<div className="gallery-image grid grid-cols-1 gap-6 mb-6"> 
-  {user?.upcoming_events?.length > 0 ? (
-    user.upcoming_events.map((imgUrl, index) => (
-      <div
-        key={index}
-        className="relative w-full h-72 rounded-md overflow-hidden border shadow-sm"
-      >
-        {/* Image */}
-        <img
-          src={imgUrl}
-          alt={`Gallery ${index + 1}`}
-          className="w-full h-full object-cover"
-        />
-
-        {/* Delete button */}
-        <button
-          onClick={() => handleDeleteupcomingevents(index)}
-          className="absolute top-0 right-0 p-2 flex items-center justify-center bg-white rounded-bl-md hover:bg-red-100 transition"
-        >
-          <span
-            className="material-icons"
-            style={{ color: "red", fontSize: "26px" }}
-          >
-            delete
-          </span>
-        </button>
-      </div>
-    ))
-  ) : (
-    <p className="col-span-full text-center text-gray-500">
-      No images available
-    </p>
-  )}
-</div>
-
-
-
-
-
-  </div>
-
-          </div>
-    
-  
-
-        </Modal.Body>
-        {/* <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer> */}
-      </Modal>
 
 
 {/*============================= add work experience============================================ */}
@@ -2285,32 +2331,66 @@ const updateaward=async()=>
           <div className="row mt-4">
           <div className="col-md-6 mb-3">
             <label className="form-label fw-bold">Award Title</label>
-            <input name="hospital_name" type="text" className="form-control" defaultValue={doctorprofileworkexperience.hospital_name} onChange={handlechangeworkexperience} />
+            <input name="award_title" type="text" className="form-control" defaultValue={doctorprofileaward.award_title} onChange={handlechangeaward} />
           </div>
 
           <div className="col-md-6 mb-3">
             <label className="form-label fw-bold">Awarding Body</label>
-            <input name="hospital_name" type="text" className="form-control" defaultValue={doctorprofileworkexperience.hospital_name} onChange={handlechangeworkexperience} />
+            <input name="awarding_body" type="text" className="form-control" defaultValue={doctorprofileaward.awarding_body} onChange={handlechangeaward} />
           </div>
           
          
           <div className="col-md-6 mb-3">
             <label className="form-label fw-bold">Date</label>
-            <input name="from_year" type="date" className="form-control"  defaultValue={doctorprofileworkexperience.from_year}  onChange={handlechangeworkexperience}/>
+            <input name="date" type="date" className="form-control"  defaultValue={doctorprofileaward.date}  onChange={handlechangeaward}/>
           </div>
 
           <div className="col-md-6 mb-3">
             <label className="form-label fw-bold">Venue</label>
-            <input name="hospital_name" type="text" className="form-control" defaultValue={doctorprofileworkexperience.hospital_name} onChange={handlechangeworkexperience} />
+            <input name="venue" type="text" className="form-control" defaultValue={doctorprofileaward.venue} onChange={handlechangeaward} />
           </div>
 
           
 
            <div className="col-md-6 mb-3">
             <label className="form-label fw-bold">Video Url</label>
-            <input name="designation" type="text" className="form-control" defaultValue={doctorprofileworkexperience.designation} onChange={handlechangeworkexperience} />
+            <input name="video_url" type="text" className="form-control" defaultValue={doctorprofileaward.video_url} onChange={handlechangeaward} />
           </div>
 
+
+    <label className="form-label fw-bold">Award Image</label>
+     <div class="upload-drop-zone">
+    <div class="upload-drop-icon">&#8682;</div>
+    <div class="upload-instructions">
+      <strong>Drag or Drop Your Photo &amp; Video</strong>
+      <div class="upload-or">Or</div>
+      <label class="upload-browse">
+        <input name="award_image" multiple type="file" hidden onChange={handlechangeawardimage} />
+        <span>Browse the File</span>
+      </label>
+      <div class="upload-info">
+        Upload in PDF, JPEG, PNG, .jpg, .gif format<br/>
+        (Not more than 20MB)
+      </div>
+    </div>
+  </div>
+
+   <label className="form-label fw-bold">Picture Gallery</label>
+     <div class="upload-drop-zone">
+    <div class="upload-drop-icon">&#8682;</div>
+    <div class="upload-instructions">
+      <strong>Drag or Drop Your Photo &amp; Video</strong>
+      <div class="upload-or">Or</div>
+      <label class="upload-browse">
+        <input name="picture_gallary" multiple type="file" hidden onChange={handlechangepicturegallary} />
+        <span>Browse the File</span>
+      </label>
+      <div class="upload-info">
+        Upload in PDF, JPEG, PNG, .jpg, .gif format<br/>
+        (Not more than 20MB)
+      </div>
+    </div>
+  </div>
          
   
 
@@ -2318,11 +2398,11 @@ const updateaward=async()=>
 
         <div className="text-center mt-3">
   <button 
-    onClick={updateworkexperience} 
+    onClick={updateaward} 
     className="btn btn-sm" 
     style={{ backgroundColor: "#F86F03", color: "white", borderRadius: "5px", width: "80px",padding:"8px" }}
   >
-    Update
+    Add
   </button>
 </div>
 
@@ -2389,198 +2469,13 @@ const updateaward=async()=>
 
 
 
-function AwardItem() {
-  return (
-    <div id="award-image" className="flex  items-start gap-2">
-      <img
-        src="https://api.builder.io/api/v1/image/assets/TEMP/6b9cac229d3f7e85fc4fb86003b5504fb855a96b?width=186"
-        alt="Award"
-        className="h-24 w-24 mt-3 rounded-xl object-cover"
-      />
-      <div id="award-container" className="flex-1 space-y-3">
-        <div>
-          <h4 id="award-header" className="text-xl ml-0  font-medium text-black">🏅 Best Cardiologist 2022</h4>
-          <p id="award-page" className="text-xs ml-3 text-black/75 font-medium">Indian Medical Association</p>
-        </div>
-               <p id="award-page2" className="text-xs ml-3 text-black/75">I has received multiple awards for excellence in cardi.....</p>
-      <div id="award-certificate" className=" flex mb-5  items-center justify-start gap-6">
-  {/* Date */}
-  <div id="award-date" className="flex  ml-3 items-center gap-2">
-    <svg className="h-4 w-4 text-black/50" fill="currentColor" viewBox="0 0 15 15">
-      <path d="M4.375 6.25H10.625M4.375 8.75H7.5M4.375 1.875V3.125M10.625 1.875V3.125M3.875 13.125H11.125C11.8251 13.125 12.1751 13.125 12.4425 12.9887C12.6777 12.8689 12.8689 12.6777 12.9887 12.4425C13.125 12.1751 13.125 11.8251 13.125 11.125V5.125C13.125 4.42493 13.125 4.0749 12.9887 3.80751C12.8689 3.57231 12.6777 3.38108 12.4425 3.26124C12.1751 3.125 11.8251 3.125 11.125 3.125H3.875C3.17494 3.125 2.8249 3.125 2.55751 3.26124C2.32231 3.38108 2.13108 3.57231 2.01124 3.80751C1.875 4.0749 1.875 4.42493 1.875 5.125V11.125C1.875 11.8251 1.875 12.1751 2.01124 12.4425C2.13108 12.6777 2.32231 12.8689 2.55751 12.9887C2.8249 13.125 3.17493 13.125 3.875 13.125Z" />
-    </svg>
-    <span className="text-xs font-semibold text-black/75">15/05/2022</span>
-   </div>
 
-  {/* View Certificate */}
-    <div id="view-cirtificate" className="flex items-center gap-2">
-    <svg className="h-4 w-4 text-black/50" fill="none" stroke="currentColor" viewBox="0 0 15 15">
-      <path strokeLinecap="round" strokeWidth={1.25} d="M8.75 7.5C8.75 9.22587 7.35087 10.625 5.625 10.625H4.375C2.64911 10.625 1.25 9.22587 1.25 7.5C1.25 5.77411 2.64911 4.375 4.375 4.375H4.6875M6.25 7.5C6.25 5.77411 7.64912 4.375 9.375 4.375H10.625C12.3509 4.375 13.75 5.77411 13.75 7.5C13.75 9.22587 12.3509 10.625 10.625 10.625H10.3125" />
-    </svg>
-    <span className="text-xs font-semibold text-primary underline">View Certificate</span>
-    </div>
-    </div>
-     </div>
-    </div>
-  );
-}
 
-function SectionWithImages({ title }) {
-  return (
-    <div className="rounded-lg bg-[#EFEFEF] p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-medium text-black">{title}</h3>
-        <div id="gallary" className="flex items-center gap-4">
-          <button className="p-2" >
-            <svg id="plus-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M8 16H16M16 16H24M16 16V24M16 16V8" />
-            </svg>
-          </button>
-          <button className="p-2">
-            <svg id="edit-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div className=" gallery-image grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mb-6">
-  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-    <div key={i} className="aspect-[4/3] rounded-lg overflow-hidden">
-      <img
-        src={`https://api.builder.io/api/v1/image/assets/TEMP/${
-          i === 1
-            ? "ddb409042be3f954b59b0cb47684677d7ce51356"
-            : i === 2
-            ? "5be83afe340568f7c4a5e93394b0873bd9c183e8"
-            : i === 3
-            ? "466794a463d5c4b31f51dadb0efd3575c3d75668"
-            : i === 4
-            ? "b91d0df4656ba3c498568d86fb50f046a1eec901"
-            : i === 5
-            ? "f646eac8358748baa02029528f08353b95402dbe"
-            : i === 6
-            ? "66a564adca9fb765b3def09045f0af645b0c88c6"
-            : i === 7
-            ? "f646eac8358748baa02029528f08353b95402dbe"
-            : "f5ddc7a342a5cbc930459f63cf40f1829fea19ce"
-        }?width=336`}
-        alt={`Gallery ${i}`}
-        className="w-full h-full object-cover"
-      />
-    </div>
-  ))}
-</div>
-    </div>
-  );
-}
 
-function SectionWithVideoGrid({ title }) {
-  return (
-    <div className="rounded-lg bg-[#EFEFEF] p-8">
-      <div id="digital-cme" className="flex items-center justify-between mb-8">
-        <h3  className="text-2xl font-medium text-black">{title}</h3>
-        <div className="function-button flex items-center gap-4">
-          <button className="p-2">
-            <svg id="plus-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M8 16H16M16 16H24M16 16V24M16 16V8" />
-            </svg>
-          </button>
-          <button className="p-2">
-            <svg id="edit-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <VideoCard key={i} />
-        ))}
-      </div>
-    </div>
-  );
-}
 
-function SectionWithCaseStudies({ title }) {
-  return (
-    <div className="rounded-lg bg-[#EFEFEF] p-8">
-      <div className=" case-study flex items-center justify-between mb-8">
-        <h3  className="text-2xl font-medium text-black">{title}</h3>
-        <div className="flex items-center gap-4">
-          <button className="p-2">
-            <svg  id="plus-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M8 16H16M16 16H24M16 16V24M16 16V8" />
-            </svg>
-          </button>
-          <button className="p-2">
-            <svg  id="edit-button" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 32 32">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.67} d="M26.8664 10.5865L11.0397 26.4133C9.62637 27.8399 5.39969 28.4931 4.43969 27.5465C3.47969 26.5998 4.1597 22.3733 5.57304 20.9466L21.3997 5.11992C22.1305 4.42394 23.1044 4.04122 24.1135 4.05351C25.1227 4.06582 26.0869 4.47216 26.8005 5.18576C27.5141 5.89935 27.9204 6.86367 27.9328 7.87276C27.9451 8.88187 27.5624 9.85578 26.8664 10.5865Z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <CaseStudyCard key={i} />
-        ))}
-      </div>
-    </div>
-  );
-}
 
-function VideoCard() {
-  return (
-    <div className="space-y-3">
-      <div
-        className="aspect-video rounded bg-gradient-to-b from-black/15 to-black/15 bg-cover bg-center relative"
-        style={{
-          backgroundImage: `url('https://api.builder.io/api/v1/image/assets/TEMP/217096612a6ad7690b13676112155122f937a83f?width=454')`,
-        }}
-      >
-        <button className="absolute inset-0 flex items-center justify-center">
-          <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center">
-            <svg
-              className="h-4 w-4 text-primary ml-0.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 18L21 12L9 6v12z" />
-            </svg>
-          </div>
-        </button>
-      </div>
-      <div className="space-y-1">
-        <p className="text-xs text-black">Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023</p>
-        <div className="flex items-center  justify-start gap-1">
-          <img src={image3} className="h-5 w-5 text-primary" fill="currentColor" viewBox="0 0 25 24">
-            
-          </img>
-          <span className="text-xs text-black/50">20/07/2025, 02:03</span>
-        </div>
-      </div>
-    </div>
-  );
-}
 
-function CaseStudyCard() {
-  return (
-    <div className="space-y-3">
-      <img
-        src="https://api.builder.io/api/v1/image/assets/TEMP/936762393e6ad66842daf467fa264eb00eb21674?width=454"
-        alt="Case Study"
-        className="aspect-video w-full rounded-lg object-cover shadow-md"
-      />
-      <div className="space-y-1">
-        <p className="text-xs text-black">Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023</p>
-        <div className="flex items-center  justify-start gap-1">
-          <img src={image3} className="h-5 w-5 text-primary" fill="currentColor" viewBox="0 0 25 24">
-           
-          </img>
-          <span className="text-xs  text-black/50">20/07/2025, 02:03</span>
-        </div>
-      </div>
-    </div>
-  );
-}
+
+
+
 
