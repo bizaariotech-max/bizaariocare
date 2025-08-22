@@ -178,6 +178,8 @@ const deleteimagefromgallary = async (req, res) => {
 const addupcomingevents = async (req, res) => {
   try {
     const id = req.params._id;
+   
+    
 
     // Find existing doctor data
     const existingDoctor = await adddoctormodal.findById(id);

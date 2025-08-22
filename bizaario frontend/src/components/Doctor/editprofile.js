@@ -2190,7 +2190,7 @@ const addupcomingevents=async()=>
         
           </div>
   
-        <label className="form-label fw-bold">Event Image</label>
+        {/* <label className="form-label fw-bold">Event Image</label>
      <div class="upload-drop-zone">
     <div class="upload-drop-icon">&#8682;</div>
     <div class="upload-instructions">
@@ -2205,7 +2205,7 @@ const addupcomingevents=async()=>
         (Not more than 20MB)
       </div>
     </div>
-  </div>
+  </div> */}
 
 
   
