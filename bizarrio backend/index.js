@@ -24,7 +24,7 @@ app.use(cors())
 connect();
 app.get('/',(req,res)=>
 {
-    res.send("welcome to bizarrio")
+    res.send("welcome to bizarriocare")
 })
 app.use('/doctor',require('./routers/doctor/doctoroutes'));
 app.use('/hospital',require('./routers/hospital/hospitalroutes'));
