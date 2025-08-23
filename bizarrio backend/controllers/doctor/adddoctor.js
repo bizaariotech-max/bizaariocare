@@ -202,7 +202,7 @@ const addupcomingevents = async (req, res) => {
     // FIX: Spread new images instead of nesting
     const newEvent = {
       ...req.body,
-      // event_image: newimage,
+      event_image: newimage,
     };
 
    
