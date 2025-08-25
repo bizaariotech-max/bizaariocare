@@ -18,7 +18,7 @@ const MedicalBoardPartnerHospitals = () => {
               <div className="container">
                     <div className="row">
                   
-                      <div className="col-lg-12 d-flex  align-items-center"> 
+                      {/* <div className="col-lg-12 d-flex  align-items-center"> 
                           <div className="button-container tab-group-large">
                               <button className={`btn btn-custom   ${activeTab==='tab1' ? 'active-custom-tab' : '' }`}
                                   onClick={()=> setActiveTab('tab1')}>
@@ -29,10 +29,10 @@ const MedicalBoardPartnerHospitals = () => {
                                  Partners Hospitals
                               </button>
                           </div>
-                      </div>
-                  </div>
-
-                   <div className="bg-white ">{renderContent()}</div>
+                      </div> */}
+                  </div> 
+                   {/* <div >{renderContent()}</div> */}
+                   <MedicalBoard/>
               </div>
         </section>
       </>

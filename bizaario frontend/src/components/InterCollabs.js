@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 
 import InternationalTab1 from './International-collbs/InternationalTab1';
+// import '../assets/css/home.css'
 const InterCollabs = () => {
     const [activeTab, setActiveTab] = useState('tab1');
     const renderContent = () => {
@@ -13,7 +14,7 @@ const InterCollabs = () => {
   };
   return (
       <>
-          <section className='international-collaborations spacing-top'>
+          <section className='international-collaborations spacing-top' >
               <div className="container ">
                   <div className="title">
                       <h2 className='fw-semibold'>International Collaborations</h2>

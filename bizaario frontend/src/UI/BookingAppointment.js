@@ -4,8 +4,13 @@ import 'react-day-picker/dist/style.css';
 import dayjs from 'dayjs';
 import '../assets/css/bookingAppointment.css';
 
-
-export default function BookAppointment({
+/**
+ * DateTimeSlotPicker
+ * - Calendar powered by react-day-picker (modern, accessible)
+ * - Time slots appear only after the user selects a date
+ * - Emits the final selection via onConfirm(selectedDateISO, selectedTime)
+ */
+export default function DateTimeSlotPicker({
   onConfirm,
   initialDate,
   slots: inputSlots,
@@ -138,12 +143,12 @@ export default function BookAppointment({
   return (
       <>
           
-      <div className="container py-2 px-5 booking-appointment-container">
+      <div className="container  p-2 px-lg-5 booking-appointment-container">
          
       {step === 'select' && (
         <div className="row g-4">
           <div className="col-12 col-lg-5">
-            <div className="p-3 py-4  border rounded-4" style={{ background: '#fff', borderColor: '#EFEFEF' }}>
+            <div className="p-3 py-4   calander-card" style={{background: '#fff',  }}>
               <DayPicker
                 mode="single"
                 selected={selectedDate}
@@ -274,5 +279,3 @@ export default function BookAppointment({
           </>
   );
 }
-
-

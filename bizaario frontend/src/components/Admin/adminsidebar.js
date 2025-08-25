@@ -41,6 +41,7 @@ const menuItems = [
   { icon: socialmediaicon, label: "Social Media Asset Master" },
   { icon: userdenialicon, label: "User Request Denial Reason" },
   { icon: userrequestreasonicon, label: "User Request Reason Master" },
+  { icon: userrequestreasonicon, label: "Logout" },
 ];
 
 

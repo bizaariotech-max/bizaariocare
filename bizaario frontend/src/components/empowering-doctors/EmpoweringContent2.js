@@ -49,7 +49,7 @@ const EmpoweringContent2 = () => {
             {doctorArr.map((element) => {
             return (
 
-            <div className=" bg-white" key={element.id}>
+            <div className="" key={element.id}>
                 <img src={element.image} alt="doctor" className=" mx-auto img-fluid" style={{width: '100%'}} />
                 <div className="content mt-4">
                     <p className="text-gray-700 text-start mb-1">

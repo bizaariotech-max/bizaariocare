@@ -22,6 +22,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Updateworkexperience from "./components/Doctor/updateworkexperience";
 import Updateupcomingevent from "./components/Doctor/updateupcomingevents";
 import Updateawards from "./components/Doctor/updateawards_certificates";
+import DoctorProfile from "./components/Doctor/doctorprofileview";
 
 function App() {
   return (
@@ -36,9 +37,7 @@ function App() {
       <Route path="/news-articles/id" element={<NewsArticles />} />
       <Route path="/contact" element={<ContactUs />} />
        <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
-        {/* <Route path="/terms" element={<Terms/>} /> */}
-      
-      {/* <Route path="/" element={<Layout />} /> */}
+   
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/signin" element={<SignIn />} />
          <Route path="/admindashboard" element={<Admindashboard/>}></Route>
@@ -52,8 +51,10 @@ function App() {
         <Route path="/editdoctorworkexperience" element={<Updateworkexperience/>}></Route> 
         <Route path="/editupcomingevents" element={<Updateupcomingevent/>}></Route>
         <Route path="/editawards" element={<Updateawards/>}></Route> 
+        <Route path="/viewdoctorprofile" element={<DoctorProfile/>}></Route> 
       </Routes>
       {/* <Doctordashboard/> */}
+      {/* <DoctorProfile/> */}
       
         
     </BrowserRouter>

@@ -22,6 +22,8 @@ import HeroSlickSlider from '../components/hero/HeroSlickSlider'
 import Hero2 from '../components/hero/Hero2'
 import Header from '../AppLayout/Header';
 import Footer from '../AppLayout/Footer'
+import HospitalPartenerHome from '../components/HospitalPartenerHome'
+import OnlineClinic from '../components/live-sessions-online-clinic/OnlineClinic'
 
 
 
@@ -36,8 +38,10 @@ const Home = () => {
       <HeroSlickSlider/>
       <Empowering />
       <MedicalBoardPartnerHospitals/> 
+      <HospitalPartenerHome/>
       <InterCollabs />
       <LiveSessions/> 
+      <OnlineClinic/>
       <NewsAndArticles />
       <Awards />
       <Testimonial /> 

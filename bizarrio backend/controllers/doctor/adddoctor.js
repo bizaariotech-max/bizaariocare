@@ -4,6 +4,7 @@ const jwt=require('jsonwebtoken')
 const cloudinary=require('cloudinary').v2
 const fs=require('fs')
 const path=require('path')
+const uploadToCloudinary=require('../../commonutilityfunction')
 
 require('dotenv')
 
@@ -70,14 +71,16 @@ const add_doctor = async (req, res) => {
 
  
     
-    if (req.files && req.files.length > 0) {
-      profileimage = []; // reset only if new files are uploaded
-      for (let file of req.files) {
-        const result = await cloudinary.uploader.upload(file.path);
-        profileimage.push(result.secure_url);
-        // Optionally delete file from server
-        // fs.unlinkSync(file.path);
-      }
+    // if (req.files && req.files.length > 0) {
+    //   profileimage = []; // reset only if new files are uploaded
+    //   for (let file of req.files) {
+    //     const result = await cloudinary.uploader.upload(file.path);
+    //     profileimage.push(result.secure_url);
+    //   }
+    // }
+
+     if (req.files && req.files.length > 0) {
+      profileimage = await uploadToCloudinary(req.files); // use common function
     }
 
     const updatedata = { ...req.body, profile_pic: profileimage };
@@ -105,16 +108,18 @@ const addimagegallary = async (req, res) => {
 
     const imagegallary = existingDoctor.image_gallary || []; // default to empty if not set
 
-    const newimage = [];
-    if (req.files && req.files.length > 0) {
-      for (let file of req.files) {
-        const result = await cloudinary.uploader.upload(file.path);
-        newimage.push(result.secure_url);
+    let newimage = [];
+    // if (req.files && req.files.length > 0) {
+    //   for (let file of req.files) {
+    //     const result = await cloudinary.uploader.upload(file.path);
+    //     newimage.push(result.secure_url);
+    //   }
+    // }
 
-        // Optionally delete file from local server
-        // fs.unlinkSync(file.path);
-      }
+     if (req.files && req.files.length > 0) {
+      newimage = await uploadToCloudinary(req.files); // use common function
     }
+
 
     // FIX: Spread new images instead of nesting
     const updatedata = { 
@@ -221,43 +226,118 @@ const addupcomingevents = async (req, res) => {
 };
 
 
-const deleteupcomingevents = async (req, res) => {
+const deleteupcomingeventsimage = async (req, res) => {
   try {
-    const id = req.params._id;
-    const index = parseInt(req.params.index, 10);
+    const { _id, eventindex, imageIndex } = req.params;
+ 
+    const doctor = await adddoctormodal.findById(_id);
+    if (!doctor) return res.status(404).json({ error: "Doctor not found" });
 
-    // Find existing doctor data
-    const existingDoctor = await adddoctormodal.findById(id);
+    const event = doctor.upcoming_events[eventindex];
+    if (!event) return res.status(400).json({ error: "Invalid event index" });
 
-    if (!existingDoctor) {
-      return res.status(404).json({ error: "Doctor not found" });
+    if (!event.event_image || imageIndex >= event.event_image.length) {
+      return res.status(400).json({ error: "Invalid image index" });
     }
 
-    if (
-      isNaN(index) ||
-      index < 0 ||
-      index >= existingDoctor.upcoming_events.length
-    ) {
-      return res.status(400).json({ message: "Invalid index" });
-    }
+    const deletedImage = event.event_image[imageIndex];
+    event.event_image.splice(imageIndex, 1);
 
-    // Remove the image at that index
-    const deletedImage = existingDoctor.upcoming_events[index];
-    existingDoctor.upcoming_events.splice(index, 1);
-
-    // Save updated document
-    await existingDoctor.save();
+    await doctor.save();
 
     res.status(200).json({
       message: "Image deleted successfully",
       deletedImage,
-      updatedDoctor: existingDoctor,
+      updatedDoctor: doctor,
     });
   } catch (error) {
-    console.error("Delete image error:", error);
+    console.error("Delete award image error:", error);
     res.status(500).json({ error: "Something went wrong" });
   }
 };
+
+const update_upcoming_events = async (req, res) => {
+ try {
+      const { _id, eventindex } = req.params;
+      const index = parseInt(eventindex, 10);
+
+      const doctor = await adddoctormodal.findById(_id);
+      if (!doctor) return res.status(404).json({ error: "Doctor not found" });
+
+      const event = doctor.upcoming_events[index];
+      if (!event) return res.status(400).json({ error: "Invalid award index" });
+
+      // Handle uploaded files
+      let neweventimage = [];
+
+
+      if (req.files && req.files.length > 0) {
+        for (let file of req.files) {
+          const result = await cloudinary.uploader.upload(file.path);
+          neweventimage.push(result.secure_url);
+          fs.unlinkSync(file.path);
+        }
+      }
+
+      // Update text fields
+      event.event_type = req.body.event_type || event.event_type;
+      event.event_title = req.body.event_title ||  event.event_title;
+      event.venue = req.body.venue || event.venue;
+      event.start_date = req.body.start_date || event.start_date;
+      event.end_date = req.body.end_date || event.end_date;
+      event.start_time = req.body.start_time || event.start_time;
+      event.end_time = req.body.end_time || event.end_time;
+      event.instructions_for_attendees = req.body.instructions_for_attendees || event.instructions_for_attendees;
+      event.currency = req.body.currency || event.currency;
+      event.fee = req.body.fee || event.fee;
+
+      // Add new images if any
+      if (neweventimage.length > 0) event.event_image.push(...neweventimage);
+
+
+      await doctor.save();
+
+      res.status(200).json({
+        message: "Award updated successfully",
+        updatedDoctor: doctor,
+      });
+    } catch (error) {
+      console.error("Update award error:", error);
+      res.status(500).json({ error: "Something went wrong" });
+    }
+};
+
+const delete_upcoming_events = async (req, res) => {
+  try {
+    const { _id, eventindex } = req.params;
+    const index = parseInt(eventindex, 10);
+
+    // Find the doctor
+    const doctor = await adddoctormodal.findById(_id);
+    if (!doctor) return res.status(404).json({ error: "Doctor not found" });
+
+    // Check if the event exists
+    if (!doctor.upcoming_events || index < 0 || index >= doctor.upcoming_events.length) {
+      return res.status(400).json({ error: "Invalid event index" });
+    }
+
+    // Remove the event from the doctor's array
+    doctor.upcoming_events.splice(index, 1);
+
+    // Save the doctor document
+    await doctor.save();
+
+    res.status(200).json({
+      message: "Event deleted successfully",
+      updatedDoctor: doctor,
+    });
+  } catch (error) {
+    console.error("Delete event error:", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+
 
 // work experience and awards/achievements functions
 const add_work_experience = async (req, res) => {
@@ -359,13 +439,13 @@ const add_awards_achievements = async (req, res) => {
       for (let file of imagefield) {
         const result = await cloudinary.uploader.upload(file.path);
         photo_of_award.push(result.secure_url);
-        // fs.unlink(file.path, () => {});
+     
       }
 
       for (let file of imagefield1) {
         const result = await cloudinary.uploader.upload(file.path);
         picture_gallary.push(result.secure_url);
-        // fs.unlink(file.path, () => {});
+    
       }
     }
 
@@ -610,7 +690,7 @@ const viewdoctorby_id=async(req,res)=>
 
 
   module.exports={add_doctor,logindoctor,changePassword,viewdoctor,updatedoctor,viewdoctorby_id,
-    addimagegallary,deleteimagefromgallary,addupcomingevents,deleteupcomingevents,add_work_experience,
+    addimagegallary,deleteimagefromgallary,addupcomingevents,deleteupcomingeventsimage,add_work_experience,
     add_awards_achievements,edit_work_experience,add_awards_achievements,deleteimagefrom_awardimage,
-    update_awards_achievements,deleteimagefrom_picturegallary
+    update_awards_achievements,deleteimagefrom_picturegallary,update_upcoming_events,delete_upcoming_events
   }
