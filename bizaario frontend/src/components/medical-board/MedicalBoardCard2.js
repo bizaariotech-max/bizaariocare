@@ -101,7 +101,7 @@ return (
           <div className="exp" style={{fontSize:'12px'}}>{item.exp}</div>
       </div>
      <div className="profile-link flex-shrink-0">
-        <a onClick={() => navigate('/viewdoctorprofile', { state: { id: item._id } })}
+        <a onClick={() => navigate('/viewdoctorprofile', { state: { id: item.id } })}
        style={{fontSize:'12px'}} className='profile-link theme-color'>View Profile</a>
     </div>
   </div>

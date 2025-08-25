@@ -1,533 +1,425 @@
-
-import React, { useState } from "react";
-// import "../../styles/doctorprofileview.css";
-import { Style } from "@mui/icons-material";
-// import testvideo from "../icons/videoplayback (1).mp4"
-
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import api from "../../api";
+import Header from "../../AppLayout/Header";
+import Footer from "../../AppLayout/Footer";
+import Carousel from 'react-multi-carousel';
+import "react-multi-carousel/lib/styles.css";
 
 export default function DoctorProfile() {
+  const location = useLocation();
+  const id = location.state?.id;
+
+  const[doctorprofile,setdoctorprofile]=useState([])
+  const getdoctordata=async()=>
+  {
+    try {
+      const resp=await api.get(`doctor/getdoctorbyid/${id}`)
+      setdoctorprofile(resp.data.doctor)
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+
+  }
+
+  useEffect(()=>
+  {
+    getdoctordata()
+  },[id])
+
+
+  
+
+   const responsive = {
+        superLargeDesktop: {
+            breakpoint: { max: 4000, min: 3000 },
+            items: 4
+        },
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 4, 
+             partialVisibilityGutter: 20
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 767 },
+            items: 2
+        },
+        mobile: {
+            breakpoint: { max: 767, min: 0 },
+            items: 1,
+           
+        }
+    };
+  
   const [activeTab, setActiveTab] = useState("About Us");
 
+  // Sample data (replace/fetch as needed)
   const events = [
-  {
-    date: "30th July",
-    services: [
-      "ECG & Blood Pressure Check",
-      "Doctor Consultation",
-      "Basic Cardiac Screening",
-      "Medication Assistance (if eligible)",
-    ],
-    location: "Fortis Hospital, Sector 62, Noida",
-    doctor: "Dr. Stonehart | In Association with Fortis Heart Institute, Delhi",
-  },
-  // Repeat for as many events as needed (if you want the same 4 blocks, just fill the array with 4 identical items)
-  {date: "30th July",
-    services: [
-      " ECG & Blood Pressure Check",
-      "Doctor Consultation",
-      "Basic Cardiac Screening",
-      "Medication Assistance (if eligible)",
-    ],
-    location: "Fortis Hospital, Sector 62, Noida",
-    doctor: "Dr. Stonehart | In Association with Fortis Heart Institute, Delhi",},
-     {date: "30th July",
-    services: [
-      "ECG & Blood Pressure Check",
-      "Doctor Consultation",
-      "Basic Cardiac Screening",
-      "Medication Assistance (if eligible)",
-    ],
-    location: "Fortis Hospital, Sector 62, Noida",
-    doctor: "Dr. Stonehart | In Association with Fortis Heart Institute, Delhi",},
-     {date: "30th July",
-    services: [
-      "ECG & Blood Pressure Check",
-      "Doctor Consultation",
-      "Basic Cardiac Screening",
-      "Medication Assistance (if eligible)",
-    ],
-    location: "Fortis Hospital, Sector 62, Noida",
-    doctor: "Dr. Stonehart | In Association with Fortis Heart Institute, Delhi",},
-];
-    const testimonials = [
-  {
-    name: "Simon Arpad",
-    location: "Uttar Pradesh",
-    message:
-       "Dr. Stonehart is not only a great cardiologist but also a kind human being. He explained my condition clearly, eased my fears, and guided me through successful treatment. I now feel healthier and more confident about my heart.",
-    video: "/videos/testimonial1.mp4",
-  },
-  {
-    name: "Sarah Thomas",
-    location: "Mumbai",
-    message:
-     "Dr.Stonehart treated my father during a critical time. His calm attitude, timely diagnosis, and deep knowledge gave us immense hope. He treats patients like family. Highly recommended!",
-    video: "/videos/testimonial2.mp4",
-  },
-  {
-    name: "Mrs. Anjali Sinha",
-    location: "Gurgaon",
-    message:
-      "After years of struggling with hypertension, I finally found the right guidance with Dr. Stonehart. His lifestyle advice and medication plan worked wonders. I appreciate his care and patience.",
-    video: "/videos/testimonial3.mp4",
-  },
+    {
+      date: "30th July",
+      services: [
+        "ECG & Blood Pressure Check",
+        "Doctor Consultation",
+        "Basic Cardiac Screening",
+        "Medication Assistance (if eligible)",
+      ],
+      location: "Fortis Hospital, Sector 62, Noida",
+      doctor: "Dr. Stonehart | In Association with Fortis Heart Institute, Delhi",
+    },
+    {
+      date: "30th July",
+      services: [
+        "ECG & Blood Pressure Check",
+        "Doctor Consultation",
+        "Basic Cardiac Screening",
+        "Medication Assistance (if eligible)",
+      ],
+      location: "Fortis Hospital, Sector 62, Noida",
+      doctor: "Dr. Stonehart | In Association with Fortis Heart Institute, Delhi",
+    },
+    {
+      date: "30th July",
+      services: [
+        "ECG & Blood Pressure Check",
+        "Doctor Consultation",
+        "Basic Cardiac Screening",
+        "Medication Assistance (if eligible)",
+      ],
+      location: "Fortis Hospital, Sector 62, Noida",
+      doctor: "Dr. Stonehart | In Association with Fortis Heart Institute, Delhi",
+    }
+  ];
 
-  {
-    name: "Ravi N.",
-    location: "New Delhi",
-    message:
-      "After years of struggling with hypertension, I finally found the right guidance with Dr. Stonehart. His lifestyle advice and medication plan worked wonders. I appreciate his care and patience.",
-    video: "/videos/testimonial3.mp4" ,
-  },
-];
+  const testimonials = [
+    {
+      name: "Simon Arpad",
+      location: "Uttar Pradesh",
+      message:
+        "Dr. Stonehart is not only a great cardiologist but also a kind human being. He explained my condition clearly, eased my fears, and guided me through successful treatment.",
+      video: "/videos/testimonial1.mp4",
+    },
+    {
+      name: "Sarah Thomas",
+      location: "Mumbai",
+      message:
+        "Dr.Stonehart treated my father during a critical time. His calm attitude, timely diagnosis, and deep knowledge gave us immense hope.",
+      video: "/videos/testimonial2.mp4",
+    },
+    {
+      name: "Mrs. Anjali Sinha",
+      location: "Gurgaon",
+      message:
+        "After years of struggling with hypertension, I finally found the right guidance with Dr. Stonehart. His lifestyle advice and medication plan worked wonders.",
+      video: "/videos/testimonial3.mp4",
+    },
+    {
+      name: "Ravi N.",
+      location: "New Delhi",
+      message:
+        "After years of struggling with hypertension, I finally found the right guidance with Dr. Stonehart. His lifestyle advice and medication plan worked wonders.",
+      video: "/videos/testimonial3.mp4",
+    }
+  ];
 
+ 
+  const cmeContents = Array(5).fill({
+    videoSrc: "https://www.youtube.com/embed/bwx2Z69S0YA",
+    title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023",
+    date: "20/07/2025, 02:03"
+  });
 
+  const caseStudies = Array(5).fill({
+    img: "https://tse2.mm.bing.net/th/id/OIP.WOVyXByfddCawMN5KVQN8AHaFz?pid=Api&P=0&h=180",
+    text: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2003"
+  });
 
-const TestimonialCard = ({ name, location, message, video }) => (
-  <div className="testimonial-card">
-    <div className="testimonial-content">
-      <div className="testimonial-text">
-        <p className="message">{message}</p>
-        <h4 className="name">{name}</h4>
-        <p className="location">{location}</p>
+ 
+
+  const TestimonialCard = ({ name, location, message, video }) => (
+    <div className="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row gap-4">
+      <div className="flex-1">
+        <p className="text-gray-700">{message}</p>
+        <h4 className="mt-2 font-semibold">{name}</h4>
+        <p className="text-sm text-gray-500">{location}</p>
       </div>
-
       {video && (
-        <div className="testimonial-video">
-          <video controls preload="none" className="video-player">
-            {/* <source src={testvideo} type="video/mp4" /> */}
-            Your browser does not support the video tag.
+        <div className="w-full md:w-52">
+          <video controls preload="none" className="w-full h-32 md:h-40 rounded-md">
+            <source src={video} type="video/mp4"/>
           </video>
         </div>
       )}
     </div>
-  </div>
-);
+  );
 
-
-
- 
-
-const renderTabContent = () => {
+  const renderTabContent = () => {
     switch (activeTab) {
       case "About Us":
         return (
-          <div>
-            <p>
-              Dr. Stonehart is a highly qualified and experienced Cardiologist with a strong commitment to patient care, clinical excellence, and ongoing medical innovation. With over 15 years of experience in the field of cardiology, Dr. Stonehart specializes in the prevention, diagnosis, and treatment of a wide range of heart conditions including coronary artery disease, heart failure, arrhythmias, and hypertension.
+          <div className="space-y-6">
+            <p className="text-gray-700 leading-relaxed">
+              Dr. Stonehart is a highly qualified and experienced Cardiologist with a strong commitment to patient care, clinical excellence, and ongoing medical innovation. With over 15 years of experience, Dr. Stonehart specializes in the prevention, diagnosis, and treatment of a wide range of heart conditions including coronary artery disease, heart failure, arrhythmias, and hypertension.
             </p>
-            <p>
+            <p className="text-gray-700">
               Known for a patient-first approach, Dr. Stonehart combines evidence-based medicine with cutting-edge technologies to deliver personalized treatment. Also involved in continuing medical education and several medical publications.
             </p>
+            <div>
+              <h6 className="mt-8 text-lg font-semibold">Bio Video</h6>
+            <iframe
+        className="w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px] rounded-md shadow-md mt-2"
+        src={doctorprofile.bio_video}
+        title="YouTube video"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
 
-               {/* Bio Video */}
-      <div className="bio-video-section">
-        <h6  style={{marginTop:'30px', fontSize:'20px'}}>Bio Video</h6>
-        <video controls width="100%" poster="video-thumbnail.jpg">
-          <source src="doctor-bio-video.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
 
 
-           <h6 style={{marginTop:'30px', fontSize:'20px'}}>Digital CME Content</h6>
-       <div className="digital-cmecontent" style={{gap:'5px'}}>
+            </div>
+            <div>
+              <h6 className="mt-8 text-lg font-semibold">Digital CME Content</h6>
+               <Carousel   arrows={false} 
+                responsive={responsive}  draggable={true} showDots={true} className="mt-2">
+      {cmeContents.map((cme, idx) => (
+        <div key={idx} className="px-2">
+          <div className="bg-gray-100 rounded-md p-2 flex flex-col items-center h-full">
+            <iframe
+              width="100%"
+              height="180"
+              src={cme.videoSrc}
+              title={cme.title}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="rounded"
+            />
+            <p className="text-sm mt-2 text-center">{cme.title}</p>
+            <div className="text-xs text-gray-500">{cme.date}</div>
+          </div>
+        </div>
+      ))}
+    </Carousel>
+            </div>
+             <div>
+      <h6 className="mt-8 text-lg font-semibold">Innovative Case Studies</h6>
 
-       <div className="cme-contents">
-      <iframe
-      width="200"
-      height="150"
-      src="https://www.youtube.com/embed/bwx2Z69S0YA"
-      title="Doctor Checkup for Kids"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
-    <p style={{ fontSize: "14px", marginTop: "8px",  }}>
-    Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023
-  </p>
-
-  <div style={{ fontSize: "12px", color: "#666" }}>
-    📅 20/07/2025, 02:03
-  </div>
-    {/* <p> */}
-  </div>
-
-       <div className="cme-contents">
-    <iframe
-     width="200"
-      height="150"
-      src="https://www.youtube.com/embed/bwx2Z69S0YA"
-      title="Doctor Checkup for Kids"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
-    <p style={{ fontSize: "14px", marginTop: "8px", }}>
-    Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023
-  </p>
-
-  <div style={{ fontSize: "12px", color: "#666" }}>
-    📅 20/07/2025, 02:03
-  </div>
-    {/* <p> */}
-  </div>
-
-      <div className="cme-contents">
-    <iframe
-     width="200"
-      height="150"
-      src="https://www.youtube.com/embed/bwx2Z69S0YA"
-      title="Doctor Checkup for Kids"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
-    <p style={{ fontSize: "14px", marginTop: "8px",  }}>
-    Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023
-  </p>
-
-  <div style={{ fontSize: "12px", color: "#666" }}>
-    📅 20/07/2025, 02:03
-  </div>
-    {/* <p> */}
-  </div>
-
-     <div className="cme-contents">
-    <iframe
-     width="200"
-      height="150"
-      src="https://www.youtube.com/embed/bwx2Z69S0YA"
-      title="Doctor Checkup for Kids"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
-    <p style={{ fontSize: "14px", marginTop: "8px", }}>
-    Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023
-  </p>
-
-  <div style={{ fontSize: "12px", color: "#666" }}>
-    📅 20/07/2025, 02:03
-  </div>
-    {/* <p> */}
-  </div>
-
-   <div className="cme-contents">
-    <iframe
-     width="200"
-      height="150"
-      src="https://www.youtube.com/embed/bwx2Z69S0YA"
-      title="Doctor Checkup for Kids"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
-    <p style={{ fontSize: "14px", marginTop: "8px", fontWeight: "500" }}>
-    Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023
-  </p>
-
-  <div style={{ fontSize: "12px", color: "#666" }}>
-    📅 20/07/2025, 02:03
-  </div>
-    {/* <p> */}
-  </div>
-      </div>
-        <h6 style={{marginTop:'30px', fontSize:'20px'}}>Innovative Case Studies</h6>
-        <div style={{gap:'5px'}} className="inovative-casestudie">
-      <div className="case-studie1"><img src="https://tse2.mm.bing.net/th/id/OIP.WOVyXByfddCawMN5KVQN8AHaFz?pid=Api&P=0&h=180"></img>
-      <p>Doctor Mike hosts the AMA Tribute to the Medical School Class of 2003</p>
-      </div>
-           <div className="case-studie1"><img src="https://tse2.mm.bing.net/th/id/OIP.WOVyXByfddCawMN5KVQN8AHaFz?pid=Api&P=0&h=180"></img>
-      <p>Doctor Mike hosts the AMA Tribute to the Medical School Class of 2003</p>
-      </div>
-              <div className="case-studie1"><img src="https://tse2.mm.bing.net/th/id/OIP.WOVyXByfddCawMN5KVQN8AHaFz?pid=Api&P=0&h=180"></img>
-      <p>Doctor Mike hosts the AMA Tribute to the Medical School Class of 2003</p>
-      </div>
-               <div className="case-studie1"><img src="https://tse2.mm.bing.net/th/id/OIP.WOVyXByfddCawMN5KVQN8AHaFz?pid=Api&P=0&h=180"></img>
-      <p>Doctor Mike hosts the AMA Tribute to the Medical School Class of 2003</p>
-      </div>
-          <div className="case-studie1"><img src="https://tse2.mm.bing.net/th/id/OIP.WOVyXByfddCawMN5KVQN8AHaFz?pid=Api&P=0&h=180"></img>
-      <p>Doctor Mike hosts the AMA Tribute to the Medical School Class of 2003</p>
-      </div>
-      </div>
-      </div>
+      <Carousel
+        responsive={responsive}
+        arrows={false}
+        infinite={true}
+        autoPlay={false}
+        draggable={true}
+        showDots={true}
+        keyBoardControl={true}
+        containerClass="mt-4"
+        dotListClass="custom-dot-list"
+      >
+        {caseStudies.map((cs, idx) => (
+          <div key={idx} className="flex flex-col items-center bg-gray-50 rounded-lg p-3 m-2">
+            <img
+              src={cs.img}
+              alt="Case Study"
+              className="w-full h-28 object-cover rounded"
+            />
+            <p className="text-xs mt-2 text-center">{cs.text}</p>
+          </div>
+        ))}
+      </Carousel>
+    </div>
           </div>
         );
-     case "Hospital Associations":
-  return (
-    <div style={{marginBottom:'50px'}}>
-      <h4 className="mb-3 fw-semibold">Work Experience</h4>
-
-      <div className="d-flex align-items-start mb-4">
-        <img
-          src="https://tse1.mm.bing.net/th/id/OIP.Eut76tsSqqQblzePsQBQ9gHaHa?pid=Api&P=0&h=180"
-          alt="AIIMS"
-          style={{ width: 100, height: 80, objectFit: "contain", marginRight: 15 }}
-        />
-        <div>
-          <h6 className="mb-1">AIIMS, New Delhi</h6>
-          <p className="mb-0">Resident Cardiologist</p>
-          <small className="text-muted">2012–2015</small>
-        </div>
+      case "Hospital Associations":
+        return (
+          <div className="space-y-6">
+            <h4 className="font-semibold text-lg">Work Experience</h4>
+            {
+            doctorprofile.work_experience.map((item, index) => (
+           <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+      <img
+        src="https://api.builder.io/api/v1/image/assets/TEMP/1b856e809c7235f840a5c224f76e47c868c95e60?width=96"
+        alt="hospital"
+        style={{ width: "70px", height: "70px", marginRight: "12px" }}
+      />
+      <div>
+        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{item.hospital_name}</span>
+        <br />
+        <span style={{ fontSize: "14px" }}>
+          {item.designation} <br></br>({new Date(item.from_year).toLocaleDateString()} - {new Date(item.to_year).toLocaleDateString()})
+        </span>
       </div>
-
-      <div className="d-flex align-items-start mb-4">
-        <img
-          src="https://tse2.mm.bing.net/th/id/OIP._1vyZh0rMazZLU0EKzkUwgHaEK?pid=Api&P=0&h=180"
-          alt="Fortis"
-          style={{ width: 100, height: 80, objectFit: "contain", marginRight: 15 }}
-        />
-        <div>
-          <h6 className="mb-1">Fortis Heart Institute, Delhi</h6>
-          <p className="mb-0">Visiting Consultant</p>
-          <small className="text-muted">2015–2017</small>
-        </div>
-      </div>
-
-      <div className="d-flex align-items-start  mb-4">
-        <img
-          src="https://tse2.mm.bing.net/th/id/OIP.3i5ifo6IJ7y8ZVrOuh1eMwHaIE?pid=Api&P=0&h=180"
-          alt="Apollo"
-          style={{ width: 100, height: 80, objectFit: "contain", marginRight: 15 }}
-        />
-        <div>
-          <h6 className="mb-1">Apollo Hospitals, Chennai</h6>
-          <p className="mb-0">Senior Cardiologist</p>
-          <small className="text-muted">2017–Present</small>
-        </div>
-      </div>
-  {/* Gallery */}
-      <h4 className="mb-3 fw-semibold">Our Gallery</h4>
-      <div className="row">
-        {[
-          "https://tse1.mm.bing.net/th/id/OIP.QCX4aDm8TtTQoZSZr2Wn4gHaEK?pid=Api&P=0&h=180",
-          "https://tse1.mm.bing.net/th/id/OIP.S-DOFHsyDeW8NN3V9ZkeKgHaEK?pid=Api&P=0&h=180",
-          "https://tse1.mm.bing.net/th/id/OIP.5whI6K6J9QYNQ2jEXTzkxwHaCS?pid=Api&P=0&h=180",
-          "https://tse2.mm.bing.net/th/id/OIP.o2HpGXjnXzUNcvOiYpNzWQHaGL?pid=Api&P=0&h=180",
-          "https://tse3.mm.bing.net/th/id/OIP.2uWOKRynKNknUoZWPrpVJgHaEK?pid=Api&P=0&h=180",
-          "https://tse1.mm.bing.net/th/id/OIP.dFElj3ERDWEw0H23Nqrf3wHaE8?pid=Api&P=0&h=180",
-          "https://tse2.mm.bing.net/th/id/OIP.tJb87JR5bT0_qltxBiKJrgHaEn?pid=Api&P=0&h=180",
-          "https://tse4.mm.bing.net/th/id/OIP.F7O5YBfuwhrLw49Tjm9RNAHaEj?pid=Api&P=0&h=180",
-          "https://tse4.mm.bing.net/th/id/OIP.F7O5YBfuwhrLw49Tjm9RNAHaEj?pid=Api&P=0&h=180      ",
-        ].map((img, index) => (
-          <div className="col-6 col-md-4 mb-3" key={index}>
-            <img
-              src={img}
-              alt={`Gallery ${index + 1}`}
-              style={{
-                width: "100%",
-                height: "150px",
-                objectFit: "cover",
-                borderRadius: "8px",
-              }}
-            />
+    </div>
+            ))}
+            <h4 className="font-semibold text-lg mt-6">Our Gallery</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+              {doctorprofile.image_gallary.map((img, idx) => (
+                <img key={idx} src={img} alt="Gallery" className="w-full h-32 object-cover rounded-md shadow"/>
+              ))}
+            </div>
           </div>
-        ))}
+        );
+      case "Awards & Certificates":
+        return (
+         <div className="space-y-6">
+  {doctorprofile.awards_and_achievements.map((a, idx) => (
+    <div
+      key={idx}
+      className="flex flex-col md:flex-row gap-6 bg-white rounded-lg shadow p-4 items-center md:items-start"
+    >
+      {/* Award Image */}
+      <img
+        src={a.award_image}
+        alt="Award"
+        className="w-full md:w-80 h-48 md:h-40 object-cover rounded-lg flex-shrink-0"
+      />
+
+      {/* Content */}
+      <div className="flex-1">
+        <h4 className="text-xl font-bold mb-1">{a.award_title}</h4>
+        <p className="text-gray-700 mb-2">{a.awarding_body}</p>
+        <div className="text-xs text-gray-500 mb-1">📅 {a.date}</div>
+        <div className="text-xs text-gray-500 mb-2">{a.venue}</div>
+        <a
+          href="#"
+          className="text-blue-600 underline text-sm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          🔗 View Certificate
+        </a>
       </div>
     </div>
-  );
-  
-
-case "Awards & Certificates":
- return (
-  <div  className="award-cirtificates"  style={{gap:'50px'}}>
-  <div className="award-container" style={{display:'flex', padding:'20px 0'}}>
-    <div className="award-img">
-      <img src="https://tse4.mm.bing.net/th/id/OIP.QqaMf3wXwNjRkxNw77rt8AHaE7?pid=Api&P=0&h=180"
-      style={{width:'700px'}}
-      />
-    </div>
-    <div className="award" style={{marginLeft:'20px'}}>
-      <h4>🏅 Best Cardiologist 2022</h4>
-      <h6>Indian Medical Association</h6>
-      <p> I have received multiple awards for excellence in cardiology and patient care,
-              including recognition for clinical innovation and compassionate service. His
-              work continues to be honored by leading medical associations.</p>
-              <div className="flex items-center gap-1" style={{marginTop:'-10px'}}>
-              📅 15/05/2022
-            </div>
-            <a
-              href="#"
-              className="text-blue-600 hover:underline flex items-center gap-1" style={{color:'blue'}}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🔗 View Certificate
-            </a>
-    </div>
-  </div>
-
-  <div  className="award-container" style={{display:'flex',padding:'20px 0'}}>
-    <div  className="award-img">
-      <img 
-      src="https://tse4.mm.bing.net/th/id/OIP.5wVS1lPP5EYrITthpqAM9QAAAA?pid=Api&P=0&h=180"
-      style={{width:'700px'}}
-      />
-     
-    </div>
-    <div className="award"  style={{marginLeft:'20px'}}>
-      <h4>🏅 Best Cardiologist 2022</h4>
-      <h6>Indian Medical Association</h6>
-      <p> I have received multiple awards for excellence in cardiology and patient care,
-              including recognition for clinical innovation and compassionate service. His
-              work continues to be honored by leading medical associations.</p>
-              <div className="flex items-center gap-1" style={{marginTop:'-10px'}}>
-              📅 15/05/2022
-            </div>
-            <a
-              href="#"
-              className="text-blue-600 hover:underline flex items-center gap-1" style={{color:'blue'}}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🔗 View Certificate
-            </a>
-    </div>
-  </div>
-  <div  className="award-container" style={{display:'flex', padding:'20px 0'}}>
-    <div  className="award-img">
-      <img src="https://tse1.mm.bing.net/th/id/OIP.A5WeqBX4qm3mhZ3MSMu5dAAAAA?pid=Api&P=0&h=180"
-      style={{width:'700px'}}
-      />
-    </div >
-    <div className="award"  style={{marginLeft:'20px'}}>
-      <h4>🏅 Best Cardiologist 2022</h4>
-      <h6>Indian Medical Association</h6>
-      <p> I have received multiple awards for excellence in cardiology and patient care,
-              including recognition for clinical innovation and compassionate service. His
-              work continues to be honored by leading medical associations.</p>
-              <div className="flex items-center gap-1" style={{marginTop:'-10px'}}>
-              📅 15/05/2022
-            </div>
-            <a
-              href="#"
-              className="text-blue-600 hover:underline flex items-center gap-1" style={{color:'blue'}}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🔗 View Certificate
-            </a>
-    </div>
-  </div>
-    <div  className="award-container" style={{display:'flex', padding:'20px 0'}}>
-    <div  className="award-img">
-      <img src="https://tse4.mm.bing.net/th/id/OIP.wCWp4-TExWxtMIz1epS4HgHaFj?pid=Api&P=0&h=180"
-      style={{width:'700px'}}
-      />
-    </div>
-    <div className="award"  style={{marginLeft:'20px'}}>
-      <h4>🏅 Best Cardiologist 2022</h4>
-      <h6>Indian Medical Association</h6>
-      <p> I have received multiple awards for excellence in cardiology and patient care,
-              including recognition for clinical innovation and compassionate service. His
-              work continues to be honored by leading medical associations.</p>
-              <div className="flex items-center gap-1" style={{marginTop:'-10px'}}>
-              📅 15/05/2022
-            </div>
-            <a
-              href="#"
-              className="text-blue-600 hover:underline flex items-center gap-1" style={{color:'blue'}}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🔗 View Certificate
-            </a>
-    </div>
-  </div>
+  ))}
 </div>
-  );
-  case "Upcoming Event":
-   return(
-  <div className="events-list">
-        {events.map((event, idx) => (
-          <div className="event-card" key={idx}>
-            <div className="event-info">
-              <h3>Free Heart Check-up & Treatment Camp</h3>
-              <p className="doctor">{event.doctor}</p>
-              <p><strong>Free Services Include:</strong></p>
-              <ul style={{listStyleType:"disc"}}>
-                {event.services?.map((s, i) => (
-                  <li key={i}>{s}</li>
-                ))}
-              </ul>
-              <p className="location"><span>📍</span> {event.location}</p>
-            </div>
-            <div className="event-side">
-              <div className="event-date">
-                <span>30<sup>th</sup></span>
-                <span className="july">July</span>
-              </div>
-              <img src="https://www.pngmart.com/files/21/Male-Doctor-PNG-Isolated-File.png" alt="Doctor" className="doctor-image" />
-            </div>
-          </div>
-        ))}
-      </div>
-   );
 
-    case "Patient Testimonials":
+        );
+      case "Upcoming Event":
   return (
-     <div className="max-w-5xl mx-auto px-2 md:px-4 py-6" >
-    <div className="space-y-2">
-      {testimonials.map((item, index) => (
-        <TestimonialCard
-          key={index}
-          name={item.name}
-          location={item.location}
-          message={item.message}
-          video={item.video}
+  <div className="space-y-6">
+  {(doctorprofile?.upcoming_events || []).map((event, idx) => (
+    <div 
+      key={idx} 
+      className="flex flex-col md:flex-row border rounded shadow-lg bg-white overflow-hidden"
+    >
+      {/* Image on left */}
+      <div className="md:w-1/3 w-full">
+        <img 
+          src={event.event_image || "https://via.placeholder.com/400x300"} 
+          alt="Event" 
+          className="w-full h-full object-cover"
         />
-      ))}
+      </div>
+
+      {/* Content on right */}
+      <div className="md:w-2/3 w-full p-4 flex flex-col justify-between">
+        <div>
+          <h3 className="font-bold text-lg mb-2">{event.event_title || "Event Title"}</h3>
+          <p className="text-sm text-gray-500 mb-2">by {`${doctorprofile.firstName} ${doctorprofile.lastName}` || "Doctor Name"}</p>
+          <p className="font-semibold mb-1">Event Type: {event.event_type}</p>
+          <p className="text-sm font-medium mt-1">📍 {event.venue || "Location"}</p>
+          <p className="text-sm font-medium mt-1">📅 {event.start_date ? new Date(event.start_date).toLocaleDateString() : "-"} - {event.end_date ? new Date(event.end_date).toLocaleDateString() : "-"}</p>
+          <p className="text-sm font-medium mt-1">{event.start_time || ""} - {event.end_time || ""}</p>
+          <p className="text-sm font-medium mt-1">{event.instructions_for_attendees || ""}</p>
+          <p className="text-sm font-medium mt-1">Fee: {event.fee || "Free"} {event.currency || ""}</p>
+        </div>
+
+   
+      
+      </div>
     </div>
-  </div>
+  ))}
+</div>
+
+
   );
 
+      case "Patient Testimonials":
+        return (
+          <div className="space-y-6">
+            {testimonials.map((item, idx) => (
+              <TestimonialCard key={idx} {...item} />
+            ))}
+          </div>
+        );
       default:
         return null;
     }
   };
 
   return (
-    <div className="doctor-profile-card">
-        <h4>Doctor Profile</h4>
-      <div className="profile-header">
-         <img
-          src="https://www.visualsstock.com/details_watermark.php?filename=42893"
-          alt="Dr. Dominic Stonehart"
-          className="doctor-img"
-        />
-        <div className="social-row" >
-          <a href="#"><i  className="bi bi-linkedin fs-5 text-primary"></i></a>
-          <a href="#"><i className="bi bi-envelope-fill fs-5 text-danger"></i></a>
-          <a href="#"><i className="bi bi-x-circle-fill fs-5 text-secondary"></i></a>
+    <>
+    <Header/>
+   
+   
+    <div className="max-w-7xl mx-auto px-1 sm:px-2 py-8">
+      {/* Profile header */}
+  <div className="w-full flex flex-col md:flex-row items-start gap-4 bg-white rounded-xl shadow p-4 border border-gray-200">
+  {/* Doctor Photo + Socials */}
+  <div className="flex flex-col items-center md:items-start min-w-[7rem]">
+    <img
+      src={doctorprofile.profile_pic}
+      alt="Dr. Dominic Stonehart"
+      className="w-28 h-32 md:w-36 md:h-40 object-cover rounded-lg border"
+    />
+    {/* Social Icons below image */}
+    <div className="flex gap-3 mt-2">
+      <a href="#" className="text-blue-600 text-xl"><i className="bi bi-linkedin"></i></a>
+      <a href="#" className="text-pink-500 text-xl"><i className="bi bi-instagram"></i></a>
+      <a href="#" className="text-blue-400 text-xl"><i className="bi bi-messenger"></i></a>
+    </div>
+  </div>
 
-           {/* <a    href="#" type="button" className="g" style={{color:'blue', border:'1px solide'}}>
-              G
-            </a> */}
-         </div>
-        <div><a
-      href="/pdfs/Dr_Dominic_Stonehart_Profile.pdf"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-decoration-none"
-      // style={{ position: "absolute", top: 140,right:320, fontSize: "14px", color: "#4374e0", fontWeight: 500 }}
-    >
-      <i className="bi bi-download me-1"></i>Doctor Profile PDF
-    </a></div>
-        <div className="profile-info">
-          <h1>Dr. Dominic Stonehart</h1>
-          <p className="doctor-qual">MBBS [Consultant Cardiologist]</p>
-          <p className="specializes">
-            Specializes in : Interventional Cardiology, Heart Failure Management, Preventive Cardiology
-          </p>
-          <p className="about-snippet">
-            Dr. Stonehart is a qualified and experienced Cardiologist with a strong commitment to patient care and clinical excellence. With 15+ years of experience, they focus on accurate diagnosis, personalized treatment, and overall well-being of patients.
-          </p>
-          <button className="book-appointment-btn">Book Appointment</button>
-        </div>
+  {/* Info Block */}
+  <div className="flex-1 w-full flex flex-col">
+    {/* Top Row: Details + Profile PDF */}
+    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+      {/* Details Left */}
+      <div className="flex-1 min-w-0">
+        <h2 className="text-2xl font-bold mb-1">Dr. {doctorprofile?.firstName} {doctorprofile?.lastName}</h2>
+        <p className="text-gray-700 font-medium mb-1">{doctorprofile?.qualification?.join(',')}</p>
+      <p className="text-[18px] text-[rgba(0,0,0,0.75)]  font-medium mb-1">
+          Specializes in:{" "}
+          <span className=" text-[18px] text-[rgba(0,0,0,0.75)]">
+            {doctorprofile.medical_specialty}
+          </span>
+        </p>
+        <p className="text-gray-800 text-sm mt-1 break-words text-[16px] text-[rgba(0,0,0,0.75)]">
+           {doctorprofile.bio}
+        </p>
       </div>
+      {/* Profile PDF Link Right (never wraps) */}
+      <div className="flex flex-row md:flex-col md:items-end items-center gap-2 md:gap-0 shrink-0 mt-2 md:mt-0">
+        <a
+          href="/pdfs/Dr_Dominic_Stonehart_Profile.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-700 underline font-semibold text-sm whitespace-nowrap"
+        >
+          <span className="inline-block align-middle mr-1">
+            <i className="bi bi-file-earmark-pdf"></i>
+          </span>
+          Doctor Profile PDF
+        </a>
+      </div>
+    </div>
+    {/* Action Buttons Row (always right-aligned) */}
+    <div className="flex flex-row gap-2 w-full justify-end mt-4">
+     <button className="px-6 py-2 rounded-[5px] font-semibold text-orange-700 border border-[#F86F03] bg-white hover:bg-orange-200 transition">
+        Send Medical Query
+      </button>
+      <button className="bg-[#F86F03] text-white px-6 py-2 rounded font-semibold hover:bg-orange-700 transition">
+        Book Appointment
+      </button>
+    </div>
+  </div>
+</div>
+
+
 
       {/* Tabs navigation */}
-      <div className="profile-tabs">
+      <div className="mt-8 flex flex-wrap gap-3">
         {[
           "About Us",
           "Hospital Associations",
@@ -537,7 +429,11 @@ case "Awards & Certificates":
         ].map(tab => (
           <button
             key={tab}
-            className={`tab${activeTab === tab ? " active" : ""}`}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition ${
+              activeTab === tab
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
             onClick={() => setActiveTab(tab)}
           >
             {tab}
@@ -546,10 +442,9 @@ case "Awards & Certificates":
       </div>
 
       {/* Tab Content */}
-      <div className="tab-content">
-        {renderTabContent()}
-      </div>
-      
+      <div className="mt-6">{renderTabContent()}</div>
     </div>
+     <Footer/>
+     </>
   );
 }
