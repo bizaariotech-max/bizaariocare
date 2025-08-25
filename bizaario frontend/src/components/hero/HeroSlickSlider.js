@@ -28,7 +28,7 @@ const HeroSlickSlider = () => {
                     <div className="container">
                         <div className="row">
                             <div className="col-md-8">
-                                <img src={element.sliderImage} alt="" className="img-fluid" />
+                               
                                 <div className="hero-content">
                                     <h1 className="hero-title ">{element.bannerTitle}</h1>
                                     <p className="hero-text  ">{element.dsc}</p>

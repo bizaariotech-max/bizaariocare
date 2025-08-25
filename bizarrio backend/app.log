@@ -142,3 +142,9 @@
 [2025-08-25 12:20:36] INFO: PUT request to /doctor/deleteupcomingeventsimage/68a44b251a0e217671835d05/7/0 | User: Unknown User
 [2025-08-25 12:20:47] INFO: PUT request to /doctor/updateupcomingevents/68a44b251a0e217671835d05/7 | User: Unknown User
 [2025-08-25 12:21:21] INFO: PUT request to /doctor/updateupcomingevents/68a44b251a0e217671835d05/7 | User: Unknown User
+[2025-08-25 12:42:47] INFO: PUT request to /doctor/updateupcomingevents/68a44b251a0e217671835d05/1 | User: Unknown User
+[2025-08-25 13:29:10] INFO: POST request to /doctor/login | User: Unknown User
+[2025-08-25 13:29:34] INFO: PUT request to /doctor/updateupcomingevents/68a44b251a0e217671835d05/2 | User: Unknown User
+[2025-08-25 15:40:41] INFO: POST request to /doctor/login | User: Unknown User
+[2025-08-25 16:03:54] INFO: POST request to /doctor/login | User: Unknown User
+[2025-08-25 16:04:29] INFO: POST request to /doctor/login | User: Unknown User
