@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const logMiddleware=require('./middlewares/logmiddleware')
 
-
 const app=express();
 
 
@@ -15,6 +14,15 @@ app.use(bodyParser.json({ limit: "50mb" })); // Increase limit for JSON payloads
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); // Increase limit for form data
 
 app.use(express.json({ limit: '50mb' }));
+
+// * use this  only in index file not in every page
+// Cloudinary Config
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 app.use(logMiddleware);
 
@@ -28,6 +36,11 @@ app.get('/',(req,res)=>
 })
 app.use('/doctor',require('./routers/doctor/doctoroutes'));
 app.use('/hospital',require('./routers/hospital/hospitalroutes'));
+
+// new api routes use this pattern = BASE_URL/api/v1/name
+app.use("/api/v1/common", require("./routers/common/lookupRoutes"));
+//* use this single api to upload image in web it returns url which can be stored in any schema
+app.use("/api/v1/common", require("./routers/common/uploadRoutes"));
 
 
 const server=app.listen(process.env.PORT,()=>
