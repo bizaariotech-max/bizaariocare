@@ -5,7 +5,7 @@ require('dotenv').config()
 const connect=()=>
     {
         try {
-            const resp=mongoose.connect(process.env.URL)
+            const resp = mongoose.connect(process.env.DATABASE);
             console.log('database connect successfully');
         } 
         catch (error)
