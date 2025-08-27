@@ -138,21 +138,33 @@ export default function DoctorProfile() {
  
 
   const TestimonialCard = ({ name, location, message, video }) => (
-    <div className="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row gap-4">
-      <div className="flex-1">
-        <p className="text-gray-700">{message}</p>
-        <h4 className="mt-2 font-semibold">{name}</h4>
-        <p className="text-sm text-gray-500">{location}</p>
-      </div>
-      {video && (
-        <div className="w-full md:w-52">
-          <video controls preload="none" className="w-full h-32 md:h-40 rounded-md">
-            <source src={video} type="video/mp4"/>
-          </video>
-        </div>
-      )}
+  <div
+    className="shadow p-4 flex flex-col md:flex-row gap-4"
+    style={{
+      borderRadius: "32px",
+      background: "rgba(82, 95, 225, 0.06)",
+    }}
+  >
+    <div className="flex-1">
+      <p className="text-gray-700">{message}</p>
+      <h4 className="mt-2 font-semibold">{name}</h4>
+      <p className="text-sm text-gray-500">{location}</p>
     </div>
-  );
+
+    {video && (
+      <div className="w-full md:w-52 flex-shrink-0">
+        <video
+          controls
+          preload="none"
+          className="w-full h-32 md:h-40 rounded-xl"
+        >
+          <source src={video} type="video/mp4" />
+        </video>
+      </div>
+    )}
+  </div>
+);
+
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -253,11 +265,22 @@ export default function DoctorProfile() {
     </div>
             ))}
             <h4 className="font-semibold text-lg mt-6">Our Gallery</h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-              {doctorprofile.image_gallary.map((img, idx) => (
-                <img key={idx} src={img} alt="Gallery" className="w-full h-32 object-cover rounded-md shadow"/>
-              ))}
-            </div>
+         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-2">
+  {doctorprofile.image_gallary.map((img, idx) => (
+    <div
+      key={idx}
+      className="w-full rounded-md shadow overflow-hidden"
+      style={{ aspectRatio: "7/5", flexShrink: 0 }} // approximate 350x250 ratio
+    >
+      <img
+        src={img}
+        alt="Gallery"
+        className="w-full h-full object-cover"
+      />
+    </div>
+  ))}
+</div>
+
           </div>
         );
       case "Awards & Certificates":
@@ -269,11 +292,13 @@ export default function DoctorProfile() {
       className="flex flex-col md:flex-row gap-6 bg-white rounded-lg shadow p-4 items-center md:items-start"
     >
       {/* Award Image */}
-      <img
-        src={a.award_image}
-        alt="Award"
-        className="w-full md:w-80 h-48 md:h-40 object-cover rounded-lg flex-shrink-0"
-      />
+      <div className="flex-shrink-0 w-full md:w-40 lg:w-48 aspect-[67/60] rounded-lg overflow-hidden">
+    <img
+      src={a.award_image}
+      alt="Award"
+      className="w-full h-full object-cover"
+    />
+  </div>
 
       {/* Content */}
       <div className="flex-1">
@@ -353,7 +378,7 @@ export default function DoctorProfile() {
     <Header/>
    
    
-    <div className="max-w-7xl mx-auto px-1 sm:px-2 py-8">
+    <div className="max-w-6xl mx-auto px-1 sm:px-2 py-8">
       {/* Profile header */}
   <div className="w-full flex flex-col md:flex-row items-start gap-4 bg-white rounded-xl shadow p-4 border border-gray-200">
   {/* Doctor Photo + Socials */}

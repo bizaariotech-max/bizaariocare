@@ -5,6 +5,8 @@ import Doctorsidebar from "./doctorsidebar";
 import { FaEdit } from "react-icons/fa";
 import Swal from 'sweetalert2';
 import { Modal, Button, Form } from "react-bootstrap";
+import UniqueLoader from '../loader';
+
 
 function Updateupcomingevent() {
 
@@ -115,59 +117,79 @@ const handleDeleteAwardImage = async (imageIndex) => {
   }));
 
   try {
+    setloading(true)
     const response = await api.put(
       `doctor/deleteupcomingeventsimage/${doctordetails.user._id}/${eventindex}/${imageIndex}`
     );
 
-  alert("image delete")
+    Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "Image deleted successfully.",
+        showConfirmButton: false,
+        timer: 1500
+      })
     return response.data; // return updated doctor data
   } catch (error) {
     console.error("Error deleting image:", error);
     throw error;
-  }
-};
-
- 
-const deleteevents=async(index)=>
-{
-  try {
-    setloading(true)
-    const resp = await api.delete(`doctor/deleteupcomingevents/${doctordetails.user._id}/${index}`);
-
-    if(resp.status===200)
-    {
-       Swal.fire({
-        icon:"success",
-        title:"Event Deleted",
-        text:"Event Deleted Successfully...",
-        showConfirmButton:true,
-        customClass: {
-        confirmButton: 'my-swal-button',
-      },
-      }).then(()=>
-      {
-        window.location.reload()
-      })
-    }
-  
-    
-  } catch (error) {
-     Swal.fire({
-      icon:"error",
-      title:"error ",
-      text:error.response.data.message,
-      showConfirmButton:true,
-        customClass: {
-        confirmButton: 'my-swal-button',
-      },
-    })
-    console.log(error);
-    
   }finally
   {
     setloading(false)
   }
-}
+};
+
+ 
+const deleteevents = async (index) => {
+  // Show confirmation first
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    customClass: {
+      confirmButton: 'my-swal-button',
+      cancelButton: 'my-swal-button',
+    },
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        setloading(true);
+        const resp = await api.delete(`doctor/deleteupcomingevents/${doctordetails.user._id}/${index}`);
+
+        if (resp.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Event Deleted",
+            text: "Event Deleted Successfully...",
+            showConfirmButton: true,
+            customClass: {
+              confirmButton: 'my-swal-button',
+            },
+          }).then(() => {
+            window.location.reload(); // Or update state instead of reload
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.response?.data?.message || "Something went wrong!",
+          showConfirmButton: true,
+          customClass: {
+            confirmButton: 'my-swal-button',
+          },
+        });
+        console.log(error);
+      } finally {
+        setloading(false);
+      }
+    }
+  });
+};
+
 
   
 const updateevents=async(index)=>
@@ -554,6 +576,22 @@ const updateevents=async(index)=>
         </Modal.Footer> */}
       </Modal>
 
+
+    {loading && (
+  <div
+    style={{
+      position: 'fixed',
+      inset: 0,
+      background: 'rgba(255, 255, 255, 0.6)',
+      zIndex: 9999,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <UniqueLoader />
+  </div>
+)}
       
     </div>
   )

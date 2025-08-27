@@ -18,6 +18,7 @@ import socialmediaicon from '../Admin/images/hashtag-svgrepo-com 1.png'
 import userdenialicon from '../Admin/images/user-xmark-alt-1-svgrepo-com 1.png'
 import userrequestreasonicon from '../Admin/images/user-question-alt-svgrepo-com 1.png'
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 
 
@@ -49,6 +50,23 @@ const Adminsidebar = () => {
 
   const navigate=useNavigate()
 
+  const logout=()=>
+  {
+    Swal.fire({
+      icon:"success",
+      title:"Logout",
+      text:"Your Are Successfully Logout...",
+      showConfirmButton:true,
+      customClass: {
+      confirmButton: 'my-swal-button',
+    },
+    }).then(()=>
+    {
+      navigate('/')
+    })
+   
+  }
+
     return (
   <aside className="sidebar">
     <div className="sidebar-header">
@@ -57,7 +75,14 @@ const Adminsidebar = () => {
     </div>
     <ul className="sidebar-menu">
       {menuItems.map((item, idx) => (
-        <li key={idx} onClick={()=>navigate(`${item.path}`)}>
+        <li key={idx} 
+        onClick={() => {
+          if (item.label.toLowerCase() === "logout") {
+            logout(); // call logout function
+          } else {
+            navigate(item.path); // otherwise navigate
+          }
+        }}>
           <img src={item.icon} alt={`${item.label} icon`} className="sidebar-icon" />
           <span>{item.label}</span>
         </li>

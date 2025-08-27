@@ -20,11 +20,27 @@ cloudinary.config({
     );
 
     const results = await Promise.all(uploadPromises);
+
     return results.map(res => res.secure_url); // return only urls
+ 
+    
   } catch (error) {
     console.error("Cloudinary upload error:", error);
     throw error;
   }
 };
 
-module.exports=uploadToCloudinary
+
+function getPublicIdFromUrl(url) {
+  const urlObj = new URL(url);
+  const pathnameParts = urlObj.pathname.split('/');
+  const uploadIndex = pathnameParts.findIndex(part => part === 'upload');
+  let publicIdParts = pathnameParts.slice(uploadIndex + 1);
+  if (publicIdParts[0].startsWith('v')) publicIdParts.shift(); // remove version
+  let filename = publicIdParts.join('/');
+  const lastDot = filename.lastIndexOf('.');
+  if (lastDot !== -1) filename = filename.substring(0, lastDot); // remove extension
+  return filename;
+}
+
+module.exports={uploadToCloudinary,getPublicIdFromUrl}

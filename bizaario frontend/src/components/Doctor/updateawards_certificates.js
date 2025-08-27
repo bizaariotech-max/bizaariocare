@@ -5,6 +5,7 @@ import Doctorsidebar from "./doctorsidebar";
 import { FaEdit } from "react-icons/fa";
 import Swal from 'sweetalert2';
 import { Modal, Button, Form } from "react-bootstrap";
+import UniqueLoader from '../loader';
 
 function Updateawards() {
 
@@ -42,6 +43,7 @@ const[doctorprofileaward,setdoctorprofileaward] =useState({doctor_id:"",award_ti
 
 
 const handleDeleteAwardImage = async (imageIndex) => {
+  setloading(true)
     setdoctorprofileaward((prev) => ({
     ...prev,
     award_image: prev.award_image.filter((_, i) => i !== imageIndex)
@@ -51,15 +53,25 @@ const handleDeleteAwardImage = async (imageIndex) => {
       `doctor/deleteawardimage/${doctordetails.user._id}/${awardIndex}/${imageIndex}`
     );
 
-  alert("image delete")
+     Swal.fire({
+      icon: "success",
+      title: "Deleted!",
+      text: "Image deleted successfully.",
+      showConfirmButton: false,
+      timer: 1500
+    });
     return response.data; // return updated doctor data
   } catch (error) {
     console.error("Error deleting image:", error);
     throw error;
+  }finally
+  {
+    setloading(false)
   }
 };
 
 const handleDeletepicturegallary = async (imageIndex) => {
+  setloading(true)
     setdoctorprofileaward((prev) => ({
     ...prev,
     picture_gallary: prev.picture_gallary.filter((_, i) => i !== imageIndex)
@@ -69,11 +81,20 @@ const handleDeletepicturegallary = async (imageIndex) => {
       `doctor/deletepicturegallary/${doctordetails.user._id}/${awardIndex}/${imageIndex}`
     );
 
-  alert("image delete")
+    Swal.fire({
+      icon: "success",
+      title: "Deleted!",
+      text: "Image deleted successfully.",
+      showConfirmButton: false,
+      timer: 1500
+    });
     return response.data; // return updated doctor data
   } catch (error) {
     console.error("Error deleting image:", error);
     throw error;
+  }finally
+  {
+    setloading(false)
   }
 };
 
@@ -211,6 +232,59 @@ const updateaward=async()=>
 }
 
 
+const deleteaward = async (awardIndex) => {
+  // Show confirmation first
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    customClass: {
+      confirmButton: 'my-swal-button',
+      cancelButton: 'my-swal-button',
+    },
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        setloading(true);
+        const resp = await api.delete(`doctor/deleteawards/${doctordetails.user._id}/${awardIndex}`);
+
+        if (resp.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Award Deleted",
+            text: "Award Deleted Successfully...",
+            showConfirmButton: true,
+            customClass: {
+              confirmButton: 'my-swal-button',
+            },
+          }).then(() => {
+            window.location.reload();
+          });
+        }
+
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.response?.data?.message || "Something went wrong!",
+          showConfirmButton: true,
+          customClass: {
+            confirmButton: 'my-swal-button',
+          },
+        });
+        console.log(error);
+
+      } finally {
+        setloading(false);
+      }
+    }
+  });
+};
+
+
 
 
 
@@ -232,22 +306,7 @@ const updateaward=async()=>
                 <h3 className=" text-2xl font-semibold text-black">Update Awards & Certificates</h3>
                 </div>
                 <div className="work-experincemain flex items-center gap-3">
-                  <button  className=" hover:bg-gray-200 p-2 rounded-full" >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 32 32"
-                      fill="none"
-                      stroke="currentColor"
-                      className="w-8 h-8 "
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2.67}
-                        d="M8 16H16M16 16H24M16 16V24M16 16V8"
-                      />
-                    </svg>
-                  </button>
+                
                 
                 </div>
               </div>
@@ -290,22 +349,37 @@ const updateaward=async()=>
       </div>
 
       {/* Right side: Edit icon */}
-       <button className="hover:bg-gray-200 p-2 rounded-full" onClick={()=>handleshowaward(item,index)}>
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 32 32"
-            fill="none"
-            stroke="currentColor"
-            className="w-8 h-8 "
-        >
-            <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2.67}
-            d="M26.866 10.587L11.04 26.413c-1.414 1.427-5.64 2.08-6.6 1.133s.72-5.173 2.133-6.6L21.4 5.12A4 4 0 0 1 26.8 5.186a4 4 0 0 1 .133 5.401z"
-            />
-        </svg>
-        </button>
+  
+
+           <div className="flex flex-col sm:flex-row items-center sm:space-x-2 space-y-2 sm:space-y-0">
+  {/* Show upcoming events button */}
+  <button
+    className="hover:bg-gray-200 p-2 rounded-full flex items-center justify-center"
+    onClick={()=>handleshowaward(item,index)}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      fill="none"
+      stroke="currentColor"
+      className="w-6 h-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2.2}
+        d="M26.866 10.587L11.04 26.413c-1.414 1.427-5.64 2.08-6.6 1.133s.72-5.173 2.133-6.6L21.4 5.12A4 4 0 0 1 26.8 5.186a4 4 0 0 1 .133 5.401z"
+      />
+    </svg>
+  </button>
+
+  {/* Delete button */}
+  <button
+    onClick={() => deleteaward(index)}
+    className="hover:bg-gray-200 p-2 rounded-full flex items-center justify-center"
+  >
+    <span className="material-icons text-red-600 text-[22px]">delete</span>
+  </button>
+</div>
     </div>
   ))
 }
@@ -518,6 +592,22 @@ const updateaward=async()=>
         </Modal.Footer> */}
       </Modal>
 
+
+      {loading && (
+  <div
+    style={{
+      position: 'fixed',
+      inset: 0,
+      background: 'rgba(255, 255, 255, 0.6)',
+      zIndex: 9999,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <UniqueLoader />
+  </div>
+)}
       
     </div>
   )

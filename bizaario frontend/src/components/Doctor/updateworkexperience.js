@@ -143,7 +143,57 @@ const updateworkexperience=async(index)=>
   }
 }
 
+const deletework = async (workindex) => {
+  // Show confirmation first
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    customClass: {
+      confirmButton: 'my-swal-button',
+      cancelButton: 'my-swal-button',
+    },
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        setloading(true);
+        const resp = await api.delete(`doctor/deleteworkexperience/${doctordetails.user._id}/${workindex}`);
 
+        if (resp.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Work-Experience Deleted",
+            text: "Work-Experience Deleted Successfully...",
+            showConfirmButton: true,
+            customClass: {
+              confirmButton: 'my-swal-button',
+            },
+          }).then(() => {
+            window.location.reload();
+          });
+        }
+
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.response?.data?.message || "Something went wrong!",
+          showConfirmButton: true,
+          customClass: {
+            confirmButton: 'my-swal-button',
+          },
+        });
+        console.log(error);
+
+      } finally {
+        setloading(false);
+      }
+    }
+  });
+};
 
   return (
     <div>
@@ -163,22 +213,7 @@ const updateworkexperience=async(index)=>
                 <h3 className=" text-2xl font-semibold text-black">Work Experience</h3>
                 </div>
                 <div className="work-experincemain flex items-center gap-3">
-                  <button  className=" hover:bg-gray-200 p-2 rounded-full" >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 32 32"
-                      fill="none"
-                      stroke="currentColor"
-                      className="w-8 h-8 "
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2.67}
-                        d="M8 16H16M16 16H24M16 16V24M16 16V8"
-                      />
-                    </svg>
-                  </button>
+                 
                 
                 </div>
               </div>
@@ -221,22 +256,36 @@ const updateworkexperience=async(index)=>
       </div>
 
       {/* Right side: Edit icon */}
-       <button className="hover:bg-gray-200 p-2 rounded-full" onClick={()=>handleshowworkexperience(item,index)}>
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 32 32"
-            fill="none"
-            stroke="currentColor"
-            className="w-8 h-8 "
-        >
-            <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2.67}
-            d="M26.866 10.587L11.04 26.413c-1.414 1.427-5.64 2.08-6.6 1.133s.72-5.173 2.133-6.6L21.4 5.12A4 4 0 0 1 26.8 5.186a4 4 0 0 1 .133 5.401z"
-            />
-        </svg>
-        </button>
+              <div className="flex flex-col sm:flex-row items-center sm:space-x-2 space-y-2 sm:space-y-0">
+            {/* Show upcoming events button */}
+              <button
+                className="hover:bg-gray-200 p-2 rounded-full flex items-center justify-center"
+                onClick={()=>handleshowworkexperience(item,index)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.2}
+                    d="M26.866 10.587L11.04 26.413c-1.414 1.427-5.64 2.08-6.6 1.133s.72-5.173 2.133-6.6L21.4 5.12A4 4 0 0 1 26.8 5.186a4 4 0 0 1 .133 5.401z"
+                  />
+                </svg>
+              </button>
+
+              {/* Delete button */}
+              <button
+                onClick={() => deletework(index)}
+                className="hover:bg-gray-200 p-2 rounded-full flex items-center justify-center"
+              >
+                <span className="material-icons text-red-600 text-[22px]">delete</span>
+              </button>
+</div>
+     
     </div>
   ))
 }
