@@ -23,6 +23,15 @@ import Updateworkexperience from "./components/Doctor/updateworkexperience";
 import Updateupcomingevent from "./components/Doctor/updateupcomingevents";
 import Updateawards from "./components/Doctor/updateawards_certificates";
 import DoctorProfile from "./components/Doctor/doctorprofileview";
+import ActivePatient from "./components/ActivePatient/ActivePatient";
+import Addcountrygroupmaster from "./components/Admin/add_country_group_master";
+import AddAssetCategoryMaster from "./components/Admin/Asset_Category_Master";
+import Addeventtype from "./components/Admin/add_event_type";
+import Addcontenttype from "./components/Admin/add_content_type";
+import Addservicecategory from "./components/Admin/add_service_category";
+import Addmedicalspecility from "./components/Admin/add_medical-speciality";
+import Addsubscription from "./components/Admin/addsubscription";
+import Addorgunit from "./components/Admin/add_org_unit";
 
 function App() {
   return (
@@ -52,9 +61,17 @@ function App() {
         <Route path="/editupcomingevents" element={<Updateupcomingevent/>}></Route>
         <Route path="/editawards" element={<Updateawards/>}></Route> 
         <Route path="/viewdoctorprofile" element={<DoctorProfile/>}></Route> 
+        <Route path="/addpatientdetails" element={<ActivePatient/>}></Route> 
+        <Route path="/addcountry_group_master" element={<Addcountrygroupmaster/>}></Route> 
+        <Route path="/add-org-master" element={<Addorgunit/>}></Route>
+        <Route path="/addassest_category_master" element={<AddAssetCategoryMaster/>}></Route> 
+        <Route path="/add_event_type_master" element={<Addeventtype/>}></Route>
+        <Route path="/add-content-type" element={<Addcontenttype/>}></Route>
+        <Route path="/add-service-category" element={<Addservicecategory/>}></Route>
+        <Route path="/add-medical-specility" element={<Addmedicalspecility/>}></Route>
+        <Route path="/add-subscription" element={<Addsubscription/>}></Route>
       </Routes>
-      {/* <Doctordashboard/> */}
-      {/* <DoctorProfile/> */}
+      {/* <ActivePatient/> */}
       
         
     </BrowserRouter>

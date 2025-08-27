@@ -5,7 +5,7 @@ const path = require('path');
 const connect = require('./connectdb');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-const logMiddleware=require('./middlewares/logmiddleware')
+// const logMiddleware=require('./middlewares/logmiddleware')
 
 const app=express();
 
@@ -24,7 +24,7 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-app.use(logMiddleware);
+// app.use(logMiddleware);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(cors())
@@ -36,6 +36,7 @@ app.get('/',(req,res)=>
 })
 app.use('/doctor',require('./routers/doctor/doctoroutes'));
 app.use('/hospital',require('./routers/hospital/hospitalroutes'));
+// app.use("/api/v1/common", require("./routers/common/lookupRoutes"));
 
 // new api routes use this pattern = BASE_URL/api/v1/name
 app.use("/api/v1/common", require("./routers/common/lookup.Routes"));
