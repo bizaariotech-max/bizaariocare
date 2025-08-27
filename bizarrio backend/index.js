@@ -42,6 +42,8 @@ app.use("/api/v1/common", require("./routers/common/lookup.Routes"));
 //* use this single api to upload image in web it returns url which can be stored in any schema
 app.use("/api/v1/common", require("./routers/common/upload.Routes"));
 app.use("/api/v1/admin", require("./routers/AdminLookup/adminLookup.Routes"));
+app.use("/api/v1/admin", require("./routers/common/station.Routes"));
+
 
 
 

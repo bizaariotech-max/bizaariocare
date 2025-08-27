@@ -19,14 +19,13 @@ const StationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "country_group_type_master", // dropdown reference
     },
-    IdCode: {
-      type: String,
-      unique: true,
-      trim: true,
+    ISDCode: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "isd_code_type_master", // dropdown reference
     },
     Currency: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "lookup_masters", // assuming from generic lookup (lookup_type: "currency")
+      ref: "currency_type_masters", 
     },
     StationAdmins: [
       {

@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose");
 const {
   __requestResponse,
   __generateAuthToken,
-} = require("../utils/constent");
+} = require("../utils/constant");
 const {
   __MISSING_LOOKUPCODES,
   __BLANK_LOOKUPCODE,

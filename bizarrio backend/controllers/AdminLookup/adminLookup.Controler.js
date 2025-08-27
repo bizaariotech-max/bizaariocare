@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const TlbLookup = require("../../modals/Common/lookupmodel");
-const { __requestResponse } = require("../../utils/constent");
+const { __requestResponse } = require("../../utils/constant");
 const {
   __NO_LOOKUP_LIST,
   __SUCCESS,

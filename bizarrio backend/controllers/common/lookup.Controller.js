@@ -3,7 +3,7 @@ const upload = require("../../middlewares/siglefile.js");
 
 // const Joi = require ("joi");
 
-const  { __requestResponse, __deepClone } =require ("../../utils/constent.js");
+const  { __requestResponse, __deepClone } =require ("../../utils/constant.js");
 const  {
   __NO_LOOKUP_LIST,
   __SUCCESS,
