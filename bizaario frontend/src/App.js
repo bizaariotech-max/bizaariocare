@@ -32,6 +32,11 @@ import Addservicecategory from "./components/Admin/add_service_category";
 import Addmedicalspecility from "./components/Admin/add_medical-speciality";
 import Addsubscription from "./components/Admin/addsubscription";
 import Addorgunit from "./components/Admin/add_org_unit";
+import Addstationmaster from "./components/Admin/addstationmaster";
+import Addassestsmaster from "./components/Admin/add_assests_master";
+import AddAssetCategoryMasterLevel2 from "./components/Admin/Assest_category_Master_Level2";
+import AddAssetCategoryMasterLevel3 from "./components/Admin/Assest_category_Master_Level3";
+import Loginmaster from "./components/Admin/login_master";
 
 function App() {
   return (
@@ -65,11 +70,16 @@ function App() {
         <Route path="/addcountry_group_master" element={<Addcountrygroupmaster/>}></Route> 
         <Route path="/add-org-master" element={<Addorgunit/>}></Route>
         <Route path="/addassest_category_master" element={<AddAssetCategoryMaster/>}></Route> 
+        <Route path="/addassest_category_master_level2" element={<AddAssetCategoryMasterLevel2/>}></Route>
+        <Route path="/addassest_category_master_level3" element={<AddAssetCategoryMasterLevel3/>}></Route>
         <Route path="/add_event_type_master" element={<Addeventtype/>}></Route>
         <Route path="/add-content-type" element={<Addcontenttype/>}></Route>
         <Route path="/add-service-category" element={<Addservicecategory/>}></Route>
         <Route path="/add-medical-specility" element={<Addmedicalspecility/>}></Route>
         <Route path="/add-subscription" element={<Addsubscription/>}></Route>
+        <Route path="/add-stationmaster" element={<Addstationmaster/>}></Route>
+        <Route path="/add-assestmaster" element={<Addassestsmaster/>}></Route>
+        <Route path="/login-master" element={<Loginmaster/>}></Route>
       </Routes>
       {/* <ActivePatient/> */}
       

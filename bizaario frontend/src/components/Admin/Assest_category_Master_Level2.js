@@ -13,18 +13,18 @@ import UniqueLoader from '../loader';
 import { DataGrid } from '@mui/x-data-grid';
 import Adminsidebar from './adminsidebar';
 import Adminheader from './adminheader';
-import '../Admin/admincss/content-type.css'
+import '../Admin/admincss/assetcategory_master.css'
 
 
-function Addcontenttype() {
+function AddAssetCategoryMasterLevel2() {
 
 
-      const[allcontent_type,setallcontent_type]=useState([])
-      const getallcontent_type=async()=>
+      const[allassest_category,setallassest_category]=useState([])
+      const getallassest_category=async()=>
       {
         try {
-          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"content_type"})
-          setallcontent_type(resp.data.data)
+          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"asset_category_level_2"})
+          setallassest_category(resp.data.data)
           
         } catch (error) {
           console.log(error);
@@ -34,10 +34,33 @@ function Addcontenttype() {
     
       useEffect(()=>
       {
-        getallcontent_type()
+        getallassest_category()
     
       },[])
 
+      console.log(allassest_category);
+
+      const[allassest_categorylevel1,setallassest_categorylevel1]=useState([])
+      const getallassest_categorylevel1=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"asset_category_level_1"})
+          setallassest_categorylevel1(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getallassest_categorylevel1()
+    
+      },[])
+
+      
+      
       const [menuAnchor, setMenuAnchor] = useState(null);
       const [menuRowId, setMenuRowId] = useState(null);
       
@@ -63,8 +86,9 @@ function Addcontenttype() {
 
      const columnshospital = [
         { field: 'sno', headerName: 'S.No.', flex: 0.2,renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1},
-        { field: 'lookup_type', headerName: 'Content Type ID', flex: 1 },
-        { field: 'lookup_value', headerName: 'Content Type', flex: 1 },
+        { field: 'lookup_type', headerName: 'Asset Category Type', flex: 1 },
+        
+        { field: 'lookup_value', headerName: 'Asset Category', flex: 1 },
        
        {
       field: 'actions',
@@ -109,63 +133,53 @@ function Addcontenttype() {
     
       ];
     
-      const rowshospital = allcontent_type?.map((doc, index) => ({
+      const rowshospital = allassest_category?.map((doc, index) => ({
         id: doc._id || index,
         ...doc,
       }));
 
-
-        const[contenttype,setcontenttype]=useState("")
-                        const add_content_type = async () => {
-                          try {
-                            const resp = await api.post("api/v1/admin/SaveLookup", {
-                              lookup_type: "content_type",
-                              parent_lookup_id: null ,
-                              lookup_value:contenttype         
-                            });
-                        
-                            if (resp.data.response.response_code === "200") {
-                                Swal.fire({
-                                        icon:"success",
-                                        title:"Content Type Created",
-                                        text:"Content Type Addedd Successfully...",
-                                        showConfirmButton:true,
-                                         customClass: {
-                                        confirmButton: 'my-swal-button',
-                                      },
-                                      }).then(()=>
-                                      {
-                                        window.location.reload()
-                                      })
-                              console.log("✅ Lookup list:", resp.data.data);
-                            } else if(resp.data.response.response_code === "501") {
-                              Swal.fire({
-                                        icon:"error",
-                                        title:"Validation Error",
-                                        text:resp.data.response.response_message,
-                                        showConfirmButton:true,
-                                         customClass: {
-                                        confirmButton: 'my-swal-button',
-                                      },
-                                      }).then(()=>
-                                      {
-                                        window.location.reload()
-                                      })
-                              console.warn("⚠️ Error:", resp.data.response.response_message);
-                            }
-                          } catch (error) {
-                            console.error("❌ API Error:", error);
-                          }
-                        };
+        const[assest_category,setassest_category]=useState("")
+        const[parent_lookup_id,setparent_lookup_id]=useState("")
+       
+        
+                              const add_assest_category = async () => {
+                                try {
+                                  const resp = await api.post("api/v1/admin/SaveLookup", {
+                                    lookup_type: "asset_category_level_2",
+                                    parent_lookup_id: parent_lookup_id ? parent_lookup_id:null ,
+                                    lookup_value:assest_category         
+                                  });
+                              
+                                  if (resp.data.response.response_code === "200") {
+                                      Swal.fire({
+                                              icon:"success",
+                                              title:"Assest Category Added",
+                                              text:"Assest Category Level 2 Addedd Successfully...",
+                                              showConfirmButton:true,
+                                               customClass: {
+                                              confirmButton: 'my-swal-button',
+                                            },
+                                            }).then(()=>
+                                            {
+                                              window.location.reload()
+                                            })
+                                    console.log("✅ Lookup list:", resp.data.data);
+                                  } else {
+                                    console.warn("⚠️ Error:", resp.data.response.response_message);
+                                  }
+                                } catch (error) {
+                                  console.error("❌ API Error:", error);
+                                }
+                              };
 
   return (
     <div>
         <Adminsidebar/>
         <Adminheader/>
-<div className='content-type'>
+<div className='asset-category-master'>
         <div className='profile-header'>
-                  <h3>Enter Details for Content Type</h3>
-                  <p>Add or update the required details for the content type to keep records accurate and complete.</p>
+                  <h3>Enter Details for Asset Category Master Level 2</h3>
+                  <p>Add or update the required details for the asset category master level 2 to keep records accurate and complete.</p>
                   </div>
         
         
@@ -200,30 +214,33 @@ function Addcontenttype() {
                         }}
                       >
           
-
-           {/* <FormControl fullWidth size="small">
-            <InputLabel>Parent Asset Category ID</InputLabel>
+ 
+     <FormControl fullWidth size="small">
+            <InputLabel>Parent Asset Category</InputLabel>
             <Select 
               name="hospital_type"
-              label="Parent Asset Category ID"
-            //   value={hospital.hospital_type}
+              label="Parent Asset Category"
+              value={parent_lookup_id}
               MenuProps={{
                 disablePortal: true,
                 disableScrollLock: true,
               }}
-            //   onChange={handleChange1}
+              onChange={(e)=>setparent_lookup_id(e.target.value)}
             >
-              <MenuItem value="India">India</MenuItem>
-              <MenuItem value="Usa">USA</MenuItem>
-              <MenuItem value="United Kingdom">UK</MenuItem>
+            {
+              allassest_categorylevel1?.map((item)=>
+              (
+                <MenuItem value={item._id}>{item.lookup_value}</MenuItem>
+              ))
+            }
             </Select>
-          </FormControl> */}
+          </FormControl>  
         
           <TextField
-            name="contenttype"
-            label="Content Type"
-            value={contenttype}
-            onChange={(e)=>setcontenttype(e.target.value)}
+            name=""
+            label="Asset Category Level 2"
+            value={assest_category}
+            onChange={(e)=>setassest_category(e.target.value)}
             fullWidth
             size="small"
           />
@@ -235,7 +252,7 @@ function Addcontenttype() {
             fullWidth
             // type="submit"
             sx={{ py: 1.2, fontSize: 16, fontWeight: 600, borderRadius: 2, mt: 1 }}
-            onClick={add_content_type}
+            onClick={add_assest_category}
           >
             Submit
           </Button>
@@ -294,4 +311,4 @@ function Addcontenttype() {
   )
 }
 
-export default Addcontenttype
+export default AddAssetCategoryMasterLevel2

@@ -19,12 +19,12 @@ import '../Admin/admincss/assetcategory_master.css'
 function AddAssetCategoryMaster() {
 
 
-      const[allhospital,setallhospital]=useState([])
-      const getallhospital=async()=>
+      const[allassest_category,setallassest_category]=useState([])
+      const getallassest_category=async()=>
       {
         try {
-          const resp=await api.get('hospital/getallhospital')
-          setallhospital(resp.data.hospital)
+          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"asset_category_level_1"})
+          setallassest_category(resp.data.data)
           
         } catch (error) {
           console.log(error);
@@ -34,7 +34,7 @@ function AddAssetCategoryMaster() {
     
       useEffect(()=>
       {
-        getallhospital()
+        getallassest_category()
     
       },[])
 
@@ -63,8 +63,8 @@ function AddAssetCategoryMaster() {
 
      const columnshospital = [
         { field: 'sno', headerName: 'S.No.', flex: 0.2,renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1},
-        { field: 'hospital_name', headerName: 'Parent Asset Category ID', flex: 1 },
-        { field: 'hospital_type', headerName: 'Asset Category', flex: 1 },
+        { field: 'lookup_type', headerName: 'Asset Category Type', flex: 1 },
+        { field: 'lookup_value', headerName: 'Asset Category', flex: 1 },
        
        {
       field: 'actions',
@@ -109,11 +109,44 @@ function AddAssetCategoryMaster() {
     
       ];
     
-      const rowshospital = allhospital.map((doc, index) => ({
+      const rowshospital = allassest_category?.map((doc, index) => ({
         id: doc._id || index,
         ...doc,
       }));
 
+        const[assest_category,setassest_category]=useState("")
+    
+       
+        
+                              const add_assest_category = async () => {
+                                try {
+                                  const resp = await api.post("api/v1/admin/SaveLookup", {
+                                    lookup_type: "asset_category_level_1",
+                                    parent_lookup_id:null ,
+                                    lookup_value:assest_category         
+                                  });
+                              
+                                  if (resp.data.response.response_code === "200") {
+                                      Swal.fire({
+                                              icon:"success",
+                                              title:"Event Type Created",
+                                              text:"Event Type Addedd Successfully...",
+                                              showConfirmButton:true,
+                                               customClass: {
+                                              confirmButton: 'my-swal-button',
+                                            },
+                                            }).then(()=>
+                                            {
+                                              window.location.reload()
+                                            })
+                                    console.log("✅ Lookup list:", resp.data.data);
+                                  } else {
+                                    console.warn("⚠️ Error:", resp.data.response.response_message);
+                                  }
+                                } catch (error) {
+                                  console.error("❌ API Error:", error);
+                                }
+                              };
 
   return (
     <div>
@@ -121,8 +154,8 @@ function AddAssetCategoryMaster() {
         <Adminheader/>
 <div className='asset-category-master'>
         <div className='profile-header'>
-                  <h3>Enter Details for Asset Category Master</h3>
-                  <p>Add or update the required details for the asset category master to keep records accurate and complete.</p>
+                  <h3>Enter Details for Asset Category Master Level 1</h3>
+                  <p>Add or update the required details for the asset category master level 1 to keep records accurate and complete.</p>
                   </div>
         
         
@@ -158,29 +191,12 @@ function AddAssetCategoryMaster() {
                       >
           
 
-           <FormControl fullWidth size="small">
-            <InputLabel>Parent Asset Category</InputLabel>
-            <Select 
-              name="hospital_type"
-              label="Parent Asset Category"
-            //   value={hospital.hospital_type}
-              MenuProps={{
-                disablePortal: true,
-                disableScrollLock: true,
-              }}
-            //   onChange={handleChange1}
-            >
-              <MenuItem value="India">India</MenuItem>
-              <MenuItem value="Usa">USA</MenuItem>
-              <MenuItem value="United Kingdom">UK</MenuItem>
-            </Select>
-          </FormControl>
         
           <TextField
-            name="hospital_name"
-            label="Asset Category"
-            // value={hospital.hospital_name}
-            // onChange={handleChange1}
+            name="assest_category"
+            label="Asset Category Level 1"
+            value={assest_category}
+            onChange={(e)=>setassest_category(e.target.value)}
             fullWidth
             size="small"
           />
@@ -190,8 +206,9 @@ function AddAssetCategoryMaster() {
             variant="contained"
             color="primary"
             fullWidth
-            type="submit"
+            // type="submit"
             sx={{ py: 1.2, fontSize: 16, fontWeight: 600, borderRadius: 2, mt: 1 }}
+            onClick={add_assest_category}
           >
             Submit
           </Button>

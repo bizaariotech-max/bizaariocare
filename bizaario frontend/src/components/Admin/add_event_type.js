@@ -109,7 +109,7 @@ function Addeventtype() {
     
       ];
     
-      const rowshospital = allevent.map((doc, index) => ({
+      const rowshospital = allevent?.map((doc, index) => ({
         id: doc._id || index,
         ...doc,
       }));

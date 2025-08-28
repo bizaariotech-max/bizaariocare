@@ -111,7 +111,7 @@ function Addcountrygroupmaster() {
     
       ];
     
-      const rowshospital = allcountrygroup.map((doc, index) => ({
+      const rowshospital = allcountrygroup?.map((doc, index) => ({
         id: doc._id || index,
         ...doc,
       }));

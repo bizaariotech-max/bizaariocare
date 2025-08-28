@@ -109,7 +109,7 @@ function Addorgunit() {
     
       ];
     
-      const rowshospital = allorgunits.map((doc, index) => ({
+      const rowshospital = allorgunits?.map((doc, index) => ({
         id: doc._id || index,
         ...doc,
       }));

@@ -18,12 +18,21 @@ const menuItems = [
       {icon: addhospitalicon, label: "Service Category", path: "/add-service-category" },
       {icon: addhospitalicon, label: "Content Type", path: "/add-content-type" },
       {icon: addhospitalicon, label: "Event Type", path: "/add_event_type_master" },
-      {icon: addhospitalicon, label: "Asset Category", path: "/addassest_category_master" },
+      {icon: addhospitalicon, label: "Asset Category Level 1", path: "/addassest_category_master" },
+      {icon: addhospitalicon, label: "Asset Category Level 2", path: "/addassest_category_master_level2" },
+      {icon: addhospitalicon, label: "Asset Category Level 3", path: "/addassest_category_master_level3" },
       {icon: addhospitalicon, label: "Subscription Type Master", path: "/add-subscription" }
     ]
 
   },
-  { icon: addhospitalicon, label: "Station Master", path: "/adddoctor" },
+
+  { icon: addhospitalicon, label: "Station Master", path: "/add-stationmaster" },
+  {
+    icon: addhospitalicon,
+    label: "Asset Master",
+    path:"/add-assestmaster"
+  },
+  { icon: addhospitalicon, label: "Login Master", path: "/login-master" },
   { icon: addhospitalicon, label: "Add Doctor/Hospitals", path: "/adddoctor" },
   { icon: addhospitalicon, label: "Create Patient Profile", path: "/addpatientdetails" },
   { icon: addhospitalicon, label: "Logout" },

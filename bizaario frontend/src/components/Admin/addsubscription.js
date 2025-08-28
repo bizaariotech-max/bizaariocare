@@ -109,7 +109,7 @@ function Addsubscription() {
     
       ];
     
-      const rowshospital = allsubscription.map((doc, index) => ({
+      const rowshospital = allsubscription?.map((doc, index) => ({
         id: doc._id || index,
         ...doc,
       }));

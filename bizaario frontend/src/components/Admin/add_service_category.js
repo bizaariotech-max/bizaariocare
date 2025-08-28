@@ -109,7 +109,7 @@ function Addservicecategory() {
     
       ];
     
-      const rowshospital = allservice.map((doc, index) => ({
+      const rowshospital = allservice?.map((doc, index) => ({
         id: doc._id || index,
         ...doc,
       }));

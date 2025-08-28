@@ -9,7 +9,7 @@ const StationSchema = new mongoose.Schema(
     },
     OrgUnitLevel: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "org_unit_type_master", // dropdown reference
+      ref: "admin_lookups", // dropdown reference
     },
     StationName: {
       type: String,
@@ -17,15 +17,15 @@ const StationSchema = new mongoose.Schema(
     },
     CountryGroupId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "country_group_type_master", // dropdown reference
+      ref: "admin_lookups", // dropdown reference
     },
     ISDCode: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "isd_code_type_master", // dropdown reference
+      ref: "admin_lookups", // dropdown reference
     },
     Currency: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "currency_type_masters", 
+      ref: "admin_lookups",
     },
     StationAdmins: [
       {
