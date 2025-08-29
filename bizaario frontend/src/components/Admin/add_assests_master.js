@@ -18,9 +18,20 @@ import '../Admin/admincss/station-master.css'
 
 function Addassestsmaster() {
 
+     const [assetmaster, setassetmaster] = useState({
+    AssetCategoryLevel1: null,
+    AssetCategoryLevel2: null,
+    AssetCategoryLevel3: null,
+    StationId: null,
+    ParentAssetId: null,
+    AssetName: "",
+    SubscriptionType: null,
+  });
+
+
 
       const[allasset_master_list,setallasset_master_list]=useState([])
-      const getallmedical_speciality=async()=>
+      const getall_assest_master=async()=>
       {
         try {
           const resp=await api.post('api/v1/admin/AssetList')
@@ -36,7 +47,7 @@ function Addassestsmaster() {
     
       useEffect(()=>
       {
-        getallmedical_speciality()
+        getall_assest_master()
     
       },[])
 
@@ -172,7 +183,9 @@ function Addassestsmaster() {
       const getallassest_category_level2=async()=>
       {
         try {
-          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"asset_category_level_2"})
+          const resp=await api.post('api/v1/common/LookupList',{lookup_type:"asset_category_level_2",parent_lookup_id:assetmaster.AssetCategoryLevel1})
+          console.log(resp);
+          
           setallassest_category_level2(resp.data.data)
           
         } catch (error) {
@@ -181,11 +194,12 @@ function Addassestsmaster() {
         }
       }
     
-      useEffect(()=>
-      {
-        getallassest_category_level2()
-    
-      },[])
+    useEffect(() => {
+  if (assetmaster.AssetCategoryLevel1) {
+    getallassest_category_level2();
+  }
+}, [assetmaster.AssetCategoryLevel1]);
+
  
 //===================================== all asset level 3==========================================
 
@@ -193,7 +207,7 @@ function Addassestsmaster() {
       const getallassest_category_level3=async()=>
       {
         try {
-          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"asset_category_level_3"})
+          const resp=await api.post('api/v1/common/LookupList',{lookup_type:"asset_category_level_3",parent_lookup_id:assetmaster.AssetCategoryLevel2})
           setallassest_category_level3(resp.data.data)
           
         } catch (error) {
@@ -204,9 +218,11 @@ function Addassestsmaster() {
     
       useEffect(()=>
       {
-        getallassest_category_level3()
-    
-      },[])
+         if (assetmaster.AssetCategoryLevel2) {
+          getallassest_category_level3();
+        }
+        
+      },[assetmaster.AssetCategoryLevel2])
 
 
   //================================== get all station list===========================================
@@ -254,15 +270,7 @@ function Addassestsmaster() {
         },[])
 
 
-    const [assetmaster, setassetmaster] = useState({
-    AssetCategoryLevel1: "",
-    AssetCategoryLevel2: "",
-    AssetCategoryLevel3: "",
-    StationId: "",
-    ParentAssetId: "",
-    AssetName: "",
-    SubscriptionType: "",
-  });
+ 
 
     const handlechange = (e) => {
   const { name, value, checked, type } = e.target;
@@ -381,7 +389,7 @@ function Addassestsmaster() {
               onChange={handlechange}
             >
              {
-                allassest_category_level1.map((item)=>
+                allassest_category_level1?.map((item)=>
                 (
                     <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
                 ))
@@ -401,7 +409,7 @@ function Addassestsmaster() {
               onChange={handlechange}
             >
              {
-                allassest_category_level2.map((item)=>
+                allassest_category_level2?.map((item)=>
                 (
                     <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
                 ))
@@ -421,7 +429,7 @@ function Addassestsmaster() {
               onChange={handlechange}
             >
              {
-                allassest_category_level3.map((item)=>
+                allassest_category_level3?.map((item)=>
                 (
                     <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
                 ))
@@ -442,7 +450,7 @@ function Addassestsmaster() {
               onChange={handlechange}
             >
              {
-                allstationmaster.map((item)=>
+                allstationmaster?.map((item)=>
                 (
                     <MenuItem key={item._id} value={item._id}>{item.StationName}</MenuItem>
                 ))

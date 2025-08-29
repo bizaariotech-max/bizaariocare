@@ -207,10 +207,10 @@ function Addstationmaster() {
 
 
     const [stationmaster, setstationmaster] = useState({
-    ParentStationId: "",
+    ParentStationId: null,
     OrgUnitLevel: "",
     StationName: "",
-    CountryGroupId: "",
+    CountryGroupId: null,
     ISDCode: "",
     Currency: "",
     CensusYear: "",

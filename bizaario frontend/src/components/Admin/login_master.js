@@ -18,6 +18,23 @@ import '../Admin/admincss/station-master.css'
 
 function Loginmaster() {
 
+  
+    const [loginmaster, setloginmaster] = useState({
+ 
+    ParentUserId: null,
+    EntityTypeId: null,
+    Entity: null,
+    UserName: "",
+    PhoneNumber: "",
+    Email: "",
+    // Password: "",
+    IsPhoneVerified: "",
+    IsEmailVerified: "",
+  });
+
+console.log(loginmaster);
+
+  
 
       const[allmedical_speciality,setallmedical_speciality]=useState([])
       const getallmedical_speciality=async()=>
@@ -114,6 +131,33 @@ function Loginmaster() {
         ...doc,
       }));
 
+
+// =============================get create login for list=====================================
+
+  const[login_for,setlogin_for]=useState([])
+      const getall_login_for=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/common/LookupList',{"lookup_type": "entity_type"})
+          setlogin_for(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_login_for()
+    
+      },[])
+
+     const selectedLoginFor = login_for?.find(
+      (item) => item._id === loginmaster.EntityTypeId
+    );
+      
+
 // =================================get org list==============================================
 
   const[allorgunits,setallorgunits]=useState([])
@@ -135,14 +179,16 @@ function Loginmaster() {
     
       },[])
 
-//================================= get country group=================================================
+//================================= get station list=================================================
 
-    const[allcountrygroup,setallcountrygroup]=useState([])
-      const getallcountrygroup=async()=>
+       const[allstationmaster,setallstationmaster]=useState([])
+      const getallstation_list=async()=>
       {
         try {
-          const resp=await api.post('api/v1/admin/LookupList',{ lookupcodes:"country_group_type"})
-          setallcountrygroup(resp.data.data)
+          const resp=await api.post('api/v1/admin/StationList',{ page:1, limit:10, search:"" })
+          console.log(resp);
+          
+          setallstationmaster(resp.data.data.list)
           
         } catch (error) {
           console.log(error);
@@ -152,20 +198,19 @@ function Loginmaster() {
     
       useEffect(()=>
       {
-        getallcountrygroup()
+        getallstation_list()
     
       },[])
 
 
-//========================================= get isd ================================================
+//========================================= get entity type ================================================
 
-
-    const[allisdcode,setallisdcode]=useState([])
-      const getallisdcode=async()=>
+ const[allassest_category_level1,setallassest_category_level1]=useState([])
+      const getallassest_category=async()=>
       {
         try {
-          const resp=await api.post('api/v1/admin/LookupList',{ lookupcodes:"isd_code_type"})
-          setallisdcode(resp.data.data)
+          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"asset_category_level_1"})
+          setallassest_category_level1(resp.data.data)
           
         } catch (error) {
           console.log(error);
@@ -175,19 +220,33 @@ function Loginmaster() {
     
       useEffect(()=>
       {
-        getallisdcode()
+        getallassest_category()
     
       },[])
 
 
-//====================================== get currency==============================================
 
-   const[allcurrency,setallcurrency]=useState([])
-      const getallcurrency=async()=>
+
+//====================================== get asset ========================================================
+
+      const[allasset_master_list,setallasset_master_list]=useState([])
+      const[entitytype,setentitytype]=useState(null)
+      const getall_assest_master=async()=>
       {
         try {
-          const resp=await api.post('api/v1/admin/LookupList',{ lookupcodes:"currency_type"})
-          setallcurrency(resp.data.data)
+          const resp=await api.post('api/v1/admin/AssetList',
+            {
+            page: 1,
+            limit: 10,
+            AssetCategoryLevel1: entitytype,
+            // "AssetCategoryLevel2": "64f1a2b3c4d5e6f7g8h9i0j2",
+            // "search": "hospital"
+            }
+          )
+      
+         
+          
+          setallasset_master_list(resp.data.data.list)
           
         } catch (error) {
           console.log(error);
@@ -197,68 +256,57 @@ function Loginmaster() {
     
       useEffect(()=>
       {
-        getallcurrency()
-    
-      },[])
+        if(entitytype)
+        {
+           getall_assest_master()
+        }
+       
+      },[entitytype])
+  
+console.log(entitytype);
 
 
-    const [stationmaster, setstationmaster] = useState({
-    ParentStationId: "",
-    OrgUnitLevel: "",
-    StationName: "",
-    CountryGroupId: "",
-    ISDCode: "",
-    Currency: "",
-    CensusYear: "",
-    PopulationMale: "",
-    PopulationFemale: "",
-    TotalPopulation: "",
-    LiteracyRate: "",
-    AreaSQKM: "",
-  });
 
-    const handlechange = (e) => {
+const handlechange = (e) => {
   const { name, value, checked, type } = e.target;
 
-  setstationmaster((prev) => {
-    if (Array.isArray(value)) {
-      return { ...prev, [name]: value };
+  setloginmaster((prev) => {
+    // Handle boolean radios (true/false as string)
+    const booleanFields = ["IsEmailVerified", "IsPhoneVerified"];
+    if (booleanFields.includes(name)) {
+      return { ...prev, [name]: value === "true" };
     }
 
-    if (Array.isArray(prev[name])) {
-      const updated = checked
-        ? [...prev[name], value] // Add
-        : prev[name].filter((item) => item !== value); // Remove
-      return { ...prev, [name]: updated };
-    }
-
-    if (type === "checkbox" && Array.isArray(prev[name])) {
-      const updated = checked
-        ? [...prev[name], value] // Add to array
-        : prev[name].filter((item) => item !== value); // Remove from array
-      return { ...prev, [name]: updated };
-    }
-
-    if (type === "checkbox") {
+    // Handle checkboxes (single boolean)
+    if (type === "checkbox" && !Array.isArray(prev[name])) {
       return { ...prev, [name]: checked };
     }
 
+    // Handle checkboxes (array)
+    if (type === "checkbox" && Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value]
+        : prev[name].filter((item) => item !== value);
+      return { ...prev, [name]: updated };
+    }
+
     // Normal single-value field
-    return { ...prev, [name]: type === "checkbox" ? checked : value };
+    return { ...prev, [name]: value };
   });
 };
 
 
+//========================== post api for create login master=============================
      
         const addstation_master = async () => {
         try {
-          const resp = await api.post("api/v1/admin/SaveStation",stationmaster);
+          const resp = await api.post("api/v1/admin/CreateAssetLogin",loginmaster);
       
           if (resp.data.response.response_code === "200") {
               Swal.fire({
                       icon:"success",
-                      title:"Station Master Added",
-                      text:"Station Master Addedd Successfully...",
+                      title:"Login Created",
+                      text:"Login Created Successfully...",
                       showConfirmButton:true,
                        customClass: {
                       confirmButton: 'my-swal-button',
@@ -321,32 +369,88 @@ function Loginmaster() {
                         }}
                       >
           
+          <FormControl component="fieldset" sx={{ mt: 0 }}>
+              <Typography sx={{ fontWeight: 500 }}>Create Login For (Entity Type)</Typography>
+              <RadioGroup size="small"
+                row
+                name="EntityTypeId"
+                value={loginmaster.EntityTypeId}
+                onChange={handlechange}
+                sx={{ flexDirection: 'row', alignItems: 'flex-start', gap: 1 }}
+              >
+                {
+                  login_for?.map((item)=>
+                  (
+                    <>
+                     <FormControlLabel value={item._id} control={<Radio />} label={item.lookup_value} />
+                    {/* <FormControlLabel value={item._id} control={<Radio />} label={item.lookup_value} /> */}
+                    </>
+                  ))
+                }
+               
+              </RadioGroup>
+            </FormControl>
+
+{
+  selectedLoginFor?.lookup_value==="Station" &&
+  (
+
+       <FormControl fullWidth size="small">
+            <InputLabel>Entity</InputLabel>
+            <Select 
+              name="Entity"
+              label="Entity"
+              value={loginmaster.Entity}
+              MenuProps={{
+                disablePortal: true,
+                disableScrollLock: true,
+              }}
+              onChange={handlechange}
+            >
+             {
+                allstationmaster?.map((item)=>
+                (
+                    <MenuItem key={item._id} value={item._id}>{item.StationName}</MenuItem>
+                ))
+            }
+            </Select>
+          </FormControl> 
+
+  )
+}
+
+{
+  selectedLoginFor?.lookup_value==="Asset" &&
+  (
+<>
        <FormControl fullWidth size="small">
             <InputLabel>Entity Type</InputLabel>
             <Select 
-              name="StationId"
+              name="entitytype"
               label="Entity Type"
-              value={stationmaster.ParentStationId}
+              value={entitytype}
               MenuProps={{
                 disablePortal: true,
                 disableScrollLock: true,
               }}
-              onChange={handlechange}
+              onChange={(e)=>setentitytype(e.target.value)}
             >
              {
-                allorgunits.map((item)=>
+                allassest_category_level1?.map((item)=>
                 (
                     <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
                 ))
             }
             </Select>
           </FormControl> 
+
+
            <FormControl fullWidth size="small">
             <InputLabel>Entity</InputLabel>
             <Select 
-              name="StationId"
+              name="Entity"
               label="Entity"
-              value={stationmaster.ParentStationId}
+              value={loginmaster.Entity}
               MenuProps={{
                 disablePortal: true,
                 disableScrollLock: true,
@@ -354,19 +458,26 @@ function Loginmaster() {
               onChange={handlechange}
             >
              {
-                allorgunits.map((item)=>
+                allasset_master_list?.map((item)=>
                 (
-                    <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
+                    <MenuItem key={item._id} value={item._id}>{item.AssetName}</MenuItem>
                 ))
             }
             </Select>
           </FormControl> 
+</>
+  )
+}
+          
+
+
+      
            <FormControl fullWidth size="small">
             <InputLabel>Parent User ID</InputLabel>
             <Select 
               name="StationId"
               label=" ⁠Parent User ID"
-              value={stationmaster.ParentStationId}
+              value={loginmaster.ParentStationId}
               MenuProps={{
                 disablePortal: true,
                 disableScrollLock: true,
@@ -403,68 +514,46 @@ function Loginmaster() {
             </Select>
           </FormControl>  */}
 
-         <FormControl fullWidth size="small">
-            <InputLabel>⁠User Name</InputLabel>
-            <Select 
-              name="ParentAssetId"
-              label="⁠User Name"
-              value={stationmaster.OrgUnitLevel}
-              MenuProps={{
-                disablePortal: true,
-                disableScrollLock: true,
-              }}
-              onChange={handlechange}
-            >
-            {
-                allorgunits.map((item)=>
-                (
-                    <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
-                ))
-            }
-            </Select>
-          </FormControl> 
+
+           <TextField
+            name="UserName"
+            label="⁠User Name"
+            defaultValue={loginmaster.UserName}
+            onChange={handlechange}
+            fullWidth
+            size="small"
+          />
         
           <TextField
-            name="AssetName"
+            name="PhoneNumber"
             label="Phone Number"
-            value={stationmaster.StationName}
+            defaultValue={loginmaster.PhoneNumber}
             onChange={handlechange}
             fullWidth
             size="small"
           />
 
-         <FormControl fullWidth size="small">
-            <InputLabel>Email Address</InputLabel>
-            <Select 
-              name="SubscriptionType"
-              label="Email Address"
-              value={stationmaster.CountryGroupId}
-              MenuProps={{
-                disablePortal: true,
-                disableScrollLock: true,
-              }}
-              onChange={handlechange}
-            >
-              {
-                allcountrygroup.map((item)=>
-                (
-                    <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
-                ))
-            }
-            </Select>
-          </FormControl> 
+         
+            <TextField
+            name="Email"
+            label="Email Address"
+            defaultValue={loginmaster.Email}
+            onChange={handlechange}
+            fullWidth
+            size="small"
+          />
 
            <FormControl component="fieldset" sx={{ mt: 0 }}>
               <Typography sx={{ fontWeight: 500 }}>⁠Is Phone Verified</Typography>
               <RadioGroup size="small"
                 row
-                name="gender"
-                // value={form.gender}
-                // onChange={handleChange}
+                name="IsPhoneVerified"
+                value={loginmaster.IsPhoneVerified}
+                onChange={handlechange}
                 sx={{ flexDirection: 'row', alignItems: 'flex-start', gap: 1 }}
               >
-                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-                <FormControlLabel value="No" control={<Radio />} label="No" />
+                <FormControlLabel value="true" control={<Radio />} label="Yes" />
+                <FormControlLabel value="false" control={<Radio />} label="No" />
               </RadioGroup>
             </FormControl>
 
@@ -472,35 +561,35 @@ function Loginmaster() {
               <Typography sx={{ fontWeight: 500 }}>⁠Is Email Verified</Typography>
               <RadioGroup size="small"
                 row
-                name="gender"
-                // value={form.gender}
-                // onChange={handleChange}
+                name="IsEmailVerified"
+                value={loginmaster.IsEmailVerified}
+                onChange={handlechange}
                 sx={{ flexDirection: 'row', alignItems: 'flex-start', gap: 1 }}
               >
-                <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-                <FormControlLabel value="No" control={<Radio />} label="No" />
+                <FormControlLabel value="true" control={<Radio />} label="Yes" />
+                <FormControlLabel value="false" control={<Radio />} label="No" />
               </RadioGroup>
             </FormControl>
          
-            <TextField
-            name="AssetName"
+            {/* <TextField
+            name="Password"
             label="Password"
-            value={stationmaster.StationName}
+            value={loginmaster.Password}
             onChange={handlechange}
             fullWidth
             size="small"
-          />
+          /> */}
 
-            <TextField
+            {/* <TextField
             type='date'
             InputLabelProps={{ shrink: true }}
             name="AssetName"
             label="CreatedOn"
-            value={stationmaster.StationName}
+            value={loginmaster.StationName}
             onChange={handlechange}
             fullWidth
             size="small"
-          />
+          /> */}
 
           <Button
             variant="contained"

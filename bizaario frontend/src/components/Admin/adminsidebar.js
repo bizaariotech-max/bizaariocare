@@ -77,7 +77,7 @@ const Adminsidebar = () => {
               className="sidebar-item"
             >
               <img src={item.icon} alt={`${item.label} icon`} className="sidebar-icon" />
-              <span>{item.label}</span>
+              <span style={{fontSize:"14px"}}>{item.label}</span>
             </li>
 
             {/* Render dropdown BELOW, not right side */}
