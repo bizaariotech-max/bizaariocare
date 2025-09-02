@@ -37,7 +37,8 @@ import Addassestsmaster from "./components/Admin/add_assests_master";
 import AddAssetCategoryMasterLevel2 from "./components/Admin/Assest_category_Master_Level2";
 import AddAssetCategoryMasterLevel3 from "./components/Admin/Assest_category_Master_Level3";
 import Loginmaster from "./components/Admin/login_master";
-import CompletePatientDetails from "./components/Doctor/CompletePatientDetails/ActivePatient";
+import CompleteDoctorDetails from "./components/Doctor/CompleteDoctorDetails/ActiveDoctor";
+import CompletePatientDetails from "./components/Doctor/CompleteDoctorDetails/ActiveDoctor";
 
 function App() {
   return (
@@ -81,7 +82,7 @@ function App() {
         <Route path="/add-stationmaster" element={<Addstationmaster/>}></Route>
         <Route path="/add-assestmaster" element={<Addassestsmaster/>}></Route>
         <Route path="/login-master" element={<Loginmaster/>}></Route>
-        <Route path="/complete-patient-details" element={<CompletePatientDetails/>}></Route>
+        <Route path="/complete-doctor-details" element={<CompleteDoctorDetails/>}></Route>
       </Routes>
       {/* <ActivePatient/> */}
       

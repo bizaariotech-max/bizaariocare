@@ -225,9 +225,9 @@ function cn(...classes) {
                 
               </div> */}
 
-               <div onClick={()=>navigate('/complete-patient-details')} className="flex items-center gap-3 px-3 py-3  rounded-lg   cursor-pointer">
+               <div onClick={()=>navigate('/complete-doctor-details')} className="flex items-center gap-3 px-3 py-3  rounded-lg   cursor-pointer">
                 <CreateCourseIcon />
-                <span className="text-[white] text-sm font-semibold ">Complete Patient Details</span>
+                <span className="text-[white] text-sm font-semibold ">Complete Doctor Profile</span>
               </div>
 
               {/* <div className="flex items-center justify-between px-3 py-3 rounded-lg   cursor-pointer"> 

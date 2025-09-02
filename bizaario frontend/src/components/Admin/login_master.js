@@ -32,16 +32,18 @@ function Loginmaster() {
     IsEmailVerified: "",
   });
 
-console.log(loginmaster);
+
 
   
 
-      const[allmedical_speciality,setallmedical_speciality]=useState([])
-      const getallmedical_speciality=async()=>
+      const[alllogin_list,setalllogin_list]=useState([])
+      const getalllogin_list=async()=>
       {
         try {
-          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"medical_speciality"})
-          setallmedical_speciality(resp.data.data)
+          const resp=await api.post('api/v1/admin/UserList',{ page:1, limit:10, search:"" })
+          console.log(resp);
+          
+          setalllogin_list(resp.data.data.list)
           
         } catch (error) {
           console.log(error);
@@ -51,7 +53,7 @@ console.log(loginmaster);
     
       useEffect(()=>
       {
-        getallmedical_speciality()
+        getalllogin_list()
     
       },[])
 
@@ -80,8 +82,8 @@ console.log(loginmaster);
 
      const columnshospital = [
         { field: 'sno', headerName: 'S.No.', flex: 0.2,renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1},
-        { field: 'lookup_type', headerName: 'Medical Speciality Type', flex: 1 },
-        { field: 'lookup_value', headerName: 'Medical Speciality', flex: 1 },
+        { field: 'UserName', headerName: 'User Name', flex: 1 },
+        { field: 'Email', headerName: 'Email', flex: 1 },
        
        {
       field: 'actions',
@@ -126,7 +128,7 @@ console.log(loginmaster);
     
       ];
     
-      const rowshospital = allmedical_speciality?.map((doc, index) => ({
+      const rowshospital = alllogin_list?.map((doc, index) => ({
         id: doc._id || index,
         ...doc,
       }));
@@ -301,7 +303,8 @@ const handlechange = (e) => {
         const addstation_master = async () => {
         try {
           const resp = await api.post("api/v1/admin/CreateAssetLogin",loginmaster);
-      
+          console.log(resp);
+          
           if (resp.data.response.response_code === "200") {
               Swal.fire({
                       icon:"success",
@@ -317,6 +320,15 @@ const handlechange = (e) => {
                     })
             console.log("✅ Lookup list:", resp.data.data);
           } else {
+            Swal.fire({
+                      icon:"error",
+                      title:"Error Occured",
+                      text:resp.data.response.response_message.error,
+                      showConfirmButton:true,
+                       customClass: {
+                      confirmButton: 'my-swal-button',
+                    }
+                  })
             console.warn("⚠️ Error:", resp.data.response.response_message);
           }
         } catch (error) {

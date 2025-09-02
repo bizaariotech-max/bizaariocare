@@ -273,6 +273,15 @@ function Addstationmaster() {
                     })
             console.log("✅ Lookup list:", resp.data.data);
           } else {
+               Swal.fire({
+                                  icon:"error",
+                                  title:"Error Occured",
+                                  text:resp.data.response.response_message.error,
+                                  showConfirmButton:true,
+                                   customClass: {
+                                  confirmButton: 'my-swal-button',
+                                }
+                              })
             console.warn("⚠️ Error:", resp.data.response.response_message);
           }
         } catch (error) {
