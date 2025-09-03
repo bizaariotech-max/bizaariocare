@@ -24,8 +24,7 @@ function Doctorheader() {
     const doctortokens= localStorage.getItem('token');
     const doctordetails = JSON.parse(localStorage.getItem("user"));
 
- 
-    
+  
     
 
     const SearchIcon = () => (
@@ -103,11 +102,11 @@ const ChevronDownIcon = () => (
          onClick={() => setIsOpen(!isOpen)} aria-label="User profile picture">
       <div
         className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-300 rounded-full bg-cover bg-center"
-        style={{ backgroundImage: `url(${doctordetails.user.profile_pic})` }}
+        // style={{ backgroundImage: `url(${doctordetails.user.profile_pic})` }}
       ></div>
       {/* Hide text on xs screens to avoid overflow */}
       <div className=" xs:block">
-        <div className="text-black text-xs sm:text-sm truncate max-w-[auto]">{`Hello ${doctordetails.user.firstName}`}</div>
+        <div className="text-black text-xs sm:text-sm truncate max-w-[auto]">{`Hello ${doctordetails.AssetName}`}</div>
         <div className="text-black/50 text-xs sm:text-sm truncate max-w-[auto]">Doctor</div>
       </div>
       {isOpen && (

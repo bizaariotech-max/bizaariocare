@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { TextField, Select, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import api from '../../../api'
+import Swal from 'sweetalert2';
 
 export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
   const [opd_schedule, setopd_schedule] = useState([{
@@ -12,7 +14,7 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
 
 
   const handleChange = (index, e) => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
     const newopd = [...opd_schedule];
 
     newopd[index][name] = value;
@@ -33,6 +35,76 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
     ]);
   };
 
+    //============================== get all service category======================================
+  
+       const[allservice,setallservice]=useState([])
+        const getallservice=async()=>
+        {
+          try {
+            const resp=await api.post('api/v1/admin/LookupList',{ lookupcodes:"service_category"})
+            setallservice(resp.data.data)
+            
+          } catch (error) {
+            console.log(error);
+            
+          }
+        }
+      
+        useEffect(()=>
+        {
+          getallservice()
+      
+        },[])
+
+  const doctor_details=JSON.parse(localStorage.getItem("user"))
+
+ const save_opd_details = async () => {
+  try {
+    const resp = await api.post(
+      `api/v1/asset-sections/opd-schedule/${doctor_details._id}`,
+      opd_schedule,
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    console.log(resp);
+    
+    // Check response_code instead of HTTP status
+    if (resp.data?.response?.response_code === "200") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Updated",
+        text: "Doctor OPD Details Updated Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else {
+      const errType = resp.data?.response?.response_message?.errorType || "Error";
+      const errMsg = resp.data?.response?.response_message?.error || "Something went wrong";
+
+      Swal.fire({
+        icon: "error",
+        title: errType,
+        text: errMsg,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.log(error);
+
+    Swal.fire({
+      icon: "error",
+      title: "Network/Error",
+      text: error.message,
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  }
+};
+
+
 
   return (
     <>
@@ -45,20 +117,26 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
           <h3 className="font-semibold text-[16px] mb-1 col-span-2">OPD Schedule Details</h3>
          
           <FormControl fullWidth size="small"  className="col-span-2">
-              <InputLabel>Service Category</InputLabel>
+              <InputLabel>OPD Day</InputLabel>
               <Select
                 name="OPDDay"
                 label="OPDDay"
                 value={opd_schedule.OPDDay}
-                onChange={handleChange}
+                onChange={(e)=>handleChange(index,e)}
                 MenuProps={{
                   disablePortal: true,
                   disableScrollLock: true,
                 }}
               >
-                <MenuItem value="India">India</MenuItem>
-                <MenuItem value="Usa">USA</MenuItem>
-                <MenuItem value="United Kingdom">UK</MenuItem>
+               
+                <MenuItem value="Monday"> Monday</MenuItem>
+                <MenuItem value="Monday"> Tuesday</MenuItem>
+                <MenuItem value="Monday"> Wednesday</MenuItem>
+                <MenuItem value="Monday"> Thursday</MenuItem>
+                <MenuItem value="Monday"> Friday</MenuItem>
+                <MenuItem value="Monday"> Saturday</MenuItem>
+                <MenuItem value="Monday"> Sunday</MenuItem>
+               
               </Select>
             </FormControl>
 
@@ -70,7 +148,7 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
             size="small" 
             className="col-span-2" 
             value={opd_schedule.OPDTimeFrom} 
-            onChange={handleChange} 
+            onChange={(e)=>handleChange(index,e)} 
             />
 
             <TextField
@@ -79,7 +157,7 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
             size="small" 
             className="col-span-2" 
             value={opd_schedule.OPDTimeTo} 
-            onChange={handleChange} 
+            onChange={(e)=>handleChange(index,e)} 
             />
 
             <TextField
@@ -89,7 +167,7 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
             size="small" 
             className="col-span-2" 
             value={opd_schedule.AvailableSlots} 
-            onChange={handleChange} 
+            onChange={(e)=>handleChange(index,e)} 
             />
 
            
@@ -101,7 +179,7 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
           <div className="flex justify-between mt-4">
             <Button variant="outlined" onClick={addMore}>Add More</Button>
           
-            <Button variant="contained" color="warning">Save</Button>
+            <Button variant="contained" color="warning" onClick={save_opd_details}>Save</Button>
  
           </div>
         </div> 

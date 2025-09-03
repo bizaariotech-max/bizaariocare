@@ -1,17 +1,89 @@
 import React, { useEffect, useState } from 'react'
 import { TextField,Grid, Select, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import api from '../../../api'
+import Swal from 'sweetalert2';
 
 export default function MedicalSpecialties({ initialData = {}, onPrevious, onNext }) {
-  const [MedicalSpecialties, setMedicalSpecialties] = useState("");
 
-  // useEffect(() => {
-  //   setData((prev) => ({ ...prev, ...initialData }));
-  // }, [initialData]);
 
-const handleChange = (e) => {
-  const { value } = e.target;
-  setMedicalSpecialties(value); // just store the value directly
+  const [MedicalSpecialties, setMedicalSpecialties] = useState([]);
+
+
+  //=========================== get all list of medical speciality================================
+
+
+     const[allmedical_speciality,setallmedical_speciality]=useState([])
+      const getallmedical_speciality=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"medical_speciality"})
+          setallmedical_speciality(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getallmedical_speciality()
+    
+      },[])
+ 
+const handleMedicalSpecialtiesChange = (event) => {
+  const { value } = event.target;
+
+  // Material-UI returns a string if autofill or comma-separated
+  setMedicalSpecialties(typeof value === "string" ? value.split(",") : value);
 };
+
+
+  const doctor_details=JSON.parse(localStorage.getItem("user"))
+
+  const save_medical_specialities=async()=>
+  {
+    try {
+
+      const payload = { MedicalSpecialties };
+
+      const resp=await api.put(`api/v1/asset-sections/medical-specialties/${doctor_details._id}`,payload,
+          {
+        headers: { "Content-Type": "application/json" },
+      }
+      )
+    if(resp.status===200)
+       {
+          Swal.fire({
+           icon:"success",
+           title:"Details Updated",
+           text:"Medical Specialities Details Updated Successfully...",
+           showConfirmButton:true,
+           customClass: {
+           confirmButton: 'my-swal-button',
+         },
+         }).then(()=>
+         {
+           window.location.reload()
+         })
+       }
+       console.log(resp);
+       
+      
+    } catch (error) {
+      console.log(error);
+       Swal.fire({
+            icon:"error",
+            title:"error ",
+            text:error.message,
+            showConfirmButton:true,
+              customClass: {
+              confirmButton: 'my-swal-button',
+            },
+          })
+      
+    }
+  }
 
 
   return (
@@ -25,18 +97,22 @@ const handleChange = (e) => {
   <FormControl fullWidth size="small"  className="col-span-2">
     <InputLabel>Medical Specialties</InputLabel>
     <Select
+    multiple
       name="MedicalSpecialties"
       label="Medical Specialties"
       value={MedicalSpecialties}
-      onChange={handleChange}
+      onChange={handleMedicalSpecialtiesChange}
       MenuProps={{
         disablePortal: true,
         disableScrollLock: true,
       }}
     >
-      <MenuItem value="India">India</MenuItem>
-      <MenuItem value="Usa">USA</MenuItem>
-      <MenuItem value="United Kingdom">UK</MenuItem>
+  {
+    allmedical_speciality.map((item)=>
+    (
+      <MenuItem value={item._id}>{item.lookup_value}</MenuItem>
+    ))
+  }
     </Select>
   </FormControl>
 
@@ -47,7 +123,7 @@ const handleChange = (e) => {
          
          
       <div className="flex justify-end gap-3 mt-4">
-                <Button variant="contained" color="warning">Save</Button>
+                <Button variant="contained" color="warning" onClick={save_medical_specialities}>Save</Button>
         </div>
         </div> 
 
@@ -62,7 +138,7 @@ const handleChange = (e) => {
                     <div>
                       {/* <p className="font-semibold text-[20px]">{formData?.name || "Patient Name"}</p> */}
                       <div className="text-sm text-gray-600  flex-wrap gap-x-6 text-[12px]">
-                        <p>Medical Specialties : <span  className="text-[#000000] font-semibold">{MedicalSpecialties || ""}</span></p><br></br>
+                        <p>Medical Specialties : <span  className="text-[#000000] font-semibold">{MedicalSpecialties.join(',') || ""}</span></p><br></br>
                        
                       </div>
                     </div>

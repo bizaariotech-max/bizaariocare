@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { TextField, Select, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import api from '../../../api'
+import Swal from 'sweetalert2';
 
 export default function ContactInformation({ initialData = {}, onPrevious, onNext }) {
   const [contact_details, setcontact_details] = useState({
@@ -8,14 +10,56 @@ export default function ContactInformation({ initialData = {}, onPrevious, onNex
     ContactEmailAddress: '',
   });
 
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setcontact_details({ ...contact_details, [name]: value });
   };
 
-    // Add new package form
+  const doctor_details=JSON.parse(localStorage.getItem("user"))
+
+ const save_contact_information = async () => {
+  try {
+    const resp = await api.put(
+      `api/v1/asset-sections/contact-info/${doctor_details._id}`,
+      contact_details,
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    // Check response_code instead of HTTP status
+    if (resp.data?.response?.response_code === "200") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Updated",
+        text: "Doctor Contact Information Updated Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else {
+      const errType = resp.data?.response?.response_message?.errorType || "Error";
+      const errMsg = resp.data?.response?.response_message?.error || "Something went wrong";
+
+      Swal.fire({
+        icon: "error",
+        title: errType,
+        text: errMsg,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.log(error);
+
+    Swal.fire({
+      icon: "error",
+      title: "Network/Error",
+      text: error.message,
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  }
+};
  
 
 
@@ -62,7 +106,7 @@ export default function ContactInformation({ initialData = {}, onPrevious, onNex
          
          
           <div className="flex justify-end gap-3 mt-4">
-                    <Button variant="contained" color="warning">Save</Button>
+                    <Button variant="contained" color="warning" onClick={save_contact_information}>Save</Button>
             </div>
         </div> 
 

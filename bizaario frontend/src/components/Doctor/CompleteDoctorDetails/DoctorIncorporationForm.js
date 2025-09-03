@@ -28,7 +28,7 @@ export default function DoctorIncorporationForm({ initialData = {}, onNext, show
 
   return (
     <div className=" grid grid-cols-2 gap-4">
-      <DoctorIncorporationDetails handleChange={handleChange} formData={incorporationdetails} onNext={onNext}/>
+      <DoctorIncorporationDetails handleChange={handleChange} incorporationdetails={incorporationdetails} onNext={onNext}/>
       <PreviewIncorporationDetails incorporationdetails={incorporationdetails}/> 
     </div>
   );

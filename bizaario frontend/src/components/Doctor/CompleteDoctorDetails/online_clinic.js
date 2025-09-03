@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { TextField, Select, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import api from '../../../api'
+import Swal from 'sweetalert2';
 
 export default function OnlineClinicLink({ initialData = {}, onPrevious, onNext }) {
   const [OnlineClinicLink, setOnlineClinicLink] = useState('');
@@ -9,6 +11,54 @@ export default function OnlineClinicLink({ initialData = {}, onPrevious, onNext 
 const handleChange = (e) => {
   const { value } = e.target;
   setOnlineClinicLink(value); // just store the value directly
+};
+
+
+ const doctor_details=JSON.parse(localStorage.getItem("user"))
+
+ const save_online_clinic_link = async () => {
+  try {
+    const payload={OnlineClinicLink}
+    const resp = await api.put(
+      `api/v1/asset-sections/online-clinic/${doctor_details._id}`,
+      payload,
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    // Check response_code instead of HTTP status
+    if (resp.data?.response?.response_code === "200") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Updated",
+        text: "Doctor Online Clinic Link Updated Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else {
+      const errType = resp.data?.response?.response_message?.errorType || "Error";
+      const errMsg = resp.data?.response?.response_message?.error || "Something went wrong";
+
+      Swal.fire({
+        icon: "error",
+        title: errType,
+        text: errMsg,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.log(error);
+
+    Swal.fire({
+      icon: "error",
+      title: "Network/Error",
+      text: error.message,
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  }
 };
 
  
@@ -42,7 +92,7 @@ const handleChange = (e) => {
          
          
            <div className="flex justify-end gap-3 mt-4">
-                     <Button variant="contained" color="warning">Save</Button>
+                     <Button variant="contained" color="warning" onClick={save_online_clinic_link}>Save</Button>
             </div>
         </div> 
 

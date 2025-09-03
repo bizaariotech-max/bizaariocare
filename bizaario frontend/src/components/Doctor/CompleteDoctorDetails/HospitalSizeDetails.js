@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { TextField, Select, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import api from '../../../api'
+import Swal from 'sweetalert2';
 
 export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNext }) {
   const [hospital_size, sethospital_size] = useState({
@@ -13,14 +15,57 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
    
   });
 
-  // useEffect(() => {
-  //   setData((prev) => ({ ...prev, ...initialData }));
-  // }, [initialData]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     sethospital_size({ ...hospital_size, [name]: value });
   };
+
+
+    const doctor_details=JSON.parse(localStorage.getItem("user"))
+
+  const save_hospital_size=async()=>
+  {
+    try {
+      const resp=await api.put(`api/v1/asset-sections/hospital-size/${doctor_details._id}`,hospital_size,
+          {
+        headers: { "Content-Type": "application/json" },
+      }
+      )
+    if(resp.status===200)
+       {
+          Swal.fire({
+           icon:"success",
+           title:"Details Updated",
+           text:"Hospital Size Details Updated Successfully...",
+           showConfirmButton:true,
+           customClass: {
+           confirmButton: 'my-swal-button',
+         },
+         }).then(()=>
+         {
+           window.location.reload()
+         })
+       }
+      
+    } catch (error) {
+      console.log(error);
+       Swal.fire({
+            icon:"error",
+            title:"error ",
+            text:error.response.data.message,
+            showConfirmButton:true,
+              customClass: {
+              confirmButton: 'my-swal-button',
+            },
+          })
+      
+    }
+  }
+
+
+
 
   return (
     <>
@@ -103,7 +148,7 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
          
          
           <div className="flex justify-end gap-3 mt-4">
-           <Button variant="contained" color="warning">Save</Button>
+           <Button variant="contained" color="warning" onClick={save_hospital_size}>Save</Button>
          </div>
         </div> 
 

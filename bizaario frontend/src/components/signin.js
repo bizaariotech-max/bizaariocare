@@ -16,27 +16,27 @@ function SignIn() {
   // Step 1: Track selected role in state
   const [role, setRole] = useState("admin"); // default is 'admin'
 
-  const [email,setemail]=useState("")
-  const[password,setpassword]=useState("")
+  const [Email,setEmail]=useState("")
+  const[Password,setPassword]=useState("")
   // Optionally, you can show different forms or adapt text for each role
-  const getFormTitle = () => {
-    if (role === "admin")  return "Admin Sign in";
-    if (role === "doctor") return "Doctor Sign in";
-    if (role === "patient") return "Patient Sign in";
-    return "Sign in";
-  };
+  // const getFormTitle = () => {
+  //   if (role === "admin")  return "Admin Sign in";
+  //   if (role === "doctor") return "Doctor Sign in";
+  //   if (role === "patient") return "Patient Sign in";
+  //   return "Sign in";
+  // };
 
 const login = async (e) => {
   e.preventDefault();
 
-  if (email === 'admin' && password === '123') {
+  if (Email === 'admin' && Password === '123') {
     navigate('/admindashboard');
     return;
   }
 
 
     try {
-      const resp = await api.post('doctor/login', { email, password });
+      const resp = await api.post('api/v1/admin/AssetLogin', { Email, Password });
 
       // Success
       Swal.fire({
@@ -49,8 +49,10 @@ const login = async (e) => {
         },
       });
 
-      localStorage.setItem('token', resp.data.token);
-      localStorage.setItem('user', JSON.stringify(resp.data.user));
+      console.log(resp);
+      
+      localStorage.setItem('token', resp.data.data.token);
+      localStorage.setItem('user', JSON.stringify(resp.data.data.user.Entity));
 
       navigate('/doctordashboard');
 
@@ -144,8 +146,8 @@ const login = async (e) => {
           {/* Step 3: The form updates (even just the heading here) */}
           <div className="input-group">
             <h2>Sign In</h2>
-            <input type="text" placeholder="Username" required  onChange={(e)=>setemail(e.target.value)}/>
-            <input type="password" placeholder="Password" required onChange={(e)=>setpassword(e.target.value)}/>
+            <input type="text" placeholder="Username" required  onChange={(e)=>setEmail(e.target.value)}/>
+            <input type="password" placeholder="Password" required onChange={(e)=>setPassword(e.target.value)}/>
           </div>
           <div className="options">
             <label>

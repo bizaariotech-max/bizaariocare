@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { TextField, Select, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import api from '../../../api'
+import Swal from 'sweetalert2';
 
 export default function FeeCharges({ initialData = {}, onPrevious, onNext }) {
   const [feecharges, setfeecharges] = useState([{
@@ -10,14 +12,13 @@ export default function FeeCharges({ initialData = {}, onPrevious, onNext }) {
 
 
 
-  const handleChange = (index, e) => {
-    const { name, value, files } = e.target;
-    const newcharges = [...feecharges];
+const handleChange = (index, field, value) => {
+  const updated = [...feecharges];
+  updated[index][field] = value;
+  setfeecharges(updated);
+};
 
-    newcharges[index][name] = value;
 
-    setfeecharges(newcharges);
-  }
   
     // Add new package form
   const addMore = () => {
@@ -31,6 +32,97 @@ export default function FeeCharges({ initialData = {}, onPrevious, onNext }) {
     ]);
   };
 
+  //============================== get all service category======================================
+
+     const[allservice,setallservice]=useState([])
+      const getallservice=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList',{ lookupcodes:"service_category"})
+          setallservice(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getallservice()
+    
+      },[])
+
+//====================================== get all currency type=======================================
+
+   const[all_currency,setall_currency]=useState([])
+      const get_all_currency=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList',{ lookupcodes:"currency_type"})
+          setall_currency(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        get_all_currency()
+    
+      },[])
+
+
+
+  const doctor_details=JSON.parse(localStorage.getItem("user"))
+
+ const save_fee_details = async () => {
+  try {
+    const resp = await api.post(
+      `api/v1/asset-sections/fees-charges/${doctor_details._id}`,
+      feecharges,
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    console.log(resp);
+    
+    // Check response_code instead of HTTP status
+    if (resp.data?.response?.response_code === "200") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Updated",
+        text: "Doctor Social Media Details Updated Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else {
+      const errType = resp.data?.response?.response_message?.errorType || "Error";
+      const errMsg = resp.data?.response?.response_message?.error || "Something went wrong";
+
+      Swal.fire({
+        icon: "error",
+        title: errType,
+        text: errMsg,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.log(error);
+
+    Swal.fire({
+      icon: "error",
+      title: "Network/Error",
+      text: error.message,
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  }
+};
 
   return (
     <>
@@ -47,16 +139,21 @@ export default function FeeCharges({ initialData = {}, onPrevious, onNext }) {
               <Select
                 name="ServiceCategory"
                 label="Service Category"
-                value={feecharges.ServiceCategory}
-                onChange={handleChange}
+                value={fee.ServiceCategory}
+                onChange={(e) => handleChange(index, e.target.name, e.target.value)}
                 MenuProps={{
                   disablePortal: true,
                   disableScrollLock: true,
                 }}
               >
-                <MenuItem value="India">India</MenuItem>
-                <MenuItem value="Usa">USA</MenuItem>
-                <MenuItem value="United Kingdom">UK</MenuItem>
+
+                {
+                  allservice.map((item)=>
+                  (
+                     <MenuItem value={item._id}>{item.lookup_value}</MenuItem>
+                  ))
+                }
+               
               </Select>
             </FormControl>
 
@@ -65,16 +162,20 @@ export default function FeeCharges({ initialData = {}, onPrevious, onNext }) {
               <Select
                 name="FeeCurrency"
                 label="Fee Currency"
-                value={feecharges.FeeCurrency}
-                onChange={handleChange}
+                value={fee.FeeCurrency}
+                onChange={(e) => handleChange(index, e.target.name, e.target.value)}
                 MenuProps={{
                   disablePortal: true,
                   disableScrollLock: true,
                 }}
               >
-                <MenuItem value="India">India</MenuItem>
-                <MenuItem value="Usa">USA</MenuItem>
-                <MenuItem value="United Kingdom">UK</MenuItem>
+                {
+                  all_currency.map((item)=>
+                  (
+                     <MenuItem value={item._id}>{item.lookup_value}</MenuItem>
+                  ))
+                }
+          
               </Select>
             </FormControl>
            
@@ -83,8 +184,8 @@ export default function FeeCharges({ initialData = {}, onPrevious, onNext }) {
             name="FeeAmount" 
             size="small" 
             className="col-span-2" 
-            value={feecharges.FeeAmount} 
-            onChange={handleChange} 
+            value={fee.FeeAmount} 
+            onChange={(e) => handleChange(index, e.target.name, e.target.value)} 
             />
 
            
@@ -96,7 +197,7 @@ export default function FeeCharges({ initialData = {}, onPrevious, onNext }) {
           <div className="flex justify-between mt-4">
             <Button variant="outlined" onClick={addMore}>Add More</Button>
           
-            <Button variant="contained" color="warning">Save</Button>
+            <Button variant="contained" color="warning" onClick={save_fee_details}>Save</Button>
                 
           </div>
         </div> 
