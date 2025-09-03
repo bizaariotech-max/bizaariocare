@@ -1,0 +1,41 @@
+.create-question-bank
+{
+margin-left: 19.5vw;
+margin-top: 10px;
+}
+ .question-bank-section {
+  padding-right: 20px;
+   
+  }
+
+@media (min-width: 1500px) {
+  .question-bank-section {
+   margin-left: -16vw;
+   
+  }
+}
+
+/* Base styles */
+.custom-data-grid {
+  height: 600px !important; /* Override inline/SX styles */
+  border-radius: 8px !important;
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable !important;
+}
+
+/* Column headers */
+.custom-data-grid .MuiDataGrid-columnHeaders {
+  background-color: #4d7bf3 !important;
+  color: black !important;
+  font-weight: bold !important;
+}
+
+/* Large screen adjustments */
+@media (min-width: 1500px) {
+  .custom-data-grid {
+    height: 800px !important;
+    max-width: 1400px !important;
+    min-width: 700px !important;
+    margin-left: -80px;
+  }
+}

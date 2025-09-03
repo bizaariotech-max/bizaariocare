@@ -1,0 +1,73 @@
+.upload-modal {
+  width: 540px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.24);
+  margin: auto; /* center in parent */
+  padding: 28px 24px 36px 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.upload-modal-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.upload-modal-title {
+  font-size: 22px;
+  font-weight: bold;
+}
+.upload-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+.upload-drop-zone {
+  margin: 32px 0 24px;
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #c2c2c2;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fafbff;
+}
+.upload-drop-icon {
+  font-size: 40px;
+  color: #c2c2c2;
+}
+.upload-instructions {
+  text-align: center;
+  margin-top: 10px;
+}
+.upload-or {
+  color: orange;
+  margin: 8px 0 4px;
+}
+.upload-browse span {
+  color: orange;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.upload-info {
+  color: #888;
+  font-size: 12px;
+  margin-top: 6px;
+}
+.upload-add-btn {
+  background: orange;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 28px;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 12px;
+}

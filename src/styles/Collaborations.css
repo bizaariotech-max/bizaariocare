@@ -1,0 +1,183 @@
+.collab-header {
+  width: 100%;
+  margin-top: 30px;
+  padding: 10px 15px;
+  box-sizing: border-box;
+}
+
+.collab-section {
+  text-align: left;
+  margin-left: 105px;
+}
+
+.collab-title {
+  color: #000;
+  font-family: Roboto;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 8px;
+}
+
+.collab-subtitle {
+  color: rgba(0, 0, 0, 0.50);
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 0;
+}
+
+/* Tabs */
+.collab-tabs {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin-top: 36px;
+  margin-left: 2px;
+}
+
+.collab-tab-btn {
+  background-color: #e0e0e0;
+  border: none;
+  height: 50px;
+  width: 100px;
+  padding: 8px 16px;
+  border-radius: 80px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.collab-tab-btn.active {
+  background-color: #5d5fef;
+  color: white;
+}
+
+/* Cards */
+.collab-cards {
+  width: calc(100% - 100px - 100px);
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 36px;
+  box-sizing: border-box;
+}
+
+.collab-card {
+  flex: 1 1 calc(33.33% - 20px);
+  width: 100%;
+  min-height: 250px;
+  color: white;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  padding: 20px 28px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 27px;
+}
+
+.collab-card-title {
+  width: 335.12px;
+  color: #F6F7FF;
+  font-family: Roboto;
+  font-size: 35.007px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 20px;
+}
+
+.collab-card-number {
+  color: #F6F7FF;
+  font-family: Roboto;
+  font-size: 46.676px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-top: 0;
+}
+
+.collab-card-icon {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 130px;
+  height: 130px;
+  aspect-ratio: 1/1;
+}
+
+/* Specific colors */
+.collab-card-doctors {
+  border-radius: 14.586px;
+  background: #FEA500;
+}
+
+.collab-card-medical {
+  border-radius: 14.586px;
+  background: #1D8A8F;
+}
+
+.collab-card-hospitals {
+  border-radius: 14.586px;
+  background: #47B34E;
+}
+
+/* Responsive */
+
+/* Tablet view */
+@media (max-width: 1024px) {
+  .collab-section {
+    margin-left: 60px;
+  }
+  .collab-cards {
+    width: calc(100% - 60px - 60px);
+    margin-left: 60px;
+    margin-right: 60px;
+    gap: 20px;
+  }
+  .collab-card {
+    flex: 1 1 calc(33.33% - 15px);
+  }
+  .collab-card-title {
+    font-size: 28px;
+    width: auto;
+  }
+  .collab-card-number {
+    font-size: 38px;
+  }
+}
+
+/* Mobile view */
+@media (max-width: 768px) {
+  .collab-section {
+    margin-left: 20px;
+  }
+  .collab-cards {
+    width: calc(100% - 20px - 20px);
+    margin-left: 20px;
+    margin-right: 20px;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .collab-card {
+    flex: 1 1 100%;
+    min-height: auto;
+  }
+  .collab-card-title {
+    font-size: 24px;
+    width: auto;
+  }
+  .collab-card-number {
+    font-size: 32px;
+  }
+  .collab-card-icon {
+    width: 100px;
+    height: 100px;
+  }
+}

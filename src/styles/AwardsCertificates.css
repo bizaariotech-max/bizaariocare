@@ -1,0 +1,219 @@
+.ac-wrapper {
+  width: 100%;
+  padding: 10px 15px;
+  box-sizing: border-box;
+}
+
+.ac-header {
+  text-align: left;
+  margin-bottom: 30px;
+  margin-left: 100px;
+}
+
+.ac-header h2 {
+  color: #000;
+  font-family: Roboto;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.ac-header p {
+  color: rgba(0, 0, 0, 0.50);
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.ac-card-container {
+  width: calc(100% - 100px -100px);
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+.ac-card {
+  display: flex;
+  padding: 18px;
+  align-items: center;
+  gap: 45px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.10);
+  flex-wrap: wrap;
+}
+
+.ac-image {
+  width: 402px;
+  height: 360px;
+  flex-shrink: 0;
+  aspect-ratio: 67/60;
+  border-radius: 5px;
+}
+
+.ac-content {
+  flex: 1;
+  min-width: 250px;
+}
+
+.ac-title {
+  color: #000;
+  font-family: Roboto;
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 10px;
+}
+
+.ac-org {
+  color: rgba(0, 0, 0, 0.75);
+  font-family: Roboto;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px;
+  margin-top: 0;
+}
+
+.ac-desc {
+  color: rgba(0, 0, 0, 0.75);
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.ac-date {
+  color: rgba(0, 0, 0, 0.75);
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.ac-link {
+  color: #525FE1;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
+  text-decoration: underline;
+}
+
+.ac-nav-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.ac-nav-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  background-color: #F86F03;
+  border: none;
+  border-radius: 2px;
+  color: #fff;
+}
+
+/* ---------- Responsive breakpoints ---------- */
+
+/* Large tablets and small laptops */
+@media (max-width: 1200px) {
+  .ac-card-container {
+    width: calc(100% - 60px);
+    margin-left: 30px;
+  }
+  .ac-header {
+    margin-left: 30px;
+  }
+  .ac-image {
+    width: 320px;
+    height: 280px;
+  }
+  .ac-title {
+    font-size: 34px;
+  }
+  .ac-org {
+    font-size: 24px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+  .ac-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ac-content {
+    text-align: left;
+  }
+  .ac-image {
+    width: 100%;
+    height: auto;
+  }
+  .ac-title {
+    font-size: 28px;
+  }
+  .ac-org {
+    font-size: 20px;
+  }
+  .ac-desc,
+  .ac-date,
+  .ac-link {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+/* Large phones */
+@media (max-width: 768px) {
+  .ac-card-container {
+    width: 100%;
+    margin-left: 0;
+  }
+  .ac-header {
+    margin-left: 0;
+    text-align: center;
+  }
+  .ac-card {
+    gap: 20px;
+  }
+  .ac-title {
+    font-size: 22px;
+  }
+  .ac-org {
+    font-size: 18px;
+  }
+  .ac-desc,
+  .ac-date,
+  .ac-link {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .ac-card {
+    padding: 12px;
+  }
+  .ac-title {
+    font-size: 20px;
+  }
+  .ac-org {
+    font-size: 16px;
+  }
+  .ac-desc,
+  .ac-date,
+  .ac-link {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
