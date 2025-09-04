@@ -21,13 +21,15 @@ import {
   IconButton,
   Tooltip,
   CircularProgress,
-  Snackbar,
-  Alert,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import api from "../../../api";
 import { __getCommenApiDataList } from "../../../utils/api/commonApi";
@@ -44,13 +46,8 @@ function ContentMaster() {
   const [currentTag, setCurrentTag] = useState("");
   const [currentReference, setCurrentReference] = useState("");
   const [currentVideo, setCurrentVideo] = useState("");
-
-  // Toast state
-  const [toast, setToast] = useState({
-    open: false,
-    message: "",
-    severity: "success", // success, error, warning, info
-  });
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedContentTypeId, setSelectedContentTypeId] = useState(null);
 
   const [state, setState] = useState({
     content_id: null, // for edit
@@ -101,20 +98,38 @@ function ContentMaster() {
   const updateState = (data) =>
     setState((prevState) => ({ ...prevState, ...data }));
 
-  // Toast functions
+  // Toast functions using react-toastify
   const showToast = (message, severity = "success") => {
-    setToast({ open: true, message, severity });
+    switch (severity) {
+      case "success":
+        toast.success(message);
+        break;
+      case "error":
+        toast.error(message);
+        break;
+      case "warning":
+        toast.warning(message);
+        break;
+      case "info":
+        toast.info(message);
+        break;
+      default:
+        toast(message);
+    }
   };
 
-  const hideToast = () => {
-    setToast({ ...toast, open: false });
-  };
-
-  // Fetch content list
-  const getContentList = async () => {
+  // Fetch content list with filters
+  const getContentList = async (contentTypeId = null) => {
     try {
       setIsLoading(true);
-      const resp = await __postApiData("/api/v1/admin/ContentList", {});
+      const payload = {};
+      
+      // Add ContentTypeId filter if provided
+      if (contentTypeId) {
+        payload.ContentTypeId = contentTypeId;
+      }
+      
+      const resp = await __postApiData("/api/v1/admin/ContentList", payload);
       
       if (resp.response.response_code === "200") {
         setContentList(resp.data.list || []);
@@ -158,8 +173,26 @@ function ContentMaster() {
     }
   };
 
+  // Handle tab change
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+    
+    // Get the content type ID for the selected tab
+    const selectedType = newValue === 0 ? null : ContentType[newValue - 1];
+    const contentTypeId = selectedType ? selectedType.id : null;
+    
+    setSelectedContentTypeId(contentTypeId);
+    
+    // Update the form's ContentTypeId if a specific tab is selected
+    if (contentTypeId) {
+      updateState({ ContentTypeId: contentTypeId });
+    }
+    
+    // Fetch content list filtered by the selected content type
+    getContentList(contentTypeId);
+  };
+
   useEffect(() => {
-    getContentList();
     // Fetch dropdown data and set default for Content Type
     const initializeDropdowns = async () => {
       try {
@@ -179,8 +212,20 @@ function ContentMaster() {
           ContentTypeId: digitalCMEOption ? digitalCMEOption.id : "",
         });
 
+        // Set the default tab based on Digital CME
+        if (digitalCMEOption) {
+          const tabIndex = contentTypeData.findIndex(item => item.id === digitalCMEOption.id);
+          if (tabIndex !== -1) {
+            setActiveTab(tabIndex + 1); // +1 because the first tab is "All"
+            setSelectedContentTypeId(digitalCMEOption.id);
+          }
+        }
+
         // Fetch Asset List data
         getAssetList();
+        
+        // Fetch initial content list (all content types)
+        getContentList();
       } catch (error) {
         console.error("Error initializing dropdowns:", error);
         showToast("Error initializing dropdowns", "error");
@@ -274,6 +319,14 @@ function ContentMaster() {
       VideoGallery: row.VideoGallery || [],
       References: row.References || [],
     });
+    
+    // Find and set the appropriate tab based on the content type
+    if (row.ContentTypeId?._id) {
+      const tabIndex = ContentType.findIndex(item => item.id === row.ContentTypeId._id);
+      if (tabIndex !== -1) {
+        setActiveTab(tabIndex + 1); // +1 because the first tab is "All"
+      }
+    }
   };
 
   const onDelete = async (id) => {
@@ -477,13 +530,16 @@ function ContentMaster() {
               : "Content added successfully!",
             "success"
           );
-          getContentList(); // Refresh the content list
+          
+          // Refresh the content list based on current tab
+          getContentList(selectedContentTypeId);
+          
           // Reset form state
           updateState({
             isLoading: false,
             content_id: null,
             AssetId: "",
-            ContentTypeId: "",
+            ContentTypeId: selectedContentTypeId, // Keep the current content type based on tab
             ContentTitle: "",
             GrantingBody: "",
             Date: "",
@@ -526,6 +582,24 @@ function ContentMaster() {
       <div className="station-master">
         <div className="space-y-6">
           <h1 className="text-2xl font-bold text-gray-800">Content Master</h1>
+          
+          {/* Tabs Section */}
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs 
+              value={activeTab} 
+              onChange={handleTabChange} 
+              aria-label="content type tabs"
+              variant="scrollable"
+              scrollButtons="auto"
+              className="bg-white rounded-t-lg"
+            >
+              <Tab label="All Content" />
+              {ContentType.map((type, index) => (
+                <Tab key={type.id} label={type.name} />
+              ))}
+            </Tabs>
+          </Box>
+          
           <div className="flex items-center justify-between">
             <div className="grid w-full grid-cols-6 gap-6 mx-auto lg:grid-cols-12">
               {/* Form Section */}
@@ -572,7 +646,18 @@ function ContentMaster() {
                       labelId="content-type-label"
                       name="ContentTypeId"
                       value={ContentTypeId || ""}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        handleChange(e);
+                        // Update the active tab when content type changes in the dropdown
+                        const newContentTypeId = e.target.value;
+                        if (newContentTypeId) {
+                          const tabIndex = ContentType.findIndex(item => item.id === newContentTypeId);
+                          if (tabIndex !== -1) {
+                            setActiveTab(tabIndex + 1); // +1 because the first tab is "All"
+                            setSelectedContentTypeId(newContentTypeId);
+                          }
+                        }
+                      }}
                       label="Content Type"
                     >
                       <MenuItem value="">
@@ -948,21 +1033,18 @@ function ContentMaster() {
         </div>
       </div>
 
-      {/* Toast Notification */}
-      <Snackbar
-        open={toast.open}
-        autoHideDuration={6000}
-        onClose={hideToast}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
-          onClose={hideToast}
-          severity={toast.severity}
-          sx={{ width: "100%" }}
-        >
-          {toast.message}
-        </Alert>
-      </Snackbar>
+      {/* React Toastify Container */}
+      <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
       {isLoading && <UniqueLoader />}
     </div>
