@@ -5,8 +5,8 @@ const __LIVE = process.env.REACT_APP_LIVE
 const __LOCAL = process.env.REACT_APP_LOCAL
 
 // export const BASE_URL = __LIVE || __LOCAL
-// export const BASE_URL = "https://bizaariocare-backend.onrender.com";
-export const BASE_URL = "http://localhost:5000";
+export const BASE_URL = "https://bizaariocare-backend.onrender.com";
+// export const BASE_URL = "http://localhost:5000";
 
 // export const BASE_URL = __LIVE
 

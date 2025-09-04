@@ -1,0 +1,187 @@
+import React, { useEffect, useState } from 'react'
+import { TextField, Select, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import api from '../../../api'
+import Swal from 'sweetalert2';
+
+export default function SocialMediaAssets({ initialData = {}, onPrevious, onNext }) {
+  const [social_media_assets, setsocial_media_assets] = useState({
+    Website: '',
+    YouTubeChannel: '',
+    FacebookPage: '',
+    InstagramAccount: '',
+    LinkedInAccount: '',
+    WhatsAppCommunity: '',
+    TelegramChannel: '',
+   
+  });
+
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setsocial_media_assets({ ...social_media_assets, [name]: value });
+  };
+
+
+   const doctor_details=JSON.parse(localStorage.getItem("user"))
+
+ const save_social_media_details = async () => {
+  try {
+    const resp = await api.put(
+      `api/v1/asset-sections/social-media/${doctor_details._id}`,
+      social_media_assets,
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    // Check response_code instead of HTTP status
+    if (resp.data?.response?.response_code === "200") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Updated",
+        text: "Doctor Social Media Details Updated Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else {
+      const errType = resp.data?.response?.response_message?.errorType || "Error";
+      const errMsg = resp.data?.response?.response_message?.error || "Something went wrong";
+
+      Swal.fire({
+        icon: "error",
+        title: errType,
+        text: errMsg,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.log(error);
+
+    Swal.fire({
+      icon: "error",
+      title: "Network/Error",
+      text: error.message,
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  }
+};
+
+
+
+  return (
+    <>
+      <div className=" grid grid-cols-2 gap-4">
+        <div className='bg-white p-3 rounded-lg shadow'>
+          <h3 className="font-semibold text-[16px] mb-3">Social Media Details</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <TextField
+            label="Website" 
+            name="Website" 
+            size="small" 
+            value={social_media_assets.Website} 
+            className="col-span-2"
+            onChange={handleChange} 
+            />
+           
+            <TextField
+            label="YouTubeChannel" 
+            name="YouTubeChannel" 
+            size="small" 
+            className="col-span-2" 
+            value={social_media_assets.YouTubeChannel} 
+            onChange={handleChange} 
+            />
+
+              <TextField
+            label="FacebookPage" 
+            name="FacebookPage" 
+            size="small" 
+            className="col-span-2" 
+            value={social_media_assets.FacebookPage} 
+            onChange={handleChange} 
+            />
+           
+            <TextField
+            label="InstagramAccount" 
+            name="InstagramAccount" 
+            size="small" 
+            className="col-span-2" 
+            value={social_media_assets.InstagramAccount} 
+            onChange={handleChange} 
+            />
+
+            <TextField
+            label="LinkedInAccount" 
+            name="LinkedInAccount" 
+            size="small" 
+            className="col-span-2" 
+            value={social_media_assets.LinkedInAccount} 
+            onChange={handleChange} 
+            />
+
+            <TextField
+            label="WhatsAppCommunity" 
+            name="WhatsAppCommunity" 
+            size="small" 
+            className="col-span-2" 
+            value={social_media_assets.WhatsAppCommunity} 
+            onChange={handleChange} 
+            />
+
+            <TextField
+            label="TelegramChannel" 
+            name="TelegramChannel" 
+            size="small" 
+            className="col-span-2" 
+            value={social_media_assets.TelegramChannel} 
+            onChange={handleChange} 
+            />
+
+
+          </div> 
+         
+         
+          <div className="flex justify-end gap-3 mt-4">
+                    <Button variant="contained" color="warning" onClick={save_social_media_details}>Save</Button>
+          </div>
+        </div> 
+
+           <div className="bg-white rounded-xl shadow p-4">
+                  <h3 className="font-semibold mb-4">Preview</h3>
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="font-semibold">Social Media Details</p>
+                    {/* <span className="text-gray-500"><TfiAngleUp /></span> */}
+                  </div>
+                  <div className="flex items-center gap-3 mb-4">
+                    {/* <img src={userProfile} alt="Patient" className="w-16 h-16 rounded-full object-cover" /> */}
+                    <div>
+                      {/* <p className="font-semibold text-[20px]">{formData?.name || "Patient Name"}</p> */}
+                      <div className="text-sm text-gray-600  flex-wrap gap-x-6 text-[12px]">
+                        <p>Website : <span  className="text-[#000000] font-semibold">{social_media_assets?.Website || ""}</span></p><br></br>
+                        <p>YouTube Channel : <span  className="text-[#000000] font-semibold">{social_media_assets?.YouTubeChannel || ""}</span></p><br></br>
+                        <p>Facebook Page : <span  className="text-[#000000] font-semibold">{social_media_assets?.FacebookPage || ""}</span></p><br></br>
+                        <p>Instagram Account : <span  className="text-[#000000] font-semibold">{social_media_assets?.InstagramAccount || ""}</span></p><br></br>
+                        <p>LinkedIn Account : <span  className="text-[#000000] font-semibold">{social_media_assets?.LinkedInAccount || ""}</span></p><br></br>
+                        <p>WhatsApp Community : <span  className="text-[#000000] font-semibold">{social_media_assets?.WhatsAppCommunity || ""}</span></p><br></br>
+                        <p>Telegram Channel : <span  className="text-[#000000] font-semibold">{social_media_assets?.TelegramChannel || ""}</span></p>
+                      </div>
+                    </div>
+                  </div>
+      
+                
+                </div>
+
+
+      </div>
+
+     
+
+    </>
+    )
+}
+
+
+

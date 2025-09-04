@@ -115,6 +115,7 @@ function ContentMaster() {
     try {
       setIsLoading(true);
       const resp = await __postApiData("/api/v1/admin/ContentList", {});
+      
       if (resp.response.response_code === "200") {
         setContentList(resp.data.list || []);
       }
