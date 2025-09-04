@@ -62,6 +62,29 @@ export default function AddressDetails({ initialData = {}, onPrevious, onNext })
     }
   }
 
+  //================================ get address details=========================================
+
+  
+  const get_address_details=async()=>
+  {
+    try {
+      const resp=await api.get(`api/v1/asset-sections/address/${doctor_details._id}`)
+         if (resp.data?.data) {
+          const { _id, ...rest } = resp.data.data;
+          setaddress(rest);
+        }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+  
+  useEffect(()=>
+  {
+    get_address_details()
+  },[])
+
+
 
   return (
     <>

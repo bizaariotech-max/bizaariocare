@@ -12,7 +12,6 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
     NumberOfBeds: '',
     NumberOfICUBeds: '',
     NumberOfOTs: '',
-   
   });
 
 
@@ -23,7 +22,9 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
   };
 
 
-    const doctor_details=JSON.parse(localStorage.getItem("user"))
+  const doctor_details=JSON.parse(localStorage.getItem("user"))
+
+  
 
   const save_hospital_size=async()=>
   {
@@ -33,6 +34,8 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
         headers: { "Content-Type": "application/json" },
       }
       )
+      console.log(resp);
+      
     if(resp.status===200)
        {
           Swal.fire({
@@ -65,6 +68,30 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
   }
 
 
+  //=========================== update hospital_size=========================================
+
+  const get_hospital_size=async()=>
+  {
+    try {
+      const resp=await api.get(`api/v1/asset-sections/hospital-size/${doctor_details._id}`)
+      if (resp.data?.data) {
+      // ✅ remove _id from API response before setting state
+      const { _id, ...rest } = resp.data.data;
+      sethospital_size(rest);
+    }
+      
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  useEffect(()=>
+  {
+    get_hospital_size()
+  },[])
+
 
 
   return (
@@ -78,7 +105,7 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
             label="Number Of Departments" 
             name="NumberOfDepartments" 
             size="small" 
-            value={hospital_size.height} 
+            value={hospital_size.NumberOfDepartments} 
             className="col-span-2"
             onChange={handleChange} 
             />
@@ -89,7 +116,7 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
             name="NumberOfDoctors" 
             size="small" 
             className="col-span-2" 
-            value={hospital_size.bmi} 
+            value={hospital_size.NumberOfDoctors} 
             onChange={handleChange} 
             />
 
@@ -99,7 +126,7 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
             name="NumberOfConsultingPhysicians" 
             size="small" 
             className="col-span-2" 
-            value={hospital_size.bmi} 
+            value={hospital_size.NumberOfConsultingPhysicians} 
             onChange={handleChange} 
             />
            
@@ -109,7 +136,7 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
             name="NumberOfNursingStaff" 
             size="small" 
             className="col-span-2" 
-            value={hospital_size.bmi} 
+            value={hospital_size.NumberOfNursingStaff} 
             onChange={handleChange} 
             />
 
@@ -119,7 +146,7 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
             name="NumberOfBeds" 
             size="small" 
             className="col-span-2" 
-            value={hospital_size.bmi} 
+            value={hospital_size.NumberOfBeds} 
             onChange={handleChange} 
             />
 
@@ -129,7 +156,7 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
             name="NumberOfICUBeds" 
             size="small" 
             className="col-span-2" 
-            value={hospital_size.bmi} 
+            value={hospital_size.NumberOfICUBeds} 
             onChange={handleChange} 
             />
 
@@ -139,7 +166,7 @@ export default function HospitalSizeDetails({ initialData = {}, onPrevious, onNe
             name="NumberOfOTs" 
             size="small" 
             className="col-span-2" 
-            value={hospital_size.bmi} 
+            value={hospital_size.NumberOfOTs} 
             onChange={handleChange} 
             />
 

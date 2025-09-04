@@ -85,7 +85,7 @@ const DoctorIncorporationDetails = ({handleChange, incorporationdetails, onNext}
           label="Registration Number" 
           name="RegistrationNumber" 
           size="small" 
-          value={incorporationdetails?.RegistrationNumber} 
+          value={incorporationdetails?.RegistrationNumber}
           onChange={handleChange} 
           />
           <TextField
@@ -94,7 +94,7 @@ const DoctorIncorporationDetails = ({handleChange, incorporationdetails, onNext}
           InputLabelProps={{ shrink: true }}
           name="ValidityExpiry" 
           size="small" 
-          value={incorporationdetails?.ValidityExpiry} 
+          // value={incorporationdetails?.ValidityExpiry} 
           onChange={handleChange} 
           />
          

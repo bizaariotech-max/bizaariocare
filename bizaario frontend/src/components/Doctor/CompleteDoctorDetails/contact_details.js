@@ -62,6 +62,27 @@ export default function ContactInformation({ initialData = {}, onPrevious, onNex
 };
  
 
+//================================== get contact details=========================================
+
+const get_online_clinic=async()=>
+  {
+    try {
+      const resp=await api.get(`api/v1/asset-sections/contact-info/${doctor_details._id}`)
+         if (resp.data?.data) {
+          const { _id, ...rest } = resp.data.data;
+          setcontact_details(rest);
+        }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+  
+  useEffect(()=>
+  {
+    get_online_clinic()
+  },[])
+
 
   return (
     <>
@@ -123,10 +144,9 @@ export default function ContactInformation({ initialData = {}, onPrevious, onNex
                      
                       <div className="text-sm text-gray-600  flex-wrap gap-x-6 text-[12px]">
                         <p>Contact Name : <span  className="text-[#000000] font-semibold">{contact_details?.ContactName || ""}</span></p><br></br>
-                        <p>Contact Phone Number : <span  className="text-[#000000] font-semibold">{contact_details?.AccountNContactPhoneNumberumber || ""}</span></p><br></br>
+                        <p>Contact Phone Number : <span  className="text-[#000000] font-semibold">{contact_details?.ContactPhoneNumber || ""}</span></p><br></br>
                         <p>Contact Email Address : <span  className="text-[#000000] font-semibold">{contact_details?.ContactEmailAddress || ""}</span></p><br></br>
                         
-
                       </div>
              
                     </div>

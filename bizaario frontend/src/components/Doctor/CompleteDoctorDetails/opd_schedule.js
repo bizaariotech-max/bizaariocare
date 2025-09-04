@@ -35,34 +35,16 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
     ]);
   };
 
-    //============================== get all service category======================================
   
-       const[allservice,setallservice]=useState([])
-        const getallservice=async()=>
-        {
-          try {
-            const resp=await api.post('api/v1/admin/LookupList',{ lookupcodes:"service_category"})
-            setallservice(resp.data.data)
-            
-          } catch (error) {
-            console.log(error);
-            
-          }
-        }
-      
-        useEffect(()=>
-        {
-          getallservice()
-      
-        },[])
 
   const doctor_details=JSON.parse(localStorage.getItem("user"))
 
  const save_opd_details = async () => {
   try {
-    const resp = await api.post(
+     const payload = opd_schedule.map(({ _id, ...rest }) => rest);
+    const resp = await api.put(
       `api/v1/asset-sections/opd-schedule/${doctor_details._id}`,
-      opd_schedule,
+      payload,
       { headers: { "Content-Type": "application/json" } }
     );
 
@@ -104,6 +86,63 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
   }
 };
 
+// ===================================get all opd details==========================================
+
+const get_opd_scheduled=async()=> {
+  try {
+    const resp = await api.get(
+      `api/v1/asset-sections/opd-schedule/${doctor_details._id}`
+    );
+  
+    console.log(resp);
+    
+    if (resp.data?.data) {
+  
+      setopd_schedule(resp.data.data.OPDSchedule);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+  useEffect(()=>
+  {
+    get_opd_scheduled()
+  },[])
+
+
+// =====================================delete opd schedule===========================================
+
+const delete_opd_scheduled=async(id)=>
+  {
+    try {
+      const resp=await api.delete(`api/v1/asset-sections/opd-schedule/${doctor_details._id}/${id}`)
+       if(resp.status===200)
+          {
+             Swal.fire({
+              icon:"success",
+              title:"Profile Updated",
+              text:resp.data.data.message,
+              showConfirmButton:true,
+              customClass: {
+              confirmButton: 'my-swal-button',
+            },
+            }).then(()=>
+            {
+              window.location.reload()
+            })
+          }
+      
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
+
 
 
   return (
@@ -112,16 +151,24 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
     
       <div className=" grid grid-cols-2 gap-4">
         <div className='bg-white p-3 rounded-lg shadow'>
-           {opd_schedule.map((opd, index) => (
+           {opd_schedule?.map((opd, index) => (
           <div className="grid grid-cols-2 gap-3" style={{marginTop:"25px"}}>
-          <h3 className="font-semibold text-[16px] mb-1 col-span-2">OPD Schedule Details</h3>
+          <h3 className="font-semibold text-[16px] mb-1 col-span-2">OPD Schedule Details
+              <button
+                type="button"
+                onClick={() => delete_opd_scheduled(opd._id)}
+                style={{marginLeft:"50%"}}
+              >
+                <span className="material-icons text-red-500 text-xl">delete</span>
+              </button>
+          </h3>
          
           <FormControl fullWidth size="small"  className="col-span-2">
               <InputLabel>OPD Day</InputLabel>
               <Select
                 name="OPDDay"
                 label="OPDDay"
-                value={opd_schedule.OPDDay}
+                value={opd.OPDDay}
                 onChange={(e)=>handleChange(index,e)}
                 MenuProps={{
                   disablePortal: true,
@@ -130,12 +177,12 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
               >
                
                 <MenuItem value="Monday"> Monday</MenuItem>
-                <MenuItem value="Monday"> Tuesday</MenuItem>
-                <MenuItem value="Monday"> Wednesday</MenuItem>
-                <MenuItem value="Monday"> Thursday</MenuItem>
-                <MenuItem value="Monday"> Friday</MenuItem>
-                <MenuItem value="Monday"> Saturday</MenuItem>
-                <MenuItem value="Monday"> Sunday</MenuItem>
+                <MenuItem value="Tuesday"> Tuesday</MenuItem>
+                <MenuItem value="Wednesday"> Wednesday</MenuItem>
+                <MenuItem value="Thursday"> Thursday</MenuItem>
+                <MenuItem value="Friday"> Friday</MenuItem>
+                <MenuItem value="Saturday"> Saturday</MenuItem>
+                <MenuItem value="Sunday"> Sunday</MenuItem>
                
               </Select>
             </FormControl>
@@ -147,7 +194,7 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
             name="OPDTimeFrom" 
             size="small" 
             className="col-span-2" 
-            value={opd_schedule.OPDTimeFrom} 
+            value={opd.OPDTimeFrom} 
             onChange={(e)=>handleChange(index,e)} 
             />
 
@@ -156,7 +203,7 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
             name="OPDTimeTo" 
             size="small" 
             className="col-span-2" 
-            value={opd_schedule.OPDTimeTo} 
+            value={opd.OPDTimeTo} 
             onChange={(e)=>handleChange(index,e)} 
             />
 
@@ -166,7 +213,7 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
             name="AvailableSlots" 
             size="small" 
             className="col-span-2" 
-            value={opd_schedule.AvailableSlots} 
+            value={opd.AvailableSlots} 
             onChange={(e)=>handleChange(index,e)} 
             />
 
@@ -197,10 +244,10 @@ export default function OpdSchedule({ initialData = {}, onPrevious, onNext }) {
                      
                     {opd_schedule.map((opd, index) => (
                       <div className="text-sm text-gray-600  flex-wrap gap-x-6 text-[12px]">
-                        <p>OPD Day : <span  className="text-[#000000] font-semibold">{opd_schedule?.OPDDay || ""}</span></p><br></br>
-                        <p>OPD Time From : <span  className="text-[#000000] font-semibold">{opd_schedule?.OPDTimeFrom || ""}</span></p><br></br>
-                        <p>OPD Time To : <span  className="text-[#000000] font-semibold">{opd_schedule?.OPDTimeTo || ""}</span></p><br></br>
-                        <p>Available Slots : <span  className="text-[#000000] font-semibold">{opd_schedule?.AvailableSlots || ""}</span></p><br></br>
+                        <p>OPD Day : <span  className="text-[#000000] font-semibold">{opd?.OPDDay || ""}</span></p><br></br>
+                        <p>OPD Time From : <span  className="text-[#000000] font-semibold">{opd?.OPDTimeFrom || ""}</span></p><br></br>
+                        <p>OPD Time To : <span  className="text-[#000000] font-semibold">{opd?.OPDTimeTo || ""}</span></p><br></br>
+                        <p>Available Slots : <span  className="text-[#000000] font-semibold">{opd?.AvailableSlots || ""}</span></p><br></br>
                        
                       </div>
                     ))}

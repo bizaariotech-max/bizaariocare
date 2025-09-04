@@ -80,13 +80,14 @@ const handleChange = (index, field, value) => {
 
  const save_fee_details = async () => {
   try {
-    const resp = await api.post(
+       const payload = feecharges.map(({ _id, ...rest }) => rest);
+    const resp = await api.put(
       `api/v1/asset-sections/fees-charges/${doctor_details._id}`,
-      feecharges,
+      payload,
       { headers: { "Content-Type": "application/json" } }
     );
 
-    console.log(resp);
+  
     
     // Check response_code instead of HTTP status
     if (resp.data?.response?.response_code === "200") {
@@ -124,15 +125,92 @@ const handleChange = (index, field, value) => {
   }
 };
 
+
+// ==================================get feecharges data========================================
+
+const get_fee_charges = async () => {
+  try {
+    const resp = await api.get(
+      `api/v1/asset-sections/fees-charges/${doctor_details._id}`
+    );
+  
+    if (resp.data?.data) {
+      // Remove top-level _id
+      const { _id, ...rest } = resp.data.data;
+
+      // Map each fee object to only what you need for form
+      const normalizedFees = rest.FeesAndCharges.map((fee) => ({
+        _id:fee._id,
+        FeeAmount: fee.FeeAmount,
+        FeeCurrency: fee.FeeCurrency._id,       // store only ID
+        ServiceCategory: fee.ServiceCategory._id // store only ID
+      }));
+
+      setfeecharges(normalizedFees); // now state is clean
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+  useEffect(()=>
+  {
+    get_fee_charges()
+  },[])
+
+
+// ================================delete fee charges===========================================
+
+  const delete_fee_charge=async(id)=>
+  {
+    try {
+      const resp=await api.delete(`api/v1/asset-sections/fees-charges/${doctor_details._id}/${id}`)
+       if(resp.status===200)
+          {
+             Swal.fire({
+              icon:"success",
+              title:"Profile Updated",
+              text:resp.data.data.message,
+              showConfirmButton:true,
+              customClass: {
+              confirmButton: 'my-swal-button',
+            },
+            }).then(()=>
+            {
+              window.location.reload()
+            })
+          }
+      
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
+  
+
   return (
     <>
 
     
       <div className=" grid grid-cols-2 gap-4">
         <div className='bg-white p-3 rounded-lg shadow'>
-           {feecharges.map((fee, index) => (
+           {feecharges?.map((fee, index) => (
           <div className="grid grid-cols-2 gap-3" style={{marginTop:"25px"}}>
-          <h3 className="font-semibold text-[16px] mb-1 col-span-2">Fee And Charges Details</h3>
+          <h3 className="font-semibold text-[16px] mb-1 col-span-2">Fee And Charges Details
+
+               <button
+                type="button"
+                onClick={() => delete_fee_charge(fee._id)}
+                style={{marginLeft:"50%"}}
+              >
+                <span className="material-icons text-red-500 text-xl">delete</span>
+              </button>
+          </h3>
+      
          
           <FormControl fullWidth size="small"  className="col-span-2">
               <InputLabel>Service Category</InputLabel>
@@ -215,9 +293,9 @@ const handleChange = (index, field, value) => {
                      
                     {feecharges.map((fee, index) => (
                       <div className="text-sm text-gray-600  flex-wrap gap-x-6 text-[12px]">
-                        <p>Service Category : <span  className="text-[#000000] font-semibold">{feecharges?.ServiceCategory || ""}</span></p><br></br>
-                        <p>Fee Currency : <span  className="text-[#000000] font-semibold">{feecharges?.FeeCurrency || ""}</span></p><br></br>
-                        <p>Fee Amount : <span  className="text-[#000000] font-semibold">{feecharges?.FeeAmount || ""}</span></p><br></br>
+                        <p>Service Category : <span  className="text-[#000000] font-semibold">{fee?.ServiceCategory || ""}</span></p><br></br>
+                        <p>Fee Currency : <span  className="text-[#000000] font-semibold">{fee?.FeeCurrency || ""}</span></p><br></br>
+                        <p>Fee Amount : <span  className="text-[#000000] font-semibold">{fee?.FeeAmount || ""}</span></p><br></br>
                        
                       </div>
                     ))}

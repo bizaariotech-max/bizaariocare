@@ -31,10 +31,11 @@ export default function DoctorIncorporationForm({ initialData = {}, onNext, show
   const get_incorporation_details=async()=>
   {
     try {
-      const resp=await api.get(`incorporation-details/${doctor_details._id}`)
-      console.log(resp);
-      
-      
+      const resp=await api.get(`api/v1/asset-sections/incorporation-details/${doctor_details._id}`)
+         if (resp.data?.data) {
+          const { _id, ...rest } = resp.data.data;
+          setincorporationdetails(rest);
+        }
     } catch (error) {
       console.log(error);
       
@@ -45,6 +46,8 @@ export default function DoctorIncorporationForm({ initialData = {}, onNext, show
   {
     get_incorporation_details()
   },[])
+
+  
   return (
     <div className=" grid grid-cols-2 gap-4">
       <DoctorIncorporationDetails handleChange={handleChange} incorporationdetails={incorporationdetails} onNext={onNext}/>

@@ -35,7 +35,7 @@ const doctor_details=JSON.parse(localStorage.getItem("user"))
       Swal.fire({
         icon: "success",
         title: "Details Updated",
-        text: "Doctor Social Media Details Updated Successfully...",
+        text: "Doctor Bank Details Updated Successfully...",
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
@@ -66,6 +66,27 @@ const doctor_details=JSON.parse(localStorage.getItem("user"))
   }
 };
  
+
+//=================================== get bank details=========================================
+
+const get_bank_details=async()=>
+  {
+    try {
+      const resp=await api.get(`api/v1/asset-sections/bank-details/${doctor_details._id}`)
+         if (resp.data?.data) {
+          const { _id, ...rest } = resp.data.data;
+          setbankdetails(rest);
+        }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+  
+  useEffect(()=>
+  {
+    get_bank_details()
+  },[])
 
 
   return (

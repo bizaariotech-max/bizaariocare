@@ -85,6 +85,30 @@ const handleMedicalSpecialtiesChange = (event) => {
     }
   }
 
+  // ======================get medical specialities data====================================
+
+const get_online_clinic = async () => {
+  try {
+    const resp = await api.get(`api/v1/asset-sections/medical-specialties/${doctor_details._id}`);
+    if (resp.data?.data) {
+      const selectedIds = resp.data.data.MedicalSpecialties.map(item =>
+        typeof item === "string" ? item : item._id
+      );
+      setMedicalSpecialties(selectedIds); // array of IDs only
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  
+  useEffect(()=>
+  {
+    get_online_clinic()
+  },[])
+
+
+  
 
   return (
     <>
@@ -100,7 +124,7 @@ const handleMedicalSpecialtiesChange = (event) => {
     multiple
       name="MedicalSpecialties"
       label="Medical Specialties"
-      value={MedicalSpecialties}
+      value={MedicalSpecialties.lookup_value?MedicalSpecialties.lookup_value:MedicalSpecialties}
       onChange={handleMedicalSpecialtiesChange}
       MenuProps={{
         disablePortal: true,
@@ -138,7 +162,7 @@ const handleMedicalSpecialtiesChange = (event) => {
                     <div>
                       {/* <p className="font-semibold text-[20px]">{formData?.name || "Patient Name"}</p> */}
                       <div className="text-sm text-gray-600  flex-wrap gap-x-6 text-[12px]">
-                        <p>Medical Specialties : <span  className="text-[#000000] font-semibold">{MedicalSpecialties.join(',') || ""}</span></p><br></br>
+                        <p>Medical Specialties : <span  className="text-[#000000] font-semibold">{MedicalSpecialties?.join(',') || ""}</span></p><br></br>
                        
                       </div>
                     </div>

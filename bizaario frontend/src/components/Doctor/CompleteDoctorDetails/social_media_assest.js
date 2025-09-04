@@ -23,7 +23,7 @@ export default function SocialMediaAssets({ initialData = {}, onPrevious, onNext
   };
 
 
-   const doctor_details=JSON.parse(localStorage.getItem("user"))
+const doctor_details=JSON.parse(localStorage.getItem("user"))
 
  const save_social_media_details = async () => {
   try {
@@ -68,6 +68,28 @@ export default function SocialMediaAssets({ initialData = {}, onPrevious, onNext
     });
   }
 };
+
+
+//======================== get social_media_assets==========================================
+
+const get_social_media_details=async()=>
+  {
+    try {
+      const resp=await api.get(`api/v1/asset-sections/social-media/${doctor_details._id}`)
+         if (resp.data?.data) {
+          const { _id, ...rest } = resp.data.data;
+          setsocial_media_assets(rest);
+        }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+  
+  useEffect(()=>
+  {
+    get_social_media_details()
+  },[])
 
 
 

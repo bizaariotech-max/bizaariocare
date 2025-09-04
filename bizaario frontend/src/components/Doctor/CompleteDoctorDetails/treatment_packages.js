@@ -18,9 +18,6 @@ export default function TreatmentPackages({ initialData = {}, onPrevious, onNext
    
   }]);
 
-  // useEffect(() => {
-  //   setData((prev) => ({ ...prev, ...initialData }));
-  // }, [initialData]);
 
   const handleChange = async (index, e) => {
   const { name, value, files } = e.target;
@@ -99,9 +96,11 @@ export default function TreatmentPackages({ initialData = {}, onPrevious, onNext
 
  const save_treatement_packages = async () => {
   try {
-    const resp = await api.post(
+       const payload = TreatmentPackages.map(({ _id, ...rest }) => rest);
+
+    const resp = await api.put(
       `api/v1/asset-sections/treatment-packages/${doctor_details._id}`,
-      TreatmentPackages,
+      payload,
       { headers: { "Content-Type": "application/json" } }
     );
 
@@ -144,6 +143,75 @@ export default function TreatmentPackages({ initialData = {}, onPrevious, onNext
   }
 };
 
+
+// ===============================get all TreatmentPackages details=================================
+
+const get_treatment_packages = async () => {
+  try {
+    const resp = await api.get(
+      `api/v1/asset-sections/treatment-packages/${doctor_details._id}`
+    );
+
+    if (resp.data?.data?.TreatmentPackages) {
+      const normalizedPackages = resp.data.data.TreatmentPackages.map((pkg) => ({
+        _id: pkg._id,
+        PackageName: pkg.PackageName,
+        PackagePrice: pkg.PackagePrice,
+        PackageCurrency: pkg.PackageCurrency?._id, // only ID
+        PackageImage: pkg.PackageImage,
+        ShortDescription: pkg.ShortDescription,
+        LongDescription: pkg.LongDescription,
+        Discount: pkg.Discount,
+        DiscountValidity: pkg.DiscountValidity,
+        PackageAnnouncementDate: pkg.PackageAnnouncementDate,
+      }));
+
+      setTreatmentPackages(normalizedPackages);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+  useEffect(()=>
+  {
+    get_treatment_packages()
+  },[])
+
+
+  //============================= delete treatment package=======================================
+
+   const delete_treatment_package=async(id)=>
+  {
+    try {
+      const resp=await api.delete(`api/v1/asset-sections/treatment-packages/${doctor_details._id}/${id}`)
+       if(resp.status===200)
+          {
+             Swal.fire({
+              icon:"success",
+              title:"Profile Updated",
+              text:resp.data.data.message,
+              showConfirmButton:true,
+              customClass: {
+              confirmButton: 'my-swal-button',
+            },
+            }).then(()=>
+            {
+              window.location.reload()
+            })
+          }
+      
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
+
 console.log(TreatmentPackages);
 
 
@@ -155,7 +223,17 @@ console.log(TreatmentPackages);
         <div className='bg-white p-3 rounded-lg shadow'>
            {TreatmentPackages?.map((pkg, index) => (
           <div className="grid grid-cols-2 gap-3" style={{marginTop:"25px"}}>
-          <h3 className="font-semibold text-[16px] mb-1 col-span-2">Treatment Packages Details</h3>
+          <h3 className="font-semibold text-[16px] mb-1 col-span-2">Treatment Packages Details
+
+              <button
+                type="button"
+                onClick={() => delete_treatment_package(pkg._id)}
+                style={{marginLeft:"40%"}}
+              >
+                <span className="material-icons text-red-500 text-xl">delete</span>
+              </button>
+
+          </h3>
             <TextField
             type='date'
             label="Package Announcement Date" 

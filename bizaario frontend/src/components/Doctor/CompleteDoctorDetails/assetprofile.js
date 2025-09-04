@@ -211,9 +211,10 @@ const doctor_details=JSON.parse(localStorage.getItem("user"))
 
  const save_profile_details = async () => {
   try {
+    const { _id, ...payload } = assetprofile;
     const resp = await api.put(
       `api/v1/asset-sections/profile/${doctor_details._id}`,
-      assetprofile,
+      payload,
       { headers: { "Content-Type": "application/json" } }
     );
 
@@ -253,6 +254,92 @@ const doctor_details=JSON.parse(localStorage.getItem("user"))
   }
 };
 
+
+//=============================== get all assest data===========================================
+
+const get_assest_profile_details = async () => {
+  try {
+    const resp = await api.get(
+      `api/v1/asset-sections/profile/${doctor_details._id}`
+    );
+  console.log(resp);
+  
+    if (resp.data?.data) {
+     
+
+      setassetprofile(resp.data.data); // now state is clean
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+  useEffect(()=>
+  {
+    get_assest_profile_details()
+  },[])
+
+
+  // ====================================delete image ===================================================
+
+
+
+const deleteImageApi = async (imageUrl) => {
+  try {
+    const res = await api.post("api/v1/common/DeleteImage", { imageUrl });
+    console.log(res);
+    
+    if(res.status===200)
+    {
+         Swal.fire({
+              icon: "success",
+              title: "Details Updated",
+              text: res.data.message,
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            })
+    }
+ 
+  } catch (err) {
+    console.error("Error deleting image:", err);
+    throw err;
+  }
+};
+
+
+// Add this function inside your component
+const handleDeleteMedia = async (type, index = null) => {
+  try {
+    let urlToDelete;
+    if (index !== null) {
+      urlToDelete = assetprofile[type][index]; // array type
+    } else {
+      urlToDelete = assetprofile[type]; // single file
+    }
+
+    if (!urlToDelete) return;
+
+    await deleteImageApi(urlToDelete); // delete from Cloudinary
+
+    setassetprofile((prev) => {
+      const updated = { ...prev };
+      if (index !== null) {
+        const arr = [...updated[type]];
+        arr.splice(index, 1);
+        updated[type] = arr;
+      } else {
+        updated[type] = "";
+      }
+      return updated;
+    });
+
+  } catch (err) {
+    console.error("Failed to delete:", err);
+  }
+};
+
+  
 
   return (
     <>
@@ -518,35 +605,236 @@ const doctor_details=JSON.parse(localStorage.getItem("user"))
                       <div className="text-sm text-gray-600  flex-wrap gap-x-6 text-[12px]">
                         <p>ShortDescription : <span  className="text-[#000000] font-semibold">{assetprofile?.ShortDescription || ""}</span></p><br></br>
                         <p>LongDescription : <span  className="text-[#000000] font-semibold">{assetprofile?.LongDescription || ""}</span></p><br></br>
-                        <p>ProfilePicture : <span  className="text-[#000000] font-semibold">{assetprofile?.ProfilePicture || ""}</span></p><br></br>
-                        <p>Logo : <span  className="text-[#000000] font-semibold">{assetprofile?.Logo || ""}</span></p><br></br>
+
+{/* =============================================profile picture======================================== */}
+
+
+                        <p>ProfilePicture :   </p>
+                       
+                        <div style={{ position: "relative", display: "inline-block" }}>
+                              <img
+                                src={assetprofile?.ProfilePicture}
+                                alt=""
+                                style={{ height: "100px", borderRadius: "5px",
+                                  border:assetprofile.ProfilePicture?"1px solid gray":"none" }}
+                              />
+                              <button
+                                onClick={() => handleDeleteMedia("ProfilePicture")}
+                                style={{
+                                  display:assetprofile.ProfilePicture?"block":"none",
+                                  position: "absolute",
+                                  top: "1px",
+                                  right: "1px",
+                                  padding: "2px",
+                                  border: "none",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <span
+                                  className="material-icons"
+                                  style={{ color: "red", fontSize: "20px" }}
+                                >
+                                  delete
+                                </span>
+                              </button>
+                            </div>
+                           
+                          
+                            <br></br>
+
+{/*========================================== logo=============================================== */}
+
+                        <p>Logo : </p>
+                           <div style={{ position: "relative", display: "inline-block" }}>
+                              <img
+                                src={assetprofile?.Logo}
+                                alt=""
+                                style={{ height: "100px", borderRadius: "5px",
+                                  border:assetprofile.Logo?"1px solid gray":"none" }}
+                              />
+                              <button
+                                onClick={() => handleDeleteMedia("Logo")}
+                                style={{
+                                  display:assetprofile.Logo?"block":"none",
+                                  position: "absolute",
+                                  top: "1px",
+                                  right: "1px",
+                                  padding: "2px",
+                                  border: "none",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <span
+                                  className="material-icons"
+                                  style={{ color: "red", fontSize: "20px" }}
+                                >
+                                  delete
+                                </span>
+                              </button>
+                            </div>
+                           
+                            
+                            <br></br>
+
+{/* =========================================picture gallary========================================== */}
+
+
                       <p>
-                        Picture Gallery: 
+                        Picture Gallery:    </p>
                         <span className="text-[#000000] font-semibold">
                           {assetprofile?.PictureGallery.length > 0
                             ? assetprofile.PictureGallery.map((item, idx) => (
-                                <span key={idx} style={{ display: "inline-block", marginRight: "8px" }}>
-                                  {item}<br></br>
-                                </span>
+                               
+                          <div style={{ position: "relative", display: "inline-block" }}>
+                                    <img
+                                      src={item}
+                                      alt=""
+                                      style={{
+                                        height: "100px",
+                                        width: "100px",
+                                        borderRadius: "5px",
+                                        border:assetprofile.PictureGallery?"1px solid gray":"none",
+                                        display: "block",
+                                        margin:"10px"
+                                      }}
+                                    />
+                                    <button
+                                      onClick={() => handleDeleteMedia("PictureGallery",idx)}
+                                      style={{
+                                        display:assetprofile.PictureGallery?"block":"none",
+                                        position: "absolute",
+                                        top: "10px",
+                                        right: "10px",
+                                        padding: "2px",
+                                        border: "none",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      <span
+                                        className="material-icons"
+                                        style={{ color: "red", fontSize: "18px" }}
+                                      >
+                                        delete
+                                      </span>
+                                    </button>
+                                  </div>
+
                               ))
                             : ""}
                         </span>
-                      </p>
+                   
                               <br></br>
-                          <p>
-                        Video Gallery: 
+  {/*=================================== video gallary =========================================*/}
+
+
+                        <p>  Video Gallery:    </p>
                         <span className="text-[#000000] font-semibold">
                           {assetprofile?.VideoGallery.length > 0
                             ? assetprofile.VideoGallery.map((item, idx) => (
-                                <span key={idx} style={{ display: "inline-block", marginRight: "8px" }}>
-                                  {item}<br></br>
-                                </span>
+                             
+                             <div style={{ position: "relative", display: "inline-block" }}>
+                                    <img
+                                      src={item}
+                                      alt=""
+                                      style={{
+                                        height: "100px",
+                                        width: "100px",
+                                        borderRadius: "5px",
+                                        border:assetprofile.VideoGallery?"1px solid gray":"none",
+                                        display: "block",
+                                        margin:"10px"
+                                      }}
+                                    />
+                                    <button
+                                     onClick={() => handleDeleteMedia("VideoGallery",idx)}
+                                      style={{
+                                        display:assetprofile.VideoGallery?"block":"none",
+                                        position: "absolute",
+                                        top: "10px",
+                                        right: "10px",
+                                        padding: "2px",
+                                        border: "none",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      <span
+                                        className="material-icons"
+                                        style={{ color: "red", fontSize: "18px" }}
+                                      >
+                                        delete
+                                      </span>
+                                    </button>
+                                  </div>
                               ))
                             : ""}
                         </span>
-                      </p>
-                        <p>Profile PDF : <span  className="text-[#000000] font-semibold">{assetprofile?.ProfilePDF || ""}</span></p><br></br>
-                        <p>Video Bio : <span  className="text-[#000000] font-semibold">{assetprofile?.VideoBio || ""}</span></p>
+                   
+{/*=========================================== profile pdf========================================== */}
+
+
+                        <p>Profile PDF :</p>
+                        <div style={{ position: "relative", display: "inline-block" }}>
+                              <img
+                                src={assetprofile?.ProfilePDF}
+                                alt=""
+                                style={{ height: "100px", borderRadius: "5px",border:assetprofile.ProfilePDF?"1px solid gray":"none", }}
+                              />
+                              <button
+                                onClick={() => handleDeleteMedia("ProfilePDF")}
+                                style={{
+                                  display:assetprofile.ProfilePDF?"block":"none",
+                                  position: "absolute",
+                                  top: "1px",
+                                  right: "1px",
+                                  padding: "2px",
+                                  border: "none",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <span
+                                  className="material-icons"
+                                  style={{ color: "red", fontSize: "20px" }}
+                                >
+                                  delete
+                                </span>
+                              </button>
+                            </div>
+                              
+                            
+                            <br></br>
+
+{/*======================================== video bio ==============================================*/}
+
+
+                        <p>Video Bio :  </p>
+                           <div style={{ position: "relative", display: "inline-block" }}>
+                              <img
+                                src={assetprofile?.VideoBio}
+                                alt=""
+                                style={{ height: "100px", borderRadius: "5px",border:assetprofile.VideoBio?"1px solid gray":"none",  }}
+                              />
+                              <button
+                                onClick={() => handleDeleteMedia("VideoBio")}
+                                style={{
+                                  display:assetprofile.VideoBio?"block":"none",
+                                  position: "absolute",
+                                  top: "1px",
+                                  right: "1px",
+                                  padding: "2px",
+                                  border: "none",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <span
+                                  className="material-icons"
+                                  style={{ color: "red", fontSize: "20px" }}
+                                >
+                                  delete
+                                </span>
+                              </button>
+                            </div>
+
+                           
                       </div>
                     </div>
                   </div>

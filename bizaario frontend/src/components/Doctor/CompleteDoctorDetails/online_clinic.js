@@ -61,7 +61,31 @@ const handleChange = (e) => {
   }
 };
 
+
+//============================== get online clinic details=======================================
+
+const get_online_clinic=async()=>
+  {
+    try {
+      const resp=await api.get(`api/v1/asset-sections/online-clinic/${doctor_details._id}`)
+      console.log(resp);
+      
+         if (resp.data?.data) {
+          const { _id, ...rest } = resp.data.data;
+          setOnlineClinicLink(rest);
+        }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+  
+  useEffect(()=>
+  {
+    get_online_clinic()
+  },[])
  
+
 
 
   return (
@@ -79,7 +103,7 @@ const handleChange = (e) => {
             name="OnlineClinicLink" 
             size="small" 
             className="col-span-2" 
-            value={OnlineClinicLink} 
+            value={OnlineClinicLink.OnlineClinicLink} 
             onChange={handleChange} 
             />
 
@@ -107,7 +131,7 @@ const handleChange = (e) => {
                     <div>
                      
                       <div className="text-sm text-gray-600  flex-wrap gap-x-6 text-[12px]">
-                        <p>Online Clinic Link : <span  className="text-[#000000] font-semibold">{OnlineClinicLink || ""}</span></p><br></br>
+                        <p>Online Clinic Link : <span  className="text-[#000000] font-semibold">{OnlineClinicLink.OnlineClinicLink || ""}</span></p><br></br>
                        
                       </div>
              

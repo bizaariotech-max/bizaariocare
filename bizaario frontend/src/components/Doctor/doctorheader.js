@@ -106,7 +106,7 @@ const ChevronDownIcon = () => (
       ></div>
       {/* Hide text on xs screens to avoid overflow */}
       <div className=" xs:block">
-        <div className="text-black text-xs sm:text-sm truncate max-w-[auto]">{`Hello ${doctordetails.AssetName}`}</div>
+        <div className="text-black text-xs sm:text-sm truncate max-w-[auto]">{`Hello ${doctordetails?.AssetName}`}</div>
         <div className="text-black/50 text-xs sm:text-sm truncate max-w-[auto]">Doctor</div>
       </div>
       {isOpen && (
