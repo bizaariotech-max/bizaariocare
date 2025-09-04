@@ -35,6 +35,16 @@ const menuItems = [
   { icon: addhospitalicon, label: "Login Master", path: "/login-master" },
   { icon: addhospitalicon, label: "Add Doctor/Hospitals", path: "/adddoctor" },
   { icon: addhospitalicon, label: "Create Patient Profile", path: "/addpatientdetails" },
+    {
+    icon: addhospitalicon,
+    label: "Content Master",
+    path: "/content-master",
+  },
+  {
+    icon: addhospitalicon,
+    label: "Event Master",
+    path: "/event-master",
+  },
   { icon: addhospitalicon, label: "Logout" },
 ];
 

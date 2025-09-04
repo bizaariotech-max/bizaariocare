@@ -87,14 +87,6 @@ const CompleteDoctorDetails = () => {
     if (activeTab === 'Incorporation Details') {
       return (
         <DoctorIncorporationForm
-          initialData={patientDetails}
-          // showPreview={showPreview}
-          onNext={(data) => {
-            // setPatientDetails(data);
-            // localStorage.setItem('patientDetails', JSON.stringify(data));
-            // setShowPreview(false);
-            setActiveTab('Hospital Size');
-          }}
         />
       );
     }
@@ -102,14 +94,6 @@ const CompleteDoctorDetails = () => {
       return (
         <HospitalSizeDetails
           initialData={personalProfile}
-          onPrevious={() => { setActiveTab('Incorporation Details');
-            //  setShowPreview(true); 
-            }}
-          onNext={(data) => {
-            // setPersonalProfile(data);
-            // localStorage.setItem('personalProfile', JSON.stringify(data));
-            setActiveTab('Hospital Size');
-          }}
         />
       );
     }
@@ -117,13 +101,9 @@ const CompleteDoctorDetails = () => {
      if (activeTab === 'Address') {
       return (
         <AddressDetails
-          // initialData={personalProfile}
           onPrevious={() => { setActiveTab('Address');
-            //  setShowPreview(true); 
             }}
           onNext={(data) => {
-            // setPersonalProfile(data);
-            // localStorage.setItem('personalProfile', JSON.stringify(data));
             setActiveTab('Hospital Size');
           }}
         />

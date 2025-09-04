@@ -39,6 +39,8 @@ import AddAssetCategoryMasterLevel3 from "./components/Admin/Assest_category_Mas
 import Loginmaster from "./components/Admin/login_master";
 import CompleteDoctorDetails from "./components/Doctor/CompleteDoctorDetails/ActiveDoctor";
 import CompletePatientDetails from "./components/Doctor/CompleteDoctorDetails/ActiveDoctor";
+import ContentMaster from "./components/Admin/ContentMaster/ContentMaster";
+import EventMaster from "./components/Admin/EventMaster/EventMaster";
 
 function App() {
   return (
@@ -83,6 +85,10 @@ function App() {
         <Route path="/add-assestmaster" element={<Addassestsmaster/>}></Route>
         <Route path="/login-master" element={<Loginmaster/>}></Route>
         <Route path="/complete-doctor-details" element={<CompleteDoctorDetails/>}></Route>
+
+              {/* admin content master */}
+        <Route path="/content-master" element={<ContentMaster />}></Route>
+        <Route path="/event-master" element={<EventMaster />}></Route>
       </Routes>
       {/* <ActivePatient/> */}
       
