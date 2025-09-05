@@ -3,6 +3,7 @@ import { TextField, Select, MenuItem, FormControl, InputLabel, Button, Radio, Fo
 import api from '../../../api'
 import Swal from 'sweetalert2';
 import { CloudUpload } from "lucide-react"; 
+import { deleteImageApi } from "../../../utils/delete_image_from_cloudinary"
 
 export default function TreatmentPackages({ initialData = {}, onPrevious, onNext }) {
   const [TreatmentPackages, setTreatmentPackages] = useState([{
@@ -211,6 +212,39 @@ const get_treatment_packages = async () => {
   }
 
 
+// Add this function inside your component
+const handleDeleteMedia = async (type, index = null) => {
+  try {
+    let urlToDelete;
+    if (index !== null) {
+      urlToDelete = TreatmentPackages[index][type]; // array type
+    } else {
+      urlToDelete = TreatmentPackages[type]; // single file
+    }
+
+    console.log(urlToDelete);
+    
+    if (!urlToDelete) return;
+
+    await deleteImageApi(urlToDelete); // delete from Cloudinary
+
+    setTreatmentPackages((prev) => {
+      const updated = { ...prev };
+      if (index !== null) {
+        const arr = [...updated[type]];
+        arr.splice(index, 1);
+        updated[type] = arr;
+      } else {
+        updated[type] = "";
+      }
+      return updated;
+    });
+
+  } catch (err) {
+    console.error("Failed to delete:", err);
+  }
+};
+
 
 console.log(TreatmentPackages);
 
@@ -396,7 +430,37 @@ console.log(TreatmentPackages);
                         <p>Package Price : <span  className="text-[#000000] font-semibold">{pkg?.PackagePrice || ""}</span></p><br></br>
                         <p>Discount : <span  className="text-[#000000] font-semibold">{pkg?.Discount || ""}</span></p><br></br>
                         <p>Discount Validity : <span  className="text-[#000000] font-semibold">{pkg?.DiscountValidity || ""}</span></p><br></br>
-                        <p>PackageImage : <span  className="text-[#000000] font-semibold">{pkg?.PackageImage || ""}</span></p><br></br>
+                        <p>PackageImage :</p>
+                        
+                        
+                            <div style={{ position: "relative", display: "inline-block" }}>
+                              <img
+                                src={pkg?.PackageImage}
+                                alt=""
+                                style={{ height: "100px", borderRadius: "5px",
+                                  border:pkg.PackageImage?"1px solid gray":"none" }}
+                              />
+                              <button
+                                onClick={() => handleDeleteMedia("PackageImage",index)}
+                                style={{
+                                  display:pkg.PackageImage?"block":"none",
+                                  position: "absolute",
+                                  top: "1px",
+                                  right: "1px",
+                                  padding: "2px",
+                                  border: "none",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <span
+                                  className="material-icons"
+                                  style={{ color: "red", fontSize: "20px" }}
+                                >
+                                  delete
+                                </span>
+                              </button>
+                            </div>
+                         <br></br>
                         <p>Short Description : <span  className="text-[#000000] font-semibold">{pkg?.ShortDescription || ""}</span></p><br></br>
                         <p>Long Description : <span  className="text-[#000000] font-semibold">{pkg?.LongDescription || ""}</span></p><br></br>
                       </div>

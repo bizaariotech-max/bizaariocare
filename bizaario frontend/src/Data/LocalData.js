@@ -23,7 +23,7 @@ import article2 from '../assets/images/articles/article2.png'
 import article3 from '../assets/images/articles/article3.png'
 import article4 from '../assets/images/articles/article4.png'
 
-export const sliderArray = [
+export const sliderArray = 
     {
         id: 1,
         sliderImage:  {
@@ -31,26 +31,26 @@ export const sliderArray = [
           },
         bannerTitle: "Where Doctors Collaborate, Patients Thrive" , 
           dsc: 'Empowering hospitals, physicians, and patients with real-time communication and clinical collaboration—because better care starts with better connection.'
-    },
-    {
-        id: 2,
-        sliderImage:  {
-            backgroundImage: `url(${slide2})`, 
-          },
-        bannerTitle: "Where Doctors Collaborate, Patients Thrive 2" , 
-         dsc: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+    }
+    // {
+    //     id: 2,
+    //     sliderImage:  {
+    //         backgroundImage: `url(${slide2})`, 
+    //       },
+    //     bannerTitle: "Where Doctors Collaborate, Patients Thrive 2" , 
+    //      dsc: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
 
-    },
-    {
-        id: 3,
-        sliderImage:  {
-            backgroundImage: `url(${slide3})`, 
-          },
-        bannerTitle: "Where Doctors Collaborate, Patients Thrive 3" , 
-        dsc: 'lm ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' 
-    },
+    // },
+    // {
+    //     id: 3,
+    //     sliderImage:  {
+    //         backgroundImage: `url(${slide3})`, 
+    //       },
+    //     bannerTitle: "Where Doctors Collaborate, Patients Thrive 3" , 
+    //     dsc: 'lm ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' 
+    // },
    
-];
+
 
 export const doctorArr = [
     {
