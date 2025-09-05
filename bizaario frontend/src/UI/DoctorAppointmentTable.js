@@ -44,48 +44,42 @@ return (
 <div className="container">
   {/* Tabs */}
   <div className="row">
-    <div className="col-lg-10 col-12 d-flex ">
-      <div className="appoint-doc-tabs">
-        <button className={`cutom-tab-style mb-3 ${activeTab==='tab1' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
-          setActiveTab('tab1')}>
-          Cardiology
-        </button>
-        <button className={`cutom-tab-style mb-3 ${activeTab==='tab2' ? ' activeTab' : 'gray-btn-style' }`}
-          onClick={()=>
-          setActiveTab('tab2')}
-          >
-          Orthopedics
-        </button>
-        <button className={`cutom-tab-style mb-3 ${activeTab==='tab3' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
-          setActiveTab('tab3')}
-          >
-          Pediatrics
-        </button>
-        <button className={`cutom-tab-style mb-3 ${activeTab==='tab4' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
-          setActiveTab('tab4')}
-          >
-          Neurology
-        </button>
-        <button className={` cutom-tab-style mb-3 ${activeTab==='tab5' ? 'activeTab' : 'gray-btn-style' }`}
-          onClick={()=>
-          setActiveTab('tab5')}
-          >
-          Obstetrics & Gynecology
-        </button>
-        <button className={` cutom-tab-style mb-3 ${activeTab==='tab7' ? 'activeTab' : 'gray-btn-style' }`}
-          onClick={()=>
-          setActiveTab('tab7')}
-          >
-          Plastic & Reconstructive Surgery
-        </button>
-        <button className={` cutom-tab-style mb-3 ${activeTab==='tab6' ? 'activeTab' : 'gray-btn-style' }`}
-          onClick={()=>
-          setActiveTab('tab6')}
-          >
-          Otorhinolaryngology
-        </button>
-      </div>
-    </div>
+     <div className=" medical-tab-buttons mb-4 col-lg-10">  
+            <button className={`cutom-tab-style ${activeTab==='tab1' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab1')}>
+            Cardiology
+          </button> 
+          <button className={`cutom-tab-style ${activeTab==='tab2' ? ' activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab2')}
+            >
+            Orthopedics
+          </button> 
+          <button className={`cutom-tab-style ${activeTab==='tab3' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab3')}
+            >
+            Pediatrics
+          </button> 
+          <button className={`cutom-tab-style ${activeTab==='tab4' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab4')}
+            >
+            Neurology
+            </button>
+             <button className={` cutom-tab-style ${activeTab==='tab5' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab5')}
+            >
+            Obstetrics & Gynecology
+          </button>
+          <button className={` cutom-tab-style ${activeTab==='tab7' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab7')}
+            >
+            Plastic & Reconstructive Surgery
+          </button> 
+          <button className={` cutom-tab-style ${activeTab==='tab6' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab6')}
+            >
+            Otorhinolaryngology
+          </button> 
+        </div>  
     <div className="col-lg-2  col-12d-flex justify-content-end">
       <div className="mb-4">
         <div className="input-group" style={{maxWidth:'216px'}}>

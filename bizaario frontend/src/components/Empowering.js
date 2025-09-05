@@ -27,21 +27,47 @@ return (
         <div className="container">
             <div className="row">
                 <div className="col-lg-8 col-12">
-                    <h2 className='fw-semibold '>Empowering Doctors with Evidence-Based Knowledge</h2>
-                    <p className='light-color'>Learn from leading doctors and specialists through focused, digestible video content.</p>
+                    <h2 className='fw-semibold' style={{color:"#000",
+                                                        fontFamily: "Lora",
+                                                        fontSize: "36px",
+                                                        fontStyle: "normal",
+                                                        fontWeight: "700",
+                                                        lineHeight: "normal"}}>
+                    Empowering Doctors with Evidence-Based Knowledge
+                    </h2>
+                    <p className='light-color' style={{
+                        color:"rgba(0, 0, 0, 0.70)",
+                        fontFamily: "Poppins",
+                        fontSize: "18px",
+                        fontStyle: "normal",
+                        fontWeight: "400",
+                        lineHeight: "normal",
+                    }}>
+                    Learn from leading doctors and specialists through focused, digestible video content.</p>
                 </div>
-                {/* <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
-                    <div className="button-container">
-                              <button className={`btn btn-custom ${activeTab==='tab1' ? 'active-custom-tab' : '' }`}
-                                  onClick={()=> setActiveTab('tab1')}>
-                                  For Doctor
+                <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
+                  
+                              <button style={{
+                                display: "flex",
+                                padding: "16px 32px",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "10px",
+                                borderRadius: "10px",
+                                background: "#52677D",
+                                color:" #FFF",
+                                fontFamily: "Lora",
+                                fontSize: "16px",
+                                fontStyle: "normal",
+                                fontWeight: 700,
+                                lineHeight: "normal"
+
+                              }}>
+                                  View All &#8594;
                               </button>
-                              <button className={`btn btn-custom ${activeTab==='tab2' ? 'active-custom-tab' : '' }`}
-                                  onClick={()=> setActiveTab('tab2')}>
-                                  For Patients
-                              </button>
-                          </div>
-                </div> */}
+                             
+                          
+                </div>
 
                 </div>
 

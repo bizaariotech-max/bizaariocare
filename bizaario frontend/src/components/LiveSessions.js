@@ -1,58 +1,188 @@
-import React, { useState } from 'react'
-import LiveSessionContent from './live-sessions-online-clinic/LiveSessionContent';
-import OnlineClinic from './live-sessions-online-clinic/OnlineClinic';
+import React from "react";
+import "../assets/css/hero.css";
+import livesessionlogo from '../assets/images/LiveSessions.png';
+import doctorlogo from '../assets/images/doctor1.png';
+import clock from '../assets/images/clock.png'
+import calender from '../assets/images/calendar.png'
 
 const LiveSessions = () => {
-//     const [activeTab, setActiveTab] = useState('tab1');   
-//     const renderContent = () => {
-//     switch (activeTab) {
-//         case 'tab1':
-//             return <div className='mt-4 mt-md-0'>
-//                 <LiveSessionContent/>
-//             </div>
-                
-//         case 'tab2':
-//         return <div className="">
-//             <OnlineClinic/>
-//         </div>;
-//         return null;
-//     }
-//   };
-  
   return (
-      <>
-          <section className='spacing-top'>
-              <div className="container ">
-                  <div className="row">
-                      <div className="col-lg-8 col-12">
-                          <h2 className='fw-semibold '>Live Sessions and Online Clinics</h2>
-                          <p className='light-color'>Learn from leading doctors and specialists through focused, digestible video content.</p>
-                      </div>
-                      {/* <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-center"> 
-                          <div className="button-container mb-lg-0  mb-4">
-                              <button className={`btn btn-custom ${activeTab==='tab1' ? 'active-custom-tab' : '' }`}
-                                  onClick={()=> setActiveTab('tab1')}>
-                                  Live Sessions
-                              </button>
-                              <button className={`btn btn-custom ${activeTab==='tab2' ? 'active-custom-tab' : '' }`}
-                                  onClick={()=> setActiveTab('tab2')}>
-                                  Online Clinic
-                              </button>
-                          </div>
-                      </div> */}
-                  </div>
-                  {/* <div className="row">
-                      <div>{renderContent()}</div>
-                  </div> */}
-                  <div className="row">
-                        <LiveSessionContent/>
-                  </div>
-            
-              </div>
-          </section>
-      </>
-  )
-}
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "561px",
+        backgroundImage: `url(${livesessionlogo})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        display: "flex",
+        alignItems: "center",
+         
+      }}
+    >
+      {/* Dark overlay for better text readability */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      />
 
-export default LiveSessions
+      {/* Content */}
+      <div
+        className="container"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          color: "#fff",
+        }}
+      >
+        <div className="row">
+          <div className="col-md-8">
+            <div className="hero-content">
+              <h1
+                className="hero-title"
+                style={{
+                  fontFamily: "Lora",
+                  fontSize: "36px",
+                  fontWeight: 700,
+                  lineHeight: "normal",
+                  marginBottom: "16px",
+                  color:"white"
+                }}
+              >
+                Live Session - Coming Soon
+              </h1>
+              <p
+                className="hero-text"
+                style={{
+                  fontFamily: "Poppins",
+                  fontSize: "18px",
+                  fontWeight: 400,
+                  lineHeight: "32px",
+                  color:"white"
+                }}
+              >
+                Our expert doctors will be going live soon to answer your questions
+                and share valuable health insights. Stay tuned for the next session.
+              </p>
+              <p
+                className="hero-text"
+                style={{
+                  fontFamily: "Poppins",
+                  fontSize: "18px",
+                  fontWeight: 400,
+                  lineHeight: "32px",
+                  color:"white"
+                }}
+              >
+               Sessions are conducted by certified doctors
+              </p>
+<div
+  style={{
+    display: "flex",
+    width: "622px",
+    padding: "12px 24px",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: "4px",
+    borderRadius: "10px",
+    background: "rgba(189, 196, 212, 0.30)",
+  }}
+>
 
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    {/* Profile Image */}
+                    <img
+                        src={doctorlogo}
+                        alt=""
+                        style={{
+                        borderRadius: "270.5px",
+                        border: "2px solid #FFF",
+                        width: "88px",
+                        height: "88px",
+                        flexShrink: 0,
+                        objectFit: "cover", // ensures image fits nicely
+                        }}
+                    />
+
+                    {/* Text Content */}
+                    <div>
+                        <p
+                        style={{
+                            color: "white",
+                            fontFamily: "Lora",
+                            fontSize: "16px",
+                            fontStyle: "normal",
+                            fontWeight: 700,
+                            lineHeight: "normal",
+                            margin: 0,
+                        }}
+                        >
+                        <strong>By Doctor Malik</strong>
+                        </p>
+
+                        <p
+                        style={{
+                            color: "white",
+                            fontFamily: "Poppins",
+                            fontSize: "12px",
+                            fontStyle: "normal",
+                            fontWeight: 400,
+                            lineHeight: "normal",
+                            margin: 0,
+                        }}
+                        >
+                        <strong>Seniour Cordialogist Apollo Hospitals</strong>
+                        </p>
+
+                                <div style={{display:"flex",gap:"24px",marginTop:"10px"}}>
+                    <div style={{display:'flex',gap:"5px"}}>
+                          <img src={clock} style={{width: "14px",height: "14px",display:"inline-block"}} alt=''></img> 
+                           <p
+                            style={{
+                                color: "white",
+                                fontFamily: "Poppins",
+                                fontSize: "12px",
+                                fontStyle: "normal",
+                                fontWeight: 400,
+                                lineHeight: "normal",
+                            }}
+                            >
+                                02.30 AM
+                               </p> 
+                    </div>
+                 
+                   <div style={{display:'flex',gap:"5px"}}>
+                          <img src={calender} style={{width: "14px",height: "14px",display:"inline-block"}} alt=''></img> 
+                            <p  style={{
+                                color: "white",
+                                fontFamily: "Poppins",
+                                fontSize: "12px",
+                                fontStyle: "normal",
+                                fontWeight: 400,
+                                lineHeight: "normal",
+                            }}>01/01/2025</p> 
+                    </div>
+                </div>
+
+                    </div>
+                    </div>
+                
+
+</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LiveSessions;

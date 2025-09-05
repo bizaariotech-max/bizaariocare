@@ -51,10 +51,13 @@ const PartnersListHome = () => {
                 {hospitalPartnerData.map((item) => {
                     return ( 
                                 
-                                <div className=" mb-4" key={item.id}>
-                                    <div className="cardiology-card" >
+                                <div className=" mb-4" key={item.id} >
+                                    <div className="cardiology-card" style={{background: "#FFF",border:"1px solid #c9cacbff"}}>
+                                        <div >
                                         <img src={item.image} alt="doctor" className="img-fluid" />
-                                        <div className='d-flex justify-content-between pt-4'>
+                                        </div>
+                                      
+                                        {/* <div className='d-flex justify-content-between pt-4'>
                                             <div>
                                                 <h5 className="doc-name">{item.name}</h5>
                                                 <div className="exp"
@@ -66,42 +69,138 @@ const PartnersListHome = () => {
                                                     className='theme-color decoration-none weight-600'>View
                                                     Profile</a>
                                             </div>
-                                        </div>
+                                        </div> */}
+
+                                    <div style={{ position: "relative", width: "100%" }}>
+                                    {/* Header Section */}
+                                    <div
+                                        style={{
+                                        paddingLeft:"5%",
+                                        display: "flex",
+                                        height: "88px",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        alignItems: "center", // ✅ center horizontally
+                                        gap: "10px",
+                                        alignSelf: "stretch",
+                                        textAlign: "center", // ✅ ensure text stays centered
+                                        }}
+                                    >
+                                    <h5
+                                    style={{
+                                        color: "#000",
+                                        fontFamily: "Lora",
+                                        fontSize: "20px",
+                                        fontStyle: "normal",
+                                        fontWeight: 700,
+                                        lineHeight: "normal",
+                                        margin: 0,
+                                    }}
+                                    >
+                                    {item.name}
+                                    </h5>
+
+                                        <p
+                                        style={{
+                                            color: "rgba(0, 0, 0, 0.70)",
+                                            fontFamily: "Poppins",
+                                            fontSize: "12px",
+                                            fontStyle: "normal",
+                                            fontWeight: 400,
+                                            lineHeight: "normal",
+                                            margin: "4px 0 0",
+                                        }}
+                                        >
+                                        {item.exp}
+                                        </p>
+                                    </div>
+                                    </div>
+
+
+                                         <div
+                                        style={{
+                                        position: "absolute",
+                                        left: "20px", // adjust overlap distance from left
+                                        top: "50%", // vertical center
+                                        transform: "translateY(-50%)", // adjust to half inside header
+                                        marginTop:"-15%"
+                                        }}
+                                    >
+                                        <img
+                                        src={item.image}
+                                        alt="doctor"
+                                        style={{
+                                            width: "100px",
+                                            height: "100px",
+                                            borderRadius: "50%",
+                                            border: "2px solid #fff",
+                                            objectFit: "cover",
+                                            boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
+                                        }}
+                                        />
+                                    </div>
+
         
-                                        <div className="content mt-4">
+                                        <div className="content" style={{padding:"20px 12px",marginTop:"-5%"}}>
                                             <div className='d-flex pb-2 align-items-center'>
                                                 <div className='me-2'>
                                                     <img src={locationIcon} alt="icon"
                                                         style={{width:'24px'}} />
                                                 </div>
         
-                                                <div style={{color:"#000000"}}>{item.location}</div>
+                                                <div style={{color:"#000000",fontFamily:"Poppins"}}>{item.location}</div>
                                             </div>
                                             <div className='d-flex pb-2 align-items-center'>
                                                 <div className='me-2'>
                                                     <img src={clockIcon} alt="icon"
                                                         style={{width:'24px'}} />
                                                 </div>
-                                                <div style={{color:'#000000'}}>Hours:
+                                                <div style={{color:'#000000',fontFamily:"Poppins"}}>Hours:
                                                     <span>{item.hours}</span></div>
                                             </div>
                                             <div className='d-flex pb-2 align-items-center'>
                                                 <div className='me-2'>
                                                     <img src={webIcon} alt="icon" style={{width:'24px'}} />
                                                 </div>
-                                                <div style={{color:'#000000'}}>Hours: <span
+                                                <div style={{color:'#000000',fontFamily:"Poppins"}}>Hours: <span
                                                         className='theme-color'>{item.URL}</span></div>
                                             </div>
                                         </div>
-                                        <div className="d-flex pt-3 " style={{gap:'20px'}}>
-                                            <div>
-                                                <a href="/" className="btn common-btn-dark  ">Book an
-                                                    Appointments</a>
-                                            </div>
-                                            <div>
-                                                <a href="/" className="btn  common-btn-outline ">Send
-                                                    Treatment Query</a>
-                                            </div>
+                                      <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%",padding:"20px 12px" }}>
+                                            <button
+                                            style={{
+                                                background: "#52677D",
+                                                color: "#fff",
+                                                border: "none",
+                                                borderRadius: "10px",
+                                                padding: "14px",
+                                                fontSize: "18px",
+                                                fontFamily: "Lora",
+                                                fontWeight: 600,
+                                                cursor: "pointer",
+                                                textAlign: "center",
+                                            }}
+                                            >
+                                            Book An Appointment
+                                            </button>
+
+                                            <button
+                                            //   onClick={() => navigate("/viewdoctorprofile", { state: { id: item.id } })}
+                                            style={{
+                                                background: "#fff",
+                                                color: "#52677D",
+                                                border: "1px solid #cbd5e1",
+                                                borderRadius: "10px",
+                                                padding: "14px",
+                                                fontSize: "18px",
+                                                fontFamily: "Lora",
+                                                fontWeight: 600,
+                                                cursor: "pointer",
+                                                textAlign: "center",
+                                            }}
+                                            >
+                                            Send Treatment Query
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -32,6 +32,51 @@ return (
   <div className=''>
     <div className="container ">
       <div className="row"> 
+       
+                <div className="col-lg-8 col-12">
+                    <h2 className='fw-semibold' style={{color:"#000",
+                                                        fontFamily: "Lora",
+                                                        fontSize: "36px",
+                                                        fontStyle: "normal",
+                                                        fontWeight: "700",
+                                                        lineHeight: "normal"}}>
+                    Trusted Medical Experts
+                    </h2>
+                    <p className='light-color' style={{
+                        color:"rgba(0, 0, 0, 0.70)",
+                        fontFamily: "Poppins",
+                        fontSize: "18px",
+                        fontStyle: "normal",
+                        fontWeight: "400",
+                        lineHeight: "normal",
+                    }}>
+                    Bringing global experience,compassionate care, and proven results.</p>
+                </div>
+                <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
+                  
+                              <button style={{
+                                display: "flex",
+                                padding: "16px 32px",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "10px",
+                                borderRadius: "10px",
+                                background: "#52677D",
+                                color:" #FFF",
+                                fontFamily: "Lora",
+                                fontSize: "16px",
+                                fontStyle: "normal",
+                                fontWeight: 700,
+                                lineHeight: "normal"
+
+                              }}>
+                                  View All &#8594;
+                              </button>
+                             
+                          
+                </div>
+
+               
           <div className=" medical-tab-buttons mb-4">  
             <button className={`cutom-tab-style ${activeTab==='tab1' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
             setActiveTab('tab1')}>

@@ -363,16 +363,28 @@ button.owl-next span {
 
 .cutom-tab-style2 {
   padding: 10px 15px;
-  border-radius: 40px;
+  border-radius: 10px;
   border: 1px solid transparent;
-  /* margin: 10px; */
+  /* background: #BDC4D4 !important; */
 
+}
+.lightBg
+{
+  border-radius: 10px;
+background: #BDC4D4 !important;
 
 }
 
+
 .gray-btn-style {
-  background-color: #eeeef1;
-  color: #626366;
+  border-radius: 10px;
+background: #BDC4D4 !important;
+display: flex;
+height: 50px;
+padding: 14px 24px;
+justify-content: center;
+align-items: center;
+gap: 10px;
 }
 
 .medical-tab-buttons {
@@ -385,15 +397,42 @@ button.owl-next span {
 }
 
 .activeTab {
-  background-color: #7680e7;
-  color: white;
+ display: flex;
+  height: 50px;
+  padding: 14px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  background: #52677D;
+  border: 1px solid transparent; /* kept from original */
+  color: #FFF;
+font-family: Poppins;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
 
 }
 
 .cutom-tab-style {
-  border-radius: 40px;
-  border: 1px solid transparent;
+  display: flex;
+  height: 50px;
+  padding: 14px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  background: #52677D;
+  border: 1px solid transparent; /* kept from original */
+  color: #FFF;
+font-family: Poppins;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
 }
+
 
 
 #swiper-wrapper-589cb751887b681d .swiper-slide:last-child {
@@ -413,7 +452,7 @@ button.owl-next span {
 } */
 
 .cardiology-card {
-  padding: 15px;
+  /* padding: 15px; */
   background-color: #e6e8fc;
   border-radius: 10px;
 

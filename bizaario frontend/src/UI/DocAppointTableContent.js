@@ -1,305 +1,238 @@
-import React, { useState } from 'react'
-import BookingAppointment from './BookingAppointment';
-
+import React from 'react';
+import { doctorArr } from '../Data/LocalData';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import '../assets/css/Empowering.css';
+import clock from '../assets/images/clock.png';
+import calendar from '../assets/images/calendar.png';
 
 const DocAppointTableContent = () => {
-      const [selectedSpecialty, setSelectedSpecialty] = useState('');
-  
-      const appointments = [
-    {id: 1, name: 'Gaurav Pandey', specialty: 'Cardiology', location: 'India/Noida', status: 'green', date: '20-12-2025/ 02:30 AM', totalSlots: 20, availableSlots: 12, waitingTime: '00:30:30' },
-    {id: 2, name: 'Gaurav Pandey', specialty: 'Cardiology', location: 'India/Noida', status: 'yellow', date: '20-12-2025/ 02:30 AM', totalSlots: 20, availableSlots: 12, waitingTime: '00:30:30' },
-    {id: 3, name: 'Gaurav Pandey', specialty: 'Cardiology', location: 'India/Noida', status: 'red', date: '20-12-2025/ 02:30 AM', totalSlots: 20, availableSlots: 12, waitingTime: '00:30:30' }
-  ];
-
-  const statusColors = {
-    green: '#00A652',
-    yellow: '#FFD700',
-    red: '#FF0000'
+  const responsive = {
+    superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 3 },
+    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3, partialVisibilityGutter: 20 },
+    tablet: { breakpoint: { max: 1024, min: 767 }, items: 2 },
+    mobile: { breakpoint: { max: 767, min: 0 }, items: 1 }
   };
-
+  
   return (
-    <>
-      <div className="table-responsive appoint-table-style">
-        <table className="table align-middle">
-          <thead className="table-heading">
-            <tr className="">
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  borderRadius: "15px 0 0 0",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                  paddingLeft: "20px",
-                }}
-              >
-                S.No.
-              </th>
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                }}
-              >
-                Doctor Name
-              </th>
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                }}
-              >
-                Speciality
-              </th>
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                }}
-              >
-                Country/City
-              </th>
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                }}
-              >
-                Status
-              </th>
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                }}
-              >
-                Schedule (Date/Time)
-              </th>
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                }}
-              >
-                Total Slots
-              </th>
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                }}
-              >
-                Available Slots
-              </th>
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                }}
-              >
-                Waiting Time
-              </th>
-              <th
-                style={{
-                  backgroundColor: "#4F56E3",
-                  textAlign: "center",
-                  paddingBlock: "18px",
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "200",
-                  borderRadius: " 0 15px  0 0",
-                }}
-              >
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.map((appt, index) => (
-              <tr key={index}>
-                <td
-                  style={{ backgroundColor: "#fefefe", paddingLeft: "20px" }}
-                  className="doctor-cell-data"
-                >
-                  S.No.
-                </td>
-                <td
-                  style={{
-                    backgroundColor: "#fefefe",
-                    textAlign: "center",
-                    paddingBlock: "18px",
-                  }}
-                >
-                  <a href="#" style={{ color: "#525fe1" }}>
-                    {appt.name}
-                  </a>
-                </td>
-                <td
-                  style={{
-                    backgroundColor: "#fefefe",
-                    textAlign: "center",
-                    paddingBlock: "18px",
-                  }}
-                >
-                  {appt.specialty}
-                </td>
-                <td
-                  style={{
-                    backgroundColor: "#fefefe",
-                    textAlign: "center",
-                    paddingBlock: "18px",
-                  }}
-                >
-                  {appt.location}
-                </td>
-                <td
-                  style={{
-                    backgroundColor: "#fefefe",
-                    textAlign: "center",
-                    paddingBlock: "18px",
-                  }}
-                >
-                  <span
-                    style={{
-                      display: "inline-block",
-                      width: "12px",
-                      height: "12px",
-                      borderRadius: "50%",
-                      background: statusColors[appt.status],
-                    }}
-                  ></span>
-                </td>
-                <td
-                  style={{
-                    backgroundColor: "#fefefe",
-                    textAlign: "center",
-                    paddingBlock: "18px",
-                  }}
-                >
-                  {appt.date}
-                </td>
-                <td
-                  style={{
-                    backgroundColor: "#fefefe",
-                    textAlign: "center",
-                    paddingBlock: "18px",
-                  }}
-                >
-                  {appt.totalSlots}
-                </td>
-                <td
-                  style={{
-                    backgroundColor: "#fefefe",
-                    textAlign: "center",
-                    paddingBlock: "18px",
-                  }}
-                >
-                  {appt.availableSlots}
-                </td>
-                <td
-                  style={{
-                    backgroundColor: "#fefefe",
-                    textAlign: "center",
-                    paddingBlock: "18px",
-                  }}
-                >
-                  {appt.waitingTime}
-                </td>
-                <td
-                  style={{
-                    backgroundColor: "#fefefe",
-                    textAlign: "right",
-                    paddingBlock: "18px",
-                  }}
-                  className="d-flex gap-2 justify-content-end"
-                >
-                  <button
-                    className="btn appoin-action-btns px-3"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                    style={{ background: "#f86f03", color: "#fff" }}
-                  >
-                    Book Appointment
-                  </button>
-                  <button
-                    className="btn appoin-action-btns  px-3"
-                    style={{ background: "#f86f03", color: "#fff" }}
-                  >
-                    Join
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div>
-          <div
-            className="modal fade"
-            id="exampleModal"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
+    <div className="doctor-slider mt-4 position-relative">
+      <Carousel
+        arrows={false}
+        responsive={responsive}
+        containerClass="carousel-container"
+        itemClass="pe-md-4 px-1"
+        showDots={true}
+        infinite={true}
+        renderDotsOutside={true}
+        partialVisible={true}
+      >
+        {doctorArr.map((element) => (
+          <div key={element.id}
+            style={{
+              borderRadius: "20px",
+              background: "#fff",
+              // padding: "20px",
+              boxShadow: "0px 2px 10px rgba(150,156,173,0.10)",
+              maxWidth: "370px",
+              margin: "auto"
+            }}
           >
-            <div className="modal-dialog modal-fullscreen pt-3">
-              <div className="modal-content spacing-top">
-                <div className="modal-header py-4"  >
-                  <button
-                    type="button"
-                    className="btn-close "
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
+            {/* Profile */}
+          <div style={{ position: "relative", width: "100%" }}>
+  {/* Header Section */}
+  <div
+    style={{
+      paddingLeft:"20%",
+      display: "flex",
+      height: "88px",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center", // ✅ center horizontally
+      gap: "10px",
+      alignSelf: "stretch",
+      background: "rgba(189, 196, 212, 0.30)",
+      textAlign: "center", // ✅ ensure text stays centered
+    }}
+  >
+  <h5
+  style={{
+    color: "#000",
+    fontFamily: "Lora",
+    fontSize: "20px",
+    fontStyle: "normal",
+    fontWeight: 700,
+    lineHeight: "normal",
+    margin: 0,
+  }}
+>
+  {element.name}
+</h5>
+
+    <p
+      style={{
+        color: "rgba(0, 0, 0, 0.70)",
+        fontFamily: "Poppins",
+        fontSize: "12px",
+        fontStyle: "normal",
+        fontWeight: 400,
+        lineHeight: "normal",
+        margin: "4px 0 0",
+      }}
+    >
+      {element.exp}
+    </p>
+  </div>
+</div>
+
+  {/* Doctor Image - overlapping */}
+  <div
+    style={{
+      position: "absolute",
+      left: "20px", // adjust overlap distance from left
+      top: "50%", // vertical center
+      transform: "translateY(-50%)", // adjust to half inside header
+      marginTop:"-45%"
+    }}
+  >
+    <img
+      src={element.image}
+      alt="doctor"
+      style={{
+        width: "100px",
+        height: "100px",
+        borderRadius: "10%",
+        border: "2px solid #fff",
+        objectFit: "cover",
+        boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
+      }}
+    />
+  </div>
+
+ <div style={{ textAlign: "right", marginTop: "5%" ,paddingRight:"15px"}}>
+              <a
+                href={element.profileUrl || '#'}
+                style={{
+                  fontSize: "13px", color: "#78829d", textDecoration: "none"
+                }}>
+                View Profile
+              </a>
+            </div>
+           
+            <div style={{ marginTop: "-18%" }}>
+           
+            {/* country/city */}
+            <p style={{marginTop:"80px",padding:"0px 15px"}}>Country/City</p> 
+             <div style={{
+                background: "#eef2fb",
+                borderRadius: "7px",
+                padding: "10px 0",
+                marginBottom: "14px",
+                textAlign: "center",
+                fontWeight: 600,
+                fontSize: "15px",
+                color: "#495057",
+                margin:"0px 15px"
+              }}>
+               {element.country}/{element.city}
+              </div>
+
+              {/* Date/Time */}
+               <p style={{marginTop:"10px",padding:"0px 15px"}}>Schedule(Date/Time) </p> 
+              <div style={{ display: "flex", gap: "12px", marginBottom: "12px",padding:"0px 15px" }}>
+                <div style={{
+                  display: "flex", alignItems: "center", gap: "7px",
+                  background: "#eef2fb", borderRadius: "8px", padding: "8px 12px"
+                }}>
+                  <img src={calendar} alt="calendar" style={{ width: "17px", height: "17px" }} />
+                  <span style={{ fontSize: "15px" }}>{element.date}</span>
                 </div>
-                <div className="modal-body ">
-                  <h2
-                    className="modal-title  pb-3 fs-5 text-center"
-                    id="exampleModalLabel"
-                  >
-                    Choose Date and Time
-                  </h2>
-                  <BookingAppointment />
+                <div style={{
+                  display: "flex", alignItems: "center", gap: "7px",
+                  background: "#eef2fb", borderRadius: "8px", padding: "8px 14px"
+                }}>
+                  <img src={clock} alt="clock" style={{ width: "17px", height: "17px" }} />
+                  <span style={{ fontSize: "15px" }}>{element.time}</span>
                 </div>
               </div>
+
+              {/* Slots */}
+               <p style={{marginTop:"10px",padding:"0px 15px"}}>No. Of Slots </p> 
+              <div style={{ display: "flex", gap: "18px", marginBottom: "12px",padding:"0px 15px" }}>
+                <div style={{
+                  background: "#eef2fb",
+                  borderRadius: "7px",
+                  padding: "10px 14px",
+                  flex: 1,
+                  textAlign: "center"
+                }}>
+                  <div style={{ fontSize: "16px", fontWeight: 700 }}>{element.totalSlots}</div>
+                  <div style={{ fontSize: "13px", color: "#6e7689" }}>20 Total Seats</div>
+                </div>
+                <div style={{
+                  background: "#eef2fb",
+                  borderRadius: "7px",
+                  padding: "10px 14px",
+                  flex: 1,
+                  textAlign: "center"
+                }}>
+                  <div style={{ fontSize: "16px", fontWeight: 700 }}>{element.availableSlots}</div>
+                  <div style={{ fontSize: "13px", color: "#6e7689" }}>18 Available Seats</div>
+                </div>
+              </div>
+
+              {/* Waiting Time */}
+               <p style={{marginTop:"10px",padding:"0px 15px"}}>Waiting Time</p> 
+              <div style={{
+                background: "#eef2fb",
+                borderRadius: "7px",
+                padding: "10px 0",
+                marginBottom: "14px",
+                textAlign: "center",
+                fontWeight: 600,
+                fontSize: "15px",
+                color: "#495057",
+                margin:"0px 15px"
+              }}>
+             00:20:33
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ display: "flex", gap: "10px", margin:"15px",paddingBottom:"20px" }}>
+              <button style={{
+                flex: 1,
+                background: "#324763",
+                color: "#fff",
+                border: "none",
+                borderRadius: "10px",
+                padding: "13px",
+                fontSize: "15px",
+                fontWeight: 600,
+                cursor: "pointer",
+                textAlign: "center"
+              }}>
+                Book Appointment
+              </button>
+              <button style={{
+                flex: 1,
+                background: "#fff",
+                color: "#324763",
+                border: "1px solid #cbd5e1",
+                borderRadius: "10px",
+                padding: "13px",
+                fontSize: "15px",
+                fontWeight: 600,
+                cursor: "pointer",
+                textAlign: "center"
+              }}>
+                Join
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-    </>
+        ))}
+      </Carousel>
+    </div>
   );
-}
+};
 
-export default DocAppointTableContent
+export default DocAppointTableContent;

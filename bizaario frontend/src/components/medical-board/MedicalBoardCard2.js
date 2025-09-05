@@ -76,61 +76,163 @@ return (
             // centerMode={false}
             
             containerClass="" 
-            itemClass="pe-md-4 px-1"   
+            itemClass="pe-md-1 px-1"   
             arrows={false}  
             infinite={true}  
             renderDotsOutside={true} 
             partialVisible={true} 
         >
-        {doctorArr.map((item) => {
+        {dominicArr.map((item) => {
         return ( 
-  <div className="cardiology-card d-flex flex-column" key={item.id} style={{height:"650px", padding:"16px", border:"1px solid #ddd", borderRadius:"8px"}}>
-  
-  {/* Image */}
-  <img 
-    src={item.image} 
-    alt="doctor" 
-    className="img-fluid" 
-    style={{height:"300px", width:"100%", objectFit:"cover", borderRadius:"8px"}} 
-  />
+ <div
+  key={item.id}
+  style={{
+    border: "1px solid #ddd",
+    borderRadius: "10px",
+    background: "#fff",
+    // padding: "16px",
+    maxWidth: "380px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    boxShadow: "0px 2px 8px rgba(0,0,0,0.08)",
+  }}
+>
+<div style={{ position: "relative", width: "100%" }}>
+  {/* Header Section */}
+  <div
+    style={{
+      paddingLeft:"20%",
+      display: "flex",
+      height: "88px",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center", // ✅ center horizontally
+      gap: "10px",
+      alignSelf: "stretch",
+      background: "rgba(189, 196, 212, 0.30)",
+      textAlign: "center", // ✅ ensure text stays centered
+    }}
+  >
+  <h5
+  style={{
+    color: "#000",
+    fontFamily: "Lora",
+    fontSize: "20px",
+    fontStyle: "normal",
+    fontWeight: 700,
+    lineHeight: "normal",
+    margin: 0,
+  }}
+>
+  {item.name}
+</h5>
+
+    <p
+      style={{
+        color: "rgba(0, 0, 0, 0.70)",
+        fontFamily: "Poppins",
+        fontSize: "12px",
+        fontStyle: "normal",
+        fontWeight: 400,
+        lineHeight: "normal",
+        margin: "4px 0 0",
+      }}
+    >
+      {item.exp}
+    </p>
+  </div>
+</div>
+
+  {/* Doctor Image - overlapping */}
+  <div
+    style={{
+      position: "absolute",
+      left: "20px", // adjust overlap distance from left
+      top: "50%", // vertical center
+      transform: "translateY(-50%)", // adjust to half inside header
+      marginTop:"-30%"
+    }}
+  >
+    <img
+      src={item.image}
+      alt="doctor"
+      style={{
+        width: "100px",
+        height: "100px",
+        borderRadius: "50%",
+        border: "2px solid #fff",
+        objectFit: "cover",
+        boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
+      }}
+    />
+  </div>
+
 
   {/* Header */}
-  <div className='d-flex justify-content-between pt-4'>
-      <div>
-          <h5 className="doc-name">{item.name}</h5>
-          <div className="exp" style={{fontSize:'12px'}}>{item.exp}</div>
-      </div>
-     <div className="profile-link flex-shrink-0">
-        <a onClick={() => navigate('/viewdoctorprofile', { state: { id: item.id } })}
-       style={{fontSize:'12px'}} className='profile-link theme-color'>View Profile</a>
+  {/* <div style={{ textAlign: "center", marginTop: "12px" }}>
+    <h5 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>
+      {item.name}
+    </h5>
+    <p style={{ fontSize: "14px", color: "#73747e", margin: "4px 0 0" }}>
+      {item.exp}
+    </p>
+  </div> */}
+
+  {/* Location */}
+  <div style={{ margin: "16px 0", width: "100%",marginTop:"15%" ,padding:"20px 12px"}}>
+    <div style={{ display: "flex", alignItems: "flex-start", marginBottom: "8px", fontSize: "14px" }}>
+      <img src={locationIcon} alt="location" style={{ width: "20px", marginRight: "8px" }} />
+      <span style={{ color: "#000" }}>{item.location}</span>
+    </div>
+    <div style={{ display: "flex", alignItems: "flex-start", fontSize: "14px" }}>
+      <img src={workIcon} alt="work" style={{ width: "20px", marginRight: "8px", marginTop: "-2px" }} />
+      <span>
+        <strong>Specializes in:</strong>{" "}
+        <span style={{ color: "#73747e" }}>{item.Specializes}</span>
+      </span>
     </div>
   </div>
 
-  {/* Content */}
-  <div className="content mt-4 flex-grow-1">
-      <div className='d-flex pb-2 align-items-center'>
-          <div className='me-2'>
-              <img src={locationIcon} alt="icon" style={{width:'24px'}} className='img-fluid' />
-          </div>
-          <div style={{color:"#000000"}}>{item.location}</div>
-      </div>
-      <div className='d-flex'>
-          <div className='me-2 '>
-              <img src={workIcon} alt="icon" style={{width:'24px',marginTop:"-4px"}} />
-          </div>
-          <div>
-              <span style={{color:"#000000"}}>Specializes in: </span>
-              <span style={{color:'#73747e'}}>{item.Specializes}</span>
-          </div>
-      </div>
-  </div>
+  {/* Buttons */}
+  <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%",padding:"20px 12px",marginTop:"-10%" }}>
+    <button
+      style={{
+        background: "#52677D",
+        color: "#fff",
+        border: "none",
+        borderRadius: "10px",
+        padding: "14px",
+        fontSize: "18px",
+        fontFamily: "Lora",
+        fontWeight: 600,
+        cursor: "pointer",
+        textAlign: "center",
+      }}
+    >
+      Send Medical Query
+    </button>
 
-  {/* Buttons at the bottom - responsive */}
-  <div className="d-flex flex-column flex-sm-row pt-3 common-btns-group1" style={{gap:'12px', marginTop:'auto'}}>
-      <a href="/" className="btn common-btn-dark flex-1 text-center">Book an Appointment</a>
-      <a href="/" className="btn common-btn-outline flex-1 text-center">Send Medical Query</a>
+    <button
+      onClick={() => navigate("/viewdoctorprofile", { state: { id: item.id } })}
+      style={{
+        background: "#fff",
+        color: "#52677D",
+        border: "1px solid #cbd5e1",
+        borderRadius: "10px",
+        padding: "14px",
+        fontSize: "18px",
+        fontFamily: "Lora",
+        fontWeight: 600,
+        cursor: "pointer",
+        textAlign: "center",
+      }}
+    >
+      View Profile
+    </button>
   </div>
 </div>
+
 
 
          

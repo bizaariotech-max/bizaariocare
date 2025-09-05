@@ -22,6 +22,7 @@ import testmonialImage1 from '../assets/images/testmonial1.png'
 import article2 from '../assets/images/articles/article2.png'
 import article3 from '../assets/images/articles/article3.png'
 import article4 from '../assets/images/articles/article4.png'
+import { Country } from 'country-state-city';
 
 export const sliderArray = 
     {
@@ -55,26 +56,54 @@ export const sliderArray =
 export const doctorArr = [
     {
         id: 1, 
+        date:"20/12/2025",
+        time:"20 min",
+        title:"Advanced Cardiac Life Support-2024",
         name: "JBy Doctor Malik",
         dsc: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023 ",
-        image: doctor1
+        Specializes:"Seniour Cardialogist Apollo Hospitals",
+        image: doctor1,
+        exp:"Cardiologist | 15+ Years Experience",
+         country:"india",
+        city:"noida"
     },
     {
         id: 2,
-             name: "JBy Doctor Malik",
+         date:"20/12/2025",
+        time:"20 min",
+        title:"Advanced Cardiac Life Support-2024",
+        name: "JBy Doctor Malik",
         dsc: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023 ",
-        image: doctor2
+        Specializes:"Seniour Cardialogist Apollo Hospitals",
+        image: doctor1,
+         country:"india",
+        city:"noida",
+         exp:"Cardiologist | 15+ Years Experience",
     },
     {
         id: 3,
-            name: "JBy Doctor Malik",
+         date:"20/12/2025",
+        time:"20 min",
+        title:"Advanced Cardiac Life Support-2024",
+        name: "JBy Doctor Malik",
         dsc: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023 ",
-        image: doctor3
+        Specializes:"Seniour Cardialogist Apollo Hospitals",
+        image: doctor1,
+         country:"india",
+        city:"noida",
+         exp:"Cardiologist | 15+ Years Experience",
     },
         {id: 4,
-            name: "JBy Doctor Malik",
+         date:"20/12/2025",
+        time:"20 min",
+        title:"Advanced Cardiac Life Support-2024",
+        name: "JBy Doctor Malik",
         dsc: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023 ",
-        image: doctor3
+        Specializes:"Seniour Cardialogist Apollo Hospitals",
+        image: doctor1,
+        country:"india",
+        city:"noida",
+         exp:"Cardiologist | 15+ Years Experience",
     },
   
 ];

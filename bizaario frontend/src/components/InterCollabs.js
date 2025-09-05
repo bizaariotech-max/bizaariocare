@@ -16,10 +16,36 @@ const InterCollabs = () => {
       <>
           <section className='international-collaborations spacing-top' >
               <div className="container ">
-                  <div className="title">
-                      <h2 className='fw-semibold'>International Collaborations</h2>
-                      <p className='light-color mb-0'>Learn from leading doctors and specialists through focused, digestible video content.</p>
-                  </div>
+                 <div className="title">
+                        <h2
+                            className="fw-semibold"
+                            style={{
+                            color: "#000",
+                            fontFamily: "Lora",
+                            fontSize: "36px",
+                            fontStyle: "normal",
+                            fontWeight: 700,
+                            lineHeight: "normal",
+                            }}
+                        >
+                            International Collaborations
+                        </h2>
+
+                        <p
+                            className="light-color mb-0"
+                            style={{
+                            color: "rgba(0, 0, 0, 0.70)",
+                            fontFamily: "Poppins",
+                            fontSize: "18px",
+                            fontStyle: "normal",
+                            fontWeight: 400,
+                            lineHeight: "normal",
+                            }}
+                        >
+                            Learn from leading doctors and specialists through focused, digestible
+                            video content.
+                        </p>
+                        </div>
 
                   <div className="my-4 medical-tab-buttons" style={{width:"200px"}}> 
                     <button className={`flex-1 py-2 cutom-tab-style2 ${activeTab==='tab1' ? 'activeTab' : 'lightBg' }`}
