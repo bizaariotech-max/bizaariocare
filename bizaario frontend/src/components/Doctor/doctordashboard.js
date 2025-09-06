@@ -1,8 +1,29 @@
-import React, { useState,useRef } from 'react';
+import React, { useState,useRef,useEffect } from 'react';
 import Doctorsidebar from './doctorsidebar';
 import Doctorheader from './doctorheader';
+import { doctorArr } from '../../Data/LocalData';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import '../../assets/css/Empowering.css'
+import clock from '../../assets/images/clock.png'
+import calender from '../../assets/images/calendar.png'
+import {dominicArr } from '../../Data/LocalData';
+import locationIcon from "../../assets/images/icons/location-pin-alt-1-svgrepo-com 1.png"
+import workIcon from "../../assets/images/icons/work.png"
+import 'react-multi-carousel/lib/styles.css';
+import '../../assets/css/medical-board-partner-hospital.css'
+import api from '../../api'
+import { useNavigate } from 'react-router-dom';
+import novacare1 from '../../assets/images/novacare.png'
+import location1 from '../../assets/images/icons/location-light.svg'
+import clockIcon from "../../assets/images/icons/clock.svg"
+import webIcon from "../../assets/images/icons/web.svg"
+// import "../../assets/css/hero.css";
+import livesessionlogo from '../../assets/images/LiveSessions.png';
+import doctorlogo from '../../assets/images/doctor1.png';
 
-// Simple cn utility for conditional class names
+
+
 function cn(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -45,8 +66,9 @@ export default function Doctordashboard() {
           <MedaidBanner />
           <OverviewSection />
           <PatientDetailsSection />
-          <MedicalBoardSection />
-          <LiveSessionsSection />
+          <MedicalBoard/>
+          <Partnerhospital/>
+          <LiveSessions />
         </main>
       </div>
 
@@ -87,59 +109,225 @@ function KnowledgeBankSection() {
     sliderRef.current.scrollLeft = scrollLeft - walk;
   };
 
+   const responsive = {
+        superLargeDesktop: {
+            breakpoint: { max: 4000, min: 3000 },
+            items: 3
+        },
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 3, 
+             partialVisibilityGutter: 20
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 767 },
+            items: 2
+        },
+        mobile: {
+            breakpoint: { max: 767, min: 0 },
+            items: 1,
+           
+        }
+    };
 
   return (
-    <div className="bg-[#525FE1] rounded-lg p-4 lg:p-6 text-white">
-      <div className="mb-8 lg:mb-16">
-        <h2 className="text-lg lg:text-xl font-medium mb-8 lg:mb-12">Knowledge Bank Data Filter</h2>
+    <>
+                <div
+                  className="doctor-slider mt-4 position-relative"
+                  style={{
+                    // display: "flex",
+                    // height: "509px",
+                    padding: "24px 0px 24px 24px",
+                    // flexDirection: "column",
+                    // alignItems: "flex-start",
+                    // gap: "10px",
+                    // alignSelf: "stretch",
+                    borderRadius: "10px",
+                    background: "rgba(189, 196, 212, 0.20)",
+                  }}
+                >
 
-<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
-      {/* Dropdowns: Stack on small, row on larger */}
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 flex-1 min-w-0 ">
-        <FilterDropdown text="Select Medical Specialty" className="text-xs sm:text-sm w-full sm:w-auto" />
-        <FilterDropdown2 text="Select Doctor" className="text-xs sm:text-sm w-full sm:w-auto" />
-        <FilterDropdown3 text="Select Archive" className="text-xs sm:text-sm w-full sm:w-auto" />
-      </div>
+                  <div className="row">
+                <div className="col-lg-8 col-12">
+                    <h2 className='fw-semibold' style={{color:"#000",
+                                                        fontFamily: "Lora",
+                                                        fontSize: "24px",
+                                                        fontStyle: "normal",
+                                                        fontWeight: "400",
+                                                        lineHeight: "normal"}}>
+                    Knowledge Bank Data Filter
+                    </h2>
+                  
+                </div>
+                <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start" style={{padding:"0px 36px 10px 0px"}}>
+                  
+                              <button style={{
+                                display: "flex",
+                                padding: "16px 32px",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "10px",
+                                borderRadius: "10px",
+                                background:" rgba(189, 196, 212, 0.50)",
+                                color:" black",
+                                fontFamily: "Lora",
+                                fontSize: "16px",
+                                fontStyle: "normal",
+                                fontWeight: 400,
+                                lineHeight: "normal"
+                            
 
-      {/* Right Controls: checkboxes + button */}
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 lg:ml-auto">
-        {/* Checkboxes */}
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white rounded-sm"></div>
-            <span className="text-xs sm:text-sm">Digital CMEs</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white rounded-sm"></div>
-            <span className="text-xs sm:text-sm">Unique Case Studies</span>
-          </label>
-        </div>
 
-        {/* Publish Button */}
-        <button className="flex items-center justify-center gap-2 bg-[#F86F03] px-3 py-2 sm:px-4 sm:py-3 rounded-lg hover:bg-[#e5630a] transition-colors text-xs sm:text-sm font-normal w-full sm:w-auto">
-          <UploadIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-          <span>Publish New Content</span>
-        </button>
-      </div>
-    </div> 
-      </div>
+                              }}>
+                                  Use Filter:
+                              </button>
+                             
+                          
+                </div>
 
-      <div
-      ref={sliderRef}
-      className="flex gap-4 overflow-x-auto no-scrollbar select-none"
-      onMouseDown={handleMouseDown}
-      onMouseLeave={handleMouseLeave}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-    >
-      {Array.from({ length: 10 }).map((_, i) => (
-        <div key={i} className="min-w-[250px]">
-          <VideoCard />
-        </div>
-      ))}
-    </div>
-    </div>
+                </div>
+
+                  <Carousel
+                   //   removeArrowOnDeviceType={["tablet", "mobile"]}
+                     arrows={false} 
+                   responsive={responsive}
+                   // autoPlay={false}
+                   // autoPlaySpeed={3000}
+                   // transitionDuration={2000} 
+                   //additionalTransfrom={-20}
+                   //  pauseOnHover={false} 
+                   //  centerMode={false}
+                   containerClass=" carousel-container" 
+                   itemClass="pe-md-4 px-1"  
+                   // showDots={true}
+                   infinite={true}  
+                   renderDotsOutside={true} 
+                   partialVisible={true}
+               
+                   >
+               {doctorArr.map((element) => {
+               return (
+   
+               <div className="" key={element.id} style={{
+                   borderRadius:"20px",
+                   background:"rgba(189, 196, 212, 0.30)",
+                   padding:"20px"
+                   
+                   }}>
+                   <img src={element.image} alt="doctor" className=" mx-auto img-fluid" style={{width: '100%',height:"203px"}} />
+                   <div style={{display:"flex",gap:"24px",marginTop:"10px"}}>
+                       <div style={{display:'flex',gap:"5px"}}>
+                             <img src={clock} style={{width: "14px",height: "14px",display:"inline-block"}} alt=''></img> 
+                              <p
+                               style={{
+                                   color: "rgba(0, 0, 0, 0.70)",
+                                   fontFamily: "Poppins",
+                                   fontSize: "12px",
+                                   fontStyle: "normal",
+                                   fontWeight: 400,
+                                   lineHeight: "normal",
+                               }}
+                               >
+                                   {element.time}</p> 
+                       </div>
+                    
+                      <div style={{display:'flex',gap:"5px"}}>
+                             <img src={calender} style={{width: "14px",height: "14px",display:"inline-block"}} alt=''></img> 
+                               <p  style={{
+                                   color: "rgba(0, 0, 0, 0.70)",
+                                   fontFamily: "Poppins",
+                                   fontSize: "12px",
+                                   fontStyle: "normal",
+                                   fontWeight: 400,
+                                   lineHeight: "normal",
+                               }}>{element.date}</p> 
+                       </div>
+                   </div>
+                   <div className="content mt-4">
+                    <p
+                       className="text-gray-700 text-start mb-1"
+                       style={{
+                           color: "#000",
+                           fontFamily: "Lora",
+                           fontSize: "20px",
+                           fontStyle: "normal",
+                           fontWeight: 700,
+                           lineHeight: "normal",
+                       }}
+                       >
+                       {element.title}
+                       </p>
+   
+                      <p
+                       style={{
+                           color: "rgba(0, 0, 0, 0.70)",
+                           fontFamily: "Poppins",
+                           fontSize: "14px",
+                           fontStyle: "normal",
+                           fontWeight: 400,
+                           lineHeight: "normal",
+                           marginBottom: "4px", // to replace mb-1 from Tailwind
+                           textAlign: "start",
+                       }}
+                       >
+                       {element.dsc}
+                       </p>
+   
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                       {/* Profile Image */}
+                       <img
+                           src={element.image}
+                           alt={element.name}
+                           style={{
+                           borderRadius: "270.5px",
+                           border: "2px solid #FFF",
+                           width: "38px",
+                           height: "38px",
+                           flexShrink: 0,
+                           objectFit: "cover", // ensures image fits nicely
+                           }}
+                       />
+   
+                       {/* Text Content */}
+                       <div>
+                           <p
+                           style={{
+                               color: "#000",
+                               fontFamily: "Lora",
+                               fontSize: "16px",
+                               fontStyle: "normal",
+                               fontWeight: 700,
+                               lineHeight: "normal",
+                               margin: 0,
+                           }}
+                           >
+                           <strong>{element.name}</strong>
+                           </p>
+   
+                           <p
+                           style={{
+                               color: "rgba(0, 0, 0, 0.70)",
+                               fontFamily: "Poppins",
+                               fontSize: "12px",
+                               fontStyle: "normal",
+                               fontWeight: 400,
+                               lineHeight: "normal",
+                               margin: 0,
+                           }}
+                           >
+                           <strong>{element.Specializes}</strong>
+                           </p>
+                       </div>
+                       </div>
+   
+                   </div>
+   
+               </div>
+               )
+               })}
+   </Carousel>
+           </div>
+         </>
   );
 }
 
@@ -275,6 +463,7 @@ function OverviewSection() {
   );
 }
 
+
 function StatCard({ title, value, change, color, chart }) {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm">
@@ -322,6 +511,363 @@ function StatCard({ title, value, change, color, chart }) {
     </div>
   );
 }
+
+//============================== Trusted Medical Experts ====================================
+
+
+
+const MedicalBoard = () => {
+const [activeTab, setActiveTab] = useState('tab1');
+
+     const responsive = {
+        superLargeDesktop: {
+            breakpoint: { max: 4000, min: 3000 },
+            items: 3,
+            // showDots:true
+        },
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 3, 
+             partialVisibilityGutter: 20,
+            //  showDots:true
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 767 },
+            items: 2,
+            // showDots:true
+        },
+        mobile: {
+            breakpoint: { max: 767, min: 0 },
+            items: 1,
+            // showDots:true
+        }
+    };
+
+    const navigate=useNavigate()
+
+     const [doctorArr, setDoctorArr] = useState([]); // store fetched doctors
+
+  const getDoctorProfile = async () => {
+    try {
+      const resp = await api.get("doctor/getalldoctor");
+      // Transform the data if needed to match your previous structure
+      const formattedData = resp.data.doctor.map((doc, index) => ({
+        id: doc._id || index + 1, // use _id from DB or fallback index
+        name: `${doc.firstName} ${doc.lastName}`,
+        exp: `${doc.medical_specialty} | ${doc.experience} Years Experience`,
+        location: `${doc.address1} ${doc.address2} ${doc.state} ${doc.city} ${doc.postal_code}` || "",
+        Specializes: `${doc.medical_specialty || ""}`,
+        image: doc.profile_pic || null, // image URL from DB
+      }));
+
+      setDoctorArr(formattedData); // update state
+    } catch (error) {
+      console.error("Error fetching doctor profile:", error);
+    }
+  };
+
+  
+  useEffect(() => {
+    getDoctorProfile();
+  }, []);
+
+
+
+
+
+const renderContent = () => {
+switch (activeTab) {
+  case 'tab1': return <div>
+
+    {/* <MedicalBoardCard2 /> */}
+
+  </div>;
+// case 'tab2': return  <div> <MedicalBoardCard2 />  </div>;
+// case 'tab3': return <div>  <MedicalBoardCard2 /> </div>;
+// case 'tab4': return <div>  <MedicalBoardCard2 /> </div>;
+// case 'tab5': return <div>  <MedicalBoardCard2 /> </div>;
+// case 'tab6': return <div>  <MedicalBoardCard2 /> </div>;
+// case 'tab7': return <div>  <MedicalBoardCard2 /> </div>;
+// return null;
+}
+};
+
+return (
+<>
+  <div className=''>
+    <div className="container ">
+      <div className="row"> 
+       
+                <div className="col-lg-8 col-12">
+                    <h2 className='fw-semibold' style={{color:"#000",
+                                                        fontFamily: "Lora",
+                                                        fontSize: "36px",
+                                                        fontStyle: "normal",
+                                                        fontWeight: "700",
+                                                        lineHeight: "normal"}}>
+                    Trusted Medical Experts
+                    </h2>
+                    <p className='light-color' style={{
+                        color:"rgba(0, 0, 0, 0.70)",
+                        fontFamily: "Poppins",
+                        fontSize: "18px",
+                        fontStyle: "normal",
+                        fontWeight: "400",
+                        lineHeight: "normal",
+                    }}>
+                    Bringing global experience,compassionate care, and proven results.</p>
+                </div>
+                <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
+                  
+                              <button style={{
+                                display: "flex",
+                                padding: "16px 32px",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "10px",
+                                borderRadius: "10px",
+                                background: "#52677D",
+                                color:" #FFF",
+                                fontFamily: "Lora",
+                                fontSize: "16px",
+                                fontStyle: "normal",
+                                fontWeight: 700,
+                                lineHeight: "normal"
+
+                              }}>
+                                  View All &#8594;
+                              </button>
+                             
+                          
+                </div>
+
+               
+          <div className=" medical-tab-buttons mb-4">  
+            <button className={`cutom-tab-style ${activeTab==='tab1' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab1')}>
+            Cardiology
+          </button> 
+          <button className={`cutom-tab-style ${activeTab==='tab2' ? ' activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab2')}
+            >
+            Orthopedics
+          </button> 
+          <button className={`cutom-tab-style ${activeTab==='tab3' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab3')}
+            >
+            Pediatrics
+          </button> 
+          <button className={`cutom-tab-style ${activeTab==='tab4' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab4')}
+            >
+            Neurology
+            </button>
+             <button className={` cutom-tab-style ${activeTab==='tab5' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab5')}
+            >
+            Obstetrics & Gynecology
+          </button>
+          <button className={` cutom-tab-style ${activeTab==='tab7' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab7')}
+            >
+            Plastic & Reconstructive Surgery
+          </button> 
+          <button className={` cutom-tab-style ${activeTab==='tab6' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+            setActiveTab('tab6')}
+            >
+            Otorhinolaryngology
+          </button> 
+        </div>  
+        <div style={{padding:0}} className='position-relative'>{renderContent()}</div>
+      </div>
+    </div>
+  </div>
+
+  <div style={{marginTop:"0%"}}>
+        <Carousel
+            // removeArrowOnDeviceType={["tablet", "mobile"]}
+            // showDots={true}
+            responsive={responsive}
+            // autoPlay={false}
+            // autoPlaySpeed={3000}
+            // transitionDuration={2000} 
+            // additionalTransfrom={-20}
+            // pauseOnHover={false} 
+            // centerMode={false}
+            
+            containerClass="" 
+            itemClass="pe-md-1 px-1"   
+            arrows={false}  
+            infinite={true}  
+            // renderDotsOutside={true} 
+            partialVisible={true} 
+        >
+        {dominicArr.map((item) => {
+        return ( 
+ <div
+  key={item.id}
+  style={{
+    margin:0,
+    border: "1px solid #ddd",
+    borderRadius: "10px",
+    background: "#fff",
+    // padding: "16px",
+    maxWidth: "380px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    // boxShadow: "0px 2px 8px rgba(0,0,0,0.08)",
+  }}
+>
+<div style={{ position: "relative", width: "100%" }}>
+  {/* Header Section */}
+  <div
+    style={{
+      paddingLeft:"20%",
+      display: "flex",
+      height: "88px",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center", // ✅ center horizontally
+      gap: "10px",
+      alignSelf: "stretch",
+      background: "rgba(189, 196, 212, 0.30)",
+      textAlign: "center", // ✅ ensure text stays centered
+    }}
+  >
+  <h5
+  style={{
+    color: "#000",
+    fontFamily: "Lora",
+    fontSize: "20px",
+    fontStyle: "normal",
+    fontWeight: 700,
+    lineHeight: "normal",
+    margin: 0,
+  }}
+>
+  {item.name}
+</h5>
+
+    <p
+      style={{
+        color: "rgba(0, 0, 0, 0.70)",
+        fontFamily: "Poppins",
+        fontSize: "12px",
+        fontStyle: "normal",
+        fontWeight: 400,
+        lineHeight: "normal",
+        margin: "4px 0 0",
+      }}
+    >
+      {item.exp}
+    </p>
+  </div>
+</div>
+
+  {/* Doctor Image - overlapping */}
+  <div
+    style={{
+      position: "absolute",
+      left: "20px", // adjust overlap distance from left
+      top: "50%", // vertical center
+      transform: "translateY(-50%)", // adjust to half inside header
+      marginTop:"-30%"
+    }}
+  >
+    <img
+      src={item.image}
+      alt="doctor"
+      style={{
+        width: "100px",
+        height: "100px",
+        borderRadius: "50%",
+        border: "2px solid #fff",
+        objectFit: "cover",
+        boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
+      }}
+    />
+  </div>
+
+
+  {/* Header */}
+  {/* <div style={{ textAlign: "center", marginTop: "12px" }}>
+    <h5 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>
+      {item.name}
+    </h5>
+    <p style={{ fontSize: "14px", color: "#73747e", margin: "4px 0 0" }}>
+      {item.exp}
+    </p>
+  </div> */}
+
+  {/* Location */}
+  <div style={{ margin: "16px 0", width: "100%",marginTop:"15%" ,padding:"20px 12px"}}>
+    <div style={{ display: "flex", alignItems: "flex-start", marginBottom: "8px", fontSize: "14px" }}>
+      <img src={locationIcon} alt="location" style={{ width: "20px", marginRight: "8px" }} />
+      <span style={{ color: "#000" }}>{item.location}</span>
+    </div>
+    <div style={{ display: "flex", alignItems: "flex-start", fontSize: "14px" }}>
+      <img src={workIcon} alt="work" style={{ width: "20px", marginRight: "8px", marginTop: "-2px" }} />
+      <span>
+        <strong>Specializes in:</strong>{" "}
+        <span style={{ color: "#73747e" }}>{item.Specializes}</span>
+      </span>
+    </div>
+  </div>
+
+  {/* Buttons */}
+  <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%",padding:"20px 12px",marginTop:"-10%" }}>
+    <button
+      style={{
+        background: "#52677D",
+        color: "#fff",
+        border: "none",
+        borderRadius: "10px",
+        padding: "14px",
+        fontSize: "18px",
+        fontFamily: "Lora",
+        fontWeight: 600,
+        cursor: "pointer",
+        textAlign: "center",
+      }}
+    >
+      Send Medical Query
+    </button>
+
+    <button
+      onClick={() => navigate("/viewdoctorprofile", { state: { id: item.id } })}
+      style={{
+        background: "#fff",
+        color: "#52677D",
+        border: "1px solid #cbd5e1",
+        borderRadius: "10px",
+        padding: "14px",
+        fontSize: "18px",
+        fontFamily: "Lora",
+        fontWeight: 600,
+        cursor: "pointer",
+        textAlign: "center",
+      }}
+    >
+      View Profile
+    </button>
+  </div>
+</div>
+
+
+
+         
+            )
+        })}
+            </Carousel>
+</div>
+
+</>
+);
+};
+
+
+
 
 function PatientDetailsSection() {
   
@@ -406,64 +952,415 @@ function TimelineStep({ completed }) {
   );
 }
 
-function MedicalBoardSection() {
-     const sliderRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
 
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setStartX(e.pageX - sliderRef.current.offsetLeft);
-    setScrollLeft(sliderRef.current.scrollLeft);
-  };
-
-  const handleMouseLeave = () => setIsDragging(false);
-  const handleMouseUp = () => setIsDragging(false);
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = x - startX;
-    sliderRef.current.scrollLeft = scrollLeft - walk;
-  };
+// ===============================partner hospital section=========================================
 
 
+const Partnerhospital = () => {
+                const [activeTab, setActiveTab] = useState('tab1');
+
+      const hospitalPartnerData = [
+  
+      {
+        id: 1, 
+        name: "NovaCare Hospital",
+        exp: "Multi-specialty / Tertiary Care",
+        location: "123 Health Blvd, Los Angeles, CA",
+        hours:'Open 24/7  ',
+        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
+        URL:  'www.novacarehealth.com ', 
+        image: novacare1
+    },
+      {
+        id: 2, 
+        name: "NovaCare Hospital",
+        exp: "Multi-specialty / Tertiary Care",
+        location: "123 Health Blvd, Los Angeles, CA",
+        hours:'Open 24/7  ',
+        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
+        URL:  'www.novacarehealth.com ', 
+        image: novacare1
+    },
+      {
+        id: 3, 
+        name: "NovaCare Hospital",
+        exp: "Multi-specialty / Tertiary Care",
+        location: "123 Health Blvd, Los Angeles, CA",
+        hours:'Open 24/7  ',
+        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
+        URL:  'www.novacarehealth.com ', 
+        image: novacare1
+    },
+      {
+        id: 4, 
+        name: "NovaCare Hospital",
+        exp: "Multi-specialty / Tertiary Care",
+        location: "123 Health Blvd, Los Angeles, CA",
+        hours:' Open 24/7  ',
+        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
+        URL:  'www.novacarehealth.com ', 
+        image: novacare1
+    },
+      {
+        id: 5, 
+        name: "NovaCare Hospital",
+        exp: "Multi-specialty / Tertiary Care",
+        location: "123 Health Blvd, Los Angeles, CA",
+        hours:' Open 24/7  ',
+        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
+        URL:  'www.novacarehealth.com ', 
+        image: novacare1
+    },
+      {
+        id: 6, 
+        name: "NovaCare Hospital",
+        exp: "Multi-specialty / Tertiary Care",
+        location: "123 Health Blvd, Los Angeles, CA",
+        hours:' Open 24/7  ',
+        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
+        URL:  'www.novacarehealth.com ', 
+        image: novacare1
+    },
+  
+
+]
+
+  
+       const responsive = {
+        superLargeDesktop: {
+            breakpoint: { max: 4000, min: 3000 },
+            items: 3
+        },
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 3, 
+             partialVisibilityGutter: 20
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 767 },
+            items: 2
+        },
+        mobile: {
+            breakpoint: { max: 767, min: 0 },
+            items: 1,
+           
+        }
+    };
+
+
+// const renderContent = () => {
+// switch (activeTab) {
+// case 'tab1': return <div className="row"><PartnersListHome/></div>;
+// case 'tab2': return  <div className="row"><PartnersListHome/></div>;
+// case 'tab3': return <div className="row"><PartnersListHome/></div>;
+// case 'tab4': return <div className="row"><PartnersListHome/></div>;
+// case 'tab5': return <div className="row"><PartnersListHome/></div>;
+// case 'tab6': return <div className="row"><PartnersListHome/></div>;
+// case 'tab7': return <div className="row"><PartnersListHome/></div>;
+// return null;
+// }
+// };
   return (
-    <div className="space-y-4 lg:space-y-6">
-      <div className="bg-[#525FE1] rounded-lg p-4 lg:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-        <div className="bg-white text-[#525FE1] px-4 py-2 rounded-lg text-lg lg:text-2xl font-medium">Medical Board</div>
-        <div className="text-white border border-white/70 px-4 py-2 rounded-lg text-lg lg:text-2xl font-medium">Partners Hospitals</div>
-      </div>
+    <>
 
-      <div className="p-2 lg:p-4">
-        <div className="flex flex-wrap gap-3 lg:gap-6 mb-6 lg:mb-8">
-          <SpecialtyTag active>Cardiology</SpecialtyTag>
-          <SpecialtyTag>Orthopedics</SpecialtyTag>
-          <SpecialtyTag>Pediatrics</SpecialtyTag>
-          <SpecialtyTag>Neurology</SpecialtyTag>
-          <SpecialtyTag>Obstetrics & Gynecology</SpecialtyTag>
-          <SpecialtyTag>Otorhinolaryngology</SpecialtyTag>
-        </div>
+    <div className="container">
+         <div className="row"> 
+                <div className="col-lg-8 col-12">
+                    <h2 className='fw-semibold' style={{color:"#000",
+                                                        fontFamily: "Lora",
+                                                        fontSize: "36px",
+                                                        fontStyle: "normal",
+                                                        fontWeight: "700",
+                                                        lineHeight: "normal"}}>
+                    Partner Hospitals
+                    </h2>
+                    <p className='light-color' style={{
+                        color:"rgba(0, 0, 0, 0.70)",
+                        fontFamily: "Poppins",
+                        fontSize: "18px",
+                        fontStyle: "normal",
+                        fontWeight: "400",
+                        lineHeight: "normal",
+                    }}>
+                    World-class healthcare instituatins with advanced facilities and trusted care.</p>
+                </div>
+                <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
+                  
+                              <button style={{
+                                display: "flex",
+                                padding: "16px 32px",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "10px",
+                                borderRadius: "10px",
+                                background: "#52677D",
+                                color:" #FFF",
+                                fontFamily: "Lora",
+                                fontSize: "16px",
+                                fontStyle: "normal",
+                                fontWeight: 700,
+                                lineHeight: "normal"
 
-        <div
-      ref={sliderRef}
-      className="flex gap-4 overflow-x-auto no-scrollbar select-none"
-      onMouseDown={handleMouseDown}
-      onMouseLeave={handleMouseLeave}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-    >
-          {Array.from({ length: 6 }, (_, i) => (
-            <DoctorCard key={i} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+                              }}>
+                                  View All &#8594;
+                              </button>
+                             
+                          
+                </div>
+
+                </div>
+
+                          <div className="col-lg-12 col-12 d-flex ">
+                    <div className=" medical-tab-buttons mb-4">  
+                        <button className={`cutom-tab-style ${activeTab==='tab1' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+                        setActiveTab('tab1')}>
+                        Delhi NCR
+                    </button> 
+                    <button className={`cutom-tab-style ${activeTab==='tab2' ? ' activeTab' : 'gray-btn-style' }`} onClick={()=>
+                        setActiveTab('tab2')}
+                        >
+                       Mumbai
+                    </button> 
+                    <button className={`cutom-tab-style ${activeTab==='tab3' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+                        setActiveTab('tab3')}
+                        >
+                        Bengaluru
+                    </button> 
+                    <button className={`cutom-tab-style ${activeTab==='tab4' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+                        setActiveTab('tab4')}
+                        >
+                        Noida   
+                        </button>
+                        <button className={` cutom-tab-style ${activeTab==='tab5' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+                        setActiveTab('tab5')}
+                        >
+                       Delhi NCR
+                    </button>
+                    <button className={` cutom-tab-style ${activeTab==='tab7' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+                        setActiveTab('tab7')}
+                        >
+                        Mumbai
+                    </button> 
+                    <button className={` cutom-tab-style ${activeTab==='tab6' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
+                        setActiveTab('tab6')}
+                        >
+                       Bengaluru
+                    </button> 
+                      </div>  
+                      </div>
+                        <div className="col-lg-2  col-12d-flex justify-content-end">
+                          <div className="mb-4">
+                            <div className="input-group" style={{maxWidth:'216px'}}>
+                              <span className="input-group-text bg-white border-end-0"><img src={location1} alt="" /></span>
+                              <select className="form-select border-start-0" 
+                                >
+                                <option value="">Select City</option>
+                                <option value="">Bengaluru</option>
+                                <option value="">Mumbai</option>
+                                <option value="">Delhi NCR</option> 
+                              </select>
+                            </div>
+                    
+                          </div>
+                        </div> 
+                </div>
+                <div > 
+                  {/* <div style={{padding:0}}>{renderContent()}</div> */}
+                </div> 
+
+
+    <>
+         <div className="doctor-slider mt-4 position-relative">
+                       <Carousel
+                        //   removeArrowOnDeviceType={["tablet", "mobile"]}
+                          arrows={false} 
+                        responsive={responsive}
+                        // autoPlay={false}
+                        // autoPlaySpeed={3000}
+                        // transitionDuration={2000} 
+                        //additionalTransfrom={-20}
+                        //  pauseOnHover={false} 
+                        //  centerMode={false}
+                        containerClass=" carousel-container" 
+                        itemClass="pe-md-4 px-1"  
+                        // showDots={true}
+                        infinite={true}  
+                        renderDotsOutside={true} 
+                        partialVisible={true}
+                    
+                        >
+                {hospitalPartnerData.map((item) => {
+                    return ( 
+                                
+                                <div className=" mb-4" key={item.id} >
+                                    <div className="cardiology-card" style={{background: "#FFF",border:"1px solid #c9cacbff"}}>
+                                        <div >
+                                        <img src={item.image} alt="doctor" className="img-fluid" />
+                                        </div>
+                                      
+                                        {/* <div className='d-flex justify-content-between pt-4'>
+                                            <div>
+                                                <h5 className="doc-name">{item.name}</h5>
+                                                <div className="exp"
+                                                    style={{fontSize:'12px', color:'#3a3a3f'}}>{item.exp}
+                                                </div>
+                                            </div>
+                                            <div className="profile-link">
+                                                <a href="#" style={{fontSize:'12px'}}
+                                                    className='theme-color decoration-none weight-600'>View
+                                                    Profile</a>
+                                            </div>
+                                        </div> */}
+
+                                    <div style={{ position: "relative", width: "100%" }}>
+                                    {/* Header Section */}
+                                    <div
+                                        style={{
+                                        paddingLeft:"5%",
+                                        display: "flex",
+                                        height: "88px",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        alignItems: "center", // ✅ center horizontally
+                                        gap: "10px",
+                                        alignSelf: "stretch",
+                                        textAlign: "center", // ✅ ensure text stays centered
+                                        }}
+                                    >
+                                    <h5
+                                    style={{
+                                        color: "#000",
+                                        fontFamily: "Lora",
+                                        fontSize: "20px",
+                                        fontStyle: "normal",
+                                        fontWeight: 700,
+                                        lineHeight: "normal",
+                                        margin: 0,
+                                    }}
+                                    >
+                                    {item.name}
+                                    </h5>
+
+                                        <p
+                                        style={{
+                                            color: "rgba(0, 0, 0, 0.70)",
+                                            fontFamily: "Poppins",
+                                            fontSize: "12px",
+                                            fontStyle: "normal",
+                                            fontWeight: 400,
+                                            lineHeight: "normal",
+                                            margin: "4px 0 0",
+                                        }}
+                                        >
+                                        {item.exp}
+                                        </p>
+                                    </div>
+                                    </div>
+
+
+                                         <div
+                                        style={{
+                                        position: "absolute",
+                                        left: "20px", // adjust overlap distance from left
+                                        top: "50%", // vertical center
+                                        transform: "translateY(-50%)", // adjust to half inside header
+                                        marginTop:"-15%"
+                                        }}
+                                    >
+                                        <img
+                                        src={item.image}
+                                        alt="doctor"
+                                        style={{
+                                            width: "100px",
+                                            height: "100px",
+                                            borderRadius: "50%",
+                                            border: "2px solid #fff",
+                                            objectFit: "cover",
+                                            boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
+                                        }}
+                                        />
+                                    </div>
+
+        
+                                        <div className="content" style={{padding:"20px 12px",marginTop:"-5%"}}>
+                                            <div className='d-flex pb-2 align-items-center'>
+                                                <div className='me-2'>
+                                                    <img src={locationIcon} alt="icon"
+                                                        style={{width:'24px'}} />
+                                                </div>
+        
+                                                <div style={{color:"#000000",fontFamily:"Poppins"}}>{item.location}</div>
+                                            </div>
+                                            <div className='d-flex pb-2 align-items-center'>
+                                                <div className='me-2'>
+                                                    <img src={clockIcon} alt="icon"
+                                                        style={{width:'24px'}} />
+                                                </div>
+                                                <div style={{color:'#000000',fontFamily:"Poppins"}}>Hours:
+                                                    <span>{item.hours}</span></div>
+                                            </div>
+                                            <div className='d-flex pb-2 align-items-center'>
+                                                <div className='me-2'>
+                                                    <img src={webIcon} alt="icon" style={{width:'24px'}} />
+                                                </div>
+                                                <div style={{color:'#000000',fontFamily:"Poppins"}}>Hours: <span
+                                                        className='theme-color'>{item.URL}</span></div>
+                                            </div>
+                                        </div>
+                                      <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%",padding:"20px 12px" }}>
+                                            <button
+                                            style={{
+                                                background: "#52677D",
+                                                color: "#fff",
+                                                border: "none",
+                                                borderRadius: "10px",
+                                                padding: "14px",
+                                                fontSize: "18px",
+                                                fontFamily: "Lora",
+                                                fontWeight: 600,
+                                                cursor: "pointer",
+                                                textAlign: "center",
+                                            }}
+                                            >
+                                            Book An Appointment
+                                            </button>
+
+                                            <button
+                                            //   onClick={() => navigate("/viewdoctorprofile", { state: { id: item.id } })}
+                                            style={{
+                                                background: "#fff",
+                                                color: "#52677D",
+                                                border: "1px solid #cbd5e1",
+                                                borderRadius: "10px",
+                                                padding: "14px",
+                                                fontSize: "18px",
+                                                fontFamily: "Lora",
+                                                fontWeight: 600,
+                                                cursor: "pointer",
+                                                textAlign: "center",
+                                            }}
+                                            >
+                                            Send Treatment Query
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                )
+                        })} 
+                        </Carousel>
+                        </div>
+    </>
+  
+
+
+
+
+    </>
+  )
+
 }
+
+
 
 function SpecialtyTag({ children, active = false }) {
   return (
@@ -478,50 +1375,190 @@ function SpecialtyTag({ children, active = false }) {
   );
 }
 
-function DoctorCard() {
+
+//===================================== live session================================================
+
+const LiveSessions = () => {
   return (
-    <div className="bg-[rgba(82,95,225,0.1)] rounded-2xl p-4 lg:p-5 hover:shadow-lg transition-shadow">
-      <div className="space-y-4 lg:space-y-5 w-[300px] lg:w-[320px] ">
-        <div className="h-48 lg:h-56 rounded-lg overflow-hidden">
-          <img
-            src="https://api.builder.io/api/v1/image/assets/TEMP/e4f27b47873f57f789a3f1f795c76b7f288a2b3e?width=754"
-            alt="Doctor"
-            className="w-full h-full object-cover"
-          />
-        </div>
+    <div
+      style={{
+        margin:"0%",
+        position: "relative",
+        width: "100%",
+        height: "561px",
+        backgroundImage: `url(${livesessionlogo})`,
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        display: "flex",
+        alignItems: "center",
+         
+      }}
+    >
+      {/* Dark overlay for better text readability */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      />
 
-        <div className="space-y-4 lg:space-y-5">
-          <div className="flex items-start justify-between gap-2">
-            <div className="space-y-1">
-              <h3 className="text-black text-lg lg:text-2xl font-medium">Dr. Dominic Stonehart</h3>
-              <p className="text-black/75 text-xs">Cardiologist | 15+ Years Experience</p>
+      {/* Content */}
+      <div
+        className="container"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          color: "#fff",
+        }}
+      >
+        <div className="row">
+          <div className="col-md-8" style={{padding:"70px 91px"}}>
+            <div className="hero-content">
+              <h1
+                className="hero-title"
+                style={{
+                  fontFamily: "Lora",
+                  fontSize: "36px",
+                  fontWeight: 700,
+                  lineHeight: "normal",
+                  marginBottom: "16px",
+                  color:"white"
+                }}
+              >
+                Live Session - Coming Soon
+              </h1>
+              <p
+                className="hero-text"
+                style={{
+                  fontFamily: "Poppins",
+                  fontSize: "18px",
+                  fontWeight: 400,
+                  lineHeight: "32px",
+                  color:"white"
+                }}
+              >
+                Our expert doctors will be going live soon to answer your questions
+                and share valuable health insights. Stay tuned for the next session.
+              </p>
+              <p
+                className="hero-text"
+                style={{
+                  fontFamily: "Poppins",
+                  fontSize: "18px",
+                  fontWeight: 400,
+                  lineHeight: "32px",
+                  color:"white"
+                }}
+              >
+               Sessions are conducted by certified doctors
+              </p>
+<div
+  style={{
+    display: "flex",
+    width: "474px",
+    padding: "12px 24px",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: "4px",
+    borderRadius: "10px",
+    background: "rgba(189, 196, 212, 0.30)",
+  }}
+>
+
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    {/* Profile Image */}
+                    <img
+                        src={doctorlogo}
+                        alt=""
+                        style={{
+                        borderRadius: "270.5px",
+                        border: "2px solid #FFF",
+                        width: "88px",
+                        height: "88px",
+                        flexShrink: 0,
+                        objectFit: "cover", // ensures image fits nicely
+                        }}
+                    />
+
+                    {/* Text Content */}
+                    <div>
+                        <p
+                        style={{
+                            color: "white",
+                            fontFamily: "Lora",
+                            fontSize: "16px",
+                            fontStyle: "normal",
+                            fontWeight: 700,
+                            lineHeight: "normal",
+                            margin: 0,
+                        }}
+                        >
+                        <strong>By Doctor Malik</strong>
+                        </p>
+
+                        <p
+                        style={{
+                            color: "white",
+                            fontFamily: "Poppins",
+                            fontSize: "12px",
+                            fontStyle: "normal",
+                            fontWeight: 400,
+                            lineHeight: "normal",
+                            margin: 0,
+                        }}
+                        >
+                        <strong>Seniour Cordialogist Apollo Hospitals</strong>
+                        </p>
+
+                                <div style={{display:"flex",gap:"24px",marginTop:"10px"}}>
+                    <div style={{display:'flex',gap:"5px"}}>
+                          <img src={clock} style={{width: "14px",height: "14px",display:"inline-block"}} alt=''></img> 
+                           <p
+                            style={{
+                                color: "white",
+                                fontFamily: "Poppins",
+                                fontSize: "12px",
+                                fontStyle: "normal",
+                                fontWeight: 400,
+                                lineHeight: "normal",
+                            }}
+                            >
+                                02.30 AM
+                               </p> 
+                    </div>
+                 
+                   <div style={{display:'flex',gap:"5px"}}>
+                          <img src={calender} style={{width: "14px",height: "14px",display:"inline-block"}} alt=''></img> 
+                            <p  style={{
+                                color: "white",
+                                fontFamily: "Poppins",
+                                fontSize: "12px",
+                                fontStyle: "normal",
+                                fontWeight: 400,
+                                lineHeight: "normal",
+                            }}>01/01/2025</p> 
+                    </div>
+                </div>
+
+                    </div>
+                    </div>
+                
+
+</div>
+
             </div>
-            <button className="text-[#525FE1] text-xs font-semibold px-2 py-1 hover:bg-[#525FE1]/10 rounded transition-colors">View Profile</button>
           </div>
-
-          <div className="space-y-3 lg:space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-black/20 rounded"></div>
-              <span className="text-black text-sm lg:text-lg">Fortis Hospital, Mumbai</span>
-            </div>
-            <div className="flex gap-3">
-              <div className="w-5 h-5 bg-black/20 rounded flex-shrink-0 mt-1"></div>
-              <div className="text-sm lg:text-lg leading-6">
-                <span className="text-black">Specializes in : </span>
-                <span className="text-black/50">Interventional Cardiology, Heart Failure Management, Preventive Cardiology</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-2">
-          <button className="flex-1 bg-[#F86F03] text-white py-3 px-3 rounded-lg text-sm lg:text-base font-semibold hover:bg-[#e5630a] transition-colors">Book an Appointments</button>
-          <button className="flex-1 border border-[#F86F03] text-[#F86F03] py-3 px-3 rounded-lg text-sm lg:text-base font-semibold hover:bg-[#F86F03]/10 transition-colors">Send Medical Query</button>
         </div>
       </div>
     </div>
   );
-}
+};
+
 
 function LiveSessionsSection() {
   return (

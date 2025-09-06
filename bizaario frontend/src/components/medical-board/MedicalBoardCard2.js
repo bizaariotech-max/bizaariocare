@@ -13,23 +13,23 @@ const MedicalBoardCard2 = () => {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 3000 },
             items: 3,
-            showDots:true
+            // showDots:true
         },
         desktop: {
             breakpoint: { max: 3000, min: 1024 },
             items: 3, 
              partialVisibilityGutter: 20,
-             showDots:true
+            //  showDots:true
         },
         tablet: {
             breakpoint: { max: 1024, min: 767 },
             items: 2,
-            showDots:true
+            // showDots:true
         },
         mobile: {
             breakpoint: { max: 767, min: 0 },
             items: 1,
-            showDots:true
+            // showDots:true
         }
     };
 
@@ -66,7 +66,7 @@ return (
 <>
         <Carousel
             // removeArrowOnDeviceType={["tablet", "mobile"]}
-            showDots={true}
+            // showDots={true}
             responsive={responsive}
             // autoPlay={false}
             // autoPlaySpeed={3000}
@@ -79,7 +79,7 @@ return (
             itemClass="pe-md-1 px-1"   
             arrows={false}  
             infinite={true}  
-            renderDotsOutside={true} 
+            // renderDotsOutside={true} 
             partialVisible={true} 
         >
         {dominicArr.map((item) => {

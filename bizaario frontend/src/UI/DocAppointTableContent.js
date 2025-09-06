@@ -21,7 +21,7 @@ const DocAppointTableContent = () => {
         responsive={responsive}
         containerClass="carousel-container"
         itemClass="pe-md-4 px-1"
-        showDots={true}
+        // showDots={true}
         infinite={true}
         renderDotsOutside={true}
         partialVisible={true}

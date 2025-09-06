@@ -24,6 +24,7 @@ import Header from '../AppLayout/Header';
 import Footer from '../AppLayout/Footer'
 import HospitalPartenerHome from '../components/HospitalPartenerHome'
 import OnlineClinic from '../components/live-sessions-online-clinic/OnlineClinic'
+import Bizaariostore from '../components/bizaario_store'
 
 
 
@@ -42,8 +43,9 @@ const Home = () => {
       <InterCollabs />
       <LiveSessions/> 
       <OnlineClinic/>
-      <NewsAndArticles />
+      <Bizaariostore/>
       <Awards />
+      <NewsAndArticles />
       <Testimonial /> 
       <Footer/>
       </>

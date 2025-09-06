@@ -23,6 +23,8 @@ import article2 from '../assets/images/articles/article2.png'
 import article3 from '../assets/images/articles/article3.png'
 import article4 from '../assets/images/articles/article4.png'
 import { Country } from 'country-state-city';
+import bizstoreimage from '../assets/images/Fetal and Neonatal Care Equipment Market Share and Growth Projections_ Comprehensive Analysis 1.png'
+import awardimg from '../assets/images/Javier Bardem parla della depressione post partum di Penélope Cruz con la massima delicatezza 1.png'
 
 export const sliderArray = 
     {
@@ -190,76 +192,109 @@ export const dominicArr = [
       category: "cardiology",
       img: news1,
          title: "The trend was noticed during a survey by Bumble",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+      time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
    {
       id:2,
       category: "cardiology",
       img: news2,
         title: "The trend was noticed during a survey by Bumble",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
    {
       id:3,
       category: "cardiology",
       img: news3,
         title: "The trend was noticed during a survey by Bumble",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
     {id:4,
       category: "orthopedics",
       img: news2,
         title: "Orthopedics Breakthroughs",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
    {
       id:5,
       category: "pediatrics",
       img: news1,
         title: "Pediatric Health Updates",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
    {
       id:6,
       category: "obgyn",
       img: news3,
         title: "Pediatric Health Updates",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
    {
       id:7,
       category: "obgyn",
       img: news1,
         title: "Pediatric Health Updates",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
    {
       id:8,
       category: "ent",
       img: news2,
         title: "Pediatric Health Updates",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
    {
       id:9,
       category: "plastic",
       img: news1,
         title: "Pediatric Health Updates",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
    {
       id:10,
       category: "plastic",
       img: news1,
         title: "Pediatric Health Updates",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     },
    {
       id:11,
       category: "neurology",
       img: news1,
         title: "Neurology Research",
-      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. '
+      desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+            time:"20min",
+      date:"01/01.2025",
+      views:"2025"
     }
   ];
 
@@ -393,6 +428,7 @@ export const testmonialData = [
 export const awardSliderData = [
      {
     id: 1,
+    image:awardimg,
     title: 'Best Cardiologist 2022',
     subTitle:'Indian Medical Association',
     desc: "I has received multiple awards for excellence in cardiology and patient care, including recognition for clinical innovation and compassionate service. His work continues to be honored by leading medical associations.",
@@ -400,6 +436,7 @@ export const awardSliderData = [
   },
      {
     id: 2,
+    image:awardimg,
     title: 'Best Cardiologist 2022',
     subTitle:'Indian Medical Association',
     desc: "I has received multiple awards for excellence in cardiology and patient care, including recognition for clinical innovation and compassionate service. His work continues to be honored by leading medical associations.",
@@ -407,6 +444,7 @@ export const awardSliderData = [
   },
      {
     id: 3,
+    image:awardimg,
     title: 'Best Cardiologist 2022',
     subTitle:'Indian Medical Association',
     desc: "I has received multiple awards for excellence in cardiology and patient care, including recognition for clinical innovation and compassionate service. His work continues to be honored by leading medical associations.",
@@ -416,7 +454,7 @@ export const awardSliderData = [
     id: 4,
     title: 'Best Cardiologist 2022',
     subTitle:'Indian Medical Association',
-    image: testmonialImage1,
+    image:awardimg,
     desc: "I has received multiple awards for excellence in cardiology and patient care, including recognition for clinical innovation and compassionate service. His work continues to be honored by leading medical associations.",
   
   },
@@ -445,3 +483,31 @@ export const relatedArticles = [
       img: article4
     },
   ];
+
+
+  export const bizaario_store = [
+    {
+        id: 1, 
+        title:"Portable ECG Machine",
+        dsc: "Company,easy-to-use device for monitoring heart health at home or clinic",
+        image: bizstoreimage,
+    },
+    {
+        id: 2, 
+        title:"Portable ECG Machine",
+        dsc: "Company,easy-to-use device for monitoring heart health at home or clinic",
+        image: bizstoreimage,
+    },
+    {
+        id: 3,
+        title:"Portable ECG Machine",
+        dsc: "Company,easy-to-use device for monitoring heart health at home or clinic",
+        image: bizstoreimage,
+    },
+        {id: 4,
+        title:"Portable ECG Machine",
+        dsc: "Company,easy-to-use device for monitoring heart health at home or clinic",
+        image: bizstoreimage,
+    },
+  
+];
