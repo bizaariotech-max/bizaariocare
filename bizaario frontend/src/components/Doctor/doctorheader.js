@@ -1,6 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useState,useRef,useEffect } from 'react';
+import bellicon from '../../assets/images/bellicon.png'
+import messageicon from '../../assets/images/mail.png'
 
 function Doctorheader() {
 
@@ -58,15 +60,15 @@ const ChevronDownIcon = () => (
   return (
     <div>
          {/* Header */}
-         <header className="bg-white shadow-sm px-4 sm:px-6 lg:px-9 py-3 flex flex-col lg:flex-row items-stretch lg:items-center gap-3 sm:gap-4 justify-between relative">
+         <header className="bg-[#F6F7FF] shadow-sm px-4 sm:px-6 lg:px-9 py-3 flex flex-col lg:flex-row items-stretch lg:items-center gap-3 sm:gap-4 justify-between relative">
   {/* Search Bar */}
  <div className="w-full lg:w-auto flex flex-row items-center order-2 lg:order-1 pl-12 sm:pl-8  lg:pl-80">
   <input
     type="text"
-    placeholder="Search..."
+    placeholder="Search by keyword..."
     className="w-52 sm:w-72 md:w-80 px-3 py-2 sm:px-5 sm:py-4 h-10 sm:h-14 bg-[#E9EBFF] rounded-l-lg text-sm placeholder:text-black/50 outline-none"
   />
-  <button className="px-3 sm:px-5 h-10 sm:h-14 bg-[#F86F03] rounded-r-lg hover:bg-[#e5630a] transition-colors flex items-center justify-center">
+  <button className="px-3 sm:px-5 h-10 sm:h-14 bg-[#52677D] rounded-r-lg hover:bg-[#e5630a] transition-colors flex items-center justify-center">
     <SearchIcon className="w-4 h-4 sm:w-5 sm:h-5" />
   </button>
 </div>
@@ -83,15 +85,16 @@ const ChevronDownIcon = () => (
     {/* Notifications */}
     <div className="flex items-center gap-3 sm:gap-4">
       <div className="relative cursor-pointer" aria-label="Notifications">
-        <BellIcon />
-        <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#FFA41B] rounded-full flex items-center justify-center">
-          <span className="text-white text-[10px] font-normal">1</span>
+        {/* <img src={bellicon} alt=''></img> */}
+        <BellIcon/>
+        <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#BDC4D4] rounded-full flex items-center justify-center">
+          <span className="text-black text-[10px] font-normal">1</span>
         </div>
       </div>
       <div className="relative cursor-pointer" aria-label="Messages">
         <MailIcon />
-        <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#FFA41B] rounded-full flex items-center justify-center">
-          <span className="text-white text-[10px] font-normal">5</span>
+        <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#BDC4D4] rounded-full flex items-center justify-center">
+          <span className="text-black text-[10px] font-normal">5</span>
         </div>
       </div>
     </div>

@@ -21,6 +21,10 @@ import webIcon from "../../assets/images/icons/web.svg"
 // import "../../assets/css/hero.css";
 import livesessionlogo from '../../assets/images/LiveSessions.png';
 import doctorlogo from '../../assets/images/doctor1.png';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import profileicon from "../../assets/images/iCON.png"
+import idicon from "../../assets/images/iCON (1).png"
 
 
 
@@ -869,45 +873,299 @@ return (
 
 
 
-function PatientDetailsSection() {
+// function PatientDetailsSection() {
   
+//   return (
+//     <div className="space-y-4 lg:space-y-6">
+//       <h2 className="text-black text-2xl lg:text-3xl font-medium">Patient Details</h2>
+
+//       <div className="flex flex-wrap gap-3 lg:gap-5">
+//         <FilterButton text="Hospitals" />
+//         <FilterButton text="Select Doctor (s)" />
+//         <FilterButton text="Country" />
+//       </div>
+
+//       <div className="bg-white rounded-lg overflow-x-auto shadow-sm">
+//           <div className="min-w-max" >
+//         <div className="bg-[#525FE1] px-4 lg:px-5 py-3 flex gap-3 lg:gap-5 text-white text-sm lg:text-lg font-medium ">
+//           <div className="min-w-12 lg:min-w-16 text-center">S.No.</div>
+//           <div className="min-w-24 lg:min-w-32">Patient Name</div>
+//           <div className="min-w-24 lg:min-w-32">Patient ID</div>
+//           <div className="min-w-24 lg:min-w-32">Nationality</div>
+//           <div className="min-w-24 lg:min-w-32">Referred Doctor</div>
+//           <div className="min-w-20 lg:min-w-24">VIL Issued</div>
+//           <div className="min-w-20 lg:min-w-24">Medical Via</div>
+//           <div className="min-w-20 lg:min-w-24">Travel Start</div>
+//           <div className="min-w-20 lg:min-w-24">Hospital</div>
+//           <div className="min-w-20 lg:min-w-24">Treatment</div>
+//           <div className="min-w-20 lg:min-w-24">Discharge</div>
+//           <div className="min-w-20 lg:min-w-24">Return Home</div>
+//           <div className="min-w-20 lg:min-w-24">Follow ups</div>
+//           <div className="min-w-20 lg:min-w-24">Case Closure</div>
+//         </div>
+//         </div>
+
+//         {Array.from({ length: 3 }, (_, i) => (
+//           <PatientRow key={i} />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// Example patient array
+const patients = [
+  {
+    name: "Prince Kumar",
+    id: "BZ0108545564113C",
+    nationality: "India",
+    doctor: "Dr. Prince Kumar",
+    steps: [
+      { title: "VIL Issued", status: "Done", color: "#4B7F28", date: "20/12/2025" },
+      { title: "Medical Via Issued", status: "In Processing", color: "#D6C90F", date: "20/12/2025" },
+      { title: "Hospital Admission", status: "Not Complete", color: "#C23C3C", date: "20/12/2025" },
+    ]
+  },
+  {
+    name: "John Doe",
+    id: "P002",
+    nationality: "USA",
+    doctor: "Dr. Smith",
+    steps: [
+      { title: "VIL Issued", status: "Done", color: "#4B7F28", date: "18/12/2025" },
+      { title: "Medical Via Issued", status: "Done", color: "#4B7F28", date: "19/12/2025" },
+      { title: "Hospital Admission", status: "In Processing", color: "#D6C90F", date: "20/12/2025" }
+    ]
+  },
+    {
+    name: "Prince Kumar",
+    id: "BZ0108545564113C",
+    nationality: "India",
+    doctor: "Dr. Prince Kumar",
+    steps: [
+      { title: "VIL Issued", status: "Done", color: "#4B7F28", date: "20/12/2025" },
+      { title: "Medical Via Issued", status: "In Processing", color: "#D6C90F", date: "20/12/2025" },
+      { title: "Hospital Admission", status: "Not Complete", color: "#C23C3C", date: "20/12/2025" }
+    ]
+  },
+  // Add more patients here
+];
+
+const  PatientDetailsSection=()=> {
+  // This demo uses your CSS from the query!
+  const cardCss = {
+    display: "flex",
+    flexDirection: "column",
+    width: "594px",
+    height: "613px",
+    padding: "20px",
+    alignItems: "center",
+    gap: "10px",
+    borderRadius: "10px",
+    border: "1px solid rgba(0, 0, 0, 0.70)",
+    background: "rgba(189, 196, 212, 0.30)",
+    boxSizing: "border-box"
+  };
+
+  // Responsive tweaks: use 100% width below 900px
+  const cardWrapCss = {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%"
+  };
+
   return (
-    <div className="space-y-4 lg:space-y-6">
-      <h2 className="text-black text-2xl lg:text-3xl font-medium">Patient Details</h2>
+    <div style={{ width: "100%",  boxSizing: "border-box" }}>
+          <div className="row">
+                <div className="col-lg-8 col-12">
+                    <h2 className='fw-semibold' style={{color:"#000",
+                                                        fontFamily: "Lora",
+                                                        fontSize: "24px",
+                                                        fontStyle: "normal",
+                                                        fontWeight: "400",
+                                                        lineHeight: "normal"}}>
+                    Patient Details
+                    </h2>
+                  
+                </div>
+                <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start" style={{padding:"0px 36px 10px 0px"}}>
+                  
+                              <button style={{
+                                display: "flex",
+                                padding: "16px 32px",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "10px",
+                                borderRadius: "10px",
+                                background:" rgba(189, 196, 212, 0.50)",
+                                color:" black",
+                                fontFamily: "Lora",
+                                fontSize: "16px",
+                                fontStyle: "normal",
+                                fontWeight: 400,
+                                lineHeight: "normal"
+                            
 
-      <div className="flex flex-wrap gap-3 lg:gap-5">
-        <FilterButton text="Hospitals" />
-        <FilterButton text="Select Doctor (s)" />
-        <FilterButton text="Country" />
-      </div>
 
-      <div className="bg-white rounded-lg overflow-x-auto shadow-sm">
-          <div className="min-w-max" >
-        <div className="bg-[#525FE1] px-4 lg:px-5 py-3 flex gap-3 lg:gap-5 text-white text-sm lg:text-lg font-medium ">
-          <div className="min-w-12 lg:min-w-16 text-center">S.No.</div>
-          <div className="min-w-24 lg:min-w-32">Patient Name</div>
-          <div className="min-w-24 lg:min-w-32">Patient ID</div>
-          <div className="min-w-24 lg:min-w-32">Nationality</div>
-          <div className="min-w-24 lg:min-w-32">Referred Doctor</div>
-          <div className="min-w-20 lg:min-w-24">VIL Issued</div>
-          <div className="min-w-20 lg:min-w-24">Medical Via</div>
-          <div className="min-w-20 lg:min-w-24">Travel Start</div>
-          <div className="min-w-20 lg:min-w-24">Hospital</div>
-          <div className="min-w-20 lg:min-w-24">Treatment</div>
-          <div className="min-w-20 lg:min-w-24">Discharge</div>
-          <div className="min-w-20 lg:min-w-24">Return Home</div>
-          <div className="min-w-20 lg:min-w-24">Follow ups</div>
-          <div className="min-w-20 lg:min-w-24">Case Closure</div>
-        </div>
-        </div>
+                              }}>
+                                  Use Filter:
+                              </button>
+                             
+                          
+                </div>
 
-        {Array.from({ length: 3 }, (_, i) => (
-          <PatientRow key={i} />
+                </div>
+
+      <Swiper
+        spaceBetween={24}
+        slidesPerView={1}
+        breakpoints={{
+          640: { slidesPerView: 1 },
+          900: { slidesPerView: 2 }
+        }}
+        style={{ paddingLeft: "10px", paddingRight: "10px" }}
+      >
+        {patients.map((data, idx) => (
+          <SwiperSlide key={idx} style={cardWrapCss}>
+            <div style={cardCss}>
+              <div style={{
+                  display: "flex", width: "100%",
+                  justifyContent: "space-between", marginBottom: 12
+                }}>
+                <div style={{
+                  width:"60%",
+                  background: "#fff",
+                  borderRadius: 8,
+                  marginBottom: 10,
+                  padding: "12px 14px",
+                  boxShadow: "0 2px 4px rgba(82,95,225,0.04)"}}>
+                  <div style={{ fontWeight: "bold", fontSize: 16,fontFamily: "Poppins" }}>Patient Details</div>
+                  <div style={{display:"flex",gap:"10px"}}>
+                  <img src={profileicon} alt='' style={{height:"19px",width:"19px"}}></img>
+                  <a href="#" style={{ color: "#525FE1", textDecoration: "underline", fontWeight: 500, fontSize: 15,fontFamily: "Poppins" }}>
+                    {data.name}
+                  </a>
+                  </div>
+                   <div style={{display:"flex",gap:"10px"}}>
+                  <img src={idicon} alt='' style={{height:"19px",width:"19px"}}></img>
+                  <div style={{ color: "#525FE1", fontSize: 13,fontFamily: "Poppins" }}>{data.id}</div>
+                  </div>
+                </div>
+                <div style={{ 
+                  width:"35%",
+                  background: "#fff",
+                  borderRadius: 8,
+                  marginBottom: 10,
+                  padding: "12px 14px",
+                  boxShadow: "0 2px 4px rgba(82,95,225,0.04)"}}>
+                  <div style={{ fontWeight: "bold", fontSize: 16,fontFamily: "Poppins" }}>Nationality</div>
+                  <div style={{ color: "#222", fontSize: 13,fontFamily: "Poppins" }}>{data.nationality}</div>
+                </div>
+              </div>
+              <div style={{
+                  width: "100%",
+                  background: "#fff",
+                  borderRadius: 8,
+                  marginBottom: 10,
+                  padding: "12px 14px",
+                  boxShadow: "0 2px 4px rgba(82,95,225,0.04)"
+                }}>
+                <div style={{ fontWeight: 500, color: "#444", marginBottom: 4 ,fontFamily: "Poppins"}}>Referred Doctor Name :</div>
+                <div style={{ color: "#525FE1", fontWeight: 500,fontFamily: "Poppins" }}>{data.doctor}</div>
+              </div>
+              <div style={{ display: "flex", width: "100%", alignItems: "flex-start", gap: 18, flex: 1 }}>
+                {/* Timeline Circles & Lines */}
+                <div style={{ position: "relative", marginTop: 5 }}>
+                  {data.steps.map((step, i) => (
+                    <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <div style={{
+                          width: 18,
+                          height: 18,
+                          borderRadius: "50%",
+                          background: "#fff",
+                          border: "3px solid #CED6F3",
+                          position: "relative",
+                          zIndex: 1
+                        }}>
+                        <div style={{
+                          position: "absolute",
+                          left: 1,
+                          top: 1,
+                          width: 10,
+                          height: 10,
+                          borderRadius: "50%",
+                          background:step.status==="Done"?"gray":""
+                        }}></div>
+                      </div>
+                      {i < data.steps.length - 1 && (
+                        <div style={{
+                          width: 4,
+                          height: 100,
+                          background: "#CED6F3"
+                        }}></div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {data.steps.map((step, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        background: "#fff",
+                        borderRadius: 8,
+                        boxShadow: "0 1px 4px rgba(82,95,225,0.08)",
+                        marginBottom: 18,
+                        padding: "13px 18px",
+                        minHeight: 60,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center"
+                      }}>
+                      <div style={{ fontWeight: "bold", color: "#222", fontSize: 15,fontFamily: "Poppins" }}>{step.title}</div>
+                      <div style={{ display: "flex", alignItems: "center", margin: "7px 0" }}>
+                        <span
+                          style={{
+                            width: 14,
+                            height: 14,
+                            borderRadius: "50%",
+                            background: step.color,
+                            display: "inline-block",
+                            marginRight: 9
+                          }}
+                        ></span>
+                        <span style={{ fontWeight: 500, color: "#333", fontSize: 14,fontFamily: "Poppins" }}>{step.status}</span>
+                      </div>
+                      <div style={{
+                        fontSize: 13,
+                        fontFamily: "Poppins",
+                        color: "#555",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 7
+                      }}>
+                        <span role="img" aria-label="calendar">📅</span>
+                        {step.date}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </div>
   );
 }
+
+
+
+
+// Usage:
+// <PatientDetailsCard />
+
 
 function FilterButton({ text }) {
   return (
