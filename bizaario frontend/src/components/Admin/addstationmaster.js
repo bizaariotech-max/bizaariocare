@@ -324,8 +324,9 @@ function Addstationmaster() {
                           background: '#fff',
                           borderRadius: 3,
                           // boxShadow: 3,
-                           minWidth:440,
-                          maxWidth: { xs: 630, lg: 900 },
+                          //  minWidth:440,
+                          // maxWidth: { xs: 630, lg: 900 },
+                          width:"80%",
                           p: { xs: 2, sm: 3, md: 5 },
                           mx: 'auto',
                           display: 'flex',
@@ -335,6 +336,7 @@ function Addstationmaster() {
                       >
           
 
+<div className="grid grid-cols-3 gap-4 w-full">
           <FormControl fullWidth size="small">
             <InputLabel>Parent Station</InputLabel>
             <Select 
@@ -355,6 +357,7 @@ function Addstationmaster() {
             }
             </Select>
           </FormControl> 
+        
 
          <FormControl fullWidth size="small">
             <InputLabel>Org Unit Level</InputLabel>
@@ -376,6 +379,7 @@ function Addstationmaster() {
             }
             </Select>
           </FormControl> 
+         
         
           <TextField
             name="StationName"
@@ -517,13 +521,12 @@ function Addstationmaster() {
             fullWidth
             size="small"
           /> */}
-
+ </div>
           <Button
             variant="contained"
             color="primary"
-            fullWidth
             // type="submit"
-            sx={{ py: 1.2, fontSize: 16, fontWeight: 600, borderRadius: 2, mt: 1 }}
+            sx={{ py: 1.2, fontSize: 16, fontWeight: 600, borderRadius: 2, mt: 1, width: "200px",  }}
             onClick={addstation_master}
           >
             Submit
@@ -532,24 +535,56 @@ function Addstationmaster() {
         
         
           {/* ======================= Right: hospital talbe================================= ===== */}
-                           <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
-                               <Box
-                               className='rightsection'
+                           
+                          </Grid>
+                        </Box>
+                    
+                    </Box>
+                  </div>
+
+
+
+
+
+
+  <div  className='doctorform'>
+                    <Box>
+                        <Box
+                          sx={{
+                            mt: { xs: 3, lg: 5 },
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            width: '100%',
+                          }}
+                        >
+                          <Grid container spacing={4} sx={{ maxWidth: 1150, width: '100%' }} >
+                            {/* ===== Left: FORM ===== */}
+                           <Box
                         component="form"
+                        // onSubmit={add_medical_group}
                         autoComplete="off"
                         sx={{
                           background: '#fff',
+                          //  background: 'red',
                           borderRadius: 3,
                           // boxShadow: 3,
-                          minWidth:510,
-                          maxWidth: 530,
-                          p: { xs: 0, sm: 0, md: 0 },
+                          //  minWidth:440,
+                          // maxWidth: { xs: 630, lg: 900 },
+                          width:"80%",
+                          // p: { xs: 2, sm: 3, md: 5 },
                           mx: 'auto',
                           display: 'flex',
                           flexDirection: 'column',
                           gap: 2, // spacing between inputs
                         }}
                       >
+          
+
+
+         
+                <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
+                              
                             
                                               
               <DataGrid
@@ -564,7 +599,7 @@ function Addstationmaster() {
                 disableSelectionOnClick
               
               />
-              </Box>
+           
               
          
         
@@ -572,11 +607,20 @@ function Addstationmaster() {
                             
                           
                             </Grid>
+
+
+        </Box>
+        
+        
+  
+                           
                           </Grid>
                         </Box>
                     
                     </Box>
                   </div>
+
+
       
       </div>
     </div>
