@@ -1,0 +1,523 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.cu-page {
+  font-family: Arial, sans-serif;
+  color: #222;
+  overflow-x: hidden;
+}
+
+/* ✅ Banner */
+.cu-banner {
+  width: 100%;
+  height: 332px;
+  background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.51) 100%),
+              url("../assets/about-banner2.png");
+
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.cu-banner-overlay {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 50px;
+  margin-left: 75px;
+}
+
+.cu-banner-text h1 {
+ color: #FFF;
+font-family: Roboto;
+font-size: 62px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin-bottom: 10px;
+}
+
+.cu-banner-text p {
+  color: #FFF;
+font-family: Roboto;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+  max-width: 700px;
+  margin-top: 0;
+}
+
+/* ✅ Talk Section */
+.cu-talk-section {
+  padding: 10px;
+  margin-top: 30px;
+  /* background-color: #fff; */
+  max-width: 85%;
+  margin-left: 120px;
+  margin-right: 120px;
+}
+
+.cu-talk-section h2 {
+  color: #000;
+font-family: Roboto;
+font-size: 36px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin-bottom: 10px;
+}
+
+.cu-talk-desc {
+  color: rgba(0, 0, 0, 0.50);
+font-family: Roboto;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+width: 1187px;
+margin-top: 0;
+}
+
+.cu-card-wrapper {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* ✅ Help Card */
+.cu-help-card {
+  flex: 1;
+  min-width: 300px;
+  background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.51) 100%),
+              url("../assets/Rectangle.png");
+  background-repeat: no-repeat;
+  background-size: cover; 
+  background-attachment: scroll;
+  color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.cu-help-title {
+  color: #FFF;
+font-family: Roboto;
+font-size: 24px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+
+.cu-help-text {
+  color: #FFF;
+font-family: Roboto;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 24px; /* 150% */
+width: 392px;
+}
+.cu-help-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cu-form button.cu-submit-button {
+  align-self: flex-end;
+}
+.cu-help-img{
+  width: 125px;
+height: 125px;
+aspect-ratio: 1/1;
+border-radius: 50%;
+}
+
+.cu-row-flex {
+  display: flex;
+  flex-wrap: wrap; /* allows wrapping on smaller screens */
+  gap: 40px; /* adjust spacing between phone and email */
+  margin-bottom: 20px;
+}
+
+.cu-contact-block {
+  min-width: 200px; /* optional: controls width of each block */
+}
+.cu-contact-block-item{
+  margin-left: 50px;
+}
+
+
+.cu-help-button {
+  display: flex;
+width: 138px;
+padding: 10px 18px;
+justify-content: center;
+align-items: center;
+gap: 10px;
+border-radius: 5px;
+background: #F86F03;
+color:rgba(255, 255, 255, 1);
+}
+
+.cu-contact-info .cu-contact-item {
+  color: #FFF;
+font-family: Roboto;
+font-size: 24px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+.cu-contact-info .cu-contact-value {
+  color: #FFF;
+font-family: Roboto;
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+.cu-icon {
+  margin-right: 8px;
+}
+
+.cu-follow-title {
+  color: #FFF;
+font-family: Roboto;
+font-size: 24px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin-bottom: 12px;
+
+}
+
+.cu-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  margin-top: 0;
+}
+
+.cu-icons svg {
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ✅ Form Card */
+.cu-form-card {
+  flex: 1;
+  min-width: 300px;
+ background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.51) 100%),
+              url("../assets/Rectangle1.png");
+  background-repeat: no-repeat;
+  background-size: cover; 
+  background-attachment: scroll;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.cu-form-title {
+  color: #FFF;
+text-align: left;
+font-family: Roboto;
+font-size: 24px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+
+.cu-form input,
+.cu-form textarea {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #fff;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  box-sizing: border-box; /* VERY IMPORTANT for consistent sizing */
+  
+}
+
+.cu-form textarea {
+  display: flex; 
+  height: 100px;
+  padding: 10px;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 5px;
+  border: 1px solid #FFF;
+  resize: vertical;
+}
+.cu-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+}
+.cu-form button {
+   align-self: flex-end;
+   margin-right: 0;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  width: 115px;
+  padding: 10px 18px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+  background: #F86F03;
+}
+
+/* ✅ Map */
+.cu-map-container {
+  /* margin-top: 40px; */
+  padding: 10px;
+   width: 1272px;
+  height: 587px;
+  flex-shrink: 0;
+  margin-left: 120px;
+  margin-right: 120px;
+}
+
+.cu-map-img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* ✅ FAQ */
+.faq-section {
+  width: 100%;
+  padding: 10px 14px;
+  /* max-width: 1250px; */
+  margin: 0 auto;
+  border-radius: 8px;
+}
+.faq-header{
+   width: 100%;
+   max-width: 1200px;
+   padding: 10px 14px;
+   margin-left: 100px;
+}
+
+.faq-title {
+  color: #000;
+font-family: Roboto;
+font-size: 36px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin-bottom: 10px;
+}
+
+.faq-subtext {
+  width: 1187px;
+ color: rgba(0, 0, 0, 0.50);
+font-family: Roboto;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+margin-top: 0;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.faq-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  background: #EBEBEB;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #000;
+font-family: Roboto;
+font-size: 20px;
+font-style: normal;
+line-height: normal;
+}
+.faq-list .faq-item:nth-child(1){
+   width: 500px;
+}
+.faq-list .faq-item:nth-child(2){
+   width: 500px;
+}
+.faq-list .faq-item:nth-child(3){
+   width: 550px;
+}
+.faq-list .faq-item:nth-child(4){
+   width: 500px;
+}
+.faq-list .faq-item:nth-child(5){
+   width: 600px;
+}
+
+.faq-icon {
+  font-size: 14px;
+}
+
+
+/* Extra small devices, phones (portrait) */
+@media (max-width: 480px) {
+  .cu-banner-overlay {
+    padding: 0 15px;
+    margin-left: 15px;
+    justify-content: center;
+  }
+  .cu-banner-text h1 {
+    font-size: 22px;
+  }
+  .cu-banner-text p {
+    font-size: 14px;
+    max-width: 90%;
+  }
+  .cu-talk-section {
+    max-width: 100%;
+    margin: 0 15px;
+    padding: 15px;
+  }
+  .cu-talk-desc {
+    width: 100%;
+  }
+  .cu-help-text {
+    width: 100%;
+  }
+  .cu-help-card, .cu-form-card {
+    min-width: auto;
+    width: 100%;
+    padding: 20px 15px;
+  }
+  .cu-help-button, .cu-form button {
+    width: 100%;
+    justify-content: center;
+  }
+  .cu-contact-info .cu-contact-item,
+  .cu-contact-info .cu-contact-value,
+  .cu-follow-title {
+    font-size: 18px;
+  }
+  .cu-icons svg {
+    font-size: 14px;
+  }
+  .cu-map-container {
+    width: 100%;
+    height: auto;
+    margin: 0 15px;
+  }
+  .cu-map-img {
+    border-radius: 5px;
+  }
+  .faq-header {
+    margin-left: 15px;
+    padding: 10px 15px;
+  }
+  .faq-title {
+    font-size: 28px;
+  }
+  .faq-subtext {
+    width: 100%;
+    font-size: 16px;
+  }
+  .faq-list .faq-item {
+    width: 100% !important;
+    font-size: 16px;
+    padding: 12px 15px;
+  }
+}
+
+/* Medium devices, tablets */
+@media (min-width: 481px) and (max-width: 767px) {
+  .cu-banner-overlay {
+    padding: 0 30px;
+    margin-left: 30px;
+    justify-content: center;
+  }
+  .cu-banner-text h1 {
+    font-size: 36px;
+  }
+  .cu-banner-text p {
+    font-size: 16px;
+    max-width: 90%;
+  }
+  .cu-talk-section {
+    max-width: 95%;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+  .cu-talk-desc {
+    width: 100%;
+  }
+  .cu-help-text {
+    width: 100%;
+  }
+  .cu-help-card, .cu-form-card {
+    min-width: auto;
+    width: 48%;
+    padding: 20px;
+  }
+  .cu-help-button, .cu-form button {
+    width: auto;
+  }
+  .cu-map-container {
+    width: 95%;
+    height: 400px;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+  .faq-header {
+    margin-left: 50px;
+    padding: 10px 20px;
+  }
+  .faq-title {
+    font-size: 32px;
+  }
+  .faq-subtext {
+    width: 100%;
+    font-size: 17px;
+  }
+  .faq-list .faq-item {
+    width: 100% !important;
+  }
+}
+
+/* Large devices, desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .cu-talk-section,
+  .cu-faq-section,
+  .cu-map-container {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cu-map-container {
+    height: 500px;
+  }
+  .faq-list .faq-item:nth-child(1),
+  .faq-list .faq-item:nth-child(2),
+  .faq-list .faq-item:nth-child(4) {
+    width: 450px !important;
+  }
+  .faq-list .faq-item:nth-child(3) {
+    width: 500px !important;
+  }
+  .faq-list .faq-item:nth-child(5) {
+    width: 530px !important;
+  }
+}

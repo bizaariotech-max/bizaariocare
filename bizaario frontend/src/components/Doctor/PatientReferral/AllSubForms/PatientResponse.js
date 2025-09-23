@@ -1,0 +1,78 @@
+const PatientResponse = ({ currentLevel = 40 }) => {
+  // Function to render the color bar indicator with dynamic positioning
+  const renderColorBar = () => {
+    const segments = [
+      { color: 'bg-red-600', level: 0 },
+      { color: 'bg-red-500', level: 1 },
+      { color: 'bg-yellow-500', level: 2 },
+      { color: 'bg-yellow-300', level: 3 },
+      { color: 'bg-green-300', level: 4 },
+      { color: 'bg-green-500', level: 5 },
+      { color: 'bg-green-600', level: 6 },
+    ];
+
+    return (
+      <div className="flex items-center">
+        {segments.map((segment, index) => (
+          <div
+            key={index}
+            className={`h-[40px] w-[40px] ${segment.color}`}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="space">
+      {/* Header with Color Bar */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-semibold text-gray-900">
+          Clinical Outcome/ Patient's Response
+        </h2>
+
+
+        <div className="relative flex items-center  bg-white rounded">
+          {renderColorBar()}
+          <div
+            className="absolute bg-black w-1.5 h-full top-1/2 transform -translate-y-1/2"
+            style={{
+              left: `calc(${currentLevel}% - 1px)`
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="space-y-4 border bg-white rounded-sm shadow-sm border-gray-200 p-6">
+        <div className="text-sm text-gray-800 leading-relaxed">
+          <p>
+            Following your recent consultation, I have prescribed{' '}
+            <span className="font-medium">[specific medication(s), dosage, and duration, e.g., Amoxicillin 500 mg, twice daily for 7 days]</span>{' '}
+            to address your{' '}
+            <span className="font-medium">[specific condition, e.g., bacterial sinus infection]</span>.
+          </p>
+
+          <p className="mt-3">
+            This treatment is expected to{' '}
+            <span className="font-medium">[intended outcome, e.g., resolve the infection and alleviate symptoms such as nasal congestion and facial pain]</span>{' '}
+            within{' '}
+            <span className="font-medium">[expected timeframe, e.g., 5-7 days]</span>.
+            Please take the medication as directed and complete the full course to ensure optimal recovery.
+          </p>
+        </div>
+
+        {/* Footer Note */}
+        <div className="pt-4 border-t border-gray-200 mt-6">
+          <p className="text-xs text-gray-600">
+            1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
+export default PatientResponse;

@@ -1,0 +1,44 @@
+.table-header
+{
+    font-size: 20px;
+}
+
+.medical-card
+{
+    background-color: rgba(82, 103, 125, 0.20);
+    display: flex;
+    width: 250px;
+    height: 103px;
+    padding: 10px;
+    flex-direction: row;
+    justify-content:center;
+    align-items:center;
+    gap: "9px";
+    border-radius: 10px
+}
+
+.card-details
+{
+    padding-left: 100px;
+}
+
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  /* Two-column form */
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  /* One-column form */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
