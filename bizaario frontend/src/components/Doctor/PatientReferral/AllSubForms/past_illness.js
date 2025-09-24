@@ -7,6 +7,19 @@ import DiagnosticsInvestigations from './DiagnosticsInvestigations';
 import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations';
 import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
 import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
+import { useEffect, useState ,useRef} from 'react'
+import { TextField, Select, MenuItem, FormControl, Box,Avatar,Tooltip,IconButton,CircularProgress, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import api from '../../../../api'
+import Swal from 'sweetalert2';
+import UniqueLoader from '../../../loader';
+import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
+import { Calendar, MapPin } from 'lucide-react';
+import ProfileCard1 from '../AllSubForms/UI/ProfileCard1';
+import ProfileCard2 from '../AllSubForms/UI/ProfileCard2';
+import { Modal,  Form, Row, Col } from 'react-bootstrap';
+import { __postApiData } from "../../../../utils/api";
+import healthicon from '../AllSubForms/assets/images/view health assessment report icon.png';
 
 const PastIllness = () => {
   // Sample data for medical summary
@@ -27,14 +40,242 @@ const PastIllness = () => {
   // ...
 ];
 
+
+  const [medical_history, setmedical_history] = useState({
+      Date :"",
+      DoctorName:"",
+      DoctorNumber :"",
+      HospitalName :"",
+      HospitalLocation :"",
+      MedicalSpeciality :"",
+      ChiefComplaints:[{
+            SymptomClass:[],
+            Compliant : '',
+            Duration : '',
+            SeverityGrade : '',
+            AggravatingFactors : []
+      }],
+      ClinicalDiagnosis :[{
+            Date:"",
+            Investigation_Category : '',
+            Investigation : '',
+            Abnormalities  : [],
+            UploadReport : [],
+            UploadInterpretation:[]
+    }],
+    MedicinesPrescribed:{
+            MedicinesPrescribed:[{MedicineName:"",Dosage:"",Duration:"" }],
+            RecoveryCycle  : '',
+            UploadPrescriptions  : [],
+    },
+    Therapy :[{
+            TherapyName:"",
+            PatientsResponse:""
+        }]
+
+    });
+
+
+
+  const [show, setShow] = useState(false)
+  
+    // function to open modal
+    const handleShow = () => setShow(true);
+    // function to close modal
+    const handleClose = () => setShow(false);
  
+
+    // ===============================get all therapy data(change for medical speciality)====================================
+
+     const[all_therapy_master,setall_therapy_master]=useState([])
+          const getall_therapy_master=async()=>
+          {
+            try {
+              const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"therapy_type"})
+              console.log(resp);
+              
+              setall_therapy_master(resp.data.data)
+              
+            } catch (error) {
+              console.log(error);
+              
+            }
+          }
+        
+          useEffect(()=>
+          {
+            getall_therapy_master()
+        
+          },[])
+
+
+          //============================ get symptom class data=======================================
+          
+          
+             const[all_symptom_class_master,setall_symptom_class_master]=useState([])
+                const getall_symptom_class_master=async()=>
+                {
+                  try {
+                    const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"symptom_class_type"})
+                    console.log(resp);
+                    
+                    setall_symptom_class_master(resp.data.data)
+                    
+                  } catch (error) {
+                    console.log(error);
+                    
+                  }
+                }
+              
+                useEffect(()=>
+                {
+                  getall_symptom_class_master()
+              
+                },[])
+          
+          
+//============================ get symptom master data===========================================
+          
+          
+             const[all_symptom_master,setall_symptom_master]=useState([])
+          
+             const getall_symptom_master = async (selectedSymptomClass) => {
+              console.log(selectedSymptomClass);
+              
+            if (!selectedSymptomClass || selectedSymptomClass.length === 0) return;
+          
+            try {
+              const resp = await api.post('api/v1/admin/LookupList/', {
+                lookupcodes: "symptom_master",
+                parent_lookup_id: selectedSymptomClass, // send array or first ID
+              });
+              console.log('Symptom master response:', resp);
+              setall_symptom_master(resp.data.data);
+            } catch (error) {
+              console.error(error);
+            }
+          };
+              
+              
+          // ================================get all aggravatingFactor======================================
+          
+          
+                const[allaggravating_master,setallaggravating_master]=useState([])
+                const getall_aggravating_master=async()=>
+                {
+                  try {
+                    const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"aggravating_factor_master"})
+                    console.log(resp);
+                    
+                    setallaggravating_master(resp.data.data)
+                    
+                  } catch (error) {
+                    console.log(error);
+                    
+                  }
+                }
+              
+                useEffect(()=>
+                {
+                  getall_aggravating_master()
+              
+                },[])
+          
+
+            //============================ color bar================================
+
+  const renderColorBar = (index) => {
+  const segments = [
+    { color: 'bg-green-600', title: "H1", desc: "Mild", value: 1 },
+    { color: 'bg-green-500', title: "H2", desc: "Mild", value: 2 },
+    { color: 'bg-yellow-300', title: "H3", desc: "Mild", value: 3 },
+    { color: 'bg-yellow-500', title: "H4", desc: "Mild", value: 4 },
+    { color: 'bg-orange-400', title: "H5", desc: "Mild", value: 5 },
+    { color: 'bg-red-600', title: "H6", desc: "Mild", value: 6 },
+  ];
+
+  // const handleClick = (value) => {
+  //   setpatient_details((prev) => {
+  //     const updated = [...prev];
+  //     updated[index] = {
+  //       ...updated[index],
+  //       SeverityGrade: value,
+  //     };
+  //     return updated;
+  //   });
+  // };
+
+  return (
+    <div className="flex w-full h-10">
+      {segments.map((segment, idx) => (
+        <div
+          key={idx}
+          // onClick={() => handleClick(segment.value)}
+          className={`flex-1 flex flex-col items-center justify-center cursor-pointer ${segment.color} text-white hover:opacity-80 transition`}
+        >
+          <span className="text-sm font-bold">{segment.title}</span>
+          <span className="text-xs">{segment.desc}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+
+const handleAddMore = () => {
+  setmedical_history(prev => ({
+    ...prev,                          // keep previous properties
+    ChiefComplaints: [                // overwrite or add to ChiefComplaints
+      ...(prev.ChiefComplaints || []),
+      { SymptomClass: [], Compliant: "", Duration: "", SeverityGrade: "", AggravatingFactors: [] } // new item
+    ],
+  }));
+};
+
+
+const handleAddMoreClinicalDiagnosis = () => {
+  setmedical_history(prev => ({
+    ...prev,                          // keep previous properties
+    ClinicalDiagnosis: [                // overwrite or add to ChiefComplaints
+      ...(prev.ClinicalDiagnosis || []),
+      { Date: "", Investigation_Category: "", Investigation: "", Abnormalities:[], UploadReport: [],UploadInterpretation:[] } // new item
+    ],
+  }));
+};
+
+const handleAddMoreClinicalMedicines = () => {
+  setmedical_history(prev => ({
+    ...prev, 
+    MedicinesPrescribed: {
+      ...prev.MedicinesPrescribed, // keep RecoveryCycle & UploadPrescriptions
+      MedicinesPrescribed: [
+        ...(prev.MedicinesPrescribed?.MedicinesPrescribed || []),
+        { MedicineName: "", Dosage: "", Duration: "" } // add new medicine
+      ]
+    }
+  }));
+};
+
+const handleAddMoreClinicalTherapy = () => {
+  setmedical_history(prev => ({
+    ...prev,                          // keep previous properties
+    Therapy: [                // overwrite or add to ChiefComplaints
+      ...(prev.Therapy || []),
+      { TherapyName: "", PatientsResponse: "" } // new item
+    ],
+  }));
+};
+
+
+
+
 
   return (
     <div className="space">
       {/* Header */}
       <div className="flex items-center justify-between pb-4 ">
         <h2 className="text-4xl font-bold text-gray-900">
-          Medical Summary
+          Medical History
         </h2>
     
       </div>
@@ -49,7 +290,7 @@ const PastIllness = () => {
               </h2>
               <div className="flex items-center space-x-4">
                 <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
-                  <span className="text-sm font-medium underline">Add</span>
+                  <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
                   <Plus className="w-4 h-4" />
                 </button>
                 <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
@@ -182,6 +423,600 @@ const PastIllness = () => {
           1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
         </p>
       </div> 
+
+
+
+{/*================================== modal for adding medical History========================= */}
+
+
+   <Modal show={show} onHide={handleClose} centered size="lg">
+        
+              <Modal.Header closeButton>
+                <Modal.Title>Add Medical History </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+              
+      
+         <div>
+      
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                
+
+                  <FormControl fullWidth size="small">
+                  <label className="form-label">Date </label>
+                  <TextField
+                  type='date'
+                  placeholder="Duration In Months" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+                   <FormControl fullWidth size="small">
+              <label className="form-label">Medical Speciality </label>
+            <Select
+                  labelId="content-type-label"
+                  name="Nationality"
+                //  value={patient_details.Nationality}
+                //  onChange={handleChange}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Medical Speciality </span>; 
+                    }
+                    return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Medical Speciality </em>
+                  </MenuItem>
+                  {all_therapy_master?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+              </FormControl>
+
+                  <FormControl fullWidth size="small">
+                  <label className="form-label">Doctor Name </label>
+                  <TextField
+                  type='text'
+                  placeholder="Doctor Name" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+                  <FormControl fullWidth size="small">
+                  <label className="form-label">Doctor Number </label>
+                  <TextField
+                  type='number'
+                  placeholder="Doctor Number" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Hospital Name </label>
+                  <TextField
+                  type='text'
+                  placeholder="Hospital Name" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+                   <FormControl fullWidth size="small">
+                  <label className="form-label">Hospital Location </label>
+                  <TextField
+                  type='text'
+                  placeholder="Hospital Location" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+           
+
+
+{/*======================== chief complaints============================================ */}
+
+        <div className='col-span-2'>
+          <h5>Chief Complaints</h5>
+            {medical_history.ChiefComplaints.map((details, index) => (
+      
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                
+                 <div className="col-span-2">
+                <FormControl fullWidth size="small">
+                <label className="form-label">Symptom Class</label>
+                <div className="flex flex-wrap gap-2">
+                  {all_symptom_class_master.map((item) => {
+                    const selected = (details?.SymptomClass || []).includes(item._id); 
+                    return (
+                      <span
+                        key={item._id}
+                        // onClick={() => handleSymptomSelect(item._id,index)}
+                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                      >
+                        {item.lookup_value}
+                        {selected && (
+                          <span
+                            className="ml-1 text-xs font-bold cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // handleSymptomSelect(item._id,index);
+                            }}
+                          >
+                            ✕
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+              </FormControl>
+              </div>
+
+      
+                
+                <div className="col-span-2">
+                <FormControl fullWidth size="small">
+                <label className="form-label">Compliant </label>
+                <div className="flex flex-wrap gap-2">
+                  {all_symptom_master.map((item) => {
+                    const selected = (details?.Compliant || []).includes(item._id); 
+                    return (
+                      <span
+                        key={item._id}
+                        // onClick={() => handlecomplaintSelect(item._id,index)}
+                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                      >
+                        {item.lookup_value}
+                        {selected && (
+                          <span
+                            className="ml-1 text-xs font-bold cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // handleSymptomSelect(item._id,index);
+                            }}
+                          >
+                            ✕
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+              </FormControl>
+              </div>
+
+                 <div className="col-span-2">
+                <FormControl fullWidth size="small">
+                <label className="form-label">Aggravating Factors</label>
+                <div className="flex flex-wrap gap-2">
+                  {allaggravating_master.map((item) => {
+                    const selected = (details?.AggravatingFactors || []).includes(item._id); 
+                    return (
+                      <span
+                        key={item._id}
+                        // onClick={() => handleaggravatingSelect(item._id,index)}
+                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                      >
+                        {item.lookup_value}
+                        {selected && (
+                          <span
+                            className="ml-1 text-xs font-bold cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // handleSymptomSelect(item._id,index);
+                            }}
+                          >
+                            ✕
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+              </FormControl>
+              </div>
+
+           
+      
+                 <FormControl fullWidth size="small">
+                  <label className="form-label">Duration </label>
+                  <TextField
+                  type='number'
+                  placeholder="Duration In Months" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+      
+                  <FormControl fullWidth size="small">
+                  <label className="form-label">Severity Grade </label>
+                  {renderColorBar(index)}
+                  </FormControl>
+      
+          <div className="flex justify-between mt-2">
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={handleAddMore}
+              >
+                Add More
+              </Button>
+
+              
+            </div>
+
+                </div> 
+
+                
+
+          ))}
+               
+           
+
+      
+              </div> 
+
+
+
+{/*======================== clinical Diagnosis ================================================*/}
+
+
+
+        <div className='col-span-2'>
+          <h5>Clinical Diagnosis </h5>
+            {medical_history.ClinicalDiagnosis.map((details, index) => (
+      
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                
+                 <FormControl fullWidth size="small">
+                  <label className="form-label">Date </label>
+                  <TextField
+                  type='date'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+                    <FormControl fullWidth size="small">
+              <label className="form-label">Investigation Category </label>
+            <Select
+                  labelId="content-type-label"
+                  name="Nationality"
+                //  value={patient_details.Nationality}
+                //  onChange={handleChange}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Investigation Category </span>; 
+                    }
+                    return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Investigation Category </em>
+                  </MenuItem>
+                  {all_therapy_master?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+              </FormControl>
+
+                      <FormControl fullWidth size="small">
+              <label className="form-label">Investigation </label>
+            <Select
+                  labelId="content-type-label"
+                  name="Nationality"
+                //  value={patient_details.Nationality}
+                //  onChange={handleChange}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Investigation </span>; 
+                    }
+                    return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Investigation </em>
+                  </MenuItem>
+                  {all_therapy_master?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+              </FormControl>
+
+                 <div className="col-span-2">
+                <FormControl fullWidth size="small">
+                <label className="form-label">Abnormalities </label>
+                <div className="flex flex-wrap gap-2">
+                  {all_symptom_class_master.map((item) => {
+                    const selected = (details?.SymptomClass || []).includes(item._id); 
+                    return (
+                      <span
+                        key={item._id}
+                        // onClick={() => handleSymptomSelect(item._id,index)}
+                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                      >
+                        {item.lookup_value}
+                        {selected && (
+                          <span
+                            className="ml-1 text-xs font-bold cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // handleSymptomSelect(item._id,index);
+                            }}
+                          >
+                            ✕
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+              </FormControl>
+              </div>
+
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Upload Report </label>
+                  <TextField
+                  type='file'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+      
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Upload Interpretation </label>
+                  <TextField
+                  type='file'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+      
+                
+          <div className="flex justify-between mt-2">
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={handleAddMoreClinicalDiagnosis}
+              >
+                Add More
+              </Button>
+
+              
+            </div>
+            
+        </div> 
+
+          ))}
+               
+      </div> 
+
+
+{/* ============================Medicines Prescribed ======================================= */}
+
+ <div className='col-span-2'>
+          <h5>Medicines Prescribed </h5>
+            
+      
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                {medical_history.MedicinesPrescribed.MedicinesPrescribed.map((details, index) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 col-span-2 border border-gray-300 rounded-lg p-2">
+                 <FormControl fullWidth size="small">
+                  <label className="form-label">Medicine Name </label>
+                  <TextField
+                  type='text'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+             <FormControl fullWidth size="small">
+                  <label className="form-label">Dosage </label>
+                  <TextField
+                  type='text'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+                    <FormControl fullWidth size="small">
+                  <label className="form-label">Duration (Days) </label>
+                  <TextField
+                  type='text'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+                        <div className="flex justify-between mt-8 h-8">
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={handleAddMoreClinicalMedicines}
+              >
+                Add More
+              </Button>
+
+              
+            </div>
+
+                  </div>
+                ))}
+             
+
+             
+
+
+              <FormControl fullWidth size="small">
+                  <label className="form-label">Recovery Cycle  </label>
+                  <TextField
+                  type='number'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+          
+      
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Upload Prescriptions  </label>
+                  <TextField
+                  type='file'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+      
+                
+    
+            
+        </div> 
+
+       
+               
+      </div> 
+
+
+{/*==================================== add therapy============================================ */}
+
+ <div className='col-span-2'>
+          <h5>Therapy (ies) </h5>
+            
+         {medical_history.Therapy.map((details, index) => (
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+             
+
+                 <FormControl fullWidth size="small">
+                  <label className="form-label">Therapy Name </label>
+                  <TextField
+                  type='text'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+             <FormControl fullWidth size="small">
+                  <label className="form-label">Patient’s Response  </label>
+                  <TextField
+                  type='text'
+                  placeholder="Date" 
+                  name="DateOfBirth" 
+                  size="small" 
+                  // value={patient_details.DateOfBirth} 
+                  // onChange={handleChange} 
+                  />
+                  </FormControl>
+
+             
+           
+             
+
+               <div className="flex justify-between mt-2">
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={handleAddMoreClinicalTherapy}
+              >
+                Add More
+              </Button>
+
+              
+            </div>
+            
+        </div> 
+
+        
+
+            ))}
+               
+      </div> 
+
+
+    </div> 
+
+   
+               
+               <div className="flex justify-end mt-4">
+           
+
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                // onClick={save_chif_complaints}
+              >
+                Save
+              </Button>
+            </div>
+
+      
+              </div> 
+      
+              </Modal.Body>
+          
+         
+          </Modal>
+
+
     </div>
   );
 };

@@ -211,98 +211,12 @@ const handleAddMore = () => {
       },[])
 
 
-//=================================== get all medications=====================================
-
-   const[all_salt_master,setall_salt_master]=useState([])
-      const getall_salt_master=async()=>
-      {
-        try {
-            const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"pharmaceutical_salt_master"})
-          console.log(resp);
-          
-          setall_salt_master(resp.data.data)
-          
-        } catch (error) {
-          console.log(error);
-          
-        }
-      }
-    
-      useEffect(()=>
-      {
-        getall_salt_master()
-    
-      },[])
 
 
-  //============================= get all Dosage============================================
 
-    const[all_dosage_type,setall_dosage_type]=useState([])
-      const getall_dosage_type=async()=>
-      {
-        try {
-          const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"dosage_type"})
-          console.log(resp);
-          
-          setall_dosage_type(resp.data.data)
-          
-        } catch (error) {
-          console.log(error);
-          
-        }
-      }
-    
-      useEffect(()=>
-      {
-        getall_dosage_type()
-    
-      },[])
 
-// ===========================get all Frequency data=========================================
 
-  const[all_medical_frequency_type,setall_medical_frequency_type]=useState([])
-      const getall_medical_frequency_type=async()=>
-      {
-        try {
-          const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"medicine_frequency_type"})
-          console.log(resp);
-          
-          setall_medical_frequency_type(resp.data.data)
-          
-        } catch (error) {
-          console.log(error);
-          
-        }
-      }
-    
-      useEffect(()=>
-      {
-        getall_medical_frequency_type()
-    
-      },[])
 
-//================================ get all therapy=======================================
-
-   const[all_therapy_master,setall_therapy_master]=useState([])
-      const getall_therapy_master=async()=>
-      {
-        try {
-          const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"therapy_type"})
-          console.log(resp);
-          
-          setall_therapy_master(resp.data.data)
-          
-        } catch (error) {
-          console.log(error);
-          
-        }
-      }
-    
-      useEffect(()=>
-      {
-        getall_therapy_master()
-    
-      },[])
 
 
 const handleSymptomSelect = (id, index) => {
@@ -670,37 +584,7 @@ const renderColorBar = (index) => {
               </FormControl>
               </div>
 
-               <div className="col-span-2">
-                <FormControl fullWidth size="small">
-                <label className="form-label">Frequency </label>
-                <div className="flex flex-wrap gap-2">
-                  {all_medical_frequency_type.map((item) => {
-                    const selected = (details?.Frequency || []).includes(item._id); 
-                    return (
-                      <span
-                        key={item._id}
-                        onClick={() => handlefrequencySelect(item._id,index)}
-                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
-                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
-                      >
-                        {item.lookup_value}
-                        {selected && (
-                          <span
-                            className="ml-1 text-xs font-bold cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleSymptomSelect(item._id,index);
-                            }}
-                          >
-                            ✕
-                          </span>
-                        )}
-                      </span>
-                    );
-                  })}
-                </div>
-              </FormControl>
-              </div>
+           
       
                  <FormControl fullWidth size="small">
                   <label className="form-label">Duration </label>
@@ -717,115 +601,6 @@ const renderColorBar = (index) => {
                   <FormControl fullWidth size="small">
                   <label className="form-label">Severity Grade </label>
                   {renderColorBar(index)}
-                  </FormControl>
-      
-              
-
-              
-      
-                  <FormControl fullWidth size="small">
-                  <label className="form-label">Current Medications  </label>
-                 <Select 
-                    name="CurrentMedications"
-                    value={details.CurrentMedications}
-                   onChange={(e)=>handleChange(e,index)}
-                  MenuProps={{
-                          disablePortal: true,
-                          disableScrollLock: true,
-                          }}
-                      displayEmpty
-                      renderValue={(selected) => {
-                        if (!selected) {
-                          return <span style={{ color: "#9ca3af" }}>Current Medications</span>; // grey placeholder
-                        }
-                        return all_salt_master.find((item) => item._id === selected)?.lookup_value;
-                      }}
-                  >
-      
-                    <MenuItem disabled value="">
-                        <em>Current Medications</em>
-                      </MenuItem>
-                  {
-                      all_salt_master?.map((item)=>
-                      (
-                          <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
-                      ))
-                  }
-                  </Select>
-                  </FormControl>
-      
-            
-                
-
-                    <FormControl fullWidth size="small">
-                  <label className="form-label">Dosage  </label>
-                 <Select 
-                    name="Dosage"
-                    value={details.Dosage}
-                   onChange={(e)=>handleChange(e,index)}
-                  MenuProps={{
-                          disablePortal: true,
-                          disableScrollLock: true,
-                          }}
-                      displayEmpty
-                      renderValue={(selected) => {
-                        if (!selected) {
-                          return <span style={{ color: "#9ca3af" }}>Dosage</span>; // grey placeholder
-                        }
-                        return all_dosage_type.find((item) => item._id === selected)?.lookup_value;
-                      }}
-                  >
-      
-                    <MenuItem disabled value="">
-                        <em>Dosage</em>
-                      </MenuItem>
-                  {
-                      all_dosage_type?.map((item)=>
-                      (
-                          <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
-                      ))
-                  }
-                  </Select>
-                  </FormControl>
-      
-
-
-           
-           
-      
-               
-      
-             
-      
-                  <FormControl fullWidth size="small">
-                  <label className="form-label">Current Therapies </label>
-                  <Select 
-                    name="CurrentTherapies"
-                    value={details.CurrentTherapies}
-                   onChange={(e)=>handleChange(e,index)}
-                  MenuProps={{
-                          disablePortal: true,
-                          disableScrollLock: true,
-                          }}
-                      displayEmpty
-                      renderValue={(selected) => {
-                        if (!selected) {
-                          return <span style={{ color: "#9ca3af" }}>Dosage</span>; // grey placeholder
-                        }
-                        return all_therapy_master.find((item) => item._id === selected)?.lookup_value;
-                      }}
-                  >
-      
-                    <MenuItem disabled value="">
-                        <em>Dosage</em>
-                      </MenuItem>
-                  {
-                      all_therapy_master?.map((item)=>
-                      (
-                          <MenuItem key={item._id} value={item._id}>{item.lookup_value}</MenuItem>
-                      ))
-                  }
-                  </Select>
                   </FormControl>
       
                 </div> 

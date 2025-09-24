@@ -321,7 +321,7 @@ function InvestigationMaster() {
           
 
                <FormControl fullWidth size="small">
-             <label className="form-label">Investigation Category Id</label>
+             <label className="form-label">Investigation Category</label>
             <Select 
               name="Investigation_CategoryId"
               value={investigation_master.Investigation_CategoryId}
@@ -333,7 +333,7 @@ function InvestigationMaster() {
                 displayEmpty
                 renderValue={(selected) => {
                   if (!selected) {
-                    return <span style={{ color: "#9ca3af" }}>Investigation Category Id</span>; // grey placeholder
+                    return <span style={{ color: "#9ca3af" }}>Investigation Category</span>; // grey placeholder
                   }
                   return investigation_category.find((item) => item._id === selected)?.lookup_value;
                 }}
