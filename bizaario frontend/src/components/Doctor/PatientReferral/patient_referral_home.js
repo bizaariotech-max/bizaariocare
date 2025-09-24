@@ -26,6 +26,7 @@ import { Modal,  Form, Row, Col } from 'react-bootstrap';
 import api from '../../../api'
 import { TextField, Select, MenuItem, FormControl, Avatar,Tooltip,IconButton,CircularProgress, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
 import { customMenuProps } from '../../../utils/mui_select_scroll_bar';
+import PresentIllness from './AllSubForms/present_illness';
 
 
 const PatientReferralHome = () => {
@@ -83,6 +84,7 @@ const PatientReferralHome = () => {
       <ClinicalOutcome />
       <CurrentTherapy />
       {/* <MedicalSummary /> */}
+      <PresentIllness/>
       <PastIllness/>
       <PastSurgeries/>
       <PastMedications />

@@ -15,14 +15,22 @@ import Swal from 'sweetalert2';
 import UniqueLoader from '../../../loader';
 import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
 import { Calendar, MapPin } from 'lucide-react';
-import ProfileCard1 from '../AllSubForms/UI/ProfileCard1';
-import ProfileCard2 from '../AllSubForms/UI/ProfileCard2';
+import ProfileCard1 from './UI/ProfileCard1';
+import ProfileCard2 from './UI/ProfileCard2';
 import { Modal,  Form, Row, Col } from 'react-bootstrap';
 import { __postApiData } from "../../../../utils/api";
 import healthicon from '../AllSubForms/assets/images/view health assessment report icon.png';
 
-const PastIllness = () => {
+const PresentIllness = () => {
 
+
+    const doctor_details=JSON.parse(localStorage.getItem("user"))
+console.log(doctor_details);
+
+
+  
+
+  
 
 
   const medicalData1 = [
@@ -45,7 +53,7 @@ const PastIllness = () => {
       DoctorNumber :"",
       HospitalName :"",
       HospitalLocation :"",
-      MedicalSpeciality :"",
+      MedicalSpeciality :[],
       ChiefComplaints:[{
             SymptomClass:[],
             Compliant : '',
@@ -72,6 +80,32 @@ const PastIllness = () => {
         }]
 
     });
+
+  const get_assest_profile_details = async () => {
+  try {
+    const [resp, resp1] = await Promise.all([
+      api.get(`api/v1/asset-sections/medical-specialties/${doctor_details._id}`),
+      api.get(`api/v1/asset-sections/contact-info/${doctor_details._id}`)
+    ]);
+
+    setmedical_history(prev => ({
+      ...prev,
+      MedicalSpeciality: resp.data?.data || prev.MedicalSpeciality,
+      Date: new Date().toISOString().split("T")[0],
+      DoctorName: doctor_details.AssetName,
+      DoctorNumber: resp1.data?.data?.ContactPhoneNumber || prev.DoctorNumber
+    }));
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+useEffect(() => {
+  get_assest_profile_details();
+}, []);
+
+
 
 
 
@@ -265,18 +299,19 @@ const handleAddMoreClinicalTherapy = () => {
 };
 
 
+console.log(medical_history);
 
 
 
   return (
     <div className="space">
       {/* Header */}
-      {/* <div className="flex items-center justify-between pb-4 ">
+      <div className="flex items-center justify-between pb-4 ">
         <h2 className="text-4xl font-bold text-gray-900">
           Medical History
         </h2>
     
-      </div> */}
+      </div>
 
        
 
@@ -284,7 +319,7 @@ const handleAddMoreClinicalTherapy = () => {
 
         <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">
-                Past Illness
+                Present Illness
               </h2>
               <div className="flex items-center space-x-4">
                 <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
@@ -430,7 +465,7 @@ const handleAddMoreClinicalTherapy = () => {
    <Modal show={show} onHide={handleClose} centered size="lg">
         
               <Modal.Header closeButton>
-                <Modal.Title className='form-title'>Add Medical History(Past Illness) </Modal.Title>
+                <Modal.Title className='form-title'>Add Medical History(Present Illness) </Modal.Title>
               </Modal.Header>
               <Modal.Body>
               
@@ -440,45 +475,42 @@ const handleAddMoreClinicalTherapy = () => {
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                 
 
-                  <FormControl fullWidth size="small">
-                  <label className="form-label">Date </label>
-                  <TextField
-                  type='date'
-                  placeholder="Duration In Months" 
-                  name="DateOfBirth" 
-                  size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
-                  />
-                  </FormControl>
+              <FormControl fullWidth size="small">
+            <label className="form-label">Date</label>
+            <TextField
+              type="date"
+              name="Date"
+              size="small"
+              value={medical_history.Date} // YYYY-MM-DD format
+              InputProps={{ readOnly: true }} 
+              // onChange={handleChange}
+            />
+          </FormControl>
+
 
                    <FormControl fullWidth size="small">
               <label className="form-label">Medical Speciality </label>
-            <Select
-                  labelId="content-type-label"
-                  name="Nationality"
-                //  value={patient_details.Nationality}
-                //  onChange={handleChange}
-                  displayEmpty
-                  MenuProps={customMenuProps}
-                  renderValue={(selected) => {
-                    if (!selected) {
-                      return <span style={{ color: "#9ca3af" }}>Medical Speciality </span>; 
-                    }
-                    return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>Medical Speciality </em>
-                  </MenuItem>
-                  {all_therapy_master?.map((type) => (
-                    <MenuItem key={type._id} value={type._id}>
-                      {type.lookup_value}
-                    </MenuItem>
-                  ))}
-                              
-  
-              </Select>
+           <div style={{ marginBottom: "8px" }}>
+            <input
+              type="text"
+              value={
+                medical_history?.MedicalSpeciality?.MedicalSpecialties
+                  ?.map(item => item.lookup_value) // extract lookup_value from each object
+                  .join(', ')                      // join them with commas
+              }
+              readOnly // makes it read-only
+              style={{
+                width: "100%",
+                padding: "6px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                backgroundColor: "#f9f9f9"
+              }}
+            />
+          </div>
+
+
+
               </FormControl>
 
                   <FormControl fullWidth size="small">
@@ -486,10 +518,10 @@ const handleAddMoreClinicalTherapy = () => {
                   <TextField
                   type='text'
                   placeholder="Doctor Name" 
-                  name="DateOfBirth" 
+                  name="DoctorName" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={medical_history.DoctorName} 
+                  InputProps={{ readOnly: true }}
                   />
                   </FormControl>
 
@@ -500,8 +532,8 @@ const handleAddMoreClinicalTherapy = () => {
                   placeholder="Doctor Number" 
                   name="DateOfBirth" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={medical_history.DoctorNumber} 
+                  InputProps={{ readOnly: true }}
                   />
                   </FormControl>
 
@@ -1019,4 +1051,4 @@ const handleAddMoreClinicalTherapy = () => {
   );
 };
 
-export default PastIllness;
+export default PresentIllness;

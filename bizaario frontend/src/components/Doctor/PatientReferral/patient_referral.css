@@ -29,6 +29,12 @@
   gap: 16px;
 }
 
+.form-title
+{
+  font-weight: bold;
+  font-family: Lora;
+}
+
 @media (max-width: 1024px) {
   /* Two-column form */
   .form-grid {
