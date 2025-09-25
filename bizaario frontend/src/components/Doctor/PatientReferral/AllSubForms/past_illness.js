@@ -1,27 +1,21 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import generalphysician from '../AllSubForms/assets/images/general physician.png'
-import ChiefComplaints from './ChiefComplaints';
 import ChiefComplaintsForMedicalSummary from './chief_complaints_for_medical_summary';
-import DiagnosticsInvestigations from './DiagnosticsInvestigations';
 import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations';
 import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
 import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
-import { useEffect, useState ,useRef} from 'react'
-import { TextField, Select, MenuItem, FormControl, Box,Avatar,Tooltip,IconButton,CircularProgress, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { useEffect, useState } from 'react'
+import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
 import api from '../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../loader';
 import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
-import { Calendar, MapPin } from 'lucide-react';
-import ProfileCard1 from '../AllSubForms/UI/ProfileCard1';
-import ProfileCard2 from '../AllSubForms/UI/ProfileCard2';
-import { Modal,  Form, Row, Col } from 'react-bootstrap';
+import { Modal, } from 'react-bootstrap';
 import { __postApiData } from "../../../../utils/api";
-import healthicon from '../AllSubForms/assets/images/view health assessment report icon.png';
 
-const PastIllness = () => {
+
+const PastIllness = (patientId) => {
 
 
 
@@ -38,52 +32,57 @@ const PastIllness = () => {
   // ...
 ];
 
+//============================= main form state start ============================================
 
   const [medical_history, setmedical_history] = useState({
-      Date :"",
-      DoctorName:"",
-      DoctorNumber :"",
-      HospitalName :"",
-      HospitalLocation :"",
-      MedicalSpeciality :"",
+    PatientId:"68ce3b785c9caf7ccffeede8",
+    DoctorHospitalInfo:{
+          Date :"",
+          DoctorName:"",
+          DoctorNumber :"",
+          HospitalName :"",
+          HospitalLocation :"",
+          MedicalSpeciality :"",
+    },
       ChiefComplaints:[{
-            SymptomClass:[],
-            Compliant : '',
-            Duration : '',
+            Symptoms:[],
+            Duration : {Value:"",Unit:""},
             SeverityGrade : '',
             AggravatingFactors : []
       }],
-      ClinicalDiagnosis :[{
+      ClinicalDiagnoses :[{
             Date:"",
-            Investigation_Category : '',
+            InvestigationCategory : '',
             Investigation : '',
             Abnormalities  : [],
-            UploadReport : [],
-            UploadInterpretation:[]
+            ReportUrl : "",
+            InterpretationUrl:""
     }],
     MedicinesPrescribed:{
-            MedicinesPrescribed:[{MedicineName:"",Dosage:"",Duration:"" }],
-            RecoveryCycle  : '',
-            UploadPrescriptions  : [],
+            Medicines:[{MedicineName:"",Dosage:"",DurationInDays:"" }],
+            RecoveryCycle  : {Value:"",Unit:""},
+            PrescriptionUrls  : [],
     },
-    Therapy :[{
+    Therapies :[{
             TherapyName:"",
-            PatientsResponse:""
+            PatientResponse:""
         }]
 
     });
 
+//=================================== main form state end=========================================
 
+
+//========================== modal open or close start==========================================
 
   const [show, setShow] = useState(false)
-  
-    // function to open modal
     const handleShow = () => setShow(true);
-    // function to close modal
     const handleClose = () => setShow(false);
+
+//=========================== modal open or close end===============================================
  
 
-    // ===============================get all therapy data(change for medical speciality)====================================
+// ===============================get all therapy data(change for medical speciality)====================================
 
      const[all_therapy_master,setall_therapy_master]=useState([])
           const getall_therapy_master=async()=>
@@ -107,7 +106,7 @@ const PastIllness = () => {
           },[])
 
 
-          //============================ get symptom class data=======================================
+//============================ get symptom class data=======================================
           
           
              const[all_symptom_class_master,setall_symptom_class_master]=useState([])
@@ -132,30 +131,9 @@ const PastIllness = () => {
                 },[])
           
           
-//============================ get symptom master data===========================================
-          
-          
-             const[all_symptom_master,setall_symptom_master]=useState([])
-          
-             const getall_symptom_master = async (selectedSymptomClass) => {
-              console.log(selectedSymptomClass);
+
               
-            if (!selectedSymptomClass || selectedSymptomClass.length === 0) return;
-          
-            try {
-              const resp = await api.post('api/v1/admin/LookupList/', {
-                lookupcodes: "symptom_master",
-                parent_lookup_id: selectedSymptomClass, // send array or first ID
-              });
-              console.log('Symptom master response:', resp);
-              setall_symptom_master(resp.data.data);
-            } catch (error) {
-              console.error(error);
-            }
-          };
-              
-              
-          // ================================get all aggravatingFactor======================================
+//= ================================get all aggravatingFactor======================================
           
           
                 const[allaggravating_master,setallaggravating_master]=useState([])
@@ -178,11 +156,240 @@ const PastIllness = () => {
                   getall_aggravating_master()
               
                 },[])
+
+
+//====================================== get all medical speciality =====================================
+
+
+   const[allmedical_speciality,setallmedical_speciality]=useState([])
+      const getallmedical_speciality=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList',{lookupcodes:"medical_speciality"})
+          setallmedical_speciality(resp.data.data)
           
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getallmedical_speciality()
+    
+      },[])
 
-            //============================ color bar================================
 
-  const renderColorBar = (index) => {
+
+      //====================================== get all investigation category =====================================
+
+
+       const[all_investigation_category,setall_investigation_category]=useState([])
+      const getall_investigation_category=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"investigation_category_type"})
+          console.log(resp);
+          
+          setall_investigation_category(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_investigation_category()
+    
+      },[])
+
+//=============================== get investigation list======================================
+
+     const[all_investigation_master,setall_investigation_master]=useState([])
+        const getall_investigation_master=async()=>
+        {
+          try {
+              const resp=await api.post(`api/v1/admin/investigationList`)
+            console.log(resp);
+            
+            setall_investigation_master(resp.data.data.list)
+            
+          } catch (error) {
+            console.log(error);
+            
+          }
+        }
+  
+    
+        useEffect(()=>
+        {
+          getall_investigation_master()
+      
+        },[])
+
+
+// ====================================get all medicine list ===================================
+
+    const[all_salt_master,setall_salt_master]=useState([])
+      const getall_salt_master=async()=>
+      {
+        try {
+            const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"pharmaceutical_salt_master"})
+          console.log(resp);
+          
+          setall_salt_master(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_salt_master()
+    
+      },[])
+
+//================================== get dosage list============================================
+
+  const[all_dosage_type,setall_dosage_type]=useState([])
+      const getall_dosage_type=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"dosage_type"})
+          console.log(resp);
+          
+          setall_dosage_type(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_dosage_type()
+    
+      },[])
+
+
+  
+  
+//============================ Handle single image upload========================================
+
+const handlesingleImageChange = async (index, e, fieldName) => {
+  const file = e.target.files[0]; // single file
+  if (!file) return;
+
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const resp = await api.post("api/v1/common/AddImage", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    // ✅ Extract URL from response
+    if (
+      resp.data?.response?.response_code === "200" &&
+      resp.data.data?.length > 0
+    ) {
+      const imageUrl = resp.data.data[0].full_URL; // full_URL from API
+
+      // ✅ Update state dynamically based on `fieldName`
+      setmedical_history((prev) => {
+        const updatedClinicalDiagnoses = [...prev.ClinicalDiagnoses];
+        updatedClinicalDiagnoses[index] = {
+          ...updatedClinicalDiagnoses[index],
+          [fieldName]: imageUrl, // <-- dynamic field update
+        };
+        return {
+          ...prev,
+          ClinicalDiagnoses: updatedClinicalDiagnoses,
+        };
+      });
+    }
+  } catch (error) {
+    console.error("Image upload error:", error);
+  }
+};
+
+
+//============================== handle multiple image upload==================================
+
+const handlePrescriptionImagesChange = async (e) => {
+  const files = e.target.files; // multiple files selected
+  if (!files || files.length === 0) return;
+
+  try {
+    // Create FormData for all files
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append("file", files[i]);
+    }
+
+    const resp = await api.post("api/v1/common/AddImage", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    // ✅ Extract URLs from response
+    if (
+      resp.data?.response?.response_code === "200" &&
+      resp.data.data?.length > 0
+    ) {
+      // Map each uploaded file to its URL
+      const uploadedUrls = resp.data.data.map((item) => item.full_URL);
+
+      // ✅ Append these URLs to state
+      setmedical_history((prev) => ({
+        ...prev,
+        MedicinesPrescribed: {
+          ...prev.MedicinesPrescribed,
+          PrescriptionUrls: [
+            ...prev.MedicinesPrescribed.PrescriptionUrls,
+            ...uploadedUrls,
+          ],
+        },
+      }));
+    }
+  } catch (error) {
+    console.error("Prescription images upload error:", error);
+  }
+};
+
+
+//================================== get dosage list============================================
+
+  const[all_unit_list,setall_unit_list]=useState([])
+      const getall_unitlist=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"duration_unit_type"})
+          console.log(resp);
+          
+          setall_unit_list(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_unitlist()
+    
+      },[])
+
+          
+//========================================= color bar=============================================
+
+ const renderColorBar = (index) => {
   const segments = [
     { color: 'bg-green-600', title: "H1", desc: "Mild", value: 1 },
     { color: 'bg-green-500', title: "H2", desc: "Mild", value: 2 },
@@ -192,40 +399,64 @@ const PastIllness = () => {
     { color: 'bg-red-600', title: "H6", desc: "Mild", value: 6 },
   ];
 
-  // const handleClick = (value) => {
-  //   setpatient_details((prev) => {
-  //     const updated = [...prev];
-  //     updated[index] = {
-  //       ...updated[index],
-  //       SeverityGrade: value,
-  //     };
-  //     return updated;
-  //   });
-  // };
+  // Map bg classes to corresponding text color classes
+  const textColorMap = {
+    'bg-green-600': 'text-green-600',
+    'bg-green-500': 'text-green-500',
+    'bg-yellow-300': 'text-yellow-300',
+    'bg-yellow-500': 'text-yellow-500',
+    'bg-orange-400': 'text-orange-400',
+    'bg-red-600': 'text-red-600',
+  };
+
+  const handleClick = (value) => {
+    setmedical_history(prev => {
+      const updatedChiefComplaints = [...prev.ChiefComplaints];
+      updatedChiefComplaints[index] = {
+        ...updatedChiefComplaints[index],
+        SeverityGrade: value,
+      };
+      return { ...prev, ChiefComplaints: updatedChiefComplaints };
+    });
+  };
+
+  const selectedValue = medical_history.ChiefComplaints[index].SeverityGrade;
+  const selectedSegment = segments.find(seg => seg.value === selectedValue);
 
   return (
-    <div className="flex w-full h-10">
-      {segments.map((segment, idx) => (
-        <div
-          key={idx}
-          // onClick={() => handleClick(segment.value)}
-          className={`flex-1 flex flex-col items-center justify-center cursor-pointer ${segment.color} text-white hover:opacity-80 transition`}
-        >
-          <span className="text-sm font-bold">{segment.title}</span>
-          <span className="text-xs">{segment.desc}</span>
-        </div>
-      ))}
+    <div>
+      {/* Color Bar */}
+      <div className="flex w-full h-10 mb-2">
+        {segments.map((segment, idx) => (
+          <div
+            key={idx}
+            onClick={() => handleClick(segment.value)}
+            className={`flex-1 flex flex-col items-center justify-center cursor-pointer ${segment.color} text-white hover:opacity-80 transition`}
+          >
+            <span className="text-sm font-bold">{segment.title}</span>
+            <span className="text-xs">{segment.desc}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Selected Value with matching text color */}
+      <div style={{display:selectedSegment?"block":"none",position:"absolute"}} className={`text-center font-semibold py-1 ${textColorMap[selectedSegment?.color] || 'text-black'}`}>
+        Value: {selectedValue || "-"}
+      </div>
     </div>
   );
 };
 
 
+
+// ==============================all add more function start=====================================
+
 const handleAddMore = () => {
   setmedical_history(prev => ({
-    ...prev,                          // keep previous properties
-    ChiefComplaints: [                // overwrite or add to ChiefComplaints
+    ...prev,                         
+    ChiefComplaints: [              
       ...(prev.ChiefComplaints || []),
-      { SymptomClass: [], Compliant: "", Duration: "", SeverityGrade: "", AggravatingFactors: [] } // new item
+      { Symptoms: [],Duration: "", SeverityGrade: "", AggravatingFactors: [] } // new item
     ],
   }));
 };
@@ -233,9 +464,9 @@ const handleAddMore = () => {
 
 const handleAddMoreClinicalDiagnosis = () => {
   setmedical_history(prev => ({
-    ...prev,                          // keep previous properties
-    ClinicalDiagnosis: [                // overwrite or add to ChiefComplaints
-      ...(prev.ClinicalDiagnosis || []),
+    ...prev,                        
+    ClinicalDiagnoses: [              
+      ...(prev.ClinicalDiagnoses || []),
       { Date: "", Investigation_Category: "", Investigation: "", Abnormalities:[], UploadReport: [],UploadInterpretation:[] } // new item
     ],
   }));
@@ -243,43 +474,280 @@ const handleAddMoreClinicalDiagnosis = () => {
 
 const handleAddMoreClinicalMedicines = () => {
   setmedical_history(prev => ({
-    ...prev, 
+    ...prev,
     MedicinesPrescribed: {
-      ...prev.MedicinesPrescribed, // keep RecoveryCycle & UploadPrescriptions
-      MedicinesPrescribed: [
-        ...(prev.MedicinesPrescribed?.MedicinesPrescribed || []),
-        { MedicineName: "", Dosage: "", Duration: "" } // add new medicine
+      ...prev.MedicinesPrescribed,
+      Medicines: [
+        ...prev.MedicinesPrescribed.Medicines,
+        { MedicineName: "", Dosage: "", DurationInDays: "" }
       ]
     }
   }));
 };
 
+
 const handleAddMoreClinicalTherapy = () => {
   setmedical_history(prev => ({
-    ...prev,                          // keep previous properties
-    Therapy: [                // overwrite or add to ChiefComplaints
-      ...(prev.Therapy || []),
-      { TherapyName: "", PatientsResponse: "" } // new item
+    ...prev,                      
+    Therapies: [                
+      ...(prev.Therapies || []),
+      { TherapyName: "", PatientsResponse: "" } 
     ],
   }));
 };
 
 
+//=============================== all add more function end===================================
 
 
+//========================= all onchange event for DoctorHospitalInfo ===========================================
+
+const handleChange = (e) => {
+  const { name, value, type, checked } = e.target;
+
+  setmedical_history(prev => ({
+    ...prev, // keep the rest of the state untouched
+    DoctorHospitalInfo: {
+      ...prev.DoctorHospitalInfo,
+      [name]: type === "checkbox" ? checked : value
+    }
+  }));
+};
+
+//====================== onchage event for ChiefComplaints start=================================
+
+
+const handleChiefComplaintsChange = (index, field, value, subField = null) => {
+  setmedical_history(prev => {
+    const updatedChiefComplaints = [...prev.ChiefComplaints];
+    const complaint = { ...updatedChiefComplaints[index] };
+
+    if (subField) {
+      // For nested objects like Duration {Value, Unit}
+      complaint[field] = {
+        ...complaint[field],
+        [subField]: value
+      };
+    } else {
+      // For direct fields like SeverityGrade, Symptoms, AggravatingFactors
+      complaint[field] = value;
+    }
+
+    updatedChiefComplaints[index] = complaint;
+
+    return {
+      ...prev,
+      ChiefComplaints: updatedChiefComplaints
+    };
+  });
+};
+
+
+const toggleArrayField = (index, field, itemId) => {
+  setmedical_history(prev => {
+    const updatedChiefComplaints = [...prev.ChiefComplaints];
+    const complaint = { ...updatedChiefComplaints[index] };
+    const currentArray = complaint[field] || [];
+
+    if (currentArray.includes(itemId)) {
+      complaint[field] = currentArray.filter(id => id !== itemId);
+    } else {
+      complaint[field] = [...currentArray, itemId];
+    }
+
+    updatedChiefComplaints[index] = complaint;
+
+    return {
+      ...prev,
+      ChiefComplaints: updatedChiefComplaints
+    };
+  });
+};
+
+//====================== onchage event for ChiefComplaints end=================================
+
+// ===============================onchange events for ClinicalDiagnoses start============================
+
+
+const handleClinicalDiagnosisChange = (index, field, value) => {
+  setmedical_history(prev => {
+    const updatedClinicalDiagnosis = [...prev.ClinicalDiagnoses];
+    const diagnosis = { ...updatedClinicalDiagnosis[index] };
+
+   
+    diagnosis[field] = value;
+    
+    updatedClinicalDiagnosis[index] = diagnosis;
+
+    return {
+      ...prev,
+      ClinicalDiagnoses: updatedClinicalDiagnosis
+    };
+  });
+};
+
+
+const toggleArrayFieldClinicalDiagnosis = (index, field, itemId) => {
+  setmedical_history(prev => {
+    const updatedClinicalDiagnosis = [...prev.ClinicalDiagnoses];
+    const diagnosis = { ...updatedClinicalDiagnosis[index] };
+    const currentArray = diagnosis[field] || [];
+
+    if (currentArray.includes(itemId)) {
+      diagnosis[field] = currentArray.filter(id => id !== itemId);
+    } else {
+      diagnosis[field] = [...currentArray, itemId];
+    }
+
+    updatedClinicalDiagnosis[index] = diagnosis;
+
+    return {
+      ...prev,
+      ClinicalDiagnoses: updatedClinicalDiagnosis
+    };
+  });
+};
+
+
+// ===============================onchange events for ClinicalDiagnoses end============================
+
+
+// ===============================onchange events for ClinicalDiagnoses start============================
+
+
+const handleMedicineChange = (index, field, value) => {
+  setmedical_history(prev => {
+    const updatedMedicines = [...prev.MedicinesPrescribed.Medicines];
+    updatedMedicines[index] = {
+      ...updatedMedicines[index],
+      [field]: value
+    };
+
+    return {
+      ...prev,
+      MedicinesPrescribed: {
+        ...prev.MedicinesPrescribed,
+        Medicines: updatedMedicines
+      }
+    };
+  });
+};
+
+const handleMedicinePrescribedChange = (field, value, subField = null) => {
+  setmedical_history(prev => {
+    const updated = { ...prev.MedicinesPrescribed };
+
+    if (subField) {
+      updated[field] = {
+        ...updated[field],
+        [subField]: value
+      };
+    } else {
+      updated[field] = value;
+    }
+
+    return {
+      ...prev,
+      MedicinesPrescribed: updated
+    };
+  });
+};
+
+
+
+// ===============================onchange events for ClinicalDiagnoses end============================
+
+
+// ===============================onchange events for therapy start============================
+
+
+const handleTherapyChange = (index, field, value) => {
+  setmedical_history(prev => {
+    const updatedTherapy = [...prev.Therapies];
+    const newtherapy = { ...updatedTherapy[index] };
+
+   
+    newtherapy[field] = value;
+    
+    updatedTherapy[index] = newtherapy;
+
+    return {
+      ...prev,
+      Therapies: updatedTherapy
+    };
+  });
+};
+
+
+// ===============================onchange events for therapy end============================
+
+
+console.log(medical_history);
+
+const[isloading,setisloading]=useState(false)
+
+const save_chif_complaints = async () => {
+  setisloading(true);
+  try {
+    const payload={...medical_history,patientId:patientId.patientId}
+    const resp = await api.post(
+      `api/v1/admin/medicalHistory/saveMedicalHistory`,
+      payload,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    console.log(resp);
+    
+
+    const { response_code, response_message } = resp.data.response;
+
+    if (response_code === "200") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Added",
+        text: "Patient Details Added Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else if (response_code === "400") {
+      // Show server validation error here
+      Swal.fire({
+        icon: "error",
+        title: response_message.errorType || "Error",
+        text: response_message.error,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    } else {
+      // Optional: handle other response codes
+      Swal.fire({
+        icon: "warning",
+        title: "Unexpected response",
+        text: "Something went wrong. Please try again.",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: "error",
+      title: "Request failed",
+      text: error.message || "Something went wrong",
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  } finally {
+    setisloading(false);
+  }
+};
 
   return (
     <div className="space">
-      {/* Header */}
-      {/* <div className="flex items-center justify-between pb-4 ">
-        <h2 className="text-4xl font-bold text-gray-900">
-          Medical History
-        </h2>
     
-      </div> */}
-
-       
-
     <div className="bg-[rgba(189,196,212,0.2)] p-4 rounded-lg border border-gray-200 ">
 
         <div className="flex items-center justify-between">
@@ -347,26 +815,7 @@ const handleAddMoreClinicalTherapy = () => {
     </div>
 
 
-    {/* <div className='card-details' style={{marginTop:"20px"}}>
-        <h3 className='table-header'>20/12/2025</h3>
-         <div style={{display:"flex"}} >
-            <img src={generalphysician} alt='' style={{height:"26px"}}></img>
-            <p style={{ margin: 0,  fontWeight: "600",fontFamily:"Lora",whiteSpace: "nowrap" }}>Cardiologist</p>
-        </div>
-        <ChiefComplaintsForMedicalSummary/>
-    </div>
-
-    <div className='card-details'>
-        <DiagnosticsInvestigationsForMedicalSummary/>
-    </div>
-
-      <div className='card-details'>
-        <CurrentMedicinesForMedicalSummary/>
-    </div>
-
-     <div className='card-details'>
-        <CurrentTherapyForMedicalSummary/>
-    </div> */}
+  
 
     {medicalData1.map((item, index) => (
   <div key={index} className="relative pl-10">
@@ -444,11 +893,11 @@ const handleAddMoreClinicalTherapy = () => {
                   <label className="form-label">Date </label>
                   <TextField
                   type='date'
-                  placeholder="Duration In Months" 
-                  name="DateOfBirth" 
+                  placeholder="Date" 
+                  name="Date" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={medical_history.DoctorHospitalInfo.Date} 
+                  onChange={handleChange} 
                   />
                   </FormControl>
 
@@ -456,22 +905,22 @@ const handleAddMoreClinicalTherapy = () => {
               <label className="form-label">Medical Speciality </label>
             <Select
                   labelId="content-type-label"
-                  name="Nationality"
-                //  value={patient_details.Nationality}
-                //  onChange={handleChange}
+                  name="MedicalSpeciality"
+                 value={medical_history.DoctorHospitalInfo.MedicalSpeciality}
+                 onChange={handleChange}
                   displayEmpty
                   MenuProps={customMenuProps}
                   renderValue={(selected) => {
                     if (!selected) {
                       return <span style={{ color: "#9ca3af" }}>Medical Speciality </span>; 
                     }
-                    return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
+                    return allmedical_speciality?.find((item) => item._id === selected)?.lookup_value;
                   }}
                 >
                   <MenuItem value="">
                     <em>Medical Speciality </em>
                   </MenuItem>
-                  {all_therapy_master?.map((type) => (
+                  {allmedical_speciality?.map((type) => (
                     <MenuItem key={type._id} value={type._id}>
                       {type.lookup_value}
                     </MenuItem>
@@ -486,10 +935,10 @@ const handleAddMoreClinicalTherapy = () => {
                   <TextField
                   type='text'
                   placeholder="Doctor Name" 
-                  name="DateOfBirth" 
+                  name="DoctorName" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={medical_history.DoctorHospitalInfo.DoctorName} 
+                  onChange={handleChange} 
                   />
                   </FormControl>
 
@@ -498,10 +947,10 @@ const handleAddMoreClinicalTherapy = () => {
                   <TextField
                   type='number'
                   placeholder="Doctor Number" 
-                  name="DateOfBirth" 
+                  name="DoctorNumber" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={medical_history.DoctorHospitalInfo.DoctorNumber} 
+                  onChange={handleChange} 
                   />
                   </FormControl>
 
@@ -510,10 +959,10 @@ const handleAddMoreClinicalTherapy = () => {
                   <TextField
                   type='text'
                   placeholder="Hospital Name" 
-                  name="DateOfBirth" 
+                  name="HospitalName" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={medical_history.DoctorHospitalInfo.HospitalName}
+                  onChange={handleChange} 
                   />
                   </FormControl>
 
@@ -522,10 +971,10 @@ const handleAddMoreClinicalTherapy = () => {
                   <TextField
                   type='text'
                   placeholder="Hospital Location" 
-                  name="DateOfBirth" 
+                  name="HospitalLocation" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={medical_history.DoctorHospitalInfo.HospitalLocation} 
+                  onChange={handleChange} 
                   />
                   </FormControl>
 
@@ -545,11 +994,11 @@ const handleAddMoreClinicalTherapy = () => {
                 <label className="form-label">Symptom Class</label>
                 <div className="flex flex-wrap gap-2">
                   {all_symptom_class_master.map((item) => {
-                    const selected = (details?.SymptomClass || []).includes(item._id); 
+                    const selected = (details?.Symptoms || []).includes(item._id); 
                     return (
                       <span
                         key={item._id}
-                        // onClick={() => handleSymptomSelect(item._id,index)}
+                        onClick={() => toggleArrayField(index, "Symptoms", item._id)}
                         className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                           ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                       >
@@ -573,38 +1022,7 @@ const handleAddMoreClinicalTherapy = () => {
               </div>
 
       
-                
-                <div className="col-span-2">
-                <FormControl fullWidth size="small">
-                <label className="form-label">Compliant </label>
-                <div className="flex flex-wrap gap-2">
-                  {all_symptom_master.map((item) => {
-                    const selected = (details?.Compliant || []).includes(item._id); 
-                    return (
-                      <span
-                        key={item._id}
-                        // onClick={() => handlecomplaintSelect(item._id,index)}
-                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
-                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
-                      >
-                        {item.lookup_value}
-                        {selected && (
-                          <span
-                            className="ml-1 text-xs font-bold cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // handleSymptomSelect(item._id,index);
-                            }}
-                          >
-                            ✕
-                          </span>
-                        )}
-                      </span>
-                    );
-                  })}
-                </div>
-              </FormControl>
-              </div>
+             
 
                  <div className="col-span-2">
                 <FormControl fullWidth size="small">
@@ -615,7 +1033,7 @@ const handleAddMoreClinicalTherapy = () => {
                     return (
                       <span
                         key={item._id}
-                        // onClick={() => handleaggravatingSelect(item._id,index)}
+                       onClick={() => toggleArrayField(index, "AggravatingFactors", item._id)}
                         className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                           ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                       >
@@ -640,17 +1058,60 @@ const handleAddMoreClinicalTherapy = () => {
 
            
       
-                 <FormControl fullWidth size="small">
-                  <label className="form-label">Duration </label>
-                  <TextField
-                  type='number'
-                  placeholder="Duration In Months" 
-                  name="DateOfBirth" 
-                  size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
-                  />
-                  </FormControl>
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Duration</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {/* Number input */}
+                    <TextField
+                      type="number"
+                      name="Value"
+                      placeholder="Enter Number"
+                      size="small"
+                      value={details.Duration.Value} 
+                       onChange={(e) => handleChiefComplaintsChange(index, "Duration", e.target.value, "Value")} 
+                      style={{ flex: 1 }}
+                    />
+                
+                 <Select
+                  labelId="content-type-label"
+                  name="InvestigationCategory"
+                 value={details.Duration.Unit}
+                  onChange={(e) => handleChiefComplaintsChange(index, "Duration", e.target.value, "Unit")}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Unit </span>; 
+                    }
+                    return all_unit_list?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Unit </em>
+                  </MenuItem>
+                  {all_unit_list?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+                    {/* Dropdown for Days/Weeks/Months */}
+                    {/* <Select
+                      name="Unit"
+                      defaultValue="Days"
+                      size="small"
+                      value={details.Duration.Unit}
+                      onChange={(e) => handleChiefComplaintsChange(index, "Duration", e.target.value, "Unit")}
+                      style={{ width: '150px' }}
+                    >
+                      <MenuItem value="Days">Days</MenuItem>
+                      <MenuItem value="Weeks">Weeks</MenuItem>
+                      <MenuItem value="Months">Months</MenuItem>
+                    </Select> */}
+                  </div>
+                </FormControl>
       
                   <FormControl fullWidth size="small">
                   <label className="form-label">Severity Grade </label>
@@ -687,7 +1148,7 @@ const handleAddMoreClinicalTherapy = () => {
 
         <div className='col-span-2'>
           <h5 className='form-title'>Clinical Diagnosis </h5>
-            {medical_history.ClinicalDiagnosis.map((details, index) => (
+            {medical_history.ClinicalDiagnoses.map((details, index) => (
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                 
@@ -696,10 +1157,10 @@ const handleAddMoreClinicalTherapy = () => {
                   <TextField
                   type='date'
                   placeholder="Date" 
-                  name="DateOfBirth" 
+                  name="Date" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={details.Date} 
+                  onChange={(e)=>handleClinicalDiagnosisChange(index,"Date",e.target.value)} 
                   />
                   </FormControl>
 
@@ -707,22 +1168,22 @@ const handleAddMoreClinicalTherapy = () => {
               <label className="form-label">Investigation Category </label>
             <Select
                   labelId="content-type-label"
-                  name="Nationality"
-                //  value={patient_details.Nationality}
-                //  onChange={handleChange}
+                  name="InvestigationCategory"
+                 value={details.InvestigationCategory}
+                  onChange={(e)=>handleClinicalDiagnosisChange(index,"InvestigationCategory",e.target.value)}
                   displayEmpty
                   MenuProps={customMenuProps}
                   renderValue={(selected) => {
                     if (!selected) {
                       return <span style={{ color: "#9ca3af" }}>Investigation Category </span>; 
                     }
-                    return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
+                    return all_investigation_category?.find((item) => item._id === selected)?.lookup_value;
                   }}
                 >
                   <MenuItem value="">
                     <em>Investigation Category </em>
                   </MenuItem>
-                  {all_therapy_master?.map((type) => (
+                  {all_investigation_category?.map((type) => (
                     <MenuItem key={type._id} value={type._id}>
                       {type.lookup_value}
                     </MenuItem>
@@ -737,23 +1198,23 @@ const handleAddMoreClinicalTherapy = () => {
             <Select
                   labelId="content-type-label"
                   name="Nationality"
-                //  value={patient_details.Nationality}
-                //  onChange={handleChange}
+                 value={details.Investigation}
+                 onChange={(e)=>handleClinicalDiagnosisChange(index,"Investigation",e.target.value)}
                   displayEmpty
                   MenuProps={customMenuProps}
                   renderValue={(selected) => {
                     if (!selected) {
                       return <span style={{ color: "#9ca3af" }}>Investigation </span>; 
                     }
-                    return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
+                    return all_investigation_master?.find((item) => item._id === selected)?.InvestigationName;
                   }}
                 >
                   <MenuItem value="">
                     <em>Investigation </em>
                   </MenuItem>
-                  {all_therapy_master?.map((type) => (
+                  {all_investigation_master?.map((type) => (
                     <MenuItem key={type._id} value={type._id}>
-                      {type.lookup_value}
+                      {type.InvestigationName}
                     </MenuItem>
                   ))}
                               
@@ -766,11 +1227,11 @@ const handleAddMoreClinicalTherapy = () => {
                 <label className="form-label">Abnormalities </label>
                 <div className="flex flex-wrap gap-2">
                   {all_symptom_class_master.map((item) => {
-                    const selected = (details?.SymptomClass || []).includes(item._id); 
+                    const selected = (details?.Abnormalities || []).includes(item._id); 
                     return (
                       <span
                         key={item._id}
-                        // onClick={() => handleSymptomSelect(item._id,index)}
+                        onClick={() => toggleArrayFieldClinicalDiagnosis(index,"Abnormalities",item._id,)}
                         className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                           ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                       >
@@ -798,10 +1259,10 @@ const handleAddMoreClinicalTherapy = () => {
                   <TextField
                   type='file'
                   placeholder="Date" 
-                  name="DateOfBirth" 
+                  name="ReportUrl" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  // value={details.ReportUrl}
+                  onChange={(e)=>handlesingleImageChange(index,e,"ReportUrl")} 
                   />
                   </FormControl>
       
@@ -812,8 +1273,8 @@ const handleAddMoreClinicalTherapy = () => {
                   placeholder="Date" 
                   name="DateOfBirth" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  // value={details.InterpretationUrl} 
+                  onChange={(e)=>handlesingleImageChange(index,e,"InterpretationUrl")} 
                   />
                   </FormControl>
       
@@ -841,43 +1302,75 @@ const handleAddMoreClinicalTherapy = () => {
  <div className='col-span-2'>
           <h5 className='form-title'>Medicines Prescribed </h5>
             
-      
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
-                {medical_history.MedicinesPrescribed.MedicinesPrescribed.map((details, index) => (
+                {medical_history.MedicinesPrescribed.Medicines.map((details, index) => (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 col-span-2 border border-gray-300 rounded-lg p-2">
                  <FormControl fullWidth size="small">
                   <label className="form-label">Medicine Name </label>
-                  <TextField
-                  type='text'
-                  placeholder="Date" 
-                  name="DateOfBirth" 
-                  size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
-                  />
-                  </FormControl>
+                  <Select
+                  labelId="content-type-label"
+                  name="Nationality"
+                  value={details.MedicineName} 
+                  onChange={(e) => handleMedicineChange(index, "MedicineName", e.target.value)}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Medicine Name </span>; 
+                    }
+                    return all_salt_master?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Medicine Name </em>
+                  </MenuItem>
+                  {all_salt_master?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+            </FormControl>
 
              <FormControl fullWidth size="small">
                   <label className="form-label">Dosage </label>
-                  <TextField
-                  type='text'
-                  placeholder="Date" 
-                  name="DateOfBirth" 
-                  size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
-                  />
+                       <Select
+                  labelId="content-type-label"
+                  name="Nationality"
+                   value={details.Dosage} 
+                  onChange={(e) => handleMedicineChange(index, "Dosage", e.target.value)} 
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Dosage </span>; 
+                    }
+                    return all_dosage_type?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Dosage </em>
+                  </MenuItem>
+                  {all_dosage_type?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+              </Select>
+              
                   </FormControl>
 
                     <FormControl fullWidth size="small">
                   <label className="form-label">Duration (Days) </label>
                   <TextField
                   type='text'
-                  placeholder="Date" 
-                  name="DateOfBirth" 
+                  placeholder="Duration In Days" 
+                  name="DurationInDays" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={details.DurationInDays} 
+                  onChange={(e) => handleMedicineChange(index, "DurationInDays", e.target.value)} 
                   />
                   </FormControl>
 
@@ -899,28 +1392,75 @@ const handleAddMoreClinicalTherapy = () => {
              
 
 
-              <FormControl fullWidth size="small">
-                  <label className="form-label">Recovery Cycle  </label>
-                  <TextField
-                  type='number'
-                  placeholder="Date" 
-                  name="DateOfBirth" 
-                  size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
-                  />
-                  </FormControl>
+             
+
+                   <FormControl fullWidth size="small">
+                  <label className="form-label">Recovery Cycle</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {/* Number input */}
+                    <TextField
+                      type="number"
+                      name="Value"
+                      placeholder="Enter Number"
+                      size="small"
+                      defaultValue={medical_history.MedicinesPrescribed.RecoveryCycle.Value} 
+                       onChange={(e) => handleMedicinePrescribedChange( "RecoveryCycle", e.target.value, "Value")} 
+                      style={{ flex: 1 }}
+                    />
+                
+                  
+                 <Select
+                  labelId="content-type-label"
+                  name="InvestigationCategory"
+                  value={medical_history.MedicinesPrescribed.RecoveryCycle.Unit} 
+                  onChange={(e) => handleMedicinePrescribedChange("RecoveryCycle",e.target.value, "Unit")}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Unit </span>; 
+                    }
+                    return all_unit_list?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Unit </em>
+                  </MenuItem>
+                  {all_unit_list?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+                    {/* Dropdown for Days/Weeks/Months */}
+                    {/* <Select
+                      name="Unit"
+                      defaultValue="Days"
+                      size="small"
+                      value={medical_history.MedicinesPrescribed.RecoveryCycle.Unit} 
+                      onChange={(e) => handleMedicinePrescribedChange("RecoveryCycle",e.target.value, "Unit")}
+                      style={{ width: '150px' }}
+                    >
+                      <MenuItem value="Days">Days</MenuItem>
+                      <MenuItem value="Weeks">Weeks</MenuItem>
+                      <MenuItem value="Months">Months</MenuItem>
+                    </Select> */}
+                  </div>
+                </FormControl>
           
       
                 <FormControl fullWidth size="small">
                   <label className="form-label">Upload Prescriptions  </label>
                   <TextField
+                  inputProps={{ multiple: true }}
                   type='file'
-                  placeholder="Date" 
-                  name="DateOfBirth" 
+                  placeholder="Prescription Urls" 
+                  name="PrescriptionUrls" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  // value={medical_history.MedicinesPrescribed.PrescriptionUrls} 
+                  onChange={(e)=>handlePrescriptionImagesChange(e)} 
                   />
                   </FormControl>
       
@@ -939,31 +1479,47 @@ const handleAddMoreClinicalTherapy = () => {
  <div className='col-span-2'>
           <h5 className='form-title'>Therapy (ies) </h5>
             
-         {medical_history.Therapy.map((details, index) => (
+         {medical_history.Therapies.map((details, index) => (
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
              
 
                  <FormControl fullWidth size="small">
                   <label className="form-label">Therapy Name </label>
-                  <TextField
-                  type='text'
-                  placeholder="Date" 
-                  name="DateOfBirth" 
-                  size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
-                  />
+                   <Select
+                  labelId="content-type-label"
+                  name="TherapyName"
+                 value={details.TherapyName}
+                 onChange={(e) => handleTherapyChange(index, "TherapyName",e.target.value,)} 
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Therapy Name </span>; 
+                    }
+                    return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Therapy Name</em>
+                  </MenuItem>
+                  {all_therapy_master?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+              </Select>
+
                   </FormControl>
 
              <FormControl fullWidth size="small">
                   <label className="form-label">Patient’s Response  </label>
                   <TextField
                   type='text'
-                  placeholder="Date" 
-                  name="DateOfBirth" 
+                  placeholder="Patient Response" 
+                  name="PatientResponse" 
                   size="small" 
-                  // value={patient_details.DateOfBirth} 
-                  // onChange={handleChange} 
+                  value={details.PatientResponse} 
+                  onChange={(e) => handleTherapyChange(index, "PatientResponse",e.target.value,)} 
                   />
                   </FormControl>
 
@@ -1000,7 +1556,7 @@ const handleAddMoreClinicalTherapy = () => {
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                // onClick={save_chif_complaints}
+                onClick={save_chif_complaints}
               >
                 Save
               </Button>
@@ -1013,6 +1569,23 @@ const handleAddMoreClinicalTherapy = () => {
           
          
           </Modal>
+
+
+          {isloading && (
+            <div
+              style={{
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(255, 255, 255, 0.6)',
+                zIndex: 9999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <UniqueLoader />
+            </div>
+          )}
 
 
     </div>

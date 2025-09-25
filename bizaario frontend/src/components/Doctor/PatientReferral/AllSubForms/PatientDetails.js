@@ -58,6 +58,7 @@ const[isloading_for,setisloading_for]=useState(false)
     ProfilePic:"",
     Name: '',
     PhoneNumber: '',
+    ISDCode:"",
     Gender: '',
     DateOfBirth: '',
     Age: '',
@@ -73,10 +74,12 @@ const[isloading_for,setisloading_for]=useState(false)
     InsurancePolicyNumber: '',
     InsuranceValidUpto: '',
     SecondaryContactName: '',
+    SecondaryISDCode:"",
     SecondaryContactNumber: '',
     Relationship: '',
     IsVerified: '',
     IsActive: true,
+    BloodGroup:"",
     CreatedBy: '',
 
   });
@@ -365,6 +368,24 @@ const handleSingleImageUpload = async (event) => {
 
 
 
+// ===========================get all isd code ===================================================
+
+const[allisdcode,setallisdcode]=useState([])
+  const getallisdcode = async () => {
+    try {
+      const resp = await api.post('api/v1/admin/LookupList', { lookupcodes: "isd_code_type" });
+      setallisdcode(resp.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+    useEffect(() => {
+  
+      getallisdcode();
+  
+    }, []);
+
 
 
 
@@ -441,21 +462,7 @@ const handleSingleImageUpload = async (event) => {
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4">
           
      
-           
-            <FormControl fullWidth size="small">
-            <label className="form-label">Phone Number with ISD Code </label>
-            <TextField
-            type='text'
-            placeholder="Phone Number With Isd Code" 
-            name="PhoneNumber" 
-            size="small" 
-            defaultValue={patient_details.PhoneNumber} 
-            onChange={handleChange} 
-            />
-            </FormControl>
-
-          
-            <FormControl fullWidth size="small">
+        <FormControl fullWidth size="small">
             <label className="form-label">Name</label>
             <TextField
             placeholder="Name" 
@@ -466,7 +473,7 @@ const handleSingleImageUpload = async (event) => {
             />
             </FormControl>
 
-           <FormControl fullWidth size="small">
+            <FormControl fullWidth size="small">
             <label className="form-label">DOB</label>
             <TextField
             type='date'
@@ -477,7 +484,47 @@ const handleSingleImageUpload = async (event) => {
             onChange={handleChange} 
             />
             </FormControl>
+           
+             <FormControl fullWidth size="small">
+            <label className="form-label">ISD Code </label>
+             <Select
+                labelId="content-type-label"
+                name="ISDCode"
+                value={patient_details.ISDCode}
+                onChange={handleChange}
+                displayEmpty
+                MenuProps={customMenuProps}
+                renderValue={(selected) => {
+                  if (!selected) {
+                    return <span style={{ color: "#9ca3af" }}>Isd Code</span>; 
+                  }
+                  return allisdcode?.find((item) => item._id === selected)?.lookup_value;
+                }}
+              >
+                <MenuItem value="">
+                  <em>Select Isd Code</em>
+                </MenuItem>
+                {allisdcode?.map((type) => (
+                  <MenuItem key={type._id} value={type._id}>
+                    {type.lookup_value}
+                  </MenuItem>
+                ))}
+            </Select>
+            </FormControl>
 
+            <FormControl fullWidth size="small">
+            <label className="form-label">Phone Number </label>
+            <TextField
+            type='text'
+            placeholder="Phone Number" 
+            name="PhoneNumber" 
+            size="small" 
+            defaultValue={patient_details.PhoneNumber} 
+            onChange={handleChange} 
+            />
+            </FormControl>
+
+          
             <FormControl fullWidth size="small">
             <label className="form-label">Age</label>
             <TextField
@@ -486,6 +533,18 @@ const handleSingleImageUpload = async (event) => {
             name="Age" 
             size="small" 
             value={patient_details.Age} 
+            onChange={handleChange} 
+            />
+            </FormControl>
+
+             <FormControl fullWidth size="small">
+            <label className="form-label">Blood Group</label>
+            <TextField
+            type='text'
+            placeholder="Blood Group" 
+            name="BloodGroup" 
+            size="small" 
+            value={patient_details.BloodGroup} 
             onChange={handleChange} 
             />
             </FormControl>
@@ -752,6 +811,33 @@ const handleSingleImageUpload = async (event) => {
             </FormControl>
 
             <FormControl fullWidth size="small">
+            <label className="form-label">Secondary Isd Code</label>
+             <Select
+                labelId="content-type-label"
+                name="SecondaryISDCode"
+                value={patient_details.SecondaryISDCode}
+                onChange={handleChange}
+                displayEmpty
+                MenuProps={customMenuProps}
+                renderValue={(selected) => {
+                  if (!selected) {
+                    return <span style={{ color: "#9ca3af" }}>Secondary Isd Code</span>; 
+                  }
+                  return allisdcode?.find((item) => item._id === selected)?.lookup_value;
+                }}
+              >
+                <MenuItem value="">
+                  <em>Select Secondary Isd Code</em>
+                </MenuItem>
+                {allisdcode?.map((type) => (
+                  <MenuItem key={type._id} value={type._id}>
+                    {type.lookup_value}
+                  </MenuItem>
+                ))}
+            </Select>
+            </FormControl>
+
+            <FormControl fullWidth size="small">
             <label className="form-label">Secondary Contact Number</label>
             <TextField
             placeholder="Secondary Contact Number" 
@@ -791,7 +877,7 @@ const handleSingleImageUpload = async (event) => {
             </Select>
             </FormControl>
 
-              <FormControl fullWidth size="small">
+              {/* <FormControl fullWidth size="small">
             <label className="form-label">Record Created By</label>
             <TextField
             placeholder="Record Created By" 
@@ -800,7 +886,7 @@ const handleSingleImageUpload = async (event) => {
             value={patient_details.CreatedBy} 
             onChange={handleChange} 
             />
-            </FormControl>
+            </FormControl> */}
 
 
 

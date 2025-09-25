@@ -85,7 +85,7 @@ const PatientReferralHome = () => {
       <CurrentTherapy />
       {/* <MedicalSummary /> */}
       <PresentIllness/>
-      <PastIllness/>
+      <PastIllness patientId={patientId}/>
       <PastSurgeries/>
       <PastMedications />
       <PastTherapy />
