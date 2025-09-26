@@ -27,10 +27,19 @@ import api from '../../../api'
 import { TextField, Select, MenuItem, FormControl, Avatar,Tooltip,IconButton,CircularProgress, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
 import { customMenuProps } from '../../../utils/mui_select_scroll_bar';
 import PresentIllness from './AllSubForms/present_illness';
+import OpenMedicalCaseFiles from './AllSubForms/open_medical_case_files';
+import PatientReferralVerify from './AllSubForms/PatientReferralVerify';
+import { useLocation } from 'react-router-dom';
 
 
 const PatientReferralHome = () => {
 
+  const location =useLocation()
+  const patient_details=location.state.patient_details
+
+  const patientId=patient_details._id
+  console.log(PatientDetails);
+  
     const [show, setShow] = useState(false)
   
     // function to open modal
@@ -65,8 +74,9 @@ const PatientReferralHome = () => {
       {
         get_patient_details()
       },[])
+console.log(patientId);
 
-      const[patientId,setpatientId]=useState("")
+  
 
   return (
     <>
@@ -76,9 +86,9 @@ const PatientReferralHome = () => {
         <Doctorsidebar />
         <div className="content-wrapper">
         <div className="main-content">
-
       <PatientTabs />
       <PatientDetails patientId={patientId}/>
+      <OpenMedicalCaseFiles patientId={patientId}/>
       <ChiefComplaints  patientId={patientId}/>
       <CurrentMedicines />
       <ClinicalOutcome />
@@ -101,7 +111,7 @@ const PatientReferralHome = () => {
       </div>
 
 
-      <Modal show={show} onHide={handleClose} centered size="lg">
+      {/* <Modal show={show} onHide={handleClose} centered size="lg">
         
               <Modal.Header closeButton>
                 <Modal.Title>Select Patient </Modal.Title>
@@ -148,13 +158,11 @@ const PatientReferralHome = () => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            {/* <Button type="submit" variant="primary">
-              Next
-            </Button> */}
+         
           </Modal.Footer>
           
          
-          </Modal>
+          </Modal> */}
 
     </>
   )

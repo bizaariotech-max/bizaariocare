@@ -86,6 +86,7 @@ import ChangePassword from "./components/Doctor/change_password";
 import HealthProfillingQuestions from "./components/Admin/Health_Profillling_Questions/health_profilling_questions";
 import CompletePatientDetails from "./components/Doctor/CompletePatientProfile/complete_patient_details_main";
 import PatientReferralHome from "./components/Doctor/PatientReferral/patient_referral_home.js";
+import PatientReferralVerify from "./components/Doctor/PatientReferral/AllSubForms/PatientReferralVerify.js";
 
 function App() {
   return (
@@ -201,7 +202,8 @@ function App() {
 
 {/*=========================== patient referral============================================= */}
 
- <Route path="/patient-referral" element={<PatientReferralHome/>}></Route>
+ <Route path="/patient-referral-home" element={<PatientReferralHome/>}></Route>
+  <Route path="/patient-referral" element={<PatientReferralVerify/>}></Route>
 
       </Routes>
       {/* <ActivePatient/> */}

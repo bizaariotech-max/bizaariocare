@@ -2,8 +2,6 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import generalphysician from '../AllSubForms/assets/images/general physician.png'
-
-import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations_for_medical_summary';
 import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
 import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
 import { useEffect, useState } from 'react'
@@ -12,10 +10,12 @@ import api from '../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../loader';
 import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
-import { Modal, } from 'react-bootstrap';
+import { Modal, } from 'react-bootstrap'; 
 import { __postApiData } from "../../../../utils/api";
 
-const ChiefComplaintsForMedicalSummary = () => {
+const ChiefComplaintsForMedicalSummary = (patientId) => {
+
+   const doctordetails=JSON.parse(localStorage.getItem("user"))
 
   // Sample data for the complaints
   const complaintsData = [
@@ -69,7 +69,7 @@ const ChiefComplaintsForMedicalSummary = () => {
 
 
 const [medical_history, setmedical_history] = useState({
-    PatientId:"68ce3b785c9caf7ccffeede8",
+    PatientId:"",
 
       ChiefComplaints:[{
             Symptoms:[],
@@ -285,6 +285,74 @@ const handleAddMore = () => {
       },[])
 
 
+
+      const[isloading,setisloading]=useState(false)
+      
+      const save_chif_complaints = async () => {
+        setisloading(true);
+        try {
+          const payload=
+          {...medical_history,
+            PatientId:patientId.patientId.patientId,
+            CreatedBy:doctordetails._id
+            
+          }
+          console.log(payload);
+          
+          const resp = await api.post(
+            `api/v1/admin/medicalHistory/saveMedicalHistory`,
+            payload,
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+          console.log(resp);
+          
+      
+          const { response_code, response_message } = resp.data.response;
+      
+          if (response_code === "200") {
+            Swal.fire({
+              icon: "success",
+              title: "Details Added",
+              text: "Patient Details Added Successfully...",
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            }).then(() => {
+              window.location.reload();
+            });
+          } else if (response_code === "400") {
+            // Show server validation error here
+            Swal.fire({
+              icon: "error",
+              title: response_message.errorType || "Error",
+              text: response_message.error,
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            });
+          } else {
+            // Optional: handle other response codes
+            Swal.fire({
+              icon: "warning",
+              title: "Unexpected response",
+              text: "Something went wrong. Please try again.",
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            });
+          }
+        } catch (error) {
+          console.error(error);
+          Swal.fire({
+            icon: "error",
+            title: "Request failed",
+            text: error.message || "Something went wrong",
+            showConfirmButton: true,
+            customClass: { confirmButton: "my-swal-button" },
+          });
+        } finally {
+          setisloading(false);
+        }
+      };
 
 
   return (
@@ -551,7 +619,7 @@ const handleAddMore = () => {
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                // onClick={save_chif_complaints}
+                onClick={save_chif_complaints}
               >
                 Save
               </Button>

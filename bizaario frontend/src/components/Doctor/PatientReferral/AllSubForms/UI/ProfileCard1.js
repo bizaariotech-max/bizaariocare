@@ -13,7 +13,7 @@ const ProfileCard1 = (selected_patient_details) => {
         {/* Profile Image */}
         <div className="flex-shrink-0">
           <img
-            src={PatientDetails.ProfilePic}
+            src={PatientDetails?.ProfilePic}
             alt="Kapupriya Gupta"
             className="w-40 h-40  rounded-lg object-cover"
           />
@@ -31,8 +31,8 @@ const ProfileCard1 = (selected_patient_details) => {
             <div className="flex items-center space-x-2">
               <Calendar className="w-4 h-4 text-gray-500" />
               <span className="text-sm text-gray-700 font-medium">
-              {PatientDetails.DateOfBirth
-                ? new Date(PatientDetails.DateOfBirth).toLocaleDateString()
+              {PatientDetails?.DateOfBirth
+                ? new Date(PatientDetails?.DateOfBirth).toLocaleDateString()
                 : "-"}
             </span>
 

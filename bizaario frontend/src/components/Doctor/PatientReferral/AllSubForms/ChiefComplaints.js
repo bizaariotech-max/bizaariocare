@@ -211,14 +211,6 @@ const handleAddMore = () => {
       },[])
 
 
-
-
-
-
-
-
-
-
 const handleSymptomSelect = (id, index) => {
   setpatient_details(prev => {
     const updated = [...prev];
@@ -402,12 +394,7 @@ const renderColorBar = (index) => {
   return (
     <div className="space mt-4">
 
-     <div className="flex items-center space-x-2">
-      <img src={healthicon} alt="" className="w-[36px] h-[36px]" />
-      <h2 className="text-[36px] font-semibold text-[var(--button-back-color)]">
-        <span>View Health Assessment Report</span>
-      </h2>
-    </div>
+    
 
 
       {/* Header */}
@@ -630,6 +617,8 @@ const renderColorBar = (index) => {
           
          
           </Modal>
+
+
 
 
 

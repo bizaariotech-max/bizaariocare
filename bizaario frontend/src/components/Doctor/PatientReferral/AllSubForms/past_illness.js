@@ -838,19 +838,19 @@ const save_chif_complaints = async () => {
         <img src={generalphysician} alt='' style={{height:"26px"}} />
         <p style={{ margin: 0, fontWeight: "600", fontFamily: "Lora", whiteSpace: "nowrap" }}>{item.doctor}</p>
       </div>
-      <ChiefComplaintsForMedicalSummary/>
+      <ChiefComplaintsForMedicalSummary patientId={patientId}/>
     </div>
 
     <div className='card-details'>
-      <DiagnosticsInvestigationsForMedicalSummary/>
+      <DiagnosticsInvestigationsForMedicalSummary patientId={patientId}/>
     </div>
 
     <div className='card-details'>
-      <CurrentMedicinesForMedicalSummary/>
+      <CurrentMedicinesForMedicalSummary patientId={patientId}/>
     </div>
 
     <div className='card-details'>
-      <CurrentTherapyForMedicalSummary/>
+      <CurrentTherapyForMedicalSummary patientId={patientId}/>
     </div>
   </div>
 ))}

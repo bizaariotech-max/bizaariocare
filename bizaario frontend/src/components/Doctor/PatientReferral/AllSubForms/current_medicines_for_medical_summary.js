@@ -13,8 +13,10 @@ import UniqueLoader from '../../../loader';
 import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap';
 import { __postApiData } from "../../../../utils/api";
-const CurrentMedicinesForMedicalSummary = () => {
+const CurrentMedicinesForMedicalSummary = (patientId) => {
 
+   const doctordetails=JSON.parse(localStorage.getItem("user"))
+   
   // Sample data for the complaints
   const complaintsData = [
     {
@@ -254,6 +256,73 @@ const handleAddMoreClinicalMedicines = () => {
   }));
 };
 
+   const[isloading,setisloading]=useState(false)
+
+const save_chif_complaints = async () => {
+  setisloading(true);
+  try {
+    const payload=
+    {...medical_history,
+      PatientId:patientId.patientId.patientId,
+      CreatedBy:doctordetails._id
+    }
+    const resp = await api.post(
+      `api/v1/admin/medicalHistory/saveMedicalHistory`,
+      payload,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    console.log(resp);
+    
+
+    const { response_code, response_message } = resp.data.response;
+
+    if (response_code === "200") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Added",
+        text: "Patient Details Added Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else if (response_code === "400") {
+      // Show server validation error here
+      Swal.fire({
+        icon: "error",
+        title: response_message.errorType || "Error",
+        text: response_message.error,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    } else {
+      // Optional: handle other response codes
+      Swal.fire({
+        icon: "warning",
+        title: "Unexpected response",
+        text: "Something went wrong. Please try again.",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: "error",
+      title: "Request failed",
+      text: error.message || "Something went wrong",
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  } finally {
+    setisloading(false);
+  }
+};
+
+
+
 
   return (
     <div className="space mt-4">
@@ -326,7 +395,7 @@ const handleAddMoreClinicalMedicines = () => {
  <Modal show={show} onHide={handleClose} centered size="lg">
         
               <Modal.Header closeButton>
-                <Modal.Title className='form-title'>Add Medicines </Modal.Title>
+                <Modal.Title className='form-title'>Add Medical History(Medicines) </Modal.Title>
               </Modal.Header>
               <Modal.Body>
               
@@ -341,7 +410,7 @@ const handleAddMoreClinicalMedicines = () => {
  <div className='col-span-2'>
           <h5 className='form-title'>Medicines Prescribed </h5>
             
-               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 ">
                 {medical_history.MedicinesPrescribed.Medicines.map((details, index) => (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 col-span-2 border border-gray-300 rounded-lg p-2">
                  <FormControl fullWidth size="small">
@@ -525,7 +594,7 @@ const handleAddMoreClinicalMedicines = () => {
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                // onClick={save_chif_complaints}
+                onClick={save_chif_complaints}
               >
                 Save
               </Button>

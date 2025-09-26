@@ -41,7 +41,7 @@ const ProfileCard2 = (selected_patient_details) => {
                <div className="flex items-center space-x-3">
               <span className="text-gray-700 font-medium">Name:</span>
               <span className="text-sm text-gray-900 font-medium font-bold">
-                {PatientDetails.SecondaryContactName || "-"}
+                {PatientDetails?.SecondaryContactName || "-"}
               </span>
             </div>
 
@@ -54,7 +54,7 @@ const ProfileCard2 = (selected_patient_details) => {
 
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-gray-600" />
-                <span className="text-sm text-gray-900 font-medium">{PatientDetails.SecondaryContactNumber}</span>
+                <span className="text-sm text-gray-900 font-medium">{PatientDetails?.SecondaryContactNumber}</span>
               </div>
 
               {/* Printer/Fax */}
