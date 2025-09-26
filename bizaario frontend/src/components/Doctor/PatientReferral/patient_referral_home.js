@@ -35,47 +35,20 @@ import { useLocation } from 'react-router-dom';
 const PatientReferralHome = () => {
 
   const location =useLocation()
+ 
+  
   const patient_details=location.state.patient_details
 
+
   const patientId=patient_details._id
-  console.log(PatientDetails);
   
-    const [show, setShow] = useState(false)
-  
-    // function to open modal
-    const handleShow = () => setShow(true);
-    // function to close modal
-    const handleClose = () => setShow(false);
+ console.log(patientId);
+ console.log(patient_details);
+ 
 
-    useEffect(()=>
-    {
-      handleShow()
-    },[])
+   
 
-      //=========================== get all patient details=========================================
     
-      const[all_patient,setall_patient]=useState([])
-
-      const get_patient_details=async()=>
-      {
-        try {
-          const resp=await api.get(`api/v1/admin/patientList`)
-          console.log(resp);
-        setall_patient(resp.data.data.list)
-          
-          
-        } catch (error) {
-          console.log(error);
-          
-        }
-      }
-    
-      useEffect(()=>
-      {
-        get_patient_details()
-      },[])
-console.log(patientId);
-
   
 
   return (
@@ -88,7 +61,7 @@ console.log(patientId);
         <div className="main-content">
       <PatientTabs />
       <PatientDetails patientId={patientId}/>
-      <OpenMedicalCaseFiles patientId={patientId}/>
+      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details}/>
       <ChiefComplaints  patientId={patientId}/>
       <CurrentMedicines />
       <ClinicalOutcome />

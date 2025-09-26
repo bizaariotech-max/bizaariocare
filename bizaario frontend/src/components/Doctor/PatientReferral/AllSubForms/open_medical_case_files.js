@@ -16,55 +16,47 @@ import healthicon from '../AllSubForms/assets/images/view health assessment repo
 import calendericon from '../../../../assets1/Vector (2).png'
 
 
-const OpenMedicalCaseFiles = (patientId) => {
+const OpenMedicalCaseFiles = ({patientId,patient_details}) => {
 
 
+  
   const doctor_details=JSON.parse(localStorage.getItem("user"))
 
   const[isloading_for,setisloading_for]=useState(false)
 
-    const [patient_details, setpatient_details] = useState([{
-      SymptomClass:[],
-      Compliant : '',
-      Duration : '',
-      SeverityGrade : '',
-      AggravatingFactors : [],
-      CurrentMedications : '',
-      Dosage : '',
-      Frequency : '',
-      CurrentTherapies : '',
-      CreatedBy: doctor_details._id,
-    }]);
+    const [medical_case_file, setmedical_case_file] = useState({
+      PatientId:"",
+      TreatmentType : '',
+      DoctorId : '',
+      DoctorName : '',
+      HospitalId : '',
+      HospitalName : '',
+      Date : '',
+      MedicalSpeciality:''
+    
+    });
 
-const handleChange = (e, index) => {
+const handleChange = (e) => {
   const { name, value, type, checked } = e.target;
 
-  setpatient_details((prev) => {
-    const updated = [...prev];
-    const obj = { ...updated[index] };
-
-    if (type === "checkbox") {
-      obj[name] = checked;
-    } else if (Array.isArray(value)) {
-      // multi-select case
-      obj[name] = value;
-    } else {
-      // single value
-      obj[name] = value;
-    }
-
-    updated[index] = obj;
-    return updated;
-  });
+  setmedical_case_file((prev) => ({
+    ...prev,
+    [name]: type === "checkbox" ? checked : value
+  }));
 };
+
 
 
  const save_chif_complaints = async () => {
   setisloading_for(true);
   try {
+    const payload={
+      ...medical_case_file,
+      PatientId:patientId
+    }
     const resp = await api.post(
-      `api/v1/admin/patientprofiling/chief-complaints/${patientId.patientId}`,
-      patient_details,
+      `api/v1/admin/patientCaseFile/savepatientCaseFile`,
+      payload,
       {
         headers: { "Content-Type": "application/json" },
       }
@@ -78,7 +70,7 @@ const handleChange = (e, index) => {
       Swal.fire({
         icon: "success",
         title: "Details Added",
-        text: "Patient Details Added Successfully...",
+        text: "Medical Case File Added Successfully...",
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
@@ -129,20 +121,7 @@ const handleChange = (e, index) => {
     const handleClose_medical_files = () => setshow_medical_files(false);
   
   
-  // const[isloading_for,setisloading_for]=useState(false)
-
-  //   const [patient_details, setpatient_details] = useState([{
-  //     SymptomClass:[],
-  //     Compliant : '',
-  //     Duration : '',
-  //     SeverityGrade : '',
-  //     AggravatingFactors : [],
-  //     CurrentMedications : '',
-  //     Dosage : '',
-  //     Frequency : '',
-  //     CurrentTherapies : '',
-  //     CreatedBy: doctor_details._id,
-  //   }]);
+ 
 
 
   //====================================== get all medical speciality =====================================
@@ -217,27 +196,15 @@ const getallmedical_speciality = async () => {
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                 
-
-                  <FormControl fullWidth size="small">
-                  <label className="form-label">Medical Case File Id </label>
-                  <TextField
-                  type='text'
-                  placeholder="Date" 
-                  name="Date" 
-                  size="small" 
-                  // value={medical_history.DoctorHospitalInfo.Date} 
-                  onChange={handleChange} 
-                  />
-                  </FormControl>
-
                     <FormControl fullWidth size="small">
                   <label className="form-label">Patient Name </label>
                   <TextField
                   type='text'
-                  placeholder="Date" 
+                  placeholder="Patient Name" 
                   name="Date" 
                   size="small" 
-                  // value={medical_history.DoctorHospitalInfo.Date} 
+                   inputProps={{ readOnly: true }} 
+                  value={patient_details?.Name} 
                   onChange={handleChange} 
                   />
                   </FormControl>
@@ -249,7 +216,10 @@ const getallmedical_speciality = async () => {
                   placeholder="Date" 
                   name="Date" 
                   size="small" 
-                  // value={medical_history.DoctorHospitalInfo.Date} 
+                    value={patient_details?.DateOfBirth?
+                    new Date(patient_details.DateOfBirth).toISOString().split("T")[0]
+                    : ""
+                  }
                   onChange={handleChange} 
                   />
                   </FormControl>
@@ -259,8 +229,8 @@ const getallmedical_speciality = async () => {
                  
                       <RadioGroup size="small"
                         row
-                        name="EntityTypeId"
-                        // value={loginmaster.EntityTypeId}
+                        name="Gender"
+                        value={patient_details?.Gender}
                         // onChange={handlechange}
                         sx={{ flexDirection: 'row', alignItems: 'flex-start', gap: 1 }}
                       >
@@ -278,7 +248,7 @@ const getallmedical_speciality = async () => {
             <Select
                   labelId="content-type-label"
                   name="MedicalSpeciality"
-                //  value={medical_history.DoctorHospitalInfo.MedicalSpeciality}
+                 value={medical_case_file.MedicalSpeciality}
                  onOpen={() => {
                     if (allmedical_speciality.length === 0) { // prevent multiple calls
                     getallmedical_speciality();
@@ -313,6 +283,48 @@ const getallmedical_speciality = async () => {
               </Select>
               </FormControl>
 
+
+         <FormControl fullWidth size="small">
+              <label className="form-label">Select Doctor</label>
+            <Select
+                  labelId="content-type-label"
+                  name="DoctorId"
+                 value={medical_case_file.DoctorId}
+                 onOpen={() => {
+                    if (allmedical_speciality.length === 0) { // prevent multiple calls
+                    getallmedical_speciality();
+                    }
+                }}
+                 onChange={handleChange}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Select Doctor </span>; 
+                    }
+                    return allmedical_speciality?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select Doctor </em>
+                  </MenuItem>
+                 {loadingSpeciality ? (
+                    <MenuItem disabled>
+                    <CircularProgress size={20} />
+                    </MenuItem>
+                ) : (
+                    allmedical_speciality?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                        {type.lookup_value}
+                    </MenuItem>
+                    ))
+                )}
+                              
+  
+              </Select>
+              </FormControl>
+
+
                   <FormControl fullWidth size="small">
                   <label className="form-label">Doctor Name </label>
                   <TextField
@@ -320,19 +332,59 @@ const getallmedical_speciality = async () => {
                   placeholder="Doctor Name" 
                   name="DoctorName" 
                   size="small" 
-                  // value={medical_history.DoctorHospitalInfo.DoctorName} 
+                  value={medical_case_file.DoctorName} 
                   onChange={handleChange} 
                   />
                   </FormControl>
 
+            <FormControl fullWidth size="small">
+              <label className="form-label">Select Hospital</label>
+            <Select
+                  labelId="content-type-label"
+                  name="HospitalId"
+                 value={medical_case_file.HospitalId}
+                 onOpen={() => {
+                    if (allmedical_speciality.length === 0) { // prevent multiple calls
+                    getallmedical_speciality();
+                    }
+                }}
+                 onChange={handleChange}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Select Hospital </span>; 
+                    }
+                    return allmedical_speciality?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select Hospital </em>
+                  </MenuItem>
+                 {loadingSpeciality ? (
+                    <MenuItem disabled>
+                    <CircularProgress size={20} />
+                    </MenuItem>
+                ) : (
+                    allmedical_speciality?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                        {type.lookup_value}
+                    </MenuItem>
+                    ))
+                )}
+                              
+  
+              </Select>
+              </FormControl>
+
                   <FormControl fullWidth size="small">
                   <label className="form-label">Hospital/Clinic Name </label>
                   <TextField
-                  type='number'
-                  placeholder="Doctor Number" 
-                  name="DoctorNumber" 
+                  type='text'
+                  placeholder="Hospital Name" 
+                  name="HospitalName" 
                   size="small" 
-                  // value={medical_history.DoctorHospitalInfo.DoctorNumber} 
+                  value={medical_case_file.HospitalName} 
                   onChange={handleChange} 
                   />
                   </FormControl>
@@ -341,10 +393,10 @@ const getallmedical_speciality = async () => {
                   <label className="form-label">Date Of Treatment </label>
                   <TextField
                   type='date'
-                  placeholder="Hospital Name" 
-                  name="HospitalName" 
+                  placeholder="Date" 
+                  name="Date" 
                   size="small" 
-                  // value={medical_history.DoctorHospitalInfo.HospitalName}
+                  value={medical_case_file.Date}
                   onChange={handleChange} 
                   />
                   </FormControl>
@@ -355,18 +407,18 @@ const getallmedical_speciality = async () => {
                   
                       <RadioGroup size="small"
                         row
-                        name="EntityTypeId"
-                        // value={loginmaster.EntityTypeId}
-                        // onChange={handlechange}
+                        name="TreatmentType"
+                        value={medical_case_file.TreatmentType}
+                        onChange={handleChange}
                         sx={{ flexDirection: 'row', alignItems: 'flex-start', gap: 1 }}
                       >
                       
                         
                       <FormControlLabel value="OPD Visit Record" control={<Radio />} label="OPD Visit Record" />
-                      <FormControlLabel value="Day Care Visit Record" control={<Radio />} label="Day Care Visit Record" />
+                      <FormControlLabel value="Day care Visit Record" control={<Radio />} label="Day Care Visit Record" />
                       <FormControlLabel value="Maternity Record" control={<Radio />} label="Maternity Record" />
-                      <FormControlLabel value="OPD Visit Record" control={<Radio />} label="General(Non-Surgical) Hospitalisation Record" />
-                      <FormControlLabel value="OPD Visit Record" control={<Radio />} label="Surgery/Procedure Record" />
+                      <FormControlLabel value="General (Non-surgical) Hospitalisation Record" control={<Radio />} label="General(Non-Surgical) Hospitalisation Record" />
+                      <FormControlLabel value="Surgery/ Procedure Record" control={<Radio />} label="Surgery/Procedure Record" />
                       
                       </RadioGroup>
                   </FormControl>
@@ -411,13 +463,22 @@ const getallmedical_speciality = async () => {
           <p className="form-title  text-gray-600">
             {file.DoctorName || 'N/A'}
           </p>
-          <p className="text-sm text-gray-600">
+          <div className='flex justify-between'>
+          <p className=" flex text-sm text-gray-600">
             <strong>Medical Speciality:</strong>{' '}
             {
               allmedical_speciality.find((item) => item._id === file.MedicalSpeciality)
                 ?.lookup_value || 'N/A'
             }
+            
           </p>
+
+          <div className='flex justify-between gap-2'>
+            <button className='classic-button'>Ongoing</button>
+            <button className='classic-button'>Past</button>
+            </div>
+
+          </div>
         </div>
       ))}
     </div>

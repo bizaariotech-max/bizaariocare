@@ -21,6 +21,24 @@
 {
     /* padding-left: 100px; */
 }
+.classic-button
+{
+height: 40px;
+  display: flex;
+  padding: 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius:10px;
+  background: var(--button-back-color);;
+  color:#FFF;
+  font-family:var(--heading-font);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal
+
+}
 
 
 .form-grid {
