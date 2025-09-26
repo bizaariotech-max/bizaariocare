@@ -1,7 +1,18 @@
 
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import healthicon from '../AllSubForms/assets/images/view health assessment report icon.png';
+import generalphysician from '../AllSubForms/assets/images/general physician.png'
+import ChiefComplaintsForMedicalSummary from './chief_complaints_for_medical_summary';
+import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations_for_medical_summary';
+import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
+import { useEffect, useState } from 'react'
+import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
+import api from '../../../../api'
+import Swal from 'sweetalert2';
+import UniqueLoader from '../../../loader';
+import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
+import { Modal, } from 'react-bootstrap';
+import { __postApiData } from "../../../../utils/api";
 const CurrentMedicinesForMedicalSummary = () => {
 
   // Sample data for the complaints
@@ -53,6 +64,197 @@ const CurrentMedicinesForMedicalSummary = () => {
       </div>
     );
   };
+
+
+ const [medical_history, setmedical_history] = useState({
+    PatientId:"68ce3b785c9caf7ccffeede8",
+    MedicinesPrescribed:{
+            Medicines:[{MedicineName:"",Dosage:"",DurationInDays:"" }],
+            RecoveryCycle  : {Value:"",Unit:""},
+            PrescriptionUrls  : [],
+         }
+    });
+
+
+    //========================== modal open or close start==========================================
+    
+      const [show, setShow] = useState(false)
+        const handleShow = () => setShow(true);
+        const handleClose = () => setShow(false);
+    
+    //=========================== modal open or close end===============================================
+// ===============================onchange events for ClinicalDiagnoses start============================
+
+
+const handleMedicineChange = (index, field, value) => {
+  setmedical_history(prev => {
+    const updatedMedicines = [...prev.MedicinesPrescribed.Medicines];
+    updatedMedicines[index] = {
+      ...updatedMedicines[index],
+      [field]: value
+    };
+
+    return {
+      ...prev,
+      MedicinesPrescribed: {
+        ...prev.MedicinesPrescribed,
+        Medicines: updatedMedicines
+      }
+    };
+  });
+};
+
+const handleMedicinePrescribedChange = (field, value, subField = null) => {
+  setmedical_history(prev => {
+    const updated = { ...prev.MedicinesPrescribed };
+
+    if (subField) {
+      updated[field] = {
+        ...updated[field],
+        [subField]: value
+      };
+    } else {
+      updated[field] = value;
+    }
+
+    return {
+      ...prev,
+      MedicinesPrescribed: updated
+    };
+  });
+};
+
+//============================== handle multiple image upload==================================
+
+const handlePrescriptionImagesChange = async (e) => {
+  const files = e.target.files; // multiple files selected
+  if (!files || files.length === 0) return;
+
+  try {
+    // Create FormData for all files
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append("file", files[i]);
+    }
+
+    const resp = await api.post("api/v1/common/AddImage", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    // ✅ Extract URLs from response
+    if (
+      resp.data?.response?.response_code === "200" &&
+      resp.data.data?.length > 0
+    ) {
+      // Map each uploaded file to its URL
+      const uploadedUrls = resp.data.data.map((item) => item.full_URL);
+
+      // ✅ Append these URLs to state
+      setmedical_history((prev) => ({
+        ...prev,
+        MedicinesPrescribed: {
+          ...prev.MedicinesPrescribed,
+          PrescriptionUrls: [
+            ...prev.MedicinesPrescribed.PrescriptionUrls,
+            ...uploadedUrls,
+          ],
+        },
+      }));
+    }
+  } catch (error) {
+    console.error("Prescription images upload error:", error);
+  }
+};
+
+
+
+// ====================================get all medicine list ===================================
+
+    const[all_salt_master,setall_salt_master]=useState([])
+      const getall_salt_master=async()=>
+      {
+        try {
+            const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"pharmaceutical_salt_master"})
+          console.log(resp);
+          
+          setall_salt_master(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_salt_master()
+    
+      },[])
+
+//================================== get dosage list============================================
+
+  const[all_dosage_type,setall_dosage_type]=useState([])
+      const getall_dosage_type=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"dosage_type"})
+          console.log(resp);
+          
+          setall_dosage_type(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_dosage_type()
+    
+      },[])
+
+//================================== get unit list============================================
+
+  const[all_unit_list,setall_unit_list]=useState([])
+      const getall_unitlist=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"duration_unit_type"})
+          console.log(resp);
+          
+          setall_unit_list(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_unitlist()
+    
+      },[])
+
+
+// =================================add more function============================================
+
+
+const handleAddMoreClinicalMedicines = () => {
+  setmedical_history(prev => ({
+    ...prev,
+    MedicinesPrescribed: {
+      ...prev.MedicinesPrescribed,
+      Medicines: [
+        ...prev.MedicinesPrescribed.Medicines,
+        { MedicineName: "", Dosage: "", DurationInDays: "" }
+      ]
+    }
+  }));
+};
+
+
   return (
     <div className="space mt-4">
 
@@ -66,7 +268,7 @@ const CurrentMedicinesForMedicalSummary = () => {
         </h2>
         <div className="flex items-center space-x-4">
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
-            <span className="text-sm font-medium underline">Add</span>
+            <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
             <Plus className="w-4 h-4" />
           </button>
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
@@ -118,6 +320,228 @@ const CurrentMedicinesForMedicalSummary = () => {
           1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
         </p>
       </div>
+
+
+
+ <Modal show={show} onHide={handleClose} centered size="lg">
+        
+              <Modal.Header closeButton>
+                <Modal.Title className='form-title'>Add Medicines </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+              
+      
+         <div>
+      
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                
+
+{/* ============================Medicines Prescribed ======================================= */}
+
+ <div className='col-span-2'>
+          <h5 className='form-title'>Medicines Prescribed </h5>
+            
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                {medical_history.MedicinesPrescribed.Medicines.map((details, index) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 col-span-2 border border-gray-300 rounded-lg p-2">
+                 <FormControl fullWidth size="small">
+                  <label className="form-label">Medicine Name </label>
+                  <Select
+                  labelId="content-type-label"
+                  name="Nationality"
+                  value={details.MedicineName} 
+                  onChange={(e) => handleMedicineChange(index, "MedicineName", e.target.value)}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Medicine Name </span>; 
+                    }
+                    return all_salt_master?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Medicine Name </em>
+                  </MenuItem>
+                  {all_salt_master?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+            </FormControl>
+
+             <FormControl fullWidth size="small">
+                  <label className="form-label">Dosage </label>
+                       <Select
+                  labelId="content-type-label"
+                  name="Nationality"
+                   value={details.Dosage} 
+                  onChange={(e) => handleMedicineChange(index, "Dosage", e.target.value)} 
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Dosage </span>; 
+                    }
+                    return all_dosage_type?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Dosage </em>
+                  </MenuItem>
+                  {all_dosage_type?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+              </Select>
+              
+                  </FormControl>
+
+                    <FormControl fullWidth size="small">
+                  <label className="form-label">Duration (Days) </label>
+                  <TextField
+                  type='text'
+                  placeholder="Duration In Days" 
+                  name="DurationInDays" 
+                  size="small" 
+                  value={details.DurationInDays} 
+                  onChange={(e) => handleMedicineChange(index, "DurationInDays", e.target.value)} 
+                  />
+                  </FormControl>
+
+                        <div className="flex justify-between mt-8 h-8">
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={handleAddMoreClinicalMedicines}
+              >
+                Add More
+              </Button>
+
+              
+            </div>
+
+                  </div>
+                ))}
+             
+
+             
+
+
+             
+
+                   <FormControl fullWidth size="small">
+                  <label className="form-label">Recovery Cycle</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {/* Number input */}
+                    <TextField
+                      type="number"
+                      name="Value"
+                      placeholder="Enter Number"
+                      size="small"
+                      defaultValue={medical_history.MedicinesPrescribed.RecoveryCycle.Value} 
+                       onChange={(e) => handleMedicinePrescribedChange( "RecoveryCycle", e.target.value, "Value")} 
+                      style={{ flex: 1 }}
+                    />
+                
+                  
+                 <Select
+                  labelId="content-type-label"
+                  name="InvestigationCategory"
+                  value={medical_history.MedicinesPrescribed.RecoveryCycle.Unit} 
+                  onChange={(e) => handleMedicinePrescribedChange("RecoveryCycle",e.target.value, "Unit")}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Unit </span>; 
+                    }
+                    return all_unit_list?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Unit </em>
+                  </MenuItem>
+                  {all_unit_list?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+                    {/* Dropdown for Days/Weeks/Months */}
+                    {/* <Select
+                      name="Unit"
+                      defaultValue="Days"
+                      size="small"
+                      value={medical_history.MedicinesPrescribed.RecoveryCycle.Unit} 
+                      onChange={(e) => handleMedicinePrescribedChange("RecoveryCycle",e.target.value, "Unit")}
+                      style={{ width: '150px' }}
+                    >
+                      <MenuItem value="Days">Days</MenuItem>
+                      <MenuItem value="Weeks">Weeks</MenuItem>
+                      <MenuItem value="Months">Months</MenuItem>
+                    </Select> */}
+                  </div>
+                </FormControl>
+          
+      
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Upload Prescriptions  </label>
+                  <TextField
+                  inputProps={{ multiple: true }}
+                  type='file'
+                  placeholder="Prescription Urls" 
+                  name="PrescriptionUrls" 
+                  size="small" 
+                  // value={medical_history.MedicinesPrescribed.PrescriptionUrls} 
+                  onChange={(e)=>handlePrescriptionImagesChange(e)} 
+                  />
+                  </FormControl>
+      
+                
+    
+            
+        </div> 
+
+       
+               
+      </div> 
+
+
+
+
+
+    </div> 
+
+   
+               
+               <div className="flex justify-end mt-4">
+           
+
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                // onClick={save_chif_complaints}
+              >
+                Save
+              </Button>
+            </div>
+
+      
+              </div> 
+      
+              </Modal.Body>
+          
+         
+          </Modal>
+
+
+
+
     </div>
   );
 }

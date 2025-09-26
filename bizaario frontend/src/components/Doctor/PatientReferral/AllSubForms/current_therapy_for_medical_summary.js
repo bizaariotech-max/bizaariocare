@@ -1,8 +1,20 @@
 
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import healthicon from '../AllSubForms/assets/images/view health assessment report icon.png';
-import CurrentTherapy from './CurrentTherapy';
+import generalphysician from '../AllSubForms/assets/images/general physician.png'
+import ChiefComplaintsForMedicalSummary from './chief_complaints_for_medical_summary';
+import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations_for_medical_summary';
+import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
+import { useEffect, useState } from 'react'
+import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
+import api from '../../../../api'
+import Swal from 'sweetalert2';
+import UniqueLoader from '../../../loader';
+import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
+import { Modal, } from 'react-bootstrap';
+import { __postApiData } from "../../../../utils/api";
+
+
 const CurrentTherapyForMedicalSummary = () => {
 
   // Sample data for the complaints
@@ -24,30 +36,78 @@ const CurrentTherapyForMedicalSummary = () => {
     }
   ];
 
-  // Function to render severity grade as color bars
-  const renderSeverityGrade = (severity) => {
-    const segments = [
-      { color: 'bg-red-600', active: severity >= 1 },
 
-      { color: 'bg-[#ffc001]', active: severity >= 2 },
-      { color: 'bg-[#feff99]', active: severity >= 3 },
-      { color: 'bg-[#92d14f]', active: severity >= 4 },
-      { color: 'bg-[#107c42]', active: severity >= 5 },
+   const [medical_history, setmedical_history] = useState({
+      PatientId:"68ce3b785c9caf7ccffeede8",
+      Therapies :[{
+              TherapyName:"",
+              PatientResponse:""
+          }]
+  
+      });
+
+  //========================== modal open or close start==========================================
+  
+    const [show, setShow] = useState(false)
+      const handleShow = () => setShow(true);
+      const handleClose = () => setShow(false);
+  
+  //=========================== modal open or close end===============================================
+// ===============================onchange events for therapy start============================
 
 
-    ];
-    return (
-      <div className="flex items-center space-x-1">
-        {segments.map((segment, index) => (
-          <div
-            key={index}
-            className={`h-6 ${index === 4 ? 'w-8' : 'w-8'} ${segment.active ? segment.color : 'bg-gray-200'
-              } ${index === 4 ? 'rounded-none' : 'rounded-sm'}`}
-          />
-        ))}
-      </div>
-    );
-  };
+const handleTherapyChange = (index, field, value) => {
+  setmedical_history(prev => {
+    const updatedTherapy = [...prev.Therapies];
+    const newtherapy = { ...updatedTherapy[index] };
+
+   
+    newtherapy[field] = value;
+    
+    updatedTherapy[index] = newtherapy;
+
+    return {
+      ...prev,
+      Therapies: updatedTherapy
+    };
+  });
+};
+
+// ===============================get all therapy data(change for medical speciality)====================================
+
+     const[all_therapy_master,setall_therapy_master]=useState([])
+          const getall_therapy_master=async()=>
+          {
+            try {
+              const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"therapy_type"})
+              console.log(resp);
+              
+              setall_therapy_master(resp.data.data)
+              
+            } catch (error) {
+              console.log(error);
+              
+            }
+          }
+        
+          useEffect(()=>
+          {
+            getall_therapy_master()
+        
+          },[])
+
+//======================================= add more function====================================
+
+          const handleAddMoreClinicalTherapy = () => {
+          setmedical_history(prev => ({
+            ...prev,                      
+            Therapies: [                
+              ...(prev.Therapies || []),
+              { TherapyName: "", PatientsResponse: "" } 
+            ],
+          }));
+        };
+
   return (
      <div className="space ">
           {/* Header */}
@@ -57,7 +117,7 @@ const CurrentTherapyForMedicalSummary = () => {
             </h2>
             <div className="flex items-center space-x-4">
               <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
-                <span className="text-sm font-medium underline">Add</span>
+                <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
                 <Plus className="w-4 h-4" />
               </button>
               <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
@@ -102,6 +162,118 @@ const CurrentTherapyForMedicalSummary = () => {
               1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
             </p>
           </div>
+
+
+            <Modal show={show} onHide={handleClose} centered size="lg">
+                  
+                        <Modal.Header closeButton>
+                          <Modal.Title className='form-title'>Add Therapy (ies) </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                        
+                
+                   <div>
+                
+                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                      
+          {/*==================================== add therapy============================================ */}
+          
+           <div className='col-span-2'>
+                  
+                      
+                   {medical_history.Therapies.map((details, index) => (
+                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                       
+          
+                           <FormControl fullWidth size="small">
+                            <label className="form-label">Therapy Name </label>
+                             <Select
+                            labelId="content-type-label"
+                            name="TherapyName"
+                           value={details.TherapyName}
+                           onChange={(e) => handleTherapyChange(index, "TherapyName",e.target.value,)} 
+                            displayEmpty
+                            MenuProps={customMenuProps}
+                            renderValue={(selected) => {
+                              if (!selected) {
+                                return <span style={{ color: "#9ca3af" }}>Therapy Name </span>; 
+                              }
+                              return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
+                            }}
+                          >
+                            <MenuItem value="">
+                              <em>Therapy Name</em>
+                            </MenuItem>
+                            {all_therapy_master?.map((type) => (
+                              <MenuItem key={type._id} value={type._id}>
+                                {type.lookup_value}
+                              </MenuItem>
+                            ))}
+                        </Select>
+          
+                            </FormControl>
+          
+                       <FormControl fullWidth size="small">
+                            <label className="form-label">Patient’s Response  </label>
+                            <TextField
+                            type='text'
+                            placeholder="Patient Response" 
+                            name="PatientResponse" 
+                            size="small" 
+                            value={details.PatientResponse} 
+                            onChange={(e) => handleTherapyChange(index, "PatientResponse",e.target.value,)} 
+                            />
+                            </FormControl>
+          
+                       
+                     
+                       
+          
+                         <div className="flex justify-between mt-2">
+                        <Button
+                          style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                          onClick={handleAddMoreClinicalTherapy}
+                        >
+                          Add More
+                        </Button>
+          
+                        
+                      </div>
+                      
+                  </div> 
+          
+                  
+          
+                      ))}
+                         
+                </div> 
+          
+          
+              </div> 
+          
+             
+                         
+                         <div className="flex justify-end mt-4">
+                     
+          
+                        <Button
+                          style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                          // onClick={save_chif_complaints}
+                        >
+                          Save
+                        </Button>
+                      </div>
+          
+                
+                        </div> 
+                
+                        </Modal.Body>
+                    
+                   
+                    </Modal>
+
+
+
         </div>
   );
 }

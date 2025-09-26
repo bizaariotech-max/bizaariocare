@@ -4,7 +4,7 @@ import generalphysician from '../AllSubForms/assets/images/general physician.png
 import ChiefComplaints from './ChiefComplaints';
 import ChiefComplaintsForMedicalSummary from './chief_complaints_for_medical_summary';
 import DiagnosticsInvestigations from './DiagnosticsInvestigations';
-import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations';
+import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations_for_medical_summary';
 import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
 import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
 import { useEffect, useState ,useRef} from 'react'

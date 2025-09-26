@@ -2,7 +2,7 @@ import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import generalphysician from '../AllSubForms/assets/images/general physician.png'
 import ChiefComplaintsForMedicalSummary from './chief_complaints_for_medical_summary';
-import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations';
+import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations_for_medical_summary';
 import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
 import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
 import { useEffect, useState } from 'react'
@@ -17,7 +17,7 @@ import { __postApiData } from "../../../../utils/api";
 
 const PastIllness = (patientId) => {
 
-
+ const doctordetails=JSON.parse(localStorage.getItem("user"))
 
   const medicalData1 = [
   {
@@ -363,7 +363,7 @@ const handlePrescriptionImagesChange = async (e) => {
 };
 
 
-//================================== get dosage list============================================
+//================================== get unit list============================================
 
   const[all_unit_list,setall_unit_list]=useState([])
       const getall_unitlist=async()=>
@@ -689,7 +689,11 @@ const[isloading,setisloading]=useState(false)
 const save_chif_complaints = async () => {
   setisloading(true);
   try {
-    const payload={...medical_history,patientId:patientId.patientId}
+    const payload=
+    {...medical_history,
+      PatientId:patientId.patientId,
+      CreatedBy:doctordetails._id
+    }
     const resp = await api.post(
       `api/v1/admin/medicalHistory/saveMedicalHistory`,
       payload,
