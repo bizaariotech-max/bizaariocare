@@ -1,26 +1,122 @@
-.table-header
-{
-    font-size: 20px;
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+:root {
+  --primary-color: #52677d;
+  --secondary-color: #f2f3f6;
+  --white-color: #ffffff;
+  --black-color: #000000;
 }
 
-.medical-card
-{
-    background-color: rgba(82, 103, 125, 0.20);
-    display: flex;
-    width: 250px;
-    height: 103px;
-    padding: 10px;
-    flex-direction: row;
-    justify-content:center;
-    align-items:center;
-    gap: "9px";
-    border-radius: 10px
+.primary-bg {
+  background-color: #52677d;
 }
 
-.card-details
-{
-    /* padding-left: 100px; */
+.primary-color {
+  color: #52677d;
 }
+
+.primary-border {
+  border-color: #52677d;
+}
+
+.table-header {
+  font-size: 20px;
+}
+
+.medical-card {
+  background-color: rgba(82, 103, 125, 0.20);
+  /* display: flex; */
+  width: 100%;
+  /* height: 103px; */
+
+  /* flex-direction: row; */
+  justify-content: center;
+  align-items: center;
+  gap: "9px";
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+
+
+.space {
+  margin-top: 36px;
+  line-height: normal;
+}
+
+.lora {
+  font-family: "Lora", sans-serif;
+}
+
+:is(h2, h3, h4, .table-header) {
+  font-family: "Lora", sans-serif;
+  /* font-size: 24px; */
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+table th {
+  font-family: "Lora", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.light-text {
+  color: #4d4d4d;
+
+}
+
+.custom-btn2 {
+  cursor: pointer;
+  padding: 12px 30px;
+  margin: 0;
+  position: relative;
+  display: inline-block;
+  /* border: 2px solid #cda301; */
+  border-radius: 8px;
+  overflow: hidden;
+  background: transparent;
+  background-color: #ffffff;
+  transition: color 0.4s ease;
+  z-index: 1;
+  color: var(--primary-color);
+}
+
+.custom-btn2::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--primary-color);
+  transition: left 0.4s ease;
+  z-index: -1;
+}
+
+.custom-btn2:hover::after {
+  left: 0;
+
+}
+
+.custom-btn2:hover {
+  color: white;
+}
+
+.common-btn-content {
+  transition: all 0.4s ease;
+
+}
+.common-btn-3:hover .common-btn-content {
+  transform: translate(-8px);
+}
+
+
+
 .classic-button
 {
 height: 40px;
@@ -36,33 +132,6 @@ height: 40px;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: normal
+  line-height: normal
 
-}
-
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.form-title
-{
-  font-weight: bold;
-  font-family: Lora;
-}
-
-@media (max-width: 1024px) {
-  /* Two-column form */
-  .form-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  /* One-column form */
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
 }

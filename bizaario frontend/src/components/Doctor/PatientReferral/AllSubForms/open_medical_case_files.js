@@ -142,29 +142,52 @@ const getallmedical_speciality = async () => {
   }
 };
 
-  const [caseFiles, setCaseFiles] = useState([
-  {
-    CaseFileId: 'CF001',
-    Date: '2025-09-26',
-    TreatmentType: 'OPD Visit Record',
-    DoctorName: 'Dr. John Doe',
-    MedicalSpeciality: '64abf4dc2', // some _id from allmedical_speciality array
-  },
-  {
-    CaseFileId: 'CF002',
-    Date: '2025-09-20',
-    TreatmentType: 'Surgery/Procedure Record',
-    DoctorName: 'Dr. Jane Smith',
-    MedicalSpeciality: '64abf4dc3', // another _id from allmedical_speciality array
-  },
-  {
-    CaseFileId: 'CF003',
-    Date: '2025-08-15',
-    TreatmentType: 'Maternity Record',
-    DoctorName: 'Dr. Rajesh Kumar',
-    MedicalSpeciality: '64abf4dc4',
-  },
-]);
+
+//============================ get all case file=========================================
+
+
+ const [caseFiles, setCaseFiles] = useState([])
+const getall_case_file = async () => {
+  try {
+    setLoadingSpeciality(true);
+    const resp = await api.get('api/v1/admin/patientCaseFile/listPatientCaseFile');
+    console.log(resp);
+    setCaseFiles(resp.data.data.list)
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoadingSpeciality(false);
+  }
+};
+
+useEffect(()=>
+{
+getall_case_file()
+},[])
+
+//   const [caseFiles, setCaseFiles] = useState([
+//   {
+//     CaseFileId: 'CF001',
+//     Date: '2025-09-26',
+//     TreatmentType: 'OPD Visit Record',
+//     DoctorName: 'Dr. John Doe',
+//     MedicalSpeciality: '64abf4dc2', // some _id from allmedical_speciality array
+//   },
+//   {
+//     CaseFileId: 'CF002',
+//     Date: '2025-09-20',
+//     TreatmentType: 'Surgery/Procedure Record',
+//     DoctorName: 'Dr. Jane Smith',
+//     MedicalSpeciality: '64abf4dc3', // another _id from allmedical_speciality array
+//   },
+//   {
+//     CaseFileId: 'CF003',
+//     Date: '2025-08-15',
+//     TreatmentType: 'Maternity Record',
+//     DoctorName: 'Dr. Rajesh Kumar',
+//     MedicalSpeciality: '64abf4dc4',
+//   },
+// ]);
 
 
 
@@ -441,7 +464,7 @@ const getallmedical_speciality = async () => {
             </div>
 
           <div className="col-span-1 mt-6 bg-[rgba(82, 103, 125, 0.10)]">
-  {caseFiles.length === 0 ? (
+  {caseFiles?.length === 0 ? (
     <p>No case files yet.</p>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3 ">
@@ -467,7 +490,7 @@ const getallmedical_speciality = async () => {
           <p className=" flex text-sm text-gray-600">
             <strong>Medical Speciality:</strong>{' '}
             {
-              allmedical_speciality.find((item) => item._id === file.MedicalSpeciality)
+              allmedical_speciality?.find((item) => item._id === file.MedicalSpeciality)
                 ?.lookup_value || 'N/A'
             }
             

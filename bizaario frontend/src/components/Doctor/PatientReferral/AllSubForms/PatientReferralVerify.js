@@ -116,6 +116,7 @@ const PatientReferralVerify = ({
     // handlePatientReferral(true)
     // setReferralPreview(true)
     setShowReferralForm(true)
+    setOtpBox(false)
   };
 
   // Format timer display
@@ -218,6 +219,7 @@ const PatientReferralVerify = ({
         <div className="main-content">
       {/* ===========Form Section =================*/}
       {/* {showReferralForm ? ( */}
+      
       <div className={`p-6 ${showReferralForm ? 'block' : 'hidden'}`}>
         {/* Header */}
         <div className='flex items-center justify-between mb-4'>
@@ -227,11 +229,11 @@ const PatientReferralVerify = ({
             </h1>
           </div>
 
-          <div className="flex justify-end pb-3 mt-[-10px]">
+          {/* <div className="flex justify-end pb-3 mt-[-10px]">
             <IconButton size="small" className="x-icon" onClick={() => setOpen(false)}>
               <CloseIcon />
             </IconButton>
-          </div>
+          </div> */}
         </div>
         <div className="space-y-6">
           {/* Instructions */}
