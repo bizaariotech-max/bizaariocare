@@ -44,19 +44,18 @@ const PastSurgeries = () => {
 
 
  const [surgeries, setsurgeries] = useState({
-      PatientId:"",
       SurgeryProcedure:[{
             Date:"",
-            HospitalClinic_Name:"",
+            HospitalClinicName:"",
             SurgeonName:"",
             SurgeonNumber:"",
             MedicalSpeciality:"",
-            SurgeryProcedure_Name:"",
-            BloodTransfusion :"",
-            AnaesthesiaType:"",
-            RecoveryCycle:"",
-            PostSurgeryComplications: '',
-            UploadDischargeSummary: '',
+            SurgeryProcedureName:"",
+            AnaesthesiaType :"",
+            BloodTransfusionNeeded:"",
+            RecoveryCycle:{Value:"",Unit:""},
+            PostSurgeryComplications: [],
+            DischargeSummaryUrlNote: '',
       }],
     });
 
@@ -267,11 +266,11 @@ const PastSurgeries = () => {
                     <label className="form-label">Date </label>
                     <TextField
                     type='date'
-                    placeholder="Duration In Months" 
+                    placeholder="Date" 
                     name="DateOfBirth" 
                     size="small" 
-                    // value={patient_details.DateOfBirth} 
-                    // onChange={handleChange} 
+                    value={details.Date} 
+                    // onChange={deta} 
                     />
                     </FormControl>
 
@@ -279,10 +278,10 @@ const PastSurgeries = () => {
                     <label className="form-label">Hospital/ Clinic Name </label>
                     <TextField
                     type='text'
-                    placeholder="Duration In Months" 
-                    name="DateOfBirth" 
+                    placeholder="Hospital/ Clinic Name" 
+                    name="HospitalClinicName" 
                     size="small" 
-                    // value={patient_details.DateOfBirth} 
+                    value={details.HospitalClinicName} 
                     // onChange={handleChange} 
                     />
                     </FormControl>
@@ -291,10 +290,10 @@ const PastSurgeries = () => {
                     <label className="form-label">Surgeon Name </label>
                     <TextField
                     type='text'
-                    placeholder="Duration In Months" 
-                    name="DateOfBirth" 
+                    placeholder="Surgeon Name" 
+                    name="SurgeonName" 
                     size="small" 
-                    // value={patient_details.DateOfBirth} 
+                    value={details.SurgeonName} 
                     // onChange={handleChange} 
                     />
                     </FormControl>
@@ -303,10 +302,10 @@ const PastSurgeries = () => {
                     <label className="form-label">Surgeon Number </label>
                     <TextField
                     type='text'
-                    placeholder="Duration In Months" 
-                    name="DateOfBirth" 
+                    placeholder="Surgeon Number" 
+                    name="SurgeonNumber" 
                     size="small" 
-                    // value={patient_details.DateOfBirth} 
+                    value={details.SurgeonNumber} 
                     // onChange={handleChange} 
                     />
                     </FormControl>
@@ -315,8 +314,8 @@ const PastSurgeries = () => {
                     <label className="form-label">Medical Speciality </label>
                   <Select
                         labelId="content-type-label"
-                        name="Nationality"
-                      //  value={patient_details.Nationality}
+                        name="MedicalSpeciality"
+                       value={details.MedicalSpeciality}
                       //  onChange={handleChange}
                         displayEmpty
                         MenuProps={customMenuProps}
@@ -344,10 +343,10 @@ const PastSurgeries = () => {
                     <label className="form-label">Surgery/ Procedure Name </label>
                     <TextField
                     type='text'
-                    placeholder="Duration In Months" 
-                    name="DateOfBirth" 
+                    placeholder="Surgery/ Procedure Name" 
+                    name="SurgeryProcedureName" 
                     size="small" 
-                    // value={patient_details.DateOfBirth} 
+                    value={details.SurgeryProcedureName} 
                     // onChange={handleChange} 
                     />
                     </FormControl>
@@ -357,7 +356,7 @@ const PastSurgeries = () => {
               <RadioGroup size="small"
                 row
                 name="EntityTypeId"
-                // value={loginmaster.EntityTypeId}
+                value={details.BloodTransfusion}
                 // onChange={handlechange}
                 sx={{ flexDirection: 'row', alignItems: 'flex-start', gap: 1 }}
               >
@@ -376,7 +375,7 @@ const PastSurgeries = () => {
               <RadioGroup size="small"
                 row
                 name="EntityTypeId"
-                // value={loginmaster.EntityTypeId}
+                value={details.AnaesthesiaType}
                 // onChange={handlechange}
                 sx={{ flexDirection: 'row', alignItems: 'flex-start', gap: 1 }}
               >
@@ -387,35 +386,37 @@ const PastSurgeries = () => {
                 
               </RadioGroup>
             </FormControl>
-<FormControl fullWidth size="small">
-  <label className="form-label">Recovery Cycle</label>
-  <div style={{ display: 'flex', gap: '8px' }}>
-    {/* Number input */}
-    <TextField
-      type="number"
-      name="recoveryNumber"
-      placeholder="Enter Number"
-      size="small"
-      // value={patient_details.recoveryNumber} 
-      // onChange={handleChange} 
-      style={{ flex: 1 }}
-    />
 
-    {/* Dropdown for Days/Weeks/Months */}
-    <Select
-      name="recoveryUnit"
-      defaultValue="Days"
-      size="small"
-      // value={patient_details.recoveryUnit}
-      // onChange={handleChange}
-      style={{ width: '150px' }}
-    >
-      <MenuItem value="Days">Days</MenuItem>
-      <MenuItem value="Weeks">Weeks</MenuItem>
-      <MenuItem value="Months">Months</MenuItem>
-    </Select>
-  </div>
-</FormControl>
+
+      <FormControl fullWidth size="small">
+        <label className="form-label">Recovery Cycle</label>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {/* Number input */}
+          <TextField
+            type="number"
+            name="RecoveryCycle"
+            placeholder="Recovery Cycle"
+            size="small"
+            value={details.RecoveryCycle.Value} 
+            // onChange={handleChange} 
+            style={{ flex: 1 }}
+          />
+
+          {/* Dropdown for Days/Weeks/Months */}
+          <Select
+            name="recoveryUnit"
+            defaultValue="Days"
+            size="small"
+            value={details.RecoveryCycle.Unit}
+            // onChange={handleChange}
+            style={{ width: '150px' }}
+          >
+            <MenuItem value="Days">Days</MenuItem>
+            <MenuItem value="Weeks">Weeks</MenuItem>
+            <MenuItem value="Months">Months</MenuItem>
+          </Select>
+        </div>
+      </FormControl>
 
 
               

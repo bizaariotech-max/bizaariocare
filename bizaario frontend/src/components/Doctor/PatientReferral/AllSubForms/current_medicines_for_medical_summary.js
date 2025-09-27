@@ -13,7 +13,8 @@ import UniqueLoader from '../../../loader';
 import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap';
 import { __postApiData } from "../../../../utils/api";
-const CurrentMedicinesForMedicalSummary = (patientId) => {
+
+const CurrentMedicinesForMedicalSummary = ({patientId,selected_case_file,case_file_data}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
    
@@ -69,7 +70,6 @@ const CurrentMedicinesForMedicalSummary = (patientId) => {
 
 
  const [medical_history, setmedical_history] = useState({
-    PatientId:"68ce3b785c9caf7ccffeede8",
     MedicinesPrescribed:{
             Medicines:[{MedicineName:"",Dosage:"",DurationInDays:"" }],
             RecoveryCycle  : {Value:"",Unit:""},
@@ -177,7 +177,7 @@ const handlePrescriptionImagesChange = async (e) => {
       {
         try {
             const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"pharmaceutical_salt_master"})
-          console.log(resp);
+         
           
           setall_salt_master(resp.data.data)
           
@@ -200,7 +200,7 @@ const handlePrescriptionImagesChange = async (e) => {
       {
         try {
           const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"dosage_type"})
-          console.log(resp);
+        
           
           setall_dosage_type(resp.data.data)
           
@@ -223,7 +223,7 @@ const handlePrescriptionImagesChange = async (e) => {
       {
         try {
           const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"duration_unit_type"})
-          console.log(resp);
+       
           
           setall_unit_list(resp.data.data)
           
@@ -258,22 +258,22 @@ const handleAddMoreClinicalMedicines = () => {
 
    const[isloading,setisloading]=useState(false)
 
-const save_chif_complaints = async () => {
+const save_medicine = async () => {
   setisloading(true);
   try {
     const payload=
-    {...medical_history,
-      PatientId:patientId.patientId.patientId,
-      CreatedBy:doctordetails._id
-    }
+          {...medical_history,
+            CaseFileId:selected_case_file,
+            CreatedBy:doctordetails._id
+          }
     const resp = await api.post(
-      `api/v1/admin/medicalHistory/saveMedicalHistory`,
+      `api/v1/admin/medical-history/medicines-prescribed/add`,
       payload,
       {
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log(resp);
+ 
     
 
     const { response_code, response_message } = resp.data.response;
@@ -348,7 +348,7 @@ const save_chif_complaints = async () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
         {/* Table Header */}
         <div className="bg-[var(--button-back-color)] text-white  " >
           <div className="grid grid-cols-4 gap-4 p-2 text-[20px]">
@@ -360,23 +360,21 @@ const save_chif_complaints = async () => {
 
         {/* Table Body */}
         <div className="divide-y divide-gray-200">
-          {complaintsData.map((item, index) => (
+          {case_file_data[0]?.MedicinesPrescribed?.Medicines.map((item, index) => (
             <div
               key={item.id}
               className={`grid grid-cols-4 gap-4 p-4 ${index % 2 === 0 ? 'bg-[#f2f3f6]' : 'bg-white'
                 }`}
             >
               <div className="text-sm text-gray-900 font-medium">
-                {item.complaint}
+                {item.MedicineName}
               </div>
               <div className="text-sm text-gray-900">
-                {item.duration}
+                {item.Dosage}
               </div>
-              <div className="flex items-center">
-                {renderSeverityGrade(item.severity)}
-              </div>
+            
               <div className="text-sm text-gray-900">
-                {item.aggravatingFactor}
+                {item.DurationInDays} Days
               </div>
             </div>
           ))}
@@ -384,7 +382,7 @@ const save_chif_complaints = async () => {
       </div>
 
       {/* Footer Note */}
-      <div className="p-4 bg-gray-50 border-t border-gray-200">
+      <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"block":"none"}}>
         <p className="text-xs text-gray-600">
           1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
         </p>
@@ -594,7 +592,7 @@ const save_chif_complaints = async () => {
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                onClick={save_chif_complaints}
+                onClick={save_medicine}
               >
                 Save
               </Button>

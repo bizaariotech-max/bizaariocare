@@ -16,7 +16,7 @@ import healthicon from '../AllSubForms/assets/images/view health assessment repo
 import calendericon from '../../../../assets1/Vector (2).png'
 
 
-const OpenMedicalCaseFiles = ({patientId,patient_details}) => {
+const OpenMedicalCaseFiles = ({patientId,patient_details,setselected_case_file}) => {
 
 
   
@@ -61,7 +61,7 @@ const handleChange = (e) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log(resp);
+  
     
 
     const { response_code, response_message } = resp.data.response;
@@ -143,6 +143,51 @@ const getallmedical_speciality = async () => {
 };
 
 
+// ================================get doctor list========================================
+
+ const[allDoctor,setallDoctor]=useState([])
+      const getall_doctorlist=async()=>
+      {
+        try {
+          const resp=await api.post(`api/v1/admin/AssetList`,{AssetCategoryLevel1:"68b0104063729ea39b28d0fb"})
+          setallDoctor(resp.data.data.list)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_doctorlist()
+    
+      },[])
+
+
+
+      // ================================get hospital list========================================
+
+ const[allHospital,setallHospital]=useState([])
+      const getall_hospitallist=async()=>
+      {
+        try {
+          const resp=await api.post(`api/v1/admin/AssetList`,{AssetCategoryLevel1:"68b00db063729ea39b28d0ef"})
+          setallHospital(resp.data.data.list)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_hospitallist()
+    
+      },[])
+
+
 //============================ get all case file=========================================
 
 
@@ -151,7 +196,6 @@ const getall_case_file = async () => {
   try {
     setLoadingSpeciality(true);
     const resp = await api.get('api/v1/admin/patientCaseFile/listPatientCaseFile');
-    console.log(resp);
     setCaseFiles(resp.data.data.list)
   } catch (error) {
     console.error(error);
@@ -165,29 +209,7 @@ useEffect(()=>
 getall_case_file()
 },[])
 
-//   const [caseFiles, setCaseFiles] = useState([
-//   {
-//     CaseFileId: 'CF001',
-//     Date: '2025-09-26',
-//     TreatmentType: 'OPD Visit Record',
-//     DoctorName: 'Dr. John Doe',
-//     MedicalSpeciality: '64abf4dc2', // some _id from allmedical_speciality array
-//   },
-//   {
-//     CaseFileId: 'CF002',
-//     Date: '2025-09-20',
-//     TreatmentType: 'Surgery/Procedure Record',
-//     DoctorName: 'Dr. Jane Smith',
-//     MedicalSpeciality: '64abf4dc3', // another _id from allmedical_speciality array
-//   },
-//   {
-//     CaseFileId: 'CF003',
-//     Date: '2025-08-15',
-//     TreatmentType: 'Maternity Record',
-//     DoctorName: 'Dr. Rajesh Kumar',
-//     MedicalSpeciality: '64abf4dc4',
-//   },
-// ]);
+
 
 
 
@@ -314,7 +336,7 @@ getall_case_file()
                   name="DoctorId"
                  value={medical_case_file.DoctorId}
                  onOpen={() => {
-                    if (allmedical_speciality.length === 0) { // prevent multiple calls
+                    if (allDoctor.length === 0) { // prevent multiple calls
                     getallmedical_speciality();
                     }
                 }}
@@ -325,7 +347,7 @@ getall_case_file()
                     if (!selected) {
                       return <span style={{ color: "#9ca3af" }}>Select Doctor </span>; 
                     }
-                    return allmedical_speciality?.find((item) => item._id === selected)?.lookup_value;
+                    return allDoctor?.find((item) => item._id === selected)?.AssetName;
                   }}
                 >
                   <MenuItem value="">
@@ -336,9 +358,9 @@ getall_case_file()
                     <CircularProgress size={20} />
                     </MenuItem>
                 ) : (
-                    allmedical_speciality?.map((type) => (
+                    allDoctor?.map((type) => (
                     <MenuItem key={type._id} value={type._id}>
-                        {type.lookup_value}
+                        {type.AssetName}
                     </MenuItem>
                     ))
                 )}
@@ -367,7 +389,7 @@ getall_case_file()
                   name="HospitalId"
                  value={medical_case_file.HospitalId}
                  onOpen={() => {
-                    if (allmedical_speciality.length === 0) { // prevent multiple calls
+                    if (allHospital.length === 0) { // prevent multiple calls
                     getallmedical_speciality();
                     }
                 }}
@@ -378,7 +400,7 @@ getall_case_file()
                     if (!selected) {
                       return <span style={{ color: "#9ca3af" }}>Select Hospital </span>; 
                     }
-                    return allmedical_speciality?.find((item) => item._id === selected)?.lookup_value;
+                    return allHospital?.find((item) => item._id === selected)?.AssetName;
                   }}
                 >
                   <MenuItem value="">
@@ -389,9 +411,9 @@ getall_case_file()
                     <CircularProgress size={20} />
                     </MenuItem>
                 ) : (
-                    allmedical_speciality?.map((type) => (
+                    allHospital?.map((type) => (
                     <MenuItem key={type._id} value={type._id}>
-                        {type.lookup_value}
+                        {type.AssetName}
                     </MenuItem>
                     ))
                 )}
@@ -475,7 +497,7 @@ getall_case_file()
         >
           <h3 className=" text-lg text-gray-800 font-thin">
             Medical Case File ID:<br></br>
-             <span className="form-title text-lg font-semibold text-gray-800">{file.CaseFileId || 'N/A'}</span>
+             <span className="form-title text-lg font-semibold text-gray-800">{file._id || 'N/A'}</span>
           </h3>
           <p className="flex text-sm text-gray-600 gap-2">
             <img src={calendericon} alt='' className='h-5'></img> {file.Date || 'N/A'}
@@ -499,6 +521,16 @@ getall_case_file()
           <div className='flex justify-between gap-2'>
             <button className='classic-button'>Ongoing</button>
             <button className='classic-button'>Past</button>
+           <button
+            className='classic-button'
+            onClick={() => {
+              setselected_case_file(file._id);
+              handleClose_medical_files();
+            }}
+          >
+            View
+          </button>
+
             </div>
 
           </div>

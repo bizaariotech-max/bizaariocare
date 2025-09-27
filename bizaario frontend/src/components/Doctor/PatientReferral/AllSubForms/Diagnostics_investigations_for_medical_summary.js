@@ -14,7 +14,7 @@ import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap';
 import { __postApiData } from "../../../../utils/api";
 
-const DiagnosticsInvestigationsForMedicalSummary = (patientId) => {
+const DiagnosticsInvestigationsForMedicalSummary = ({patientId,selected_case_file,case_file_data}) => {
 
      const doctordetails=JSON.parse(localStorage.getItem("user"))
   // Sample data for the complaints
@@ -73,8 +73,7 @@ const DiagnosticsInvestigationsForMedicalSummary = (patientId) => {
   //============================= main form state start ============================================
   
     const [medical_history, setmedical_history] = useState({
-      PatientId:"",
-     
+    
         ClinicalDiagnoses :[{
               Date:"",
               InvestigationCategory : '',
@@ -165,7 +164,7 @@ const toggleArrayFieldClinicalDiagnosis = (index, field, itemId) => {
       {
         try {
           const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"investigation_category_type"})
-          console.log(resp);
+        
           
           setall_investigation_category(resp.data.data)
           
@@ -189,7 +188,7 @@ const toggleArrayFieldClinicalDiagnosis = (index, field, itemId) => {
           {
             try {
                 const resp=await api.post(`api/v1/admin/investigationList`)
-              console.log(resp);
+          
               
               setall_investigation_master(resp.data.data.list)
               
@@ -214,7 +213,7 @@ const toggleArrayFieldClinicalDiagnosis = (index, field, itemId) => {
                 {
                   try {
                     const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"symptom_class_type"})
-                    console.log(resp);
+             
                     
                     setall_symptom_class_master(resp.data.data)
                     
@@ -276,22 +275,22 @@ const handlesingleImageChange = async (index, e, fieldName) => {
 
 const[isloading,setisloading]=useState(false)
 
-const save_chif_complaints = async () => {
+const save_diagnostics_investigations = async () => {
   setisloading(true);
   try {
     const payload=
-    {...medical_history,
-      PatientId:patientId.patientId.patientId,
-      CreatedBy:doctordetails._id
-    }
+          {...medical_history,
+            CaseFileId:selected_case_file,
+            CreatedBy:doctordetails._id
+          }
     const resp = await api.post(
-      `api/v1/admin/medicalHistory/saveMedicalHistory`,
+      `api/v1/admin/medical-history/clinical-diagnoses/add-multiple`,
       payload,
       {
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log(resp);
+
     
 
     const { response_code, response_message } = resp.data.response;
@@ -361,36 +360,36 @@ const save_chif_complaints = async () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
         {/* Table Header */}
         <div className="bg-[var(--button-back-color)] text-white  " >
           <div className="grid grid-cols-4 gap-4 p-2 text-[20px]">
             <h3 className="table-header">Investigation Category</h3>
             <h3 className="table-header">Investigation Name</h3>
-            <h3 className="table-header">Value/Readings</h3>
+            {/* <h3 className="table-header">Value/Readings</h3> */}
             <h3 className="table-header">Abnormalities Found</h3>
           </div>
         </div>
 
         {/* Table Body */}
         <div className="divide-y divide-gray-200">
-          {complaintsData.map((item, index) => (
+          {case_file_data[0]?.ClinicalDiagnoses?.map((item, index) => (
             <div
               key={item.id}
               className={`grid grid-cols-4 gap-4 p-4 ${index % 2 === 0 ? 'bg-[#f2f3f6]' : 'bg-white'
                 }`}
             >
               <div className="text-sm text-gray-900 font-medium">
-                {item.complaint}
+                {item?.InvestigationCategory}
               </div>
               <div className="text-sm text-gray-900">
-                {item.duration}
+                {item?.Investigation}
               </div>
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 {renderSeverityGrade(item.severity)}
-              </div>
+              </div> */}
               <div className="text-sm text-gray-900">
-                {item.aggravatingFactor}
+                {item.Abnormalities?.join(',')}
               </div>
             </div>
           ))}
@@ -398,7 +397,7 @@ const save_chif_complaints = async () => {
       </div>
 
       {/* Footer Note */}
-      <div className="p-4 bg-gray-50 border-t border-gray-200">
+      <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"block":"none"}}>
         <p className="text-xs text-gray-600">
           1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
         </p>
@@ -587,7 +586,7 @@ const save_chif_complaints = async () => {
       
                     <Button
                       style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                      onClick={save_chif_complaints}
+                      onClick={save_diagnostics_investigations}
                     >
                       Save
                     </Button>

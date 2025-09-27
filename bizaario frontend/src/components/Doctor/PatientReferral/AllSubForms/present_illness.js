@@ -25,7 +25,7 @@ const PresentIllness = () => {
 
 
     const doctor_details=JSON.parse(localStorage.getItem("user"))
-console.log(doctor_details);
+
 
 
   
@@ -124,7 +124,7 @@ useEffect(() => {
           {
             try {
               const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"therapy_type"})
-              console.log(resp);
+            
               
               setall_therapy_master(resp.data.data)
               
@@ -149,7 +149,7 @@ useEffect(() => {
                 {
                   try {
                     const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"symptom_class_type"})
-                    console.log(resp);
+                  
                     
                     setall_symptom_class_master(resp.data.data)
                     
@@ -181,7 +181,7 @@ useEffect(() => {
                 lookupcodes: "symptom_master",
                 parent_lookup_id: selectedSymptomClass, // send array or first ID
               });
-              console.log('Symptom master response:', resp);
+            
               setall_symptom_master(resp.data.data);
             } catch (error) {
               console.error(error);
@@ -197,7 +197,7 @@ useEffect(() => {
                 {
                   try {
                     const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"aggravating_factor_master"})
-                    console.log(resp);
+                
                     
                     setallaggravating_master(resp.data.data)
                     
@@ -299,7 +299,6 @@ const handleAddMoreClinicalTherapy = () => {
 };
 
 
-console.log(medical_history);
 
 
 

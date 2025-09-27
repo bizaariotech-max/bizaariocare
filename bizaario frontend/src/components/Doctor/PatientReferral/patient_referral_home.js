@@ -38,19 +38,14 @@ const PatientReferralHome = () => {
  
   
   const patient_details=location.state.patient_details
-
-
   const patientId=patient_details._id
+
+  const[selected_case_file,setselected_case_file]=useState("")
+
+
+  console.log(selected_case_file);
   
- console.log(patientId);
- console.log(patient_details);
- 
-
-   
-
-    
   
-
   return (
     <>
     <Doctorheader />
@@ -61,14 +56,14 @@ const PatientReferralHome = () => {
         <div className="main-content">
       <PatientTabs />
       <PatientDetails patientId={patientId}/>
-      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details}/>
-      <ChiefComplaints  patientId={patientId}/>
-      <CurrentMedicines />
-      <ClinicalOutcome />
-      <CurrentTherapy />
+      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/>
+      {/* <ChiefComplaints  patientId={patientId}/> */}
+      {/* <CurrentMedicines /> */}
+      {/* <ClinicalOutcome /> */}
+      {/* <CurrentTherapy /> */}
       {/* <MedicalSummary /> */}
-      <PresentIllness/>
-      <PastIllness patientId={patientId}/>
+      {/* <PresentIllness/> */}
+      <PastIllness patientId={patientId} selected_case_file={selected_case_file}/>
       <PastSurgeries/>
       <PastMedications />
       <PastTherapy />

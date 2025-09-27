@@ -15,7 +15,7 @@ import { Modal, } from 'react-bootstrap';
 import { __postApiData } from "../../../../utils/api";
 
 
-const CurrentTherapyForMedicalSummary = (patientId) => {
+const CurrentTherapyForMedicalSummary = ({patientId,selected_case_file,case_file_data}) => {
 
      const doctordetails=JSON.parse(localStorage.getItem("user"))
 
@@ -40,7 +40,6 @@ const CurrentTherapyForMedicalSummary = (patientId) => {
 
 
    const [medical_history, setmedical_history] = useState({
-      PatientId:"68ce3b785c9caf7ccffeede8",
       Therapies :[{
               TherapyName:"",
               PatientResponse:""
@@ -105,23 +104,24 @@ const handleTherapyChange = (index, field, value) => {
             ...prev,                      
             Therapies: [                
               ...(prev.Therapies || []),
-              { TherapyName: "", PatientsResponse: "" } 
+              { TherapyName: "", PatientResponse: "" } 
             ],
           }));
         };
 
   const[isloading,setisloading]=useState(false)
   
-  const save_chif_complaints = async () => {
+  const save_therapy = async () => {
     setisloading(true);
     try {
-      const payload=
-      {...medical_history,
-        PatientId:patientId.patientId.patientId,
-        CreatedBy:doctordetails._id
-      }
+     const payload=
+          {...medical_history,
+            CaseFileId:selected_case_file,
+            CreatedBy:doctordetails._id
+            
+          }
       const resp = await api.post(
-        `api/v1/admin/medicalHistory/saveMedicalHistory`,
+        `api/v1/admin/medical-history/therapies/add-multiple`,
         payload,
         {
           headers: { "Content-Type": "application/json" },
@@ -195,7 +195,7 @@ const handleTherapyChange = (index, field, value) => {
           </div>
     
           {/* Table */}
-          <div className="overflow-x-auto">
+            <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
             {/* Table Header */}
             <div className="bg-slate-600 text-white">
               <div className="grid grid-cols-2 gap-4 p-2">
@@ -206,17 +206,17 @@ const handleTherapyChange = (index, field, value) => {
     
             {/* Table Body */}
             <div className="divide-y divide-gray-200">
-              {therapyData.map((item, index) => (
+              {case_file_data[0]?.Therapies?.map((item, index) => (
                 <div
                   key={item.id}
                   className={`grid grid-cols-2 gap-4 p-4 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
                     }`}
                 >
                   <div className="text-sm text-gray-900 font-medium">
-                    {item.therapyName}
+                    {item.TherapyName}
                   </div>
                   <div className="text-sm text-gray-900">
-                    {item.clinicalOutcome}
+                    {item.PatientResponse}
                   </div>
                 </div>
               ))}
@@ -224,7 +224,7 @@ const handleTherapyChange = (index, field, value) => {
           </div>
     
           {/* Footer Note */}
-          <div className="p-4  border-t border-gray-200">
+          <div className="p-4  border-t border-gray-200" style={{display:selected_case_file?"block":"none"}}>
             <p className="text-xs text-gray-600">
               1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
             </p>
@@ -325,7 +325,7 @@ const handleTherapyChange = (index, field, value) => {
           
                         <Button
                           style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                          onClick={save_chif_complaints}
+                          onClick={save_therapy}
                         >
                           Save
                         </Button>

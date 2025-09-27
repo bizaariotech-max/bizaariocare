@@ -13,7 +13,7 @@ import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
 import { __postApiData } from "../../../../utils/api";
 
-const ChiefComplaintsForMedicalSummary = (patientId) => {
+const ChiefComplaintsForMedicalSummary = ({patientId,selected_case_file,case_file_data}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
 
@@ -69,8 +69,7 @@ const ChiefComplaintsForMedicalSummary = (patientId) => {
 
 
 const [medical_history, setmedical_history] = useState({
-    PatientId:"",
-
+    CaseFileId:"",
       ChiefComplaints:[{
             Symptoms:[],
             Duration : {Value:"",Unit:""},
@@ -221,8 +220,6 @@ const handleAddMore = () => {
                     {
                       try {
                         const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"symptom_class_type"})
-                        console.log(resp);
-                        
                         setall_symptom_class_master(resp.data.data)
                         
                       } catch (error) {
@@ -245,8 +242,6 @@ const handleAddMore = () => {
                         {
                           try {
                             const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"aggravating_factor_master"})
-                            console.log(resp);
-                            
                             setallaggravating_master(resp.data.data)
                             
                           } catch (error) {
@@ -268,8 +263,6 @@ const handleAddMore = () => {
       {
         try {
           const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"duration_unit_type"})
-          console.log(resp);
-          
           setall_unit_list(resp.data.data)
           
         } catch (error) {
@@ -293,20 +286,20 @@ const handleAddMore = () => {
         try {
           const payload=
           {...medical_history,
-            PatientId:patientId.patientId.patientId,
+            CaseFileId:selected_case_file,
             CreatedBy:doctordetails._id
             
           }
-          console.log(payload);
+         
           
           const resp = await api.post(
-            `api/v1/admin/medicalHistory/saveMedicalHistory`,
+            `api/v1/admin/medical-history/chief-complaints/add-multiple`,
             payload,
             {
               headers: { "Content-Type": "application/json" },
             }
           );
-          console.log(resp);
+        
           
       
           const { response_code, response_message } = resp.data.response;
@@ -315,7 +308,7 @@ const handleAddMore = () => {
             Swal.fire({
               icon: "success",
               title: "Details Added",
-              text: "Patient Details Added Successfully...",
+              text: "Chief Complaints Added Successfully...",
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
@@ -355,6 +348,15 @@ const handleAddMore = () => {
       };
 
 
+// ========================get data via case file id==========================================
+
+
+
+console.log(case_file_data);
+
+
+
+
   return (
     <div className="space mt-4">
 
@@ -377,7 +379,8 @@ const handleAddMore = () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      
+      <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
         {/* Table Header */}
         <div className="bg-[var(--button-back-color)] text-white  " >
           <div className="grid grid-cols-4 gap-4 p-2 text-[20px]">
@@ -390,23 +393,23 @@ const handleAddMore = () => {
 
         {/* Table Body */}
         <div className="divide-y divide-gray-200">
-          {complaintsData.map((item, index) => (
+          {case_file_data[0]?.ChiefComplaints?.map((item, index) => (
             <div
               key={item.id}
               className={`grid grid-cols-4 gap-4 p-4 ${index % 2 === 0 ? 'bg-[#f2f3f6]' : 'bg-white'
                 }`}
             >
               <div className="text-sm text-gray-900 font-medium">
-                {item.complaint}
+                {item?.Symptoms?.join(',')}
               </div>
               <div className="text-sm text-gray-900">
-                {item.duration}
+                {item?.duration?.Value} {item.duration?.Unit}
               </div>
               <div className="flex items-center">
-                {renderSeverityGrade(item.severity)}
+                {renderSeverityGrade(item?.SeverityGrade)}
               </div>
               <div className="text-sm text-gray-900">
-                {item.aggravatingFactor}
+                {item?.AggravatingFactors?.join(',')}
               </div>
             </div>
           ))}
@@ -414,7 +417,7 @@ const handleAddMore = () => {
       </div>
 
       {/* Footer Note */}
-      <div className="p-4 bg-gray-50 border-t border-gray-200">
+      <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"flex":"none"}}>
         <p className="text-xs text-gray-600">
           1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
         </p>

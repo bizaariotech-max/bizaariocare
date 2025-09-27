@@ -15,9 +15,12 @@ import { Modal, } from 'react-bootstrap';
 import { __postApiData } from "../../../../utils/api";
 
 
-const PastIllness = (patientId) => {
+const PastIllness = ({patientId,selected_case_file}) => {
 
  const doctordetails=JSON.parse(localStorage.getItem("user"))
+
+ console.log(selected_case_file);
+ 
 
   const medicalData1 = [
   {
@@ -89,8 +92,6 @@ const PastIllness = (patientId) => {
           {
             try {
               const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"therapy_type"})
-              console.log(resp);
-              
               setall_therapy_master(resp.data.data)
               
             } catch (error) {
@@ -114,8 +115,6 @@ const PastIllness = (patientId) => {
                 {
                   try {
                     const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"symptom_class_type"})
-                    console.log(resp);
-                    
                     setall_symptom_class_master(resp.data.data)
                     
                   } catch (error) {
@@ -141,8 +140,6 @@ const PastIllness = (patientId) => {
                 {
                   try {
                     const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"aggravating_factor_master"})
-                    console.log(resp);
-                    
                     setallaggravating_master(resp.data.data)
                     
                   } catch (error) {
@@ -190,8 +187,6 @@ const PastIllness = (patientId) => {
       {
         try {
           const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"investigation_category_type"})
-          console.log(resp);
-          
           setall_investigation_category(resp.data.data)
           
         } catch (error) {
@@ -213,8 +208,6 @@ const PastIllness = (patientId) => {
         {
           try {
               const resp=await api.post(`api/v1/admin/investigationList`)
-            console.log(resp);
-            
             setall_investigation_master(resp.data.data.list)
             
           } catch (error) {
@@ -238,8 +231,6 @@ const PastIllness = (patientId) => {
       {
         try {
             const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"pharmaceutical_salt_master"})
-          console.log(resp);
-          
           setall_salt_master(resp.data.data)
           
         } catch (error) {
@@ -261,8 +252,6 @@ const PastIllness = (patientId) => {
       {
         try {
           const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"dosage_type"})
-          console.log(resp);
-          
           setall_dosage_type(resp.data.data)
           
         } catch (error) {
@@ -370,8 +359,6 @@ const handlePrescriptionImagesChange = async (e) => {
       {
         try {
           const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"duration_unit_type"})
-          console.log(resp);
-          
           setall_unit_list(resp.data.data)
           
         } catch (error) {
@@ -682,8 +669,6 @@ const handleTherapyChange = (index, field, value) => {
 // ===============================onchange events for therapy end============================
 
 
-console.log(medical_history);
-
 const[isloading,setisloading]=useState(false)
 
 const save_chif_complaints = async () => {
@@ -748,6 +733,31 @@ const save_chif_complaints = async () => {
     setisloading(false);
   }
 };
+
+
+
+
+//================================== get selected case file data============================================
+
+  const[case_file_data,setcase_file_data]=useState([])
+      const getcase_filedetails=async()=>
+      {
+        try {
+          
+          const resp=await api.get(`api/v1/admin/medical-history/list?CaseFileId=${selected_case_file}`)
+          setcase_file_data(resp.data.data.list)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getcase_filedetails()
+    
+      },[selected_case_file])
 
   return (
     <div className="space">
@@ -821,39 +831,30 @@ const save_chif_complaints = async () => {
 
   
 
-    {medicalData1.map((item, index) => (
-  <div key={index} className="relative pl-10">
+  
     {/* Vertical line */}
     <div className="absolute left-4 top-0 h-full w-[2px] bg-gray-300"></div>
 
-    {/* Circle number */}
-    <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-gray-500 text-white flex items-center justify-center text-xs font-bold">
-      {index + 1}
-    </div>
+    
 
     {/* Your existing cards */}
-    <div className='card-details' style={{marginTop:"20px"}}>
-      <h3 className='table-header'>{item.date}</h3>
-      <div style={{display:"flex"}}>
-        <img src={generalphysician} alt='' style={{height:"26px"}} />
-        <p style={{ margin: 0, fontWeight: "600", fontFamily: "Lora", whiteSpace: "nowrap" }}>{item.doctor}</p>
-      </div>
-      <ChiefComplaintsForMedicalSummary patientId={patientId}/>
+    <div className='card-details'>
+   
+      <ChiefComplaintsForMedicalSummary patientId={patientId} selected_case_file={selected_case_file} case_file_data={case_file_data}/>
     </div>
 
     <div className='card-details'>
-      <DiagnosticsInvestigationsForMedicalSummary patientId={patientId}/>
+      <DiagnosticsInvestigationsForMedicalSummary patientId={patientId} selected_case_file={selected_case_file} case_file_data={case_file_data}/>
     </div>
 
     <div className='card-details'>
-      <CurrentMedicinesForMedicalSummary patientId={patientId}/>
+      <CurrentMedicinesForMedicalSummary patientId={patientId} selected_case_file={selected_case_file} case_file_data={case_file_data}/>
     </div>
 
     <div className='card-details'>
-      <CurrentTherapyForMedicalSummary patientId={patientId}/>
+      <CurrentTherapyForMedicalSummary patientId={patientId} selected_case_file={selected_case_file} case_file_data={case_file_data}/>
     </div>
-  </div>
-))}
+
 
    
 
