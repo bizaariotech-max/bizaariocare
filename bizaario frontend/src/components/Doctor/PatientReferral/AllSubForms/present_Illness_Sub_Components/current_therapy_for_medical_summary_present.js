@@ -1,21 +1,18 @@
 
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import generalphysician from '../AllSubForms/assets/images/general physician.png'
-import ChiefComplaintsForMedicalSummary from './chief_complaints_for_medical_summary';
-import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations_for_medical_summary';
-import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
+
 import { useEffect, useState } from 'react'
 import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
-import api from '../../../../api'
+import api from '../../../../../api'
 import Swal from 'sweetalert2';
-import UniqueLoader from '../../../loader';
-import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
+import UniqueLoader from '../../../../loader';
+import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap';
-import { __postApiData } from "../../../../utils/api";
 
 
-const CurrentTherapyForMedicalSummary = ({patientId,selected_case_file,case_file_data}) => {
+
+const CurrentTherapyForMedicalSummaryPresent = ({patientId,selected_case_file,case_file_data}) => {
 
      const doctordetails=JSON.parse(localStorage.getItem("user"))
 
@@ -63,7 +60,7 @@ const handleTherapyChange = (index, field, value) => {
           {
             try {
               const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"therapy_type"})
-             
+          
               
               setall_therapy_master(resp.data.data)
               
@@ -109,7 +106,7 @@ const handleTherapyChange = (index, field, value) => {
           headers: { "Content-Type": "application/json" },
         }
       );
- 
+   
       
   
       const { response_code, response_message } = resp.data.response;
@@ -163,8 +160,8 @@ const handleTherapyChange = (index, field, value) => {
    const getall_patient_medical_history = async () => {
      try {
       //  setLoadingSpeciality(true);
-       const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
-       
+       const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Active`);
+      
         
           const formatted = resp.data.data.list.map(item => ({
             caseFileId: item.CaseFileId._id,
@@ -214,16 +211,15 @@ const handleTherapyChange = (index, field, value) => {
             <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
             {/* Table Header */}
             <div className="bg-slate-600 text-white">
-               <div className="grid grid-cols-[1fr_2fr] gap-4 p-2">
-                <div className="table-header">Therapy Name</div>
-                <div className="table-header">Clinical Outcome/Patient's Response</div>
+                <div className="grid grid-cols-[1fr_2fr] gap-4 p-2">
+                <h2>Therapy Name</h2>
+                <h2>Clinical Outcome/Patient's Response</h2>
               </div>
             </div>
     
             {/* Table Body */}
             <div className="divide-y divide-gray-200">
-              {
-                case_file_data[0]?.Status === "Past" &&
+              {case_file_data[0]?.Status === "Active" &&
               case_file_data[0]?.Therapies?.map((item, index) => (
                 <div
                   key={item.id}
@@ -261,7 +257,7 @@ const handleTherapyChange = (index, field, value) => {
 
       {/* Table Header */}
       <div className="bg-[var(--button-back-color)] text-white">
-         <div className="grid grid-cols-[1fr_2fr] gap-4 p-2">
+          <div className="grid grid-cols-[1fr_2fr] gap-4 p-2">
           <h3 className="table-header">Therapy Name</h3>
           <h3 className="table-header">Clinical Outcome/Patient's Response</h3>
 
@@ -273,7 +269,7 @@ const handleTherapyChange = (index, field, value) => {
         {caseFile.therapy.map((item, index) => (
           <div
             key={index}
-            className={`grid grid-cols-2 gap-4 p-4 ${
+            className={`grid grid-cols-4 gap-4 p-4 ${
               index % 2 === 0 ? "bg-[#f2f3f6]" : "bg-white"
             }`}
           >
@@ -414,5 +410,5 @@ const handleTherapyChange = (index, field, value) => {
   );
 }
 
-export default CurrentTherapyForMedicalSummary
+export default CurrentTherapyForMedicalSummaryPresent
 

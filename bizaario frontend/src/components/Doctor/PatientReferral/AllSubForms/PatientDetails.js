@@ -15,7 +15,7 @@ import { __postApiData } from "../../../../utils/api";
 
 const PatientDetails = (patientId) => {
 
-  console.log(patientId);
+ 
   
   //=================== get selected patient details================================
 
@@ -25,8 +25,7 @@ const PatientDetails = (patientId) => {
       {
         try {
           const resp=await api.get(`api/v1/admin/getPatient/${patientId.patientId}`)
-          console.log(resp);
-          
+        
           setselected_patient_details(resp.data.data)
           
         } catch (error) {
@@ -148,7 +147,7 @@ useEffect(() => {
             }
 
             if (imageUrl) {
-              console.log("Uploaded image URL:", imageUrl);
+            
               resolve(imageUrl);
             } else {
               reject(new Error("No image URL found in response"));
@@ -173,7 +172,7 @@ const handleSingleImageUpload = async (event) => {
   if (file) {
     try {
       const uploadedUrl = await __handleUploadFile(file);
-      console.log(uploadedUrl);
+   
       
       setpatient_details((prv) => ({
         ...prv,
@@ -203,7 +202,7 @@ const handleSingleImageUpload = async (event) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log(resp);
+
     
 
     const { response_code, response_message } = resp.data.response;
@@ -307,7 +306,7 @@ const handleSingleImageUpload = async (event) => {
       try {
         const resp = await api.post('api/v1/admin/StationList',{OrgUnitLevel:"68affb6d874340d8d79dbea4"});
         setall_country(resp.data.data.list);
-        console.log(resp);
+    
         
       } catch (error) {
         console.log(error);
@@ -328,7 +327,7 @@ const handleSingleImageUpload = async (event) => {
         const resp = await api.post('api/v1/admin/StationList',
           {OrgUnitLevel:"68affb77874340d8d79dbeaa",ParentStationId:patient_details.Nationality});
         setall_state(resp.data.data.list);
-        console.log(resp);
+   
         
       } catch (error) {
         console.log(error);
@@ -352,7 +351,7 @@ const handleSingleImageUpload = async (event) => {
         const resp = await api.post('api/v1/admin/StationList',
           {OrgUnitLevel:"68affb90874340d8d79dbeb6",ParentStationId:patient_details.State});
         setall_city(resp.data.data.list);
-        console.log(resp);
+ 
         
       } catch (error) {
         console.log(error);

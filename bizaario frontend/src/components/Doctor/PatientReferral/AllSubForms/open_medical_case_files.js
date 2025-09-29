@@ -32,8 +32,8 @@ const OpenMedicalCaseFiles = ({patientId,patient_details,setselected_case_file})
       HospitalId : '',
       HospitalName : '',
       Date : '',
-      MedicalSpeciality:''
-    
+      MedicalSpeciality:'',
+      Status:""
     });
 
 const handleChange = (e) => {
@@ -195,8 +195,12 @@ const getallmedical_speciality = async () => {
 const getall_case_file = async () => {
   try {
     setLoadingSpeciality(true);
-    const resp = await api.get('api/v1/admin/patientCaseFile/listPatientCaseFile');
+    const resp = await api.get(`api/v1/admin/patientCaseFile/listPatientCaseFile?PatientId=${patientId}`);
+    
+    
     setCaseFiles(resp.data.data.list)
+  
+    
   } catch (error) {
     console.error(error);
   } finally {
@@ -446,6 +450,33 @@ getall_case_file()
                   />
                   </FormControl>
 
+                  <FormControl fullWidth size="small">
+                  <label className="form-label">Status </label>
+                 <Select
+                  labelId="content-type-label"
+                  name="Status"
+                 value={medical_case_file.Status}
+                 onChange={handleChange}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Select Status </span>; 
+                    }
+                    return selected;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select Status </em>
+                  </MenuItem>
+                
+                    <MenuItem value="Ongoing">Ongoing</MenuItem>
+                    <MenuItem value="Resolved">Resolved</MenuItem>
+                    <MenuItem value="Past">Past</MenuItem>
+              </Select>
+                
+                  </FormControl>
+
                 <div className='col-span-2'>
                    <FormControl fullWidth size="small">
                   <label className="form-label">Treatment Type </label>
@@ -490,7 +521,7 @@ getall_case_file()
     <p>No case files yet.</p>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3 ">
-      {caseFiles.map((file, index) => (
+      {caseFiles?.map((file, index) => (
         <div
           key={index}
           className="border rounded-lg shadow-md p-3 bg-[rgba(82,103,125,0.10)]"

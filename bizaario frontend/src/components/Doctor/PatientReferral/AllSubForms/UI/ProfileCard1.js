@@ -4,7 +4,7 @@ import user1 from '../assets/images/user1.svg';
 
 const ProfileCard1 = (selected_patient_details) => {
 
-  console.log(selected_patient_details);
+
   const PatientDetails=selected_patient_details.patient_details
   
   return (

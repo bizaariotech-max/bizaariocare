@@ -68,7 +68,7 @@ const VitalsPhysicalExaminations = () => {
       {
         try {
             const resp=await api.post(`api/v1/admin/investigationList`)
-          console.log(resp);
+         
           
           setall_investigation_master(resp.data.data.list)
           
@@ -83,7 +83,7 @@ const VitalsPhysicalExaminations = () => {
               getall_investigation_master()
           
             },[])
-        console.log(all_investigation_master);
+     
         
 
 

@@ -1,28 +1,18 @@
 
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import generalphysician from '../AllSubForms/assets/images/general physician.png'
-import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
-import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
 import { useEffect, useState } from 'react'
 import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
-import api from '../../../../api'
+import api from '../../../../../api'
 import Swal from 'sweetalert2';
-import UniqueLoader from '../../../loader';
-import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
+import UniqueLoader from '../../../../loader';
+import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
-import { __postApiData } from "../../../../utils/api";
+import { __postApiData } from "../../../../../utils/api";
 
-const ChiefComplaintsForMedicalSummary = ({patientId,selected_case_file,case_file_data}) => {
-
-
-
- 
-  
+const ChiefComplaintsForMedicalSummaryPresent = ({patientId,selected_case_file,case_file_data}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
-
-  
 
   // Function to render severity grade as color bars
   const renderSeverityGrade = (severity) => {
@@ -335,7 +325,7 @@ const handleAddMore = () => {
  const getall_patient_medical_history = async () => {
    try {
     //  setLoadingSpeciality(true);
-     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
+     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Active`);
         const formatted = resp.data.data.list.map(item => ({
           caseFileId: item.CaseFileId._id,
           treatmentType: item.CaseFileId.TreatmentType,
@@ -356,12 +346,6 @@ const handleAddMore = () => {
  {
  getall_patient_medical_history()
  },[])
-
-
-
-
-
-
 
 
 
@@ -407,7 +391,7 @@ const handleAddMore = () => {
 
   {/* Table Body */}
   <div className="divide-y divide-gray-200">
-    {case_file_data[0]?.Status === "Past" &&
+    {case_file_data[0]?.Status === "Active" &&
     case_file_data[0]?.ChiefComplaints?.map((item, index) => (
       <div
         key={item.id}
@@ -715,5 +699,5 @@ const handleAddMore = () => {
   );
 }
 
-export default ChiefComplaintsForMedicalSummary
+export default ChiefComplaintsForMedicalSummaryPresent
 

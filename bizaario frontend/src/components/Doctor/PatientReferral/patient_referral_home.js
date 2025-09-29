@@ -21,6 +21,7 @@ import Doctorsidebar from '../doctorsidebar';
 import '../../Doctor/PatientReferral/patient_referral.css'
 import PastIllness from './AllSubForms/past_illness';
 import PastSurgeries from './AllSubForms/past_surgeries';
+import { Link } from 'react-router-dom';
 
 import { Modal,  Form, Row, Col } from 'react-bootstrap';
 import api from '../../../api'
@@ -30,6 +31,8 @@ import PresentIllness from './AllSubForms/present_illness';
 import OpenMedicalCaseFiles from './AllSubForms/open_medical_case_files';
 import PatientReferralVerify from './AllSubForms/PatientReferralVerify';
 import { useLocation } from 'react-router-dom';
+import PremiumDoctorCarousel from './AllSubForms/PremiumDoctor/PremiumDoctorCarousel';
+import PremiumDoctor from './AllSubForms/PremiumDoctor/PremiumDoctor';
 
 
 const PatientReferralHome = () => {
@@ -43,7 +46,7 @@ const PatientReferralHome = () => {
   const[selected_case_file,setselected_case_file]=useState("")
 
 
-  console.log(selected_case_file);
+ 
   
   
   return (
@@ -62,9 +65,10 @@ const PatientReferralHome = () => {
       {/* <ClinicalOutcome /> */}
       {/* <CurrentTherapy /> */}
       {/* <MedicalSummary /> */}
-      {/* <PresentIllness/> */}
+      <PresentIllness patientId={patientId} selected_case_file={selected_case_file}/>
       <PastIllness patientId={patientId} selected_case_file={selected_case_file}/>
-      <PastSurgeries/>
+      <PastSurgeries patientId={patientId} selected_case_file={selected_case_file}/>
+       
       <PastMedications />
       <PastTherapy />
       <OccupationalProfile />
@@ -74,6 +78,24 @@ const PatientReferralHome = () => {
       <Diagnosis />
       <TreatmentToDate />
       <PatientResponse /> 
+
+        <div className="mt-6">
+              <div className="flex gap-4">
+                {/* Outline Button */}
+                <button className="px-4 py-2  border-2 border-[var(--primary-color)] text-[var(--primary-color)] rounded-md  hover:bg-[var(--primary-color)] hover:text-white transition lora">
+                  Edit Details
+                </button>
+
+                {/* Filled Button */}
+                <button className="lora px-4 py-2 bg-[var(--primary-color)] text-white rounded-md  hover:bg-[var(--primary-color)] transition">
+                  <Link to="/patient-referral/appoint-doctors" className="no-underline text-white">
+                    Patient Referral
+                  </Link>
+                </button>
+              </div>
+            </div>
+
+
          </div>
         </div>
       </div>
