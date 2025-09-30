@@ -88,6 +88,7 @@ import CompletePatientDetails from "./components/Doctor/CompletePatientProfile/c
 import PatientReferralHome from "./components/Doctor/PatientReferral/patient_referral_home.js";
 import PatientReferralVerify from "./components/Doctor/PatientReferral/AllSubForms/PatientReferralVerify.js";
 import PremiumDoctor from "./components/Doctor/PatientReferral/AllSubForms/PremiumDoctor/PremiumDoctor.js";
+import AddNewPatientDetails from "./components/Doctor/PatientReferral/AllSubForms/Add_New_Patient.js";
 
 function App() {
   return (
@@ -205,6 +206,8 @@ function App() {
 
  <Route path="/patient-referral-home" element={<PatientReferralHome/>}></Route>
   <Route path="/patient-referral" element={<PatientReferralVerify/>}></Route>
+
+   <Route path="/add-new-patient" element={<AddNewPatientDetails/>}></Route>
 
   <Route path="/patient-referral/appoint-doctors" element={<PremiumDoctor />}></Route>
 

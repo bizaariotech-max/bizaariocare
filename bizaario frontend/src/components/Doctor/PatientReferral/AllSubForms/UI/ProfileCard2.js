@@ -70,7 +70,7 @@ const ProfileCard2 = (selected_patient_details) => {
         <div className=" ml-8">
           <div className="flex items-center  pb-4">
             <Mail className="w-5 h-5 text-gray-600" />
-            <span className="text-sm text-gray-900 font-medium">rairavi209@gmail.com</span>
+            <span className="text-sm text-gray-900 font-medium">{PatientDetails?.EmailAddress? PatientDetails.EmailAddress:""}</span>
           </div>
           <div className="w-20 h-20 border-2 border-gray-800 rounded-lg p-1 bg-white">
 

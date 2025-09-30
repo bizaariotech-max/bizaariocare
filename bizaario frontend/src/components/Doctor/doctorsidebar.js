@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from "react";
 import "../Admin/admincss/adminsidebar.css";
 import logo from "../../assets/images/bizaariowhite.png";
-import dashboardicon from "../../assets/images/dashboardicon.png";
-import addhospitalicon from "../Admin/images/user-plus-alt-1-svgrepo-com 1.png";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { patch } from "@mui/material";
+import dashboardicon from "../Doctor/Icon/Dashboard.svg";
+import digitalcme from "../Doctor/Icon/CME.svg";
+import newsarticle from "../Doctor/Icon/News.svg";
+import awards_and_recognitions from "../Doctor/Icon/Award.svg";
+import testimonials from "../Doctor/Icon/Testimonals.svg";
+import opd_surgical_camps from "../Doctor/Icon/surgery.svg";
+import workshop from "../Doctor/Icon/Workshop.svg";
+import completdoctorprofile from "../Doctor/Icon/Dr. Profile.svg";
+import patientreferral from "../Doctor/Icon/Patient Reffral.svg";
+import logout from "../Doctor/Icon/Logout.svg";
+
 
 const menuItems = [
   { icon: dashboardicon, label: "Dashboard", path: "/doctordashboard" },
-  {icon: addhospitalicon,label: "Digital CME",path:"/createdigitalcme"},
-  { icon: addhospitalicon, label: "News Articles", path: "/news_and_articles" },
-  { icon: addhospitalicon, label: "Awards & Recognitions", path: "/awards-and-recognitions" },
-  { icon: addhospitalicon, label: "Patient Testimonials", path: "/patient-testimonials" },
-  { icon: addhospitalicon, label: "OPD/ Surgical Camps", path: "/opd-srugicla-camps" },
-  { icon: addhospitalicon, label: "Workshop", path: "/workshop" },
+  {icon: digitalcme,label: "Digital CME",path:"/createdigitalcme"},
+  { icon: newsarticle, label: "News Articles", path: "/news_and_articles" },
+  { icon: awards_and_recognitions, label: "Awards & Recognitions", path: "/awards-and-recognitions" },
+  { icon: testimonials, label: "Patient Testimonials", path: "/patient-testimonials" },
+  { icon: opd_surgical_camps, label: "OPD/ Surgical Camps", path: "/opd-srugicla-camps" },
+  { icon: workshop, label: "Workshop", path: "/workshop" },
   // { icon: addhospitalicon, label: "Create Sub-Admin", path: "/createsubadmin" },
-  { icon: addhospitalicon, label: "Complete Doctor Profile", path: "/complete-doctor-details" },
-   { icon: addhospitalicon, label: "Patient Referral", path: "/patient-referral" },
+  { icon: completdoctorprofile, label: "Complete Doctor Profile", path: "/complete-doctor-details" },
+   { icon: patientreferral, label: "Patient Referral", path: "/patient-referral" },
 
-  { icon: addhospitalicon, label: "Logout" },
+  { icon: logout, label: "Logout" },
 ];
 
 const Doctorsidebar = () => {
   const navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState(
-    Number(localStorage.getItem("openDropdown")) || null
+    // Number(localStorage.getItem("openDropdown")) || null
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

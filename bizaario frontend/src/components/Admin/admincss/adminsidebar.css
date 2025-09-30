@@ -166,7 +166,7 @@
 }
 
 .sidebar-item.logout-item:hover {
-  background-color: #e60000; /* darker red on hover */
+  color: var(--gray3) !important; 
   cursor: pointer;
 }
 

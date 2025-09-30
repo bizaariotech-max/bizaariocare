@@ -14,8 +14,8 @@ const ProfileCard1 = (selected_patient_details) => {
         <div className="flex-shrink-0">
           <img
             src={PatientDetails?.ProfilePic}
-            alt="Kapupriya Gupta"
-            className="w-40 h-40  rounded-lg object-cover"
+            alt="no image"
+            className="w-40 h-40  rounded-lg object-cover border"
           />
         </div>
 
@@ -66,7 +66,7 @@ const ProfileCard1 = (selected_patient_details) => {
               </div>
               <div className="flex items-start ">
                 <span className="text-sm light-text font-medium">Blood Group:</span>
-                <span className="text-sm text-gray-900 font-semibold ml-2"> B+</span>
+                <span className="text-sm text-gray-900 font-semibold ml-2">{PatientDetails?.BloodGroup? PatientDetails.BloodGroup:""}</span>
               </div>
             </div>
           </div>

@@ -174,7 +174,7 @@ const handleChange = (e) => {
           title:"Profile Created",
           text:"Doctor Profile Created Successfully...",
           showConfirmButton:true,
-           customClass: {
+          customClass: {
           confirmButton: 'my-swal-button',
         },
         }).then(()=>

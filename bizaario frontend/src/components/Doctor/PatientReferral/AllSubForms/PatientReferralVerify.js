@@ -1,5 +1,5 @@
 import React, { useEffect, useState ,useRef} from 'react'
-import { TextField, Select, MenuItem, FormControl, Box,Avatar,Tooltip,IconButton,CircularProgress, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import { TextField,Paper, Select, MenuItem, FormControl, Box,Avatar,Tooltip,IconButton,CircularProgress, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import api from '../../../../api'
 import CloseIcon from "@mui/icons-material/Close";
@@ -9,6 +9,8 @@ import ProfileCard2 from '../AllSubForms/UI/ProfileCard2';
 import { useNavigate } from 'react-router-dom';
 import Doctorsidebar from '../../doctorsidebar';
 import Doctorheader from '../../doctorheader';
+import Swal from 'sweetalert2';
+
 
 
 const PatientReferralVerify = ({
@@ -30,6 +32,54 @@ const PatientReferralVerify = ({
 
   let phoneNumber = submittedPhone || inputValue;
   // console.log(showReferralForm, "showReferralForm")
+
+
+    //=========================== get all patient details=========================================
+      
+    const navigate=useNavigate()
+
+         const[patient_details,setpatient_details]=useState("")
+  
+        const get_patient_details=async()=>
+        {
+          try {
+            const resp=await api.get(`api/v1/admin/getPatientbyphonenumber/${inputValue}`)
+            console.log(resp);
+        
+            if(resp.data.response.response_code!=="200")
+            {
+             
+              Swal.fire({
+                icon:"error",
+                title:"Not Found",
+                text:"No patient found with the provided Mobile Number, UHID/EMR Number, or National ID. Please proceed with creating a new patient file.",
+                showConfirmButton:true,
+                 customClass: {
+                  confirmButton: 'my-swal-button',
+                  htmlContainer: "my-swal-text",
+                }
+              }).then(()=>
+              {
+                 setPatientReferralPreview(true)
+              })
+               return false; // ❌ not found
+            }
+            setpatient_details(resp.data.data)
+            return true;
+            
+            
+          } catch (error) {
+            console.log(error);
+            
+          }
+        }
+      
+        useEffect(()=>
+        {
+          get_patient_details()
+        },[])
+
+
 
   // ===============OTP-form==========================
 
@@ -133,7 +183,19 @@ const PatientReferralVerify = ({
     setInputValue(''); // Clear input when switching options
   };
 
-  const handleGenerateOTP = () => {
+
+  const[show_add_patient_button,setshow_add_patient_button]=useState("")
+
+  const handleGenerateOTP = async() => {
+      const patientFound = await get_patient_details();
+      if (!patientFound) {
+        setshow_add_patient_button("not exist")
+
+        return; // ❌ stop here, no OTP box
+      }
+  setshow_add_patient_button("exist")
+   
+
     if (!validateInput()) {
       alert('Please enter a valid value');
       return;
@@ -156,8 +218,8 @@ const PatientReferralVerify = ({
         return 'Mobile Number';
       case 'uhid':
         return 'UHID/EMR Number';
-      case 'citizen':
-        return 'Citizen ID';
+      case 'national digital id':
+        return 'National Digital Id';
       default:
         return 'Enter value';
     }
@@ -171,7 +233,7 @@ const PatientReferralVerify = ({
         return /^[0-9]{10}$/.test(inputValue);
       case 'uhid':
         return inputValue.length >= 5;
-      case 'citizen':
+      case 'national digital id':
         return inputValue.length >= 5;
       default:
         return true;
@@ -179,32 +241,16 @@ const PatientReferralVerify = ({
   };
 
 
-    //=========================== get all patient details=========================================
-      
-    const navigate=useNavigate()
+  useEffect(()=>
+  {
+    if(patientReferralPreview)
+    {
+      setShowReferralForm(false)
 
-         const[patient_details,setpatient_details]=useState("")
+    }
+
+  },[patientReferralPreview])
   
-        const get_patient_details=async()=>
-        {
-          try {
-            const resp=await api.get(`api/v1/admin/getPatientbyphonenumber/${inputValue}`)
-            console.log(resp);
-            setpatient_details(resp.data.data)
-            
-            
-          } catch (error) {
-            console.log(error);
-            
-          }
-        }
-      
-        useEffect(()=>
-        {
-          get_patient_details()
-        },[inputValue])
-  
-      
 
 
   return (
@@ -222,8 +268,8 @@ const PatientReferralVerify = ({
       
       <div className='flex justify-center'>
 
-      
-      <div className={`p-6 ${showReferralForm ? 'block' : 'hidden'}`}>
+      <div className={`p-6 ${showReferralForm ? 'block' : 'hidden'} `}>
+          <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
         {/* Header */}
         <div className='flex items-center justify-between mb-4'>
           <div >
@@ -301,21 +347,21 @@ const PatientReferralVerify = ({
                   <input
                     type="radio"
                     name="referralOption"
-                    value="citizen"
-                    checked={selectedOption === 'citizen'}
-                    onChange={() => handleOptionChange('citizen')}
+                    value="national digital id"
+                    checked={selectedOption === 'national digital id'}
+                    onChange={() => handleOptionChange('national digital id')}
                     className="sr-only"
                   />
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedOption === 'citizen'
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedOption === 'national digital id'
                     ? 'border-blue-600 bg-blue-600'
                     : 'border-gray-400 bg-white'
                     }`}>
-                    {selectedOption === 'citizen' && (
+                    {selectedOption === 'national digital id' && (
                       <div className="w-2 h-2 bg-white rounded-full" />
                     )}
                   </div>
                 </div>
-                <span className="text-gray-700 font-medium">Citizen ID</span>
+                <span className="text-gray-700 font-medium">National Digital ID</span>
               </label>
             </div>
           </div>
@@ -363,35 +409,34 @@ const PatientReferralVerify = ({
             <div className="text-red-600 text-sm mt-2">
               {selectedOption === 'mobile' && 'Please enter a valid 10-digit mobile number'}
               {selectedOption === 'uhid' && 'Please enter a valid UHID/EMR number (minimum 5 characters)'}
-              {selectedOption === 'citizen' && 'Please enter a valid Citizen ID (minimum 5 characters)'}
+              {selectedOption === 'national digital id' && 'Please enter a valid Citizen ID (minimum 5 characters)'}
             </div>
           )}
         </div>
+        </Paper>
       </div>
+    
       </div>
       {/* )  : <></> } */}
 
 
 {/*===================== =========== OTP-Preview =================================================*/}
       {otpBox ? (
+      
+          
         <div className='flex justify-center'>
           <div
             className="p-6"
           // style={{ backgroundColor: '#f2f3f6' }}
           >
+              <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
             {/* Header */}
             <div className="mb-6">
               <div className=' flex justify-between items-center'>
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">
                   Verify Phone
                 </h1>
-                {/* <div>
-                  <div className="flex justify-end pb-3 mt-[-10px]">
-                    <IconButton size="small" className="x-icon" onClick={() => setOpenOtp(false)}>
-                      <CloseIcon />
-                    </IconButton>
-                  </div>
-                </div> */}
+               
               </div>
 
               {/* Phone Number Display */}
@@ -467,21 +512,28 @@ const PatientReferralVerify = ({
                 Resend OTP
               </button>
             </div>
+            </Paper>
           </div>
-        </div>) : <>  </>
+        </div>
+       
+        ) : <>  </>
       }
 
       {/* =========== referralPreview-Preview =================*/}
       {
         patientReferralPreview ? (
           <div className='p-6'>
-            <div className='flex lg:flex-row flex-col  gap-4'>
+            <div className='flex lg:flex-row flex-col  gap-4 justify-center'>
+                <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                   <div className="space-y-4">
               <ProfileCard1 patient_details={patient_details}/>
               <ProfileCard2 patient_details={patient_details}/>
+              </div>
+              </Paper>
             </div>
-            <div className='mt-4'>
-              <div className='flex justify-end'>
-                <div className="flex gap-4 ">
+            <div className='mt-4' style={{display:show_add_patient_button==="exist"?"block":"none"}}>
+              <div className='flex justify-center'>
+                <div className="flex gap-4 " >
                   <button onClick={()=>navigate('/patient-referral-home',{state:{patient_details}})}
                     className={`px-6 py-3 rounded-lg font-medium text-[var(--primary-color)] transition-colors border-[var(--primary-color)]  border-2 hover:bg-[var(--primary-color)] cursor-pointer
                       hover:text-white
@@ -500,6 +552,30 @@ const PatientReferralVerify = ({
                 </div>
               </div>
             </div>
+
+             <div className='mt-4' style={{display:show_add_patient_button==="not exist"?"block":"none"}}>
+              <div className='flex justify-center' >
+                <div className="flex gap-4 ">
+                  <button onClick={()=>navigate('/add-new-patient')}
+                    className={`px-6 py-3 rounded-lg font-medium text-[var(--primary-color)] transition-colors border-[var(--primary-color)]  border-2 hover:bg-[var(--primary-color)] cursor-pointer
+                      hover:text-white
+                      w-[140px]
+                   `}
+                  >
+                    Add Patient
+                  </button>
+                  <button
+                    className={`px-6 py-3 rounded-lg font-medium text-white transition-colors bg-[var(--primary-color)] hover:bg-slate-700 cursor-pointer
+                      w-[140px]
+                   `}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+
+
           </div>)
           : <> </>
       }
