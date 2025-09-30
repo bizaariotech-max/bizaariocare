@@ -220,6 +220,9 @@ const PatientReferralVerify = ({
       {/* ===========Form Section =================*/}
       {/* {showReferralForm ? ( */}
       
+      <div className='flex justify-center'>
+
+      
       <div className={`p-6 ${showReferralForm ? 'block' : 'hidden'}`}>
         {/* Header */}
         <div className='flex items-center justify-between mb-4'>
@@ -365,12 +368,13 @@ const PatientReferralVerify = ({
           )}
         </div>
       </div>
+      </div>
       {/* )  : <></> } */}
 
 
 {/*===================== =========== OTP-Preview =================================================*/}
       {otpBox ? (
-        <div >
+        <div className='flex justify-center'>
           <div
             className="p-6"
           // style={{ backgroundColor: '#f2f3f6' }}
