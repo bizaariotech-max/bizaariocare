@@ -49,7 +49,7 @@ const DiagnosticsInvestigations = () => {
       {/* Table */}
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         {/* Table Header */}
-        <div className="bg-slate-600 text-white">
+        <div className="bg-[var(--button-back-color)] text-white">
           <div className="grid grid-cols-4 gap-4 p-4">
             <div className="font-medium">Investigation Category</div>
             <div className="font-medium">Investigation Name</div>

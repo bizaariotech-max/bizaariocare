@@ -110,7 +110,7 @@ const VitalsPhysicalExaminations = () => {
       {/* Table */}
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         {/* Table Header */}
-        <div className="bg-slate-600 text-white">
+        <div className="bg-[var(--button-back-color)] text-white">
           <div className="grid grid-cols-3 gap-4 p-2">
             <div className="font-medium">Parameter Name</div>
             <div className="font-medium">Value/ Readings</div>

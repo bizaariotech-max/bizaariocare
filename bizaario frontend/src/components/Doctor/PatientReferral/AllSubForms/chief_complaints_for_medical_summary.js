@@ -1,9 +1,6 @@
 
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import generalphysician from '../AllSubForms/assets/images/general physician.png'
-import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
-import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
 import { useEffect, useState } from 'react'
 import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
 import api from '../../../../api'
@@ -11,14 +8,10 @@ import Swal from 'sweetalert2';
 import UniqueLoader from '../../../loader';
 import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
-import { __postApiData } from "../../../../utils/api";
+
 
 const ChiefComplaintsForMedicalSummary = ({patientId,selected_case_file,case_file_data}) => {
 
-
-
- 
-  
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
 

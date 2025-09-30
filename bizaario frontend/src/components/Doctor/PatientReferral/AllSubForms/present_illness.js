@@ -1,19 +1,12 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import generalphysician from '../AllSubForms/assets/images/general physician.png'
-import ChiefComplaintsForMedicalSummary from './chief_complaints_for_medical_summary';
-import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations_for_medical_summary';
-import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
-import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
-import { useEffect, useState } from 'react'
-import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
+import { useEffect, useState,useRef } from 'react'
+
 import api from '../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../loader';
-import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
-import { Modal, } from 'react-bootstrap';
-import { __postApiData } from "../../../../utils/api";
-import PastSurgeries from './past_surgeries';
+
 import ChiefComplaintsForMedicalSummaryPresent from './present_Illness_Sub_Components/chief_complaints_for_medical_summary_present';
 import DiagnosticsInvestigationsForMedicalSummaryPresent from './present_Illness_Sub_Components/Diagnosis_investigations_for_medical_summary_present';
 import CurrentMedicinesForMedicalSummaryPresent from './present_Illness_Sub_Components/current_medicines_for_medical_summary_present';
@@ -23,9 +16,47 @@ import PremiumDoctorCarousel from './PremiumDoctor/PremiumDoctorCarousel';
 
 const PresentIllness = ({patientId,selected_case_file}) => {
 
+  const[loading_for,setloading_for]=useState("")
+
  const doctordetails=JSON.parse(localStorage.getItem("user"))
 
 const [isCollapsed, setIsCollapsed] = useState(false);
+
+
+
+//======================== get medical history data by patien id==============================
+
+const[medical_history_id,setmedical_history_id]=useState("")
+
+ const getall_patient_medical_history = async () => {
+   try {
+    //  setLoadingSpeciality(true);
+     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Ongoing`);
+      const historyList = resp?.data?.data?.list || [];
+
+    // ✅ find matching case file
+    const matchedHistory = historyList.find(
+      (item) => item?.CaseFileId?._id === selected_case_file
+    );
+
+    if (matchedHistory) {
+      setmedical_history_id(matchedHistory._id);
+    } else {
+      setmedical_history_id(""); // no match found
+    }
+      
+      
+     
+   } catch (error) {
+     console.error(error);
+   } finally {
+   }
+ };
+
+ useEffect(()=>
+{
+  getall_patient_medical_history()
+},[selected_case_file])
 
  
 //================================== get selected case file data============================================
@@ -36,9 +67,8 @@ const [isCollapsed, setIsCollapsed] = useState(false);
         try {
           
           const resp=await api.get(`api/v1/admin/medical-history/list?CaseFileId=${selected_case_file}`)
-         setcase_file_data(resp?.data?.data?.list || []);
+          setcase_file_data(resp?.data?.data?.list || []);
          
-          
         } catch (error) {
           console.log(error);
           
@@ -50,6 +80,78 @@ const [isCollapsed, setIsCollapsed] = useState(false);
         getcase_filedetails()
     
       },[selected_case_file])
+
+   
+  //=========================== drop down for update status====================================
+
+  const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState("Update Status");
+  const dropdownRef = useRef(null);
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+
+  // =======================update patient medical history status====================================
+  
+  const update_patient_medical_history_status = async (status) => {
+    setloading_for("update status")
+    try {
+     
+      const payload={Status:status}
+      const resp = await api.put(`api/v1/admin/medical-history/status/${medical_history_id}`,payload);
+      console.log(resp);
+      if(resp.data.response.response_code==="200")
+      {
+        Swal.fire({
+          icon:"success",
+          title:"Status Update",
+          text:"Status Update Form Onging To Past",
+          showConfirmButton:true,
+          customClass: {
+          confirmButton: 'my-swal-button',
+        },
+        }).then(()=>
+        {
+          window.location.reload()
+        })
+    
+      }
+
+         else
+                  {
+                    Swal.fire({
+                      icon:"warning",
+                      title:"Status Update",
+                      text:resp.data.response.response_message,
+                      showConfirmButton:true,
+                      customClass: {
+                      confirmButton: 'my-swal-button',
+                    },
+                    }).then(()=>
+                    {
+                      window.location.reload()
+                    })
+                
+                  }
+                  
+      
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setloading_for("")
+    }
+  };
+  
+      
 
   return (
    <div className="space">
@@ -73,6 +175,44 @@ const [isCollapsed, setIsCollapsed] = useState(false);
           <Edit className="w-4 h-4" />
           <span className="text-sm font-medium underline">Edit</span>
         </button>
+
+         <div className="relative inline-block text-left" ref={dropdownRef}>
+      {/* Button */}
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
+      >
+        <span className="text-sm font-medium underline">{status}</span>
+       
+      </button>
+
+      {/* Dropdown */}
+      {open && (
+        <div className="absolute mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+          <ul className="py-1 text-sm text-gray-700">
+            {/* <li
+              // onClick={() => handleSelect("Ongoing")}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              Ongoing
+            </li> */}
+            <li
+              onClick={() => update_patient_medical_history_status("Past")}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              Past
+            </li>
+            <li
+              // onClick={() => handleSelect("Resolved")}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              Resolved
+            </li>
+          </ul>
+        </div>
+      )}
+    </div>
 
         {/* Collapse / Expand Button */}
        <button
@@ -120,7 +260,7 @@ const [isCollapsed, setIsCollapsed] = useState(false);
     {/* Collapsible Content */}
    
      <div
-  className={`transition-all duration-500 ease-in-out overflow-hidden ${
+  className={`transition-all duration-500 ease-in-out overflow-auto ${
     isCollapsed ? "max-h-0 opacity-0" : "max-h-[2000px] opacity-100"
   }`}
 >
@@ -136,7 +276,22 @@ const [isCollapsed, setIsCollapsed] = useState(false);
           </div>
         </div>
 
-        <div
+          {/* <Carousel
+          arrows={false}
+          responsive={responsive}
+          containerClass="carousel-container"
+          itemClass="pe-3 pt-4"
+          infinite
+          partialVisible
+        >
+          {medicalSpecialties.map((item) => (
+            <div key={item.id}>
+              <MedicalSpecialitiesCard icon={generalphysician} cardData={item} />
+            </div>
+          ))}
+        </Carousel> */}
+
+        {/* <div
           className="flex gap-2 flex-nowrap overflow-x-auto sm:overflow-visible mt-10"
           style={{ cursor: "pointer" }}
         >
@@ -195,7 +350,7 @@ const [isCollapsed, setIsCollapsed] = useState(false);
               Neurology
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* Cards */}
         <div className="card-details">
@@ -240,6 +395,25 @@ const [isCollapsed, setIsCollapsed] = useState(false);
       8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
     </p>
   </div>
+
+   {loading_for==="update status" && (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(255, 255, 255, 0.6)',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <UniqueLoader />
+    </div>
+  )}
+  
+
+
 </div>
 
   );

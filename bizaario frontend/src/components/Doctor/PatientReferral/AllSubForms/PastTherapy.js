@@ -43,8 +43,8 @@ const PastTherapy = () => {
       {/* Table */}
       <div className="overflow-x-auto">
         {/* Table Header */}
-        <div className="bg-slate-600 text-white">
-          <div className="grid grid-cols-2 gap-4 p-4">
+        <div className="bg-[var(--button-back-color)] text-white">
+          <div className="grid grid-cols-2 gap-4 p-3">
             <div className="font-medium">Therapy Name</div>
             <div className="font-medium">Clinical Outcome/Patient's Response</div>
           </div>

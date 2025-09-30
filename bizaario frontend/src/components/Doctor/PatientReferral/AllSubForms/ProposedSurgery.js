@@ -1,11 +1,9 @@
-
-import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import healthicon from '../AllSubForms/assets/images/view health assessment report icon.png';
-const SurgeryProcedurePerformed = () => {
 
-  // Sample data for the complaints
-  const complaintsData = [
+
+export default function ProposedSurgery() {
+
+    const complaintsData = [
     {
       id: 1,
       complaint: 'Cough',
@@ -29,41 +27,11 @@ const SurgeryProcedurePerformed = () => {
     }
   ];
 
-  // Function to render severity grade as color bars
-  const renderSeverityGrade = (severity) => {
-    const segments = [
-      { color: 'bg-red-600', active: severity >= 1 },
 
-      { color: 'bg-[#ffc001]', active: severity >= 2 },
-      { color: 'bg-[#feff99]', active: severity >= 3 },
-      { color: 'bg-[#92d14f]', active: severity >= 4 },
-      { color: 'bg-[#107c42]', active: severity >= 5 },
-
-
-    ];
-    return (
-      <div className="flex items-center space-x-1">
-        {segments.map((segment, index) => (
-          <div
-            key={index}
-            className={`h-6 ${index === 4 ? 'w-8' : 'w-8'} ${segment.active ? segment.color : 'bg-gray-200'
-              } ${index === 4 ? 'rounded-none' : 'rounded-sm'}`}
-          />
-        ))}
-      </div>
-    );
-  };
   return (
-    <div className="space mt-4">
-
-  
-
-
-      {/* Header */}
-      <div className="flex items-center justify-between mt-2  border-b border-gray-200">
-        <h2 className="text-xl font-semibold text-gray-900">
-          Surgery/Procedure Performed
-        </h2>
+    <div className="space ">
+      <div className="flex items-center justify-between ">
+        <h2 className="lg:text-[24px] font-semibold mb-4">Proposed Surgery</h2>
         <div className="flex items-center space-x-4">
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <span className="text-sm font-medium underline">Add</span>
@@ -74,9 +42,10 @@ const SurgeryProcedurePerformed = () => {
             <span className="text-sm font-medium underline">Edit</span>
           </button>
         </div>
+
       </div>
 
-      {/* Table */}
+  {/* Table */}
       <div className="overflow-x-auto">
         {/* Table Header */}
         <div className="bg-[var(--button-back-color)] text-white  " >
@@ -116,9 +85,23 @@ const SurgeryProcedurePerformed = () => {
         
 
       </div>
+      
+     
+
+      <div className="pt-4">
+        <p className="">
+          Doctor’s Note
+        </p>
+      </div>
+
+      <div className='p-4 bg-[#f2f3f6] rounded-lg mt-4'>
+        <p>Following your recent consultation, I have prescribed [specific medication(s), dosage, and duration, e.g., Amoxicillin 500 mg, twice daily for 7 days] to address your [specific condition, e.g., bacterial sinus infection]. This treatment is expected to [intended outcome, e.g., resolve the infection and alleviate symptoms such as nasal congestion and facial pain] within [expected timeframe, e.g., 5-7 days]. Please take the medication as directed and complete the full course to ensure optimal recovery.</p>
+      </div>
+      <div className="pt-4">
+        <p className="text-xs">
+          1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
+        </p>
+      </div>
     </div>
   );
 }
-
-export default SurgeryProcedurePerformed
-

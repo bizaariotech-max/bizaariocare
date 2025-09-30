@@ -46,7 +46,7 @@ const Diagnosis = () => {
       {/* Table */}
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         {/* Table Header */}
-        <div className="bg-slate-600 text-white">
+        <div className="bg-[var(--button-back-color)] text-white">
           <div className="grid grid-cols-3 gap-4 p-4">
             <div className="font-medium">Current Diagnosis</div>
             <div className="font-medium">Type of Diagnosis</div>

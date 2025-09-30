@@ -1,11 +1,11 @@
-
-import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import healthicon from '../AllSubForms/assets/images/view health assessment report icon.png';
-const SurgeryProcedurePerformed = () => {
 
-  // Sample data for the complaints
-  const complaintsData = [
+
+
+export default function TherapyGiven() {
+
+ 
+   const complaintsData = [
     {
       id: 1,
       complaint: 'Cough',
@@ -29,41 +29,10 @@ const SurgeryProcedurePerformed = () => {
     }
   ];
 
-  // Function to render severity grade as color bars
-  const renderSeverityGrade = (severity) => {
-    const segments = [
-      { color: 'bg-red-600', active: severity >= 1 },
-
-      { color: 'bg-[#ffc001]', active: severity >= 2 },
-      { color: 'bg-[#feff99]', active: severity >= 3 },
-      { color: 'bg-[#92d14f]', active: severity >= 4 },
-      { color: 'bg-[#107c42]', active: severity >= 5 },
-
-
-    ];
-    return (
-      <div className="flex items-center space-x-1">
-        {segments.map((segment, index) => (
-          <div
-            key={index}
-            className={`h-6 ${index === 4 ? 'w-8' : 'w-8'} ${segment.active ? segment.color : 'bg-gray-200'
-              } ${index === 4 ? 'rounded-none' : 'rounded-sm'}`}
-          />
-        ))}
-      </div>
-    );
-  };
   return (
-    <div className="space mt-4">
-
-  
-
-
-      {/* Header */}
-      <div className="flex items-center justify-between mt-2  border-b border-gray-200">
-        <h2 className="text-xl font-semibold text-gray-900">
-          Surgery/Procedure Performed
-        </h2>
+    <div className="space ">
+      <div className="flex items-center justify-between ">
+        <h2 className="lg:text-[24px] font-semibold mb-4">Therapy (Ies) Given</h2>
         <div className="flex items-center space-x-4">
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <span className="text-sm font-medium underline">Add</span>
@@ -74,15 +43,17 @@ const SurgeryProcedurePerformed = () => {
             <span className="text-sm font-medium underline">Edit</span>
           </button>
         </div>
+
       </div>
 
-      {/* Table */}
+     
+       {/* Table */}
       <div className="overflow-x-auto">
         {/* Table Header */}
         <div className="bg-[var(--button-back-color)] text-white  " >
           <div className="grid grid-cols-2 gap-4 p-2 text-[20px]">
-            <h3 className="table-header">Surgery/Procedure Name</h3>
-            <h3 className="table-header">Clinical Outcome/Patient's Response</h3>
+            <h3 className="table-header">Therapy Name</h3>
+            <h3 className="table-header">Patient's Response</h3>
           </div>
         </div>
 
@@ -116,9 +87,7 @@ const SurgeryProcedurePerformed = () => {
         
 
       </div>
+
     </div>
   );
 }
-
-export default SurgeryProcedurePerformed
-

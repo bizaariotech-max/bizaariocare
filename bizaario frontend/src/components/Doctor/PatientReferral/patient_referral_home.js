@@ -33,6 +33,15 @@ import PatientReferralVerify from './AllSubForms/PatientReferralVerify';
 import { useLocation } from 'react-router-dom';
 import PremiumDoctorCarousel from './AllSubForms/PremiumDoctor/PremiumDoctorCarousel';
 import PremiumDoctor from './AllSubForms/PremiumDoctor/PremiumDoctor';
+import SurgeryProcedurePerformed from './AllSubForms/surgery_procedure_performed';
+import TherapyGiven from './AllSubForms/TherapyGiven';
+import LifestyleInterventionsPrescribed from './AllSubForms/LifestyleInterventionsPrescribed';
+import ProposedSurgery from './AllSubForms/ProposedSurgery';
+import PreSurgicalConsiderations from './AllSubForms/PreSurgicalConsiderations';
+import RiskFactor from './AllSubForms/RiskFactor';
+import PatientConcerns from './AllSubForms/PatientConcerns';
+import ImmunizationProfile from './AllSubForms/ImmunizationProfile';
+
 
 
 const PatientReferralHome = () => {
@@ -76,8 +85,16 @@ const PatientReferralHome = () => {
       <VitalsPhysicalExaminations />
       <DiagnosticsInvestigations />
       <Diagnosis />
-      <TreatmentToDate />
+      {/* <TreatmentToDate /> */}
       <PatientResponse /> 
+      <SurgeryProcedurePerformed/>
+      <TherapyGiven/>
+      <LifestyleInterventionsPrescribed/>
+      <ProposedSurgery/>
+      <PreSurgicalConsiderations/>
+      <RiskFactor/>
+      <PatientConcerns/>
+      <ImmunizationProfile/>
 
         <div className="mt-6">
               <div className="flex gap-4">

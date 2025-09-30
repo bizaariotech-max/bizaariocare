@@ -142,6 +142,9 @@ const getallmedical_speciality = async () => {
   }
 };
 
+console.log(allmedical_speciality);
+
+
 
 // ================================get doctor list========================================
 
@@ -194,8 +197,8 @@ const getallmedical_speciality = async () => {
  const [caseFiles, setCaseFiles] = useState([])
 const getall_case_file = async () => {
   try {
-    setLoadingSpeciality(true);
     const resp = await api.get(`api/v1/admin/patientCaseFile/listPatientCaseFile?PatientId=${patientId}`);
+    console.log(resp);
     
     
     setCaseFiles(resp.data.data.list)
@@ -212,6 +215,8 @@ useEffect(()=>
 {
 getall_case_file()
 },[])
+
+console.log(caseFiles);
 
 
 
@@ -537,21 +542,36 @@ getall_case_file()
             Treatment Type: <strong>{file.TreatmentType || 'N/A'}</strong>
           </p>
           <p className="form-title  text-gray-600">
-            {file.DoctorName || 'N/A'}
+            {file.DoctorName || file.DoctorId.AssetName}
           </p>
           <div className='flex justify-between'>
           <p className=" flex text-sm text-gray-600">
-            <strong>Medical Speciality:</strong>{' '}
+            <strong>Medical Speciality:</strong>
             {
               allmedical_speciality?.find((item) => item._id === file.MedicalSpeciality)
                 ?.lookup_value || 'N/A'
+            }
+            {/* {
+              file.MedicalSpeciality
+            } */}
+            
+          </p>
+
+              <p className=" flex text-sm text-gray-600">
+            <strong>Status:</strong>{' N/A'}
+            {
+              file.Status
             }
             
           </p>
 
           <div className='flex justify-between gap-2'>
-            <button className='classic-button'>Ongoing</button>
-            <button className='classic-button'>Past</button>
+            <button className='classic-button'>
+              Ongoing
+            </button>
+            <button className='classic-button'>
+              Past
+            </button>
            <button
             className='classic-button'
             onClick={() => {

@@ -46,8 +46,8 @@ const PastMedications = () => {
       {/* Table */}
       <div className="overflow-x-auto">
         {/* Table Header */}
-        <div className="bg-slate-600 text-white">
-          <div className="grid grid-cols-3 gap-4 p-4">
+        <div className="bg-[var(--button-back-color)] text-white">
+          <div className="grid grid-cols-3 gap-4 p-3">
             <div className="font-medium">Medicine/Salt Name</div>
             <div className="font-medium">Dosage</div>
             <div className="font-medium">Frequency</div>

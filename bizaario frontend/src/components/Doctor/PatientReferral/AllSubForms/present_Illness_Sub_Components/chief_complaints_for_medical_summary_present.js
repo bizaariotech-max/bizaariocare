@@ -325,7 +325,7 @@ const handleAddMore = () => {
  const getall_patient_medical_history = async () => {
    try {
     //  setLoadingSpeciality(true);
-     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Active`);
+     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Ongoing`);
         const formatted = resp.data.data.list.map(item => ({
           caseFileId: item.CaseFileId._id,
           treatmentType: item.CaseFileId.TreatmentType,
@@ -391,7 +391,7 @@ const handleAddMore = () => {
 
   {/* Table Body */}
   <div className="divide-y divide-gray-200">
-    {case_file_data[0]?.Status === "Active" &&
+    {case_file_data[0]?.Status === "Ongoing" &&
     case_file_data[0]?.ChiefComplaints?.map((item, index) => (
       <div
         key={item.id}

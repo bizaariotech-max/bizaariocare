@@ -367,11 +367,12 @@ const PatientReferralVerify = ({
       </div>
       {/* )  : <></> } */}
 
-      {/* =========== OTP-Preview =================*/}
+
+{/*===================== =========== OTP-Preview =================================================*/}
       {otpBox ? (
         <div >
           <div
-            className="p-8 rounded-lg  max-w-md mx-auto"
+            className="p-6"
           // style={{ backgroundColor: '#f2f3f6' }}
           >
             {/* Header */}
@@ -390,7 +391,7 @@ const PatientReferralVerify = ({
               </div>
 
               {/* Phone Number Display */}
-              <div className="flex items-center justify-between">
+              <div className="flex gap-10">
                 <div>
                   <span className="text-gray-700">OTP sent to </span>
                   <span className="font-semibold text-gray-900">{phoneNumber}</span>
@@ -411,7 +412,7 @@ const PatientReferralVerify = ({
               </label>
 
               {/* OTP Input Boxes */}
-              <div className="flex space-x-3 justify-center">
+              <div className="flex space-x-3">
                 {otp.map((digit, index) => (
                   <input
                     key={index}
@@ -433,7 +434,7 @@ const PatientReferralVerify = ({
             <button
               onClick={handleVerifyOTP}
               disabled={otp.join('').length !== 4}
-              className={`w-full py-4 rounded-lg font-medium text-white transition-colors mb-6 ${otp.join('').length === 4
+              className={`w-48 py-4 rounded-lg font-medium text-white transition-colors mb-6 ${otp.join('').length === 4
                 ? 'bg-slate-600 hover:bg-slate-700 cursor-pointer'
                 : 'bg-gray-400 cursor-not-allowed'
                 }`}
@@ -442,7 +443,7 @@ const PatientReferralVerify = ({
             </button>
 
             {/* Timer and Resend Section */}
-            <div className="flex items-center justify-between">
+            <div className="flex gap-6">
               <div className="text-gray-600">
                 {!isResendAvailable ? (
                   <span>Available in {formatTime(timer)} Sec</span>
