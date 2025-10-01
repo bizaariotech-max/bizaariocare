@@ -25,7 +25,6 @@ const PatientDetails = (patientId) => {
       {
         try {
           const resp=await api.get(`api/v1/admin/getPatient/${patientId.patientId}`)
-        
           setselected_patient_details(resp.data.data)
           
         } catch (error) {
@@ -39,6 +38,9 @@ const PatientDetails = (patientId) => {
         getpatient_details()
     
       },[patientId])
+      
+   
+      
 
   const doctor_details=JSON.parse(localStorage.getItem("user"))
 
@@ -47,7 +49,33 @@ const PatientDetails = (patientId) => {
   const [show, setShow] = useState(false)
 
   // function to open modal
-  const handleShow = () => setShow(true);
+  const handleShow = () =>
+    {
+      setShow(true);
+
+       const p = selected_patient_details;
+
+  // Normalize before setting state
+  const normalizedDetails = {
+    ...p,
+
+    // Convert objects to string IDs
+    Nationality: p.Nationality?._id || "",
+    CountryOfResidence: p.CountryOfResidence?._id || "",
+    State: p.State?._id || "",
+    InsuranceProvider: p.InsuranceProvider?._id || "",
+    Relationship: p.Relationship?._id || "",
+    CreatedBy:p.CreatedBy?._id || "",
+
+    // Remove backend-only fields
+    createdAt: undefined,
+    updatedAt: undefined,
+    __v: undefined,
+  }
+
+
+      setpatient_details(normalizedDetails)
+    } 
   // function to close modal
   const handleClose = () => setShow(false);
 
@@ -82,6 +110,9 @@ const[isloading_for,setisloading_for]=useState(false)
     CreatedBy: '',
 
   });
+
+  console.log(patient_details);
+  
 
 useEffect(() => {
   setpatient_details((pre) => ({
@@ -192,12 +223,15 @@ const handleSingleImageUpload = async (event) => {
 
 
 
- const save_patient_details = async () => {
+ const update_patient_details = async () => {
   setisloading_for(true);
   try {
+    const payload={...patient_details,
+      _id:patientId.patientId
+    }
     const resp = await api.post(
       `api/v1/admin/savePatient`,
-      patient_details,
+      payload,
       {
         headers: { "Content-Type": "application/json" },
       }
@@ -210,8 +244,8 @@ const handleSingleImageUpload = async (event) => {
     if (response_code === "200") {
       Swal.fire({
         icon: "success",
-        title: "Details Added",
-        text: "Patient Details Added Successfully...",
+        title: "Details Updated",
+        text: "Patient Details Updated Successfully...",
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
@@ -391,13 +425,13 @@ const[allisdcode,setallisdcode]=useState([])
   return (
     <div className="mt-[40px]">
          <div className="flex justify-end items-center space-x-4">
-          <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
+          {/* <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
             <Plus className="w-4 h-4" />
-          </button>
+          </button> */}
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <Edit className="w-4 h-4" />
-            <span className="text-sm font-medium underline">Edit</span>
+            <span className="text-sm font-medium underline" onClick={handleShow}>Edit</span>
           </button>
         </div>
       <div className='grid lg:grid-cols-2 grid-cols-1 gap-10'>
@@ -479,7 +513,11 @@ const[allisdcode,setallisdcode]=useState([])
             placeholder="Date Of Birth" 
             name="DateOfBirth" 
             size="small" 
-            value={patient_details.DateOfBirth} 
+            value={
+              patient_details?.DateOfBirth
+                ? new Date(patient_details.DateOfBirth).toISOString().split("T")[0]
+                : ""
+            } 
             onChange={handleChange} 
             />
             </FormControl>
@@ -489,7 +527,7 @@ const[allisdcode,setallisdcode]=useState([])
              <Select
                 labelId="content-type-label"
                 name="ISDCode"
-                value={patient_details.ISDCode}
+                value={patient_details?.ISDCode?patient_details.ISDCode._id || patient_details.ISDCode : ""}
                 onChange={handleChange}
                 displayEmpty
                 MenuProps={customMenuProps}
@@ -538,14 +576,35 @@ const[allisdcode,setallisdcode]=useState([])
 
              <FormControl fullWidth size="small">
             <label className="form-label">Blood Group</label>
-            <TextField
-            type='text'
-            placeholder="Blood Group" 
-            name="BloodGroup" 
-            size="small" 
-            value={patient_details.BloodGroup} 
-            onChange={handleChange} 
-            />
+
+            <Select
+                labelId="content-type-label"
+                name="BloodGroup"
+                value={patient_details.BloodGroup}
+                onChange={handleChange}
+                displayEmpty
+                MenuProps={customMenuProps}
+                 renderValue={(selected) => {
+                if (!selected) {
+                  return <span style={{ color: "#9ca3af" }}>Select Blood Group</span>;
+                }
+                return selected;
+              }}
+              >
+              <MenuItem value="">
+                <em>Select Blood Group</em>
+              </MenuItem>
+              <MenuItem value="A+">A+</MenuItem>
+              <MenuItem value="A-">A-</MenuItem>
+              <MenuItem value="B+">B+</MenuItem>
+              <MenuItem value="B-">B-</MenuItem>
+              <MenuItem value="AB+">AB+</MenuItem>
+              <MenuItem value="AB-">AB-</MenuItem>
+              <MenuItem value="O+">O+</MenuItem>
+              <MenuItem value="O-">O-</MenuItem>
+                          
+            </Select>
+            
             </FormControl>
 
           
@@ -587,7 +646,7 @@ const[allisdcode,setallisdcode]=useState([])
            <Select
                 labelId="content-type-label"
                 name="Nationality"
-                value={patient_details.Nationality}
+                value={patient_details?.Nationality?._id || patient_details?.Nationality || ""}
                 onChange={handleChange}
                 displayEmpty
                 MenuProps={customMenuProps}
@@ -616,7 +675,7 @@ const[allisdcode,setallisdcode]=useState([])
              <Select
                 labelId="content-type-label"
                 name="CountryOfResidence"
-                value={patient_details.CountryOfResidence}
+                value={patient_details?.CountryOfResidence?patient_details.CountryOfResidence._id || patient_details.CountryOfResidence : ""}
                 onChange={handleChange}
                 displayEmpty
                 MenuProps={customMenuProps}
@@ -669,7 +728,7 @@ const[allisdcode,setallisdcode]=useState([])
            <Select
                 labelId="content-type-label"
                 name="State"
-                value={patient_details.State}
+                value={patient_details?.State?patient_details.State._id || patient_details.State : ""}
                 onChange={handleChange}
                 displayEmpty
                 MenuProps={customMenuProps}
@@ -699,7 +758,7 @@ const[allisdcode,setallisdcode]=useState([])
            <Select
                 labelId="content-type-label"
                 name="City"
-                value={patient_details.City}
+                value={patient_details?.City?patient_details.City._id || patient_details.City : ""}
                 onChange={handleChange}
                 displayEmpty
                 MenuProps={customMenuProps}
@@ -740,7 +799,7 @@ const[allisdcode,setallisdcode]=useState([])
             <Select
                 labelId="content-type-label"
                 name="InsuranceProvider"
-                value={patient_details.InsuranceProvider || ""}
+                value={patient_details?.InsuranceProvider?patient_details.InsuranceProvider._id || patient_details.InsuranceProvider : ""}
                 onChange={handleChange}
                 displayEmpty
                 MenuProps={customMenuProps}
@@ -782,7 +841,11 @@ const[allisdcode,setallisdcode]=useState([])
             placeholder="Insurance Valid Upto" 
             name="InsuranceValidUpto" 
             size="small" 
-            value={patient_details.InsuranceValidUpto} 
+            value={
+            patient_details?.InsuranceValidUpto
+              ? new Date(patient_details.InsuranceValidUpto).toISOString().split("T")[0]
+              : ""
+          }
             onChange={handleChange} 
             />
             </FormControl>
@@ -810,11 +873,11 @@ const[allisdcode,setallisdcode]=useState([])
             </FormControl>
 
             <FormControl fullWidth size="small">
-            <label className="form-label">Secondary Isd Code</label>
+            <label className="form-label">Secondary ISD Code</label>
              <Select
                 labelId="content-type-label"
                 name="SecondaryISDCode"
-                value={patient_details.SecondaryISDCode}
+                value={patient_details?.SecondaryISDCode?patient_details.SecondaryISDCode._id || patient_details.SecondaryISDCode : ""}
                 onChange={handleChange}
                 displayEmpty
                 MenuProps={customMenuProps}
@@ -852,7 +915,7 @@ const[allisdcode,setallisdcode]=useState([])
             <Select
                 labelId="content-type-label"
                 name="Relationship"
-                value={patient_details.Relationship}
+                value={patient_details?.Relationship?patient_details.Relationship._id || patient_details.Relationship : ""}
                 onChange={handleChange}
                 MenuProps={customMenuProps}
                 displayEmpty
@@ -894,7 +957,7 @@ const[allisdcode,setallisdcode]=useState([])
          
          
           <div className="flex justify-end gap-3 mt-4">
-           <Button style={{backgroundColor:"#52677D",fontFamily:"Lora",color:"white"}} onClick={save_patient_details}>Save</Button>
+           <Button style={{backgroundColor:"#52677D",fontFamily:"Lora",color:"white"}} onClick={update_patient_details}>Update</Button>
          </div>
 
         </div> 

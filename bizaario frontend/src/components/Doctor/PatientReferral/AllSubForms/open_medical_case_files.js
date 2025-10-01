@@ -223,15 +223,10 @@ console.log(caseFiles);
 
 
   return (
-    <div className="space mt-4">
+    <div className="space mt-4 " >
 
-     <div className="flex justify-between space-x-2">
-      <div className='flex '>
-      <img src={healthicon} alt="" className="w-[36px] h-[36px]" />
-      <h2 className="text-[36px] font-semibold text-[var(--button-back-color)]">
-        <span>View Health Assessment Report</span>
-      </h2>
-      </div>
+     <div className="flex justify-end space-x-2">
+     
       <button className='view-all' onClick={handleShow_medical_files}>Open Medical Case Files</button>
     </div>
 
@@ -240,7 +235,22 @@ console.log(caseFiles);
 <Modal show={show_medical_files} onHide={handleClose_medical_files} centered size="lg">
         
               <Modal.Header closeButton>
-                <Modal.Title className='form-title'>Create New File </Modal.Title>
+                <div className="flex flex-col">
+      {/* Main title */}
+      <h2 className="text-lg font-bold text-gray-900 w-full">Create New File</h2>
+       <hr className="w-full border-gray-800 my-2" />
+
+      {/* Patient details */}
+      <div className="mt-1 text-sm text-gray-600 space-x-2">
+        <span className="font-semibold text-blue-700">{patient_details?.Name}</span>
+        <span className="text-gray-500">{patient_details?.Gender}</span>
+        {patient_details?.DateOfBirth && (
+          <span className="text-gray-500">
+            {new Date(patient_details.DateOfBirth).toISOString().split("T")[0]}
+          </span>
+        )}
+      </div>
+    </div>
               </Modal.Header>
               <Modal.Body>
               
@@ -539,10 +549,10 @@ console.log(caseFiles);
             <img src={calendericon} alt='' className='h-5'></img> {file.Date || 'N/A'}
           </p>
           <p className="text-sm text-gray-600">
-            Treatment Type: <strong>{file.TreatmentType || 'N/A'}</strong>
+            Treatment Type: <strong>{file?.TreatmentType || 'N/A'}</strong>
           </p>
           <p className="form-title  text-gray-600">
-            {file.DoctorName || file.DoctorId.AssetName}
+            {file?.DoctorName || file?.DoctorId?.AssetName}
           </p>
           <div className='flex justify-between'>
           <p className=" flex text-sm text-gray-600">

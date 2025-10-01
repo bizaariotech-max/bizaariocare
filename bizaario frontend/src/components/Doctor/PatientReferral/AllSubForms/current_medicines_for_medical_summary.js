@@ -344,7 +344,7 @@ const save_medicine = async () => {
 
         {/* Table Body */}
         <div className="divide-y divide-gray-200">
-          {case_file_data[0]?.Status === "Past" &&
+          {case_file_data?.length > 0 && case_file_data[0]?.Status === "Past" &&
           case_file_data[0]?.MedicinesPrescribed?.Medicines?.map((item, index) => (
             <div
               key={item.id}

@@ -13,6 +13,7 @@ import { Modal,  Form, Row, Col } from 'react-bootstrap';
 import { __postApiData } from "../../../../utils/api";
 import Doctorsidebar from '../../doctorsidebar';
 import Doctorheader from '../../doctorheader';
+import { useNavigate } from 'react-router-dom';
 
 
 const AddNewPatientDetails = () => {
@@ -171,7 +172,7 @@ const handleSingleImageUpload = async (event) => {
 };
 
 
-
+const navigate=useNavigate()
 
  const save_patient_details = async () => {
   setisloading_for(true);
@@ -199,7 +200,7 @@ const handleSingleImageUpload = async (event) => {
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
-        window.location.reload();
+        navigate('/patient-referral-home',{state:{patient_details:resp.data.data}})
       });
     } else if (response_code === "400") {
       // Show server validation error here
@@ -507,7 +508,42 @@ const[allisdcode,setallisdcode]=useState([])
             />
             </FormControl>
 
-             <FormControl fullWidth size="small">
+
+  <FormControl fullWidth size="small">
+            <label className="form-label">Blood Group</label>
+
+            <Select
+                labelId="content-type-label"
+                name="BloodGroup"
+                value={patient_details.BloodGroup}
+                onChange={handleChange}
+                displayEmpty
+                MenuProps={customMenuProps}
+                 renderValue={(selected) => {
+                if (!selected) {
+                  return <span style={{ color: "#9ca3af" }}>Select Blood Group</span>;
+                }
+                return selected;
+              }}
+              >
+              <MenuItem value="">
+                <em>Select Blood Group</em>
+              </MenuItem>
+              <MenuItem value="A+">A+</MenuItem>
+              <MenuItem value="A-">A-</MenuItem>
+              <MenuItem value="B+">B+</MenuItem>
+              <MenuItem value="B-">B-</MenuItem>
+              <MenuItem value="AB+">AB+</MenuItem>
+              <MenuItem value="AB-">AB-</MenuItem>
+              <MenuItem value="O+">O+</MenuItem>
+              <MenuItem value="O-">O-</MenuItem>
+                          
+            </Select>
+            
+            </FormControl>
+
+            
+             {/* <FormControl fullWidth size="small">
             <label className="form-label">Blood Group</label>
             <TextField
             type='text'
@@ -517,7 +553,7 @@ const[allisdcode,setallisdcode]=useState([])
             value={patient_details.BloodGroup} 
             onChange={handleChange} 
             />
-            </FormControl>
+            </FormControl> */}
 
           
 

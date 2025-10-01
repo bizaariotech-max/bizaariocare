@@ -48,6 +48,8 @@ const PatientReferralHome = () => {
 
   const location =useLocation()
  
+  console.log(location);
+  
   
   const patient_details=location.state.patient_details
   const patientId=patient_details._id
