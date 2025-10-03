@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField,Grid, Select, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
+import { TextField,Grid, Select,Chip, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
 import api from '../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../loader';
@@ -9,6 +9,22 @@ export default function MedicalSpecialties() {
   const[isloading_for,setisloading_for]=useState(false)
 
   const [MedicalSpecialties, setMedicalSpecialties] = useState([]);
+   const [Specialization , setSpecialization ] = useState([]);
+
+
+  const [currentSpecialization, setCurrentSpecialization] = useState("");
+    // Add a new specialization
+  const addSpecialization = () => {
+    const value = currentSpecialization.trim();
+    if (!value) return; // ignore empty input
+    setSpecialization((prev) => [...prev, value]);
+    setCurrentSpecialization(""); // clear input
+  };
+
+  // Remove specialization by index
+  const removeSpecialization = (index) => {
+    setSpecialization((prev) => prev.filter((_, i) => i !== index));
+  };
 
 
   //=========================== get all list of medical speciality================================
@@ -48,7 +64,7 @@ const handleMedicalSpecialtiesChange = (event) => {
     setisloading_for(true)
     try {
 
-      const payload = { MedicalSpecialties };
+      const payload = { MedicalSpecialties,Specialization };
 
       const resp=await api.put(`api/v1/asset-sections/medical-specialties/${doctor_details._id}`,payload,
           {
@@ -97,11 +113,14 @@ const handleMedicalSpecialtiesChange = (event) => {
 const get_medical_specialties = async () => {
   try {
     const resp = await api.get(`api/v1/asset-sections/medical-specialties/${doctor_details._id}`);
+    console.log(resp);
+    
     if (resp.data?.data) {
       const selectedIds = resp.data.data.MedicalSpecialties.map(item =>
         typeof item === "string" ? item : item._id
       );
-      setMedicalSpecialties(selectedIds); // array of IDs only
+      setMedicalSpecialties(selectedIds);
+      setSpecialization(resp.data.data.Specialization)
     }
   } catch (error) {
     console.log(error);
@@ -155,6 +174,54 @@ const get_medical_specialties = async () => {
     ))}
   </Select>
 </FormControl>
+
+{/* 
+          <FormControl fullWidth size="small">
+            <label className="form-label">Specialization</label>
+            <TextField
+            placeholder="Specialization" 
+            name="NoOfLecturesDelivered" 
+            size="small" 
+            value={Specialization} 
+            // onChange={handleChange} 
+            />
+            </FormControl> */}
+
+             <FormControl fullWidth size="small">
+                  <label variant="subtitle1" className='form-label'>
+                    Specialization
+                  </label>
+                  <div className="flex space-x-2">
+                    <TextField
+                      placeholder="Add Specialization"
+                      value={currentSpecialization}
+                      onChange={(e) => setCurrentSpecialization(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && addSpecialization()}
+                      fullWidth
+                      size="small"
+                    />
+                    <Button
+                      onClick={addSpecialization}
+                      variant="outlined"
+                      // startIcon={<AddIcon />}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {Specialization.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {Specialization.map((tag, index) => (
+                        <Chip
+                          key={index}
+                          label={tag}
+                          onDelete={() => removeSpecialization(index)}
+                          color="primary"
+                          variant="outlined"
+                        />
+                      ))}
+                    </div>
+                  )}
+                </FormControl>
 
 
 

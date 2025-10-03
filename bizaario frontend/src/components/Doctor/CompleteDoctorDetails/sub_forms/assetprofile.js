@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, Select, MenuItem, FormControl, InputLabel, Button, Radio, FormControlLabel, RadioGroup, CircularProgress } from '@mui/material';
+import { TextField, Select, MenuItem, FormControl,Chip, InputLabel, Button, Radio, FormControlLabel, RadioGroup, CircularProgress } from '@mui/material';
 import api from '../../../../api'
 import Swal from 'sweetalert2';
 import { CloudUpload } from "lucide-react"; 
@@ -15,6 +15,11 @@ export default function AssetProfile() {
   const [assetprofile, setassetprofile] = useState({
     ShortDescription: '',
     LongDescription: '',
+    NoofSurgeriesPerformed:'',
+    NoofSatisfiedPatients:'',
+    NoofArticlesPublished:'',
+    NoofLecturesDelivered:'',
+    Fellowships :[],
     ProfilePicture: '',
     Logo: '',
     PictureGallery: [],
@@ -29,6 +34,31 @@ export default function AssetProfile() {
     const { name, value } = e.target;
     setassetprofile({ ...assetprofile, [name]: value });
   };
+
+
+  const [currentFellowship, setCurrentFellowship] = useState("");
+
+// ➕ Add fellowship
+const addFellowship = () => {
+  if (currentFellowship.trim() === "") return;
+  setassetprofile((prev) => ({
+    ...prev,
+    Fellowships: [...(prev.Fellowships || []), currentFellowship.trim()],
+  }));
+  setCurrentFellowship(""); // clear input
+};
+
+
+// ❌ Remove fellowship
+const removeFellowship = (index) => {
+  setassetprofile((prev) => ({
+    ...prev,
+    Fellowships: prev.Fellowships.filter((_, i) => i !== index),
+  }));
+};
+  
+
+
 
 
  const handleChangeprofile_pic = async (e) => {
@@ -262,7 +292,7 @@ const doctor_details=JSON.parse(localStorage.getItem("user"))
       Swal.fire({
         icon: "success",
         title: "Details Updated",
-        text: "Doctor Social Media Details Updated Successfully...",
+        text: "Doctor Profile Details Updated Successfully...",
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
@@ -409,6 +439,97 @@ const handleDeleteMedia = async (type, index = null) => {
             value={assetprofile.LongDescription} 
             onChange={handleChange} 
             />
+            </FormControl>
+
+             <FormControl fullWidth size="small">
+            <label className="form-label">No of Surgeries Performed</label>
+            <TextField
+            placeholder="No Of Surgeries Performed" 
+            name="NoofSurgeriesPerformed" 
+            size="small" 
+            value={assetprofile.NoofSurgeriesPerformed} 
+            onChange={handleChange} 
+            />
+            </FormControl>
+
+               <FormControl fullWidth size="small">
+            <label className="form-label">No of Satisfied Patients</label>
+            <TextField
+            placeholder="No Of Satisfied Patients" 
+            name="NoofSatisfiedPatients" 
+            size="small" 
+            value={assetprofile.NoofSatisfiedPatients} 
+            onChange={handleChange} 
+            />
+            </FormControl>
+
+            <FormControl fullWidth size="small">
+            <label className="form-label">No of Articles Published</label>
+            <TextField
+            placeholder="No Of Articles Published" 
+            name="NoofArticlesPublished" 
+            size="small" 
+            value={assetprofile.NoofArticlesPublished} 
+            onChange={handleChange} 
+            />
+            </FormControl>
+
+            <FormControl fullWidth size="small">
+            <label className="form-label">No of Lectures Delivered </label>
+            <TextField
+            placeholder="No Of Lectures Delivered" 
+            name="NoofLecturesDelivered" 
+            size="small" 
+            value={assetprofile.NoofLecturesDelivered} 
+            onChange={handleChange} 
+            />
+            </FormControl>
+
+            {/* <FormControl fullWidth size="small">
+            <label className="form-label">Fellowships</label>
+            <TextField
+            placeholder="Fellowsiips" 
+            name="Fellowsiips" 
+            size="small" 
+            value={assetprofile.Fellowsiips} 
+            onChange={handleChange} 
+            />
+            </FormControl> */}
+
+    <FormControl fullWidth size="small">
+  <label className="form-label">Fellowships</label>
+  <div className="flex space-x-2">
+    <TextField
+      placeholder="Add Fellowships"
+      value={currentFellowship}
+      onChange={(e) => setCurrentFellowship(e.target.value)}
+      onKeyDown={(e) => e.key === "Enter" && addFellowship()} // add on Enter
+      fullWidth
+      size="small"
+    />
+    <Button onClick={addFellowship} variant="outlined">
+      Add
+    </Button>
+  </div>
+
+  {assetprofile?.Fellowships?.length > 0 && (
+    <div className="flex flex-wrap gap-2 mt-2">
+      {assetprofile.Fellowships.map((fellowship, index) => (
+        <Chip
+          key={index}
+          label={fellowship}
+          onDelete={() => removeFellowship(index)}
+          color="primary"
+          variant="outlined"
+        />
+      ))}
+    </div>
+  )}
+</FormControl>
+
+
+               <FormControl fullWidth size="small">
+          
             </FormControl>
 
   
