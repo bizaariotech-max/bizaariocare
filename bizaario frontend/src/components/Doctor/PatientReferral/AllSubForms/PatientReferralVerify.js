@@ -523,14 +523,20 @@ const PatientReferralVerify = ({
       {
         patientReferralPreview ? (
           <div className='p-6'>
-            <div className='flex lg:flex-row flex-col  gap-4 justify-center'>
-                <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-                   <div className="space-y-4">
-              <ProfileCard1 patient_details={patient_details}/>
-              <ProfileCard2 patient_details={patient_details}/>
-              </div>
-              </Paper>
-            </div>
+        <div className="flex lg:flex-row flex-col gap-4">
+  <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }} className="w-full">
+    <div className="flex flex-col lg:flex-row gap-4 w-full">
+      <div className="flex-1">
+        <ProfileCard1 patient_details={patient_details} />
+      </div>
+      <div className="flex-1">
+        <ProfileCard2 patient_details={patient_details} />
+      </div>
+    </div>
+  </Paper>
+</div>
+
+
             <div className='mt-4' style={{display:show_add_patient_button==="exist"?"block":"none"}}>
               <div className='flex justify-center'>
                 <div className="flex gap-4 " >

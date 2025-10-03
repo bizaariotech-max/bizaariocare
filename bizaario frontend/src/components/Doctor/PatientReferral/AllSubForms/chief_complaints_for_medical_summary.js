@@ -503,14 +503,7 @@ const handleAddMore = () => {
          <div>
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
-                
-
-               
-
-
-           
-
-
+              
 {/*======================== chief complaints============================================ */}
 
         <div className='col-span-2'>

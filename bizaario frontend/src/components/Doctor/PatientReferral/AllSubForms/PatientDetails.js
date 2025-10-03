@@ -434,7 +434,7 @@ const[allisdcode,setallisdcode]=useState([])
             <span className="text-sm font-medium underline" onClick={handleShow}>Edit</span>
           </button>
         </div>
-      <div className='grid lg:grid-cols-2 grid-cols-1 gap-10'>
+      <div className='grid lg:grid-cols-2 grid-cols-1 gap-4'>
         <ProfileCard1 patient_details={selected_patient_details}/>
         <ProfileCard2 patient_details={selected_patient_details}/>
       </div>

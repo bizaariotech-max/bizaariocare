@@ -508,7 +508,7 @@ const handleDeleteMedia = async (type, index = null) => {
       size="small"
     />
     <Button onClick={addFellowship} variant="outlined">
-      Add
+      Add More
     </Button>
   </div>
 

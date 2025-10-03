@@ -2,6 +2,8 @@ import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import generalphysician from '../AllSubForms/assets/images/general physician.png'
 import { useEffect, useState,useRef } from 'react'
+import { Modal, } from 'react-bootstrap'; 
+import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
 
 import api from '../../../../api'
 import Swal from 'sweetalert2';
@@ -12,6 +14,12 @@ import DiagnosticsInvestigationsForMedicalSummaryPresent from './present_Illness
 import CurrentMedicinesForMedicalSummaryPresent from './present_Illness_Sub_Components/current_medicines_for_medical_summary_present';
 import CurrentTherapyForMedicalSummaryPresent from './present_Illness_Sub_Components/current_therapy_for_medical_summary_present';
 import PremiumDoctorCarousel from './PremiumDoctor/PremiumDoctorCarousel';
+import PreExistingDisease from './present_Illness_Sub_Components/pre_existing_disease';
+import FamilyHistory from './present_Illness_Sub_Components/family_history';
+import HabitLifestyle from './present_Illness_Sub_Components/habit_lifestyle';
+import Allergies from './present_Illness_Sub_Components/allergies';
+import Pastaccidenttrauma from './present_Illness_Sub_Components/patient_accident_trauma';
+
 
 
 const PresentIllness = ({patientId,selected_case_file}) => {
@@ -151,6 +159,89 @@ const[medical_history_id,setmedical_history_id]=useState("")
     }
   };
   
+
+//========================== modal open or close start==========================================
+      
+        const [show, setShow] = useState(false)
+          const handleShow = () => setShow(true);
+          const handleClose = () => setShow(false);
+
+
+
+    
+   //======================= get all data of truma-master=========================================
+
+    const[alltruma,setalltruma]=useState([])
+      const gettruma=async()=>
+      {
+        try {
+          
+          const resp=await api.post('api/v1/common/LookupList',{lookup_type: "trauma_master"})
+          setalltruma(resp?.data?.data || []);
+         
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        gettruma()
+    
+      },[])
+
+
+   //======================= get all data of occupation master=========================================
+
+    const[alloccupation,setalloccupation]=useState([])
+      const getoccupation=async()=>
+      {
+        try {
+          
+          const resp=await api.post('api/v1/common/LookupList',{lookup_type: "occupation_master"})
+     
+          setalloccupation(resp?.data?.data || []);
+         
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getoccupation()
+    
+      },[])
+      
+   
+
+        //======================= get all data of habit master=========================================
+
+    const[allhabit,setallhabit]=useState([])
+      const gethabit=async()=>
+      {
+        try {
+          
+          const resp=await api.post('api/v1/common/LookupList',{lookup_type: "habit_master"})
+     
+          setallhabit(resp?.data?.data || []);
+         
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        gethabit()
+    
+      },[])
+      
+
+
       
 
   return (
@@ -158,104 +249,20 @@ const[medical_history_id,setmedical_history_id]=useState("")
   <div className="bg-[rgba(189,196,212,0.2)] p-4 rounded-lg border border-gray-200">
 
     {/* Header with toggle button */}
-    <div className="flex items-center justify-between">
+    {/* <div className="flex items-center justify-between">
       <h2 className="text-xl font-semibold text-gray-900">
-        Present Illness
+        Pre-Existing Disease (s)
       </h2>
 
-      <div className="flex items-center space-x-4">
-        {/* Add Button */}
-        <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
-          <span className="text-sm font-medium underline">Add</span>
-          <Plus className="w-4 h-4" />
+      <div className="flex items-center space-x-4 justify-end">
+     
+        <button className=" view-all flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors" onClick={handleShow}>
+          <span className="text-sm font-medium underline">Add/ Edit</span>
+         
         </button>
-
-        {/* Edit Button */}
-        <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
-          <Edit className="w-4 h-4" />
-          <span className="text-sm font-medium underline">Edit</span>
-        </button>
-
-         <div className="relative inline-block text-left" ref={dropdownRef}>
-      {/* Button */}
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
-      >
-        <span className="text-sm font-medium underline">{status}</span>
-       
-      </button>
-
-      {/* Dropdown */}
-      {open && (
-        <div className="absolute mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-          <ul className="py-1 text-sm text-gray-700">
-            {/* <li
-              // onClick={() => handleSelect("Ongoing")}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-            >
-              Ongoing
-            </li> */}
-            <li
-              onClick={() => update_patient_medical_history_status("Past")}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-            >
-              Past
-            </li>
-            <li
-              // onClick={() => handleSelect("Resolved")}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-            >
-              Resolved
-            </li>
-          </ul>
-        </div>
-      )}
-    </div>
-
-        {/* Collapse / Expand Button */}
-       <button
-  onClick={() => setIsCollapsed(!isCollapsed)}
-  className="text-blue-600 hover:text-blue-700 transition-colors"
->
-  {isCollapsed ? (
-    // Double Down Arrow (expand)
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M19 5l-7 7-7-7M19 13l-7 7-7-7"
-      />
-    </svg>
-  ) : (
-    // Double Up Arrow (collapse)
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M5 19l7-7 7 7M5 11l7-7 7 7"
-      />
-    </svg>
-  )}
-</button>
 
       </div>
-    </div>
+    </div> */}
 
     {/* Collapsible Content */}
    
@@ -276,83 +283,52 @@ const[medical_history_id,setmedical_history_id]=useState("")
           </div>
         </div>
 
-          {/* <Carousel
-          arrows={false}
-          responsive={responsive}
-          containerClass="carousel-container"
-          itemClass="pe-3 pt-4"
-          infinite
-          partialVisible
-        >
-          {medicalSpecialties.map((item) => (
-            <div key={item.id}>
-              <MedicalSpecialitiesCard icon={generalphysician} cardData={item} />
-            </div>
-          ))}
-        </Carousel> */}
-
-        {/* <div
-          className="flex gap-2 flex-nowrap overflow-x-auto sm:overflow-visible mt-10"
-          style={{ cursor: "pointer" }}
-        >
-          <div className="medical-card">
-            <img src={generalphysician} alt="" />
-            <p
-              style={{
-                margin: 0,
-                fontWeight: "600",
-                fontFamily: "Lora",
-                whiteSpace: "nowrap",
-              }}
-            >
-              General Physician
-            </p>
-          </div>
-
-          <div className="medical-card">
-            <img src={generalphysician} alt="" />
-            <p
-              style={{
-                margin: 0,
-                fontWeight: "600",
-                fontFamily: "Lora",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Cardiologist
-            </p>
-          </div>
-
-          <div className="medical-card">
-            <img src={generalphysician} alt="" />
-            <p
-              style={{
-                margin: 0,
-                fontWeight: "600",
-                fontFamily: "Lora",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Orthopedic
-            </p>
-          </div>
-
-          <div className="medical-card">
-            <img src={generalphysician} alt="" />
-            <p
-              style={{
-                margin: 0,
-                fontWeight: "600",
-                fontFamily: "Lora",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Neurology
-            </p>
-          </div>
-        </div> */}
+       
 
         {/* Cards */}
+
+          <div className="card-details">
+          <PreExistingDisease
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+         <div className="card-details">
+          <FamilyHistory
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+          <div className="card-details">
+          <HabitLifestyle
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+        <div className="card-details">
+          <Allergies
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+            <div className="card-details">
+          <Pastaccidenttrauma
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+       
+
+
         <div className="card-details">
           <ChiefComplaintsForMedicalSummaryPresent
             patientId={patientId}
@@ -395,6 +371,93 @@ const[medical_history_id,setmedical_history_id]=useState("")
       8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
     </p>
   </div>
+
+
+  {/*======================== modal for add pre existing disease ================================*/}
+
+
+   <Modal show={show} onHide={handleClose} centered size="lg">
+          
+                <Modal.Header closeButton>
+                  <Modal.Title className='form-title'>Add Pre-Existing Disease (s)</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                
+        
+           <div>
+        
+                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                
+  {/*======================== chief complaints============================================ */}
+  
+          <div className='col-span-2'>
+          
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                          
+                           <div className="col-span-2">
+                          <FormControl fullWidth size="small">
+                          <label className="form-label">Disease Name</label>
+                          <div className="flex flex-wrap gap-2">
+                            {alltruma.map((item) => {
+                              const selected = (item?.Symptoms || []).includes(item._id); 
+                              return (
+                                <span
+                                  key={item._id}
+                                  // onClick={() => toggleArrayField(index, "Symptoms", item._id)}
+                                  className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                                    ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                                >
+                                  {item.lookup_value}
+                                  {selected && (
+                                    <span
+                                      className="ml-1 text-xs font-bold cursor-pointer"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        // handleSymptomSelect(item._id,index);
+                                      }}
+                                    >
+                                      ✕
+                                    </span>
+                                  )}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </FormControl>
+                        </div>
+          
+                
+                          </div> 
+                 
+
+            </div> 
+  
+      </div> 
+  
+     
+                 
+                 <div className="flex justify-end mt-4">
+             
+  
+                <Button
+                  style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                  // onClick={save_chif_complaints}
+                >
+                  Save
+                </Button>
+              </div>
+  
+        
+                </div> 
+        
+                </Modal.Body>
+            
+           
+            </Modal>
+
+
+
+
 
    {loading_for==="update status" && (
     <div
