@@ -2,55 +2,30 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import { useEffect, useState } from 'react'
-import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
+import {  CircularProgress, FormControl, Button,  } from '@mui/material';
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
-import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
-import { __postApiData } from "../../../../../utils/api";
 
-const PreExistingDisease = ({patientId,selected_case_file,case_file_data}) => {
+const PreExistingDisease = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
 
-  // Function to render severity grade as color bars
-  const renderSeverityGrade = (severity) => {
-    const segments = [
-      { color: 'bg-red-600', active: severity >= 1 },
-
-      { color: 'bg-[#ffc001]', active: severity >= 2 },
-      { color: 'bg-[#feff99]', active: severity >= 3 },
-      { color: 'bg-[#92d14f]', active: severity >= 4 },
-      { color: 'bg-[#107c42]', active: severity >= 5 },
-
-
-    ];
-    return (
-      <div className="flex items-center space-x-1">
-        {segments.map((segment, index) => (
-          <div
-            key={index}
-            className={`h-6 ${index === 4 ? 'w-8' : 'w-8'} ${segment.active ? segment.color : 'bg-gray-200'
-              } ${index === 4 ? 'rounded-none' : 'rounded-sm'}`}
-          />
-        ))}
-      </div>
-    );
-  };
-
 
 const [pre_existing_disease, setpre_existing_disease] = useState({
-    disease_id:"",
-    disease:[]
-  
+    PreExistingDiseaseItem:[]
     });
 
 
     //========================== modal open or close start==========================================
     
       const [show, setShow] = useState(false)
-        const handleShow = () => setShow(true);
+        const handleShow = () => 
+          {
+            setShow(true);
+            getall_disease_master()
+          }
         const handleClose = () => setShow(false);
 
 
@@ -79,53 +54,45 @@ const [pre_existing_disease, setpre_existing_disease] = useState({
 };
 
 
-
-
-
-
-
-
-
-        
 //================================== get disease list============================================
+
+    const [loadingDiseases, setLoadingDiseases] = useState(false);
 
    const[all_disease_master,setall_disease_master]=useState([])
       const getall_disease_master=async()=>
       {
         try {
+          setLoadingDiseases(true)
             const resp=await api.post('api/v1/common/LookupList/',{lookup_type:"disease_master"})
-          console.log(resp);
-          
           setall_disease_master(resp.data.data)
           
         } catch (error) {
           console.log(error);
           
         }
+        finally
+        {
+          setLoadingDiseases(false)
+        }
       }
     
-      useEffect(()=>
-      {
-        getall_disease_master()
+     
+      
     
-      },[])
-
 
       const[isloading,setisloading]=useState(false)
       
-      const save_chif_complaints = async () => {
+      const save_preexisting_disease = async () => {
         setisloading(true);
         try {
           const payload=
           {...pre_existing_disease,
-            CaseFileId:selected_case_file,
-            CreatedBy:doctordetails._id
+           PatientId:patientId,
             
           }
          
           
-          const resp = await api.post(
-            `api/v1/admin/medical-history/chief-complaints/add-multiple`,
+          const resp = await api.post( `api/v1/admin/patient/pre-existing-disease/add`,
             payload,
             {
               headers: { "Content-Type": "application/json" },
@@ -140,11 +107,12 @@ const [pre_existing_disease, setpre_existing_disease] = useState({
             Swal.fire({
               icon: "success",
               title: "Details Added",
-              text: "Chief Complaints Added Successfully...",
+              text: "Pre Existing Disease Added Successfully...",
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
-              window.location.reload();
+              // window.location.reload();
+              onRefresh()
             });
           } else if (response_code === "400") {
             // Show server validation error here
@@ -180,21 +148,15 @@ const [pre_existing_disease, setpre_existing_disease] = useState({
       };
 
 
-    const[patient_all_cheif_complaints,setpatient_all_cheif_complaints]=useState([])
+  
+      
+    const[all_pre_existing_disease,setall_pre_existing_disease]=useState([])
 
- const getall_patient_medical_history = async () => {
+ const get_all_pre_existing_disease = async () => {
    try {
     //  setLoadingSpeciality(true);
-     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Ongoing`);
-        const formatted = resp.data.data.list.map(item => ({
-          caseFileId: item.CaseFileId._id,
-          treatmentType: item.CaseFileId.TreatmentType,
-          complaints: item.ChiefComplaints
-        }));
-        setpatient_all_cheif_complaints(formatted);
-
- 
-     
+     const resp = await api.get(`api/v1/admin/patient/pre-existing-disease/list?PatientId=${patientId}`);
+      setall_pre_existing_disease(resp.data.data);
    } catch (error) {
      console.error(error);
    } finally {
@@ -204,16 +166,80 @@ const [pre_existing_disease, setpre_existing_disease] = useState({
  
  useEffect(()=>
  {
- getall_patient_medical_history()
+ get_all_pre_existing_disease()
  },[])
 
 
+
+//=========================================  edit code ==========================================
+
+const handleRemoveDisease = async (diseaseId, index) => {
+  // Show confirmation first
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "This disease will be removed permanently!",
+    icon: 'warning',
+    // showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, remove it!',
+    // cancelButtonText: 'Cancel',
+    customClass: { confirmButton: "my-swal-button" },
+  });
+
+  if (result.isConfirmed) {
+    try {
+      setisloading(true)
+      const resp = await api.post(
+        'api/v1/admin/patient/pre-existing-disease/remove',
+        { PatientId: patientId, PreExistingDiseaseItem: diseaseId }
+      );
+      const { response_code, response_message } = resp.data.response;
+
+      if (response_code === '200') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Removed',
+          text: 'Disease removed successfully',
+          customClass: { confirmButton: "my-swal-button" },
+        });
+        // Remove from local state to update UI
+        const updatedDiseases = [...all_pre_existing_disease];
+        updatedDiseases.splice(index, 1);
+        setall_pre_existing_disease(updatedDiseases);
+        onRefresh(); // optional: refresh parent data
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: response_message.error || 'Something went wrong',
+          customClass: { confirmButton: "my-swal-button" },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Request failed',
+        text: error.message || 'Something went wrong',
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+    finally
+    {
+      setisloading(false)
+    }
+  }
+};
+
+
+
+  
 
 
 
   return (
     <div className="space mt-4">
-
 
       {/* Header */}
       <div className="flex items-center justify-between mt-2  border-b border-gray-200">
@@ -225,113 +251,38 @@ const [pre_existing_disease, setpre_existing_disease] = useState({
             <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
             <Plus className="w-4 h-4" />
           </button>
-          <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
+          {/* <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <Edit className="w-4 h-4" />
-            <span className="text-sm font-medium underline">Edit</span>
-          </button>
+            <span className="text-sm font-medium underline" onClick={handleShowedit}>Edit</span>
+          </button> */}
         </div>
       </div>
 
-      {/* Table */}
+  {/* Table */}
       
- {/* Show case_file_data section */}
-<div
-  className="overflow-x-auto"
-  style={{ display: selected_case_file ? "block" : "none" }}
->
-  {/* Table Header */}
-  <div className="bg-[var(--button-back-color)] text-white">
-    <div className="grid grid-cols-4 gap-4 p-2 text-[20px]">
-      <h3 className="table-header">Chief Complaints</h3>
-      <h3 className="table-header">Duration (Months)</h3>
-      <h3 className="table-header">Severity Grade</h3>
-      <h3 className="table-header">Aggravating Factor (s)</h3>
-    </div>
-  </div>
+ 
 
-  {/* Table Body */}
-  <div className="divide-y divide-gray-200">
-    {case_file_data[0]?.Status === "Ongoing" &&
-    case_file_data[0]?.ChiefComplaints?.map((item, index) => (
-      <div
-        key={item.id}
-        className={`grid grid-cols-4 gap-4 p-4 ${
-          index % 2 === 0 ? "bg-[#f2f3f6]" : "bg-white"
-        }`}
-      >
-        <div className="text-sm text-gray-900 font-medium">
-            {item?.Symptoms?.map(sym => sym?.lookup_value).join(", ")}
-        </div>
-        <div className="text-sm text-gray-900">
-          {item?.Duration?.Value} {item.Duration?.Unit?.lookup_value}
-        </div>
-        <div className="flex items-center">
-          {renderSeverityGrade(item?.SeverityGrade)}
-        </div>
-        <div className="text-sm text-gray-900">
-          {item?.AggravatingFactors?.map(ag => ag?.lookup_value).join(", ")}
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
-
-{/* Show patient_all_cheif_complaints section only if case_file_data is empty */}
-{(!case_file_data || case_file_data.length === 0) &&
-  patient_all_cheif_complaints.map((caseFile, caseIndex) => (
-    <div key={caseFile.caseFileId} className="mb-6">
-      {/* Case File Header */}
-      <h3 className="text-xl font-bold mb-2">
-        {caseFile.treatmentType} (Case File ID: {caseFile.caseFileId})
-      </h3>
-
-      {/* Table Header */}
-      <div className="bg-[var(--button-back-color)] text-white">
-        <div className="grid grid-cols-4 gap-4 p-2 text-[16px] font-semibold">
-          <h3 className="table-header">Chief Complaints</h3>
-          <h3 className="table-header">Duration</h3>
-          <h3 className="table-header">Severity Grade</h3>
-          <h3 className="table-header">Aggravating Factor(s)</h3>
-        </div>
-      </div>
-
-      {/* Table Body */}
-      <div className="divide-y divide-gray-200">
-        {caseFile.complaints.map((item, index) => (
-          <div
-            key={index}
-            className={`grid grid-cols-4 gap-4 p-4 ${
-              index % 2 === 0 ? "bg-[#f2f3f6]" : "bg-white"
-            }`}
-          >
-            {/* Chief Complaints Symptoms */}
-          
-
-           <div className="text-sm text-gray-900 font-medium">
-              {item?.Symptoms?.map(sym => sym?.lookup_value).join(", ") || "—"}
-            </div>
-
-            {/* Duration */}
-            <div className="text-sm text-gray-900">
-              {item?.Duration?.Value || "—"} {item?.Duration?.Unit?.lookup_value || ""}
-            </div>
-
-            {/* Severity Grade */}
-            <div className="flex items-center">
-              {renderSeverityGrade(item?.SeverityGrade)}
-            </div>
-
-            {/* Aggravating Factors */}
-            <div className="text-sm text-gray-900">
-              {(item?.AggravatingFactors || [])
-                .map(ag => ag?.lookup_value)
-                .join(", ") || "—"}
-            </div>
-          </div>
+      {
+        <div className="flex flex-wrap gap-2 mt-2">
+        {all_pre_existing_disease.map((item, index) => (
+         
+            <span className="px-3 py-1 bg-[#e2e4f4] text-sm rounded-md">
+            {item.lookup_value}
+              <span
+                className="ml-1 text-xs font-bold cursor-pointer text-red-500"
+                onClick={() => handleRemoveDisease(item._id, index)}
+              >
+                ✕
+              </span>
+            </span>
         ))}
       </div>
-    </div>
-  ))}
+
+    }
+
+
+
+
 
 
 
@@ -367,12 +318,16 @@ const [pre_existing_disease, setpre_existing_disease] = useState({
                     <FormControl fullWidth size="small">
                       <label className="form-label">Disease Name</label>
                       <div className="flex flex-wrap gap-2">
-                        {all_disease_master.map((item) => {
-                          const selected = pre_existing_disease.disease.includes(item._id); 
+                         {loadingDiseases ? 
+                         (
+                          <CircularProgress size={28} />
+                        ) :all_disease_master.length > 0 ? (
+                        all_disease_master.map((item) => {
+                          const selected = pre_existing_disease.PreExistingDiseaseItem.includes(item._id); 
                           return (
                             <span
                               key={item._id}
-                              onClick={() => toggleArrayField("disease", item._id)}
+                              onClick={() => toggleArrayField("PreExistingDiseaseItem", item._id)}
                               className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                                 ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                             >
@@ -387,7 +342,12 @@ const [pre_existing_disease, setpre_existing_disease] = useState({
                               )}
                             </span>
                           );
-                        })}
+                        })
+                      ): (
+                            <p className="text-gray-500 text-sm">No diseases found</p>
+                          )}
+                      
+                      
                       </div>
                     </FormControl>
                   </div>
@@ -405,7 +365,7 @@ const [pre_existing_disease, setpre_existing_disease] = useState({
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                onClick={save_chif_complaints}
+                onClick={save_preexisting_disease}
               >
                 Save
               </Button>
@@ -418,6 +378,28 @@ const [pre_existing_disease, setpre_existing_disease] = useState({
           
          
           </Modal>
+
+
+
+
+
+        {/*=========================== loader======================================= */}
+
+          {isloading && (
+            <div
+              style={{
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(255, 255, 255, 0.6)',
+                zIndex: 9999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <UniqueLoader />
+            </div>
+          )}
 
     </div>
   );

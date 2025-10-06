@@ -18,7 +18,9 @@ import PreExistingDisease from './present_Illness_Sub_Components/pre_existing_di
 import FamilyHistory from './present_Illness_Sub_Components/family_history';
 import HabitLifestyle from './present_Illness_Sub_Components/habit_lifestyle';
 import Allergies from './present_Illness_Sub_Components/allergies';
-import Pastaccidenttrauma from './present_Illness_Sub_Components/patient_accident_trauma';
+import Pastaccidenttrauma from './present_Illness_Sub_Components/past_accident_trauma';
+import CurrentMedications from './present_Illness_Sub_Components/current_medications';
+import CurrentTherapies from './present_Illness_Sub_Components/current_therapis';
 
 
 
@@ -108,56 +110,7 @@ const[medical_history_id,setmedical_history_id]=useState("")
   }, []);
 
 
-  // =======================update patient medical history status====================================
-  
-  const update_patient_medical_history_status = async (status) => {
-    setloading_for("update status")
-    try {
-     
-      const payload={Status:status}
-      const resp = await api.put(`api/v1/admin/medical-history/status/${medical_history_id}`,payload);
-      console.log(resp);
-      if(resp.data.response.response_code==="200")
-      {
-        Swal.fire({
-          icon:"success",
-          title:"Status Update",
-          text:"Status Update Form Onging To Past",
-          showConfirmButton:true,
-          customClass: {
-          confirmButton: 'my-swal-button',
-        },
-        }).then(()=>
-        {
-          window.location.reload()
-        })
-    
-      }
-
-         else
-                  {
-                    Swal.fire({
-                      icon:"warning",
-                      title:"Status Update",
-                      text:resp.data.response.response_message,
-                      showConfirmButton:true,
-                      customClass: {
-                      confirmButton: 'my-swal-button',
-                    },
-                    }).then(()=>
-                    {
-                      window.location.reload()
-                    })
-                
-                  }
-                  
-      
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setloading_for("")
-    }
-  };
+ 
   
 
 //========================== modal open or close start==========================================
@@ -192,54 +145,26 @@ const[medical_history_id,setmedical_history_id]=useState("")
       },[])
 
 
-   //======================= get all data of occupation master=========================================
+  
+  const [refreshKeys, setRefreshKeys] = useState({
+  preExisting: 0,
+  familyHistory: 0,
+  habits: 0,
+  allergies: 0,
+  trauma: 0,
+  complaints: 0,
+  diagnostics: 0,
+  medicines: 0,
+  therapy: 0,
+});
 
-    const[alloccupation,setalloccupation]=useState([])
-      const getoccupation=async()=>
-      {
-        try {
-          
-          const resp=await api.post('api/v1/common/LookupList',{lookup_type: "occupation_master"})
-     
-          setalloccupation(resp?.data?.data || []);
-         
-        } catch (error) {
-          console.log(error);
-          
-        }
-      }
-    
-      useEffect(()=>
-      {
-        getoccupation()
-    
-      },[])
-      
-   
-
-        //======================= get all data of habit master=========================================
-
-    const[allhabit,setallhabit]=useState([])
-      const gethabit=async()=>
-      {
-        try {
-          
-          const resp=await api.post('api/v1/common/LookupList',{lookup_type: "habit_master"})
-     
-          setallhabit(resp?.data?.data || []);
-         
-        } catch (error) {
-          console.log(error);
-          
-        }
-      }
-    
-      useEffect(()=>
-      {
-        gethabit()
-    
-      },[])
-      
+// Function to trigger refresh for a single component
+const handleComponentRefresh = (name) => {
+  setRefreshKeys((prev) => ({
+    ...prev,
+    [name]: prev[name] + 1, // increment to re-render that specific component
+  }));
+};
 
 
       
@@ -248,23 +173,9 @@ const[medical_history_id,setmedical_history_id]=useState("")
    <div className="space">
   <div className="bg-[rgba(189,196,212,0.2)] p-4 rounded-lg border border-gray-200">
 
-    {/* Header with toggle button */}
-    {/* <div className="flex items-center justify-between">
-      <h2 className="text-xl font-semibold text-gray-900">
-        Pre-Existing Disease (s)
-      </h2>
+  
 
-      <div className="flex items-center space-x-4 justify-end">
-     
-        <button className=" view-all flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors" onClick={handleShow}>
-          <span className="text-sm font-medium underline">Add/ Edit</span>
-         
-        </button>
-
-      </div>
-    </div> */}
-
-    {/* Collapsible Content */}
+ 
    
      <div
   className={`transition-all duration-500 ease-in-out overflow-auto ${
@@ -289,6 +200,28 @@ const[medical_history_id,setmedical_history_id]=useState("")
 
           <div className="card-details">
           <PreExistingDisease
+          key={refreshKeys.preExisting}
+            onRefresh={() => handleComponentRefresh("preExisting")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+        <div className="card-details">
+          <CurrentMedications
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+         <div className="card-details">
+          <CurrentTherapies
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -297,6 +230,8 @@ const[medical_history_id,setmedical_history_id]=useState("")
 
          <div className="card-details">
           <FamilyHistory
+            key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -305,6 +240,8 @@ const[medical_history_id,setmedical_history_id]=useState("")
 
           <div className="card-details">
           <HabitLifestyle
+            key={refreshKeys.habits}
+            onRefresh={() => handleComponentRefresh("habits")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -313,6 +250,8 @@ const[medical_history_id,setmedical_history_id]=useState("")
 
         <div className="card-details">
           <Allergies
+            key={refreshKeys.allergies}
+            onRefresh={() => handleComponentRefresh("allergies")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -321,6 +260,8 @@ const[medical_history_id,setmedical_history_id]=useState("")
 
             <div className="card-details">
           <Pastaccidenttrauma
+            key={refreshKeys.trauma}
+            onRefresh={() => handleComponentRefresh("trauma")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}

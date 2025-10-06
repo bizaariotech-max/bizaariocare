@@ -142,7 +142,7 @@ const getallmedical_speciality = async () => {
   }
 };
 
-console.log(allmedical_speciality);
+
 
 
 
@@ -198,7 +198,7 @@ console.log(allmedical_speciality);
 const getall_case_file = async () => {
   try {
     const resp = await api.get(`api/v1/admin/patientCaseFile/listPatientCaseFile?PatientId=${patientId}`);
-    console.log(resp);
+   
     
     
     setCaseFiles(resp.data.data.list)
@@ -216,7 +216,7 @@ useEffect(()=>
 getall_case_file()
 },[])
 
-console.log(caseFiles);
+
 
 
 

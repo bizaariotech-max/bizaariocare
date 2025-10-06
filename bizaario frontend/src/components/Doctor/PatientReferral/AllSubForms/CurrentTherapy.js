@@ -169,7 +169,7 @@ const CurrentTherapy = () => {
                   <label className="form-label">Patient’s Response  </label>
                   <TextField
                   type='number'
-                  placeholder="Duration In Months" 
+                  placeholder="Patient's Response" 
                   name="DateOfBirth" 
                   size="small" 
                   // value={patient_details.DateOfBirth} 

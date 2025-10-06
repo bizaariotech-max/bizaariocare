@@ -111,7 +111,7 @@ const[isloading_for,setisloading_for]=useState(false)
 
   });
 
-  console.log(patient_details);
+
   
 
 useEffect(() => {

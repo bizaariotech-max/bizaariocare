@@ -2,15 +2,14 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import { useEffect, useState } from 'react'
-import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
+import {  FormControl, Button,CircularProgress} from '@mui/material';
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
-import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
-import { __postApiData } from "../../../../../utils/api";
 
-const FamilyHistory = ({patientId,selected_case_file,case_file_data}) => {
+
+const FamilyHistory = ({patientId,selected_case_file,case_file_data, onRefresh}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
 
@@ -24,7 +23,11 @@ const [family_history, setfamily_history] = useState({
     //========================== modal open or close start==========================================
     
       const [show, setShow] = useState(false)
-        const handleShow = () => setShow(true);
+        const handleShow = () => 
+          {
+            setShow(true);
+            getall_disease_master()
+          }
         const handleClose = () => setShow(false);
 
 
@@ -59,26 +62,28 @@ const [family_history, setfamily_history] = useState({
 
 //================================== get disease list============================================
 
+const [loadingDiseases, setLoadingDiseases] = useState(false);
+
+
    const[all_disease_master,setall_disease_master]=useState([])
       const getall_disease_master=async()=>
       {
         try {
+          setLoadingDiseases(true)
             const resp=await api.post('api/v1/common/LookupList/',{lookup_type:"disease_master"})
-          console.log(resp);
-          
-          setall_disease_master(resp.data.data)
+            setall_disease_master(resp.data.data)
           
         } catch (error) {
           console.log(error);
           
         }
+        finally
+        {
+          setLoadingDiseases(false)
+        }
       }
     
-      useEffect(()=>
-      {
-        getall_disease_master()
-    
-      },[])
+   
 
 
 
@@ -112,7 +117,9 @@ const [family_history, setfamily_history] = useState({
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
-              window.location.reload();
+              // window.location.reload();
+              
+                 onRefresh();
             });
           } else if (response_code === "400") {
             // Show server validation error here
@@ -188,10 +195,10 @@ const [family_history, setfamily_history] = useState({
             <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
             <Plus className="w-4 h-4" />
           </button>
-          <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
+          {/* <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <Edit className="w-4 h-4" />
             <span className="text-sm font-medium underline">Edit</span>
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -205,6 +212,12 @@ const [family_history, setfamily_history] = useState({
          
             <span className="px-3 py-1 bg-[#e2e4f4] text-sm rounded-md">
             {item.lookup_value}
+              <span
+                className="ml-1 text-xs font-bold cursor-pointer text-red-500"
+                // onClick={() => handleRemoveDisease(item._id, index)}
+              >
+                ✕
+              </span>
             </span>
         ))}
       </div>
@@ -241,36 +254,43 @@ const [family_history, setfamily_history] = useState({
                  <h5 className='form-title'>Family History</h5>
                
              
-                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
-                         <div className="col-span-2">
-                           <FormControl fullWidth size="small">
-                             <label className="form-label">Disease Name</label>
-                             <div className="flex flex-wrap gap-2">
-                               {all_disease_master.map((item) => {
-                                 const selected = family_history.FamilyHistoryItem.includes(item._id); 
-                                 return (
-                                   <span
-                                     key={item._id}
-                                     onClick={() => toggleArrayField("FamilyHistoryItem", item._id)}
-                                     className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
-                                       ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
-                                   >
-                                     {item.lookup_value}
-                                     {selected && (
-                                       <span
-                                         className="ml-1 text-xs font-bold cursor-pointer"
-                                         onClick={(e) => e.stopPropagation()}
-                                       >
-                                         ✕
-                                       </span>
-                                     )}
-                                   </span>
-                                 );
-                               })}
-                             </div>
-                           </FormControl>
-                         </div>
-                       </div>
+                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                    <div className="col-span-2">
+                      <FormControl fullWidth size="small">
+                        <label className="form-label">Disease Name</label>
+                        <div className="flex flex-wrap gap-2 min-h-[50px] items-center">
+                          {loadingDiseases ? (
+                            <CircularProgress size={28} />
+                          ) : all_disease_master.length > 0 ? (
+                            all_disease_master.map((item) => {
+                              const selected = family_history.FamilyHistoryItem.includes(item._id);
+                              return (
+                                <span
+                                  key={item._id}
+                                  onClick={() => toggleArrayField("FamilyHistoryItem", item._id)}
+                                  className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                                    ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                                >
+                                  {item.lookup_value}
+                                  {selected && (
+                                    <span
+                                      className="ml-1 text-xs font-bold cursor-pointer"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      ✕
+                                    </span>
+                                  )}
+                                </span>
+                              );
+                            })
+                          ) : (
+                            <p className="text-gray-500 text-sm">No diseases found</p>
+                          )}
+                        </div>
+                      </FormControl>
+                    </div>
+                  </div>
+
        
        
                      </div> 
@@ -298,6 +318,26 @@ const [family_history, setfamily_history] = useState({
           
          
           </Modal>
+
+
+        {/*=========================== loader======================================= */}
+
+          {isloading && (
+            <div
+              style={{
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(255, 255, 255, 0.6)',
+                zIndex: 9999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <UniqueLoader />
+            </div>
+          )}
+
 
     </div>
   );
