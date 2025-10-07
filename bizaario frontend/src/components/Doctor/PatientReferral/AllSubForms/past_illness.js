@@ -13,7 +13,7 @@ import UniqueLoader from '../../../loader';
 import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap';
 import { __postApiData } from "../../../../utils/api";
-import PastSurgeries from './past_surgeries';
+import PastSurgeries from './past_medical_history/past_surgeries';
 
 
 const PastIllness = ({patientId,selected_case_file}) => {

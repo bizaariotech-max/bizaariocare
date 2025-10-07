@@ -112,7 +112,7 @@ const [habit_lifestyle, sethabit_lifestyle] = useState({
             Swal.fire({
               icon: "success",
               title: "Details Added",
-              text: "Chief Complaints Added Successfully...",
+              text: "Habit Lifestyle Added Successfully...",
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
@@ -173,6 +173,67 @@ const [habit_lifestyle, sethabit_lifestyle] = useState({
  },[])
 
 
+// ================================== edit code===============================================
+
+const handleRemoveHabit = async (habitId, index) => {
+  // Show confirmation first
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "This habit lifestyle will be removed permanently!",
+    icon: 'warning',
+    // showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, remove it!',
+    // cancelButtonText: 'Cancel',
+    customClass: { confirmButton: "my-swal-button" },
+  });
+
+  if (result.isConfirmed) {
+    try {
+      setisloading(true)
+      const resp = await api.post(
+        'api/v1/admin/patient/habit-lifestyle/remove',
+        { PatientId: patientId, HabitLifestyleItem: habitId }
+      );
+      const { response_code, response_message } = resp.data.response;
+
+ 
+      if (response_code === '200') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Removed',
+          text: 'Habit Lifestyle removed successfully',
+          customClass: { confirmButton: "my-swal-button" },
+        });
+        // Remove from local state to update UI
+        const updatedLifestyle = [...patient_all_habit_lifestyle];
+        updatedLifestyle.splice(index, 1);
+        setpatient_all_habit_lifestyle(updatedLifestyle);
+        onRefresh(); // optional: refresh parent data
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: response_message.error || 'Something went wrong',
+          customClass: { confirmButton: "my-swal-button" },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Request failed',
+        text: error.message || 'Something went wrong',
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+    finally
+    {
+      setisloading(false)
+    }
+  }
+};
 
 
 
@@ -208,7 +269,7 @@ const [habit_lifestyle, sethabit_lifestyle] = useState({
             {item.lookup_value}
               <span
                 className="ml-1 text-xs font-bold cursor-pointer text-red-500"
-                // onClick={() => handleRemoveDisease(item._id, index)}
+                onClick={() => handleRemoveHabit(item._id, index)}
               >
                 ✕
               </span>

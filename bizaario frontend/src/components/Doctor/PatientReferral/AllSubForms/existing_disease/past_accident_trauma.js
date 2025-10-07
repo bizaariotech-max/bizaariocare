@@ -2,39 +2,37 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import { useEffect, useState } from 'react'
-import {  FormControl, Button,CircularProgress} from '@mui/material';
+import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
+import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
+import { __postApiData } from "../../../../../utils/api";
 
-
-const FamilyHistory = ({patientId,selected_case_file,case_file_data, onRefresh}) => {
+const Pastaccidenttrauma = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
 
  
 
-const [family_history, setfamily_history] = useState({
-    FamilyHistoryItem:[]
+
+const [past_accident, setpast_accident] = useState({
+    PastAccidentsTraumaItem:[]
     });
 
 
     //========================== modal open or close start==========================================
     
       const [show, setShow] = useState(false)
-        const handleShow = () => 
-          {
-            setShow(true);
-            getall_disease_master()
-          }
+        const handleShow = () => setShow(true);
         const handleClose = () => setShow(false);
 
 
-
+  
 
    const toggleArrayField = (field, itemId) => {
-  setfamily_history(prev => {
+  setpast_accident(prev => {
     const currentArray = prev[field] || [];
     let updatedArray = [];
 
@@ -55,71 +53,64 @@ const [family_history, setfamily_history] = useState({
 
 
 
+        
+  //======================= get all data of trauma=========================================
 
-
-
-
-
-//================================== get disease list============================================
-
-const [loadingDiseases, setLoadingDiseases] = useState(false);
-
-
-   const[all_disease_master,setall_disease_master]=useState([])
-      const getall_disease_master=async()=>
+    const[trauma,settrauma]=useState([])
+      const getallergy=async()=>
       {
         try {
-          setLoadingDiseases(true)
-            const resp=await api.post('api/v1/common/LookupList/',{lookup_type:"disease_master"})
-            setall_disease_master(resp.data.data)
           
+          const resp=await api.post('api/v1/common/LookupList',{lookup_type: "trauma_master"})
+          settrauma(resp?.data?.data || []);
+         
         } catch (error) {
           console.log(error);
           
         }
-        finally
-        {
-          setLoadingDiseases(false)
-        }
       }
     
-   
+      useEffect(()=>
+      {
+        getallergy()
+    
+      },[])
 
 
 
 
       const[isloading,setisloading]=useState(false)
       
-      const save_family_history = async () => {
+      const save_patient_past_accident = async () => {
         setisloading(true);
         try {
-          const payload=
-          {...family_history,
-            PatientId:patientId,
+           const payload=
+          {...past_accident,
+            PatientId:patientId,   
           }
          
-          
           const resp = await api.post(
-            `api/v1/admin/patient/family-history/add`,
+            `api/v1/admin/patient/past-accidents-trauma/add`,
             payload,
             {
               headers: { "Content-Type": "application/json" },
             }
           );
         
+          
+      
           const { response_code, response_message } = resp.data.response;
       
           if (response_code === "200") {
             Swal.fire({
               icon: "success",
               title: "Details Added",
-              text: "Family History Added Successfully...",
+              text: "Patient Pass Accidents Traums Details Added Successfully...",
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
               // window.location.reload();
-              
-                 onRefresh();
+              onRefresh()
             });
           } else if (response_code === "400") {
             // Show server validation error here
@@ -155,13 +146,14 @@ const [loadingDiseases, setLoadingDiseases] = useState(false);
       };
 
 
-    const[patient_family_history,setpatient_family_history]=useState([])
+    const[patient_truma,setpatient_truma]=useState([])
 
- const getall_patient_family_history = async () => {
+ const getpatient_pastaccident_traums = async () => {
    try {
     //  setLoadingSpeciality(true);
-     const resp = await api.get(`api/v1/admin/patient/family-history/list?PatientId=${patientId}`);
-    setpatient_family_history(resp.data.data);
+     const resp = await api.get(`api/v1/admin/patient/past-accidents-trauma/list?PatientId=${patientId}`);
+     
+    setpatient_truma(resp.data.data);
 
    } catch (error) {
      console.error(error);
@@ -172,12 +164,70 @@ const [loadingDiseases, setLoadingDiseases] = useState(false);
  
  useEffect(()=>
  {
- getall_patient_family_history()
+ getpatient_pastaccident_traums()
  },[])
 
 
+//=========================================  edit code ==========================================
 
+const handleRemoveTruma = async (trumaId, index) => {
+  // Show confirmation first
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "This truma will be removed permanently!",
+    icon: 'warning',
+    // showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, remove it!',
+    // cancelButtonText: 'Cancel',
+    customClass: { confirmButton: "my-swal-button" },
+  });
 
+  if (result.isConfirmed) {
+    try {
+      setisloading(true)
+      const resp = await api.post(
+        'api/v1/admin/patient/past-accidents-trauma/remove',
+        { PatientId: patientId, PastAccidentsTraumaItem: trumaId }
+      );
+      const { response_code, response_message } = resp.data.response;
+
+      if (response_code === '200') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Removed',
+          text: 'Truma removed successfully',
+          customClass: { confirmButton: "my-swal-button" },
+        });
+        // Remove from local state to update UI
+        const updatedTruma = [...patient_truma];
+        updatedTruma.splice(index, 1);
+        setpatient_truma(updatedTruma);
+        onRefresh(); // optional: refresh parent data
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: response_message.error || 'Something went wrong',
+          customClass: { confirmButton: "my-swal-button" },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Request failed',
+        text: error.message || 'Something went wrong',
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+    finally
+    {
+      setisloading(false)
+    }
+  }
+};
 
 
 
@@ -188,7 +238,7 @@ const [loadingDiseases, setLoadingDiseases] = useState(false);
       {/* Header */}
       <div className="flex items-center justify-between mt-2  border-b border-gray-200">
         <h2 className="text-xxl font-semibold text-gray-900">
-          Family History
+          Past Accident Trauma
         </h2>
         <div className="flex items-center space-x-4">
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
@@ -204,41 +254,52 @@ const [loadingDiseases, setLoadingDiseases] = useState(false);
 
       {/* Table */}
       
- 
+ {/* Show case_file_data section */}
+<div
+  className="overflow-x-auto"
+  style={{ display: selected_case_file ? "block" : "none" }}
+>
+  
 
-{
-        <div className="flex flex-wrap gap-2 mt-2">
-        {patient_family_history.map((item, index) => (
-         
-            <span className="px-3 py-1 bg-[#e2e4f4] text-sm rounded-md">
-            {item.lookup_value}
-              <span
+ 
+</div>
+
+
+    {
+     <div className="flex flex-wrap gap-2 mt-2">
+  {patient_truma?.map((item, index) => (
+    <span
+      key={index}
+      className="px-3 py-1 bg-[#e2e4f4] text-sm rounded-md"
+    >
+      {item.lookup_value}
+        <span
                 className="ml-1 text-xs font-bold cursor-pointer text-red-500"
-                // onClick={() => handleRemoveDisease(item._id, index)}
+                onClick={() => handleRemoveTruma(item._id, index)}
               >
                 ✕
               </span>
-            </span>
-        ))}
-      </div>
+    </span>
+  ))}
+</div>
+
 
   }
 
 
 
-
       {/* Footer Note */}
-      <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"flex":"none"}}>
+      {/* <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"flex":"none"}}>
         <p className="text-xs text-gray-600">
           1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
         </p>
-      </div>
+      </div> */}
 
 
   <Modal show={show} onHide={handleClose} centered size="lg">
         
               <Modal.Header closeButton>
-                <Modal.Title className='form-title'>Add Family History</Modal.Title>
+                <Modal.Title className='form-title'>Add Past Accidents Trauma</Modal.Title>
               </Modal.Header>
               <Modal.Body>
               
@@ -246,28 +307,31 @@ const [loadingDiseases, setLoadingDiseases] = useState(false);
          <div>
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
-              
-{/*======================== family history============================================ */}
+                
 
-       
-               <div className='col-span-2'>
-                 <h5 className='form-title'>Family History</h5>
                
-             
+
+
+           
+
+
+{/*======================== PastAccidentsTraumaItem ====================================================== */}
+
+      <div className='col-span-2'>
+                <h5 className='form-title'>Past Accident Trauma</h5>
+            
+            
                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
-                    <div className="col-span-2">
-                      <FormControl fullWidth size="small">
-                        <label className="form-label">Disease Name</label>
-                        <div className="flex flex-wrap gap-2 min-h-[50px] items-center">
-                          {loadingDiseases ? (
-                            <CircularProgress size={28} />
-                          ) : all_disease_master.length > 0 ? (
-                            all_disease_master.map((item) => {
-                              const selected = family_history.FamilyHistoryItem.includes(item._id);
+                      <div className="col-span-2">
+                        <FormControl fullWidth size="small">
+                          <label className="form-label">Past Accidents Trauma Name</label>
+                          <div className="flex flex-wrap gap-2">
+                            {trauma.map((item) => {
+                              const selected = past_accident.PastAccidentsTraumaItem.includes(item._id); 
                               return (
                                 <span
                                   key={item._id}
-                                  onClick={() => toggleArrayField("FamilyHistoryItem", item._id)}
+                                  onClick={() => toggleArrayField("PastAccidentsTraumaItem", item._id)}
                                   className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                                     ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                                 >
@@ -282,34 +346,29 @@ const [loadingDiseases, setLoadingDiseases] = useState(false);
                                   )}
                                 </span>
                               );
-                            })
-                          ) : (
-                            <p className="text-gray-500 text-sm">No diseases found</p>
-                          )}
-                        </div>
-                      </FormControl>
+                            })}
+                          </div>
+                        </FormControl>
+                      </div>
                     </div>
-                  </div>
-
-       
-       
-                     </div> 
-
+      
+                    
+                    </div> 
 
     </div> 
 
-   <div className="flex justify-end mt-4">
-              
    
-                 <Button
-                   style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                   onClick={save_family_history}
-                 >
-                   Save
-                 </Button>
-               </div>
                
-             
+               <div className="flex justify-end mt-4">
+           
+
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={save_patient_past_accident}
+              >
+                Save
+              </Button>
+            </div>
 
       
               </div> 
@@ -319,10 +378,8 @@ const [loadingDiseases, setLoadingDiseases] = useState(false);
          
           </Modal>
 
-
-        {/*=========================== loader======================================= */}
-
-          {isloading && (
+          {/* ===========================loader================================================ */}
+        {isloading && (
             <div
               style={{
                 position: 'fixed',
@@ -338,10 +395,9 @@ const [loadingDiseases, setLoadingDiseases] = useState(false);
             </div>
           )}
 
-
     </div>
   );
 }
 
-export default FamilyHistory
+export default Pastaccidenttrauma
 

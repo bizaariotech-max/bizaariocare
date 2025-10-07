@@ -10,15 +10,15 @@ import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
 import { __postApiData } from "../../../../../utils/api";
 
-const Pastaccidenttrauma = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
+const Allergies = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
 
  
 
 
-const [past_accident, setpast_accident] = useState({
-    PastAccidentsTraumaItem:[]
+const [allergies, setallergies] = useState({
+    AllergyItem:[]
     });
 
 
@@ -32,7 +32,7 @@ const [past_accident, setpast_accident] = useState({
   
 
    const toggleArrayField = (field, itemId) => {
-  setpast_accident(prev => {
+  setallergies(prev => {
     const currentArray = prev[field] || [];
     let updatedArray = [];
 
@@ -54,15 +54,15 @@ const [past_accident, setpast_accident] = useState({
 
 
         
-  //======================= get all data of trauma=========================================
+  //======================= get all data of allergy_master=========================================
 
-    const[trauma,settrauma]=useState([])
+    const[allergy,setallergy]=useState([])
       const getallergy=async()=>
       {
         try {
           
-          const resp=await api.post('api/v1/common/LookupList',{lookup_type: "trauma_master"})
-          settrauma(resp?.data?.data || []);
+          const resp=await api.post('api/v1/common/LookupList',{lookup_type: "allergy_master"})
+          setallergy(resp?.data?.data || []);
          
         } catch (error) {
           console.log(error);
@@ -81,16 +81,16 @@ const [past_accident, setpast_accident] = useState({
 
       const[isloading,setisloading]=useState(false)
       
-      const save_patient_past_accident = async () => {
+      const save_patient_allergies = async () => {
         setisloading(true);
         try {
            const payload=
-          {...past_accident,
+          {...allergies,
             PatientId:patientId,   
           }
          
           const resp = await api.post(
-            `api/v1/admin/patient/past-accidents-trauma/add`,
+            `/api/v1/admin/patient/allergy/add`,
             payload,
             {
               headers: { "Content-Type": "application/json" },
@@ -105,7 +105,7 @@ const [past_accident, setpast_accident] = useState({
             Swal.fire({
               icon: "success",
               title: "Details Added",
-              text: "Patient Pass Accidents Traums Details Added Successfully...",
+              text: "Patient Allergies Added Successfully...",
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
@@ -146,12 +146,12 @@ const [past_accident, setpast_accident] = useState({
       };
 
 
-    const[patient_allergies,setpatient_allergies]=useState([])
+  const[patient_allergies,setpatient_allergies]=useState([])
 
- const getpatient_pastaccident_traums = async () => {
+ const getpatient_allergies = async () => {
    try {
     //  setLoadingSpeciality(true);
-     const resp = await api.get(`api/v1/admin/patient/past-accidents-trauma/list?PatientId=${patientId}`);
+     const resp = await api.get(`api/v1/admin/patient/allergy/list?PatientId=${patientId}`);
      
     setpatient_allergies(resp.data.data);
 
@@ -164,9 +164,73 @@ const [past_accident, setpast_accident] = useState({
  
  useEffect(()=>
  {
- getpatient_pastaccident_traums()
+ getpatient_allergies()
  },[])
 
+
+// =========================================edit code==============================================
+
+const handleRemoveAllergies = async (allergiesId, index) => {
+  // Show confirmation first
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "This allergie will be removed permanently!",
+    icon: 'warning',
+    // showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, remove it!',
+    // cancelButtonText: 'Cancel',
+    customClass: { confirmButton: "my-swal-button" },
+  });
+
+  if (result.isConfirmed) {
+    try {
+      setisloading(true)
+      const resp = await api.post(
+        'api/v1/admin/patient/allergy/remove',
+        { PatientId: patientId, AllergyItem: allergiesId }
+      );
+      const { response_code, response_message } = resp.data.response;
+
+      console.log(resp);
+      
+
+      if (response_code === '200') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Removed',
+          text: 'Allergie removed successfully',
+          customClass: { confirmButton: "my-swal-button" },
+        });
+        // Remove from local state to update UI
+        const updatedAllergies = [...patient_allergies];
+        updatedAllergies.splice(index, 1);
+        setpatient_allergies(updatedAllergies);
+        onRefresh(); // optional: refresh parent data
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: response_message.error || 'Something went wrong',
+          customClass: { confirmButton: "my-swal-button" },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Request failed',
+        text: error.message || 'Something went wrong',
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+    finally
+    {
+      setisloading(false)
+    }
+  }
+};
 
 
 
@@ -178,7 +242,7 @@ const [past_accident, setpast_accident] = useState({
       {/* Header */}
       <div className="flex items-center justify-between mt-2  border-b border-gray-200">
         <h2 className="text-xxl font-semibold text-gray-900">
-          Past Accident Trauma
+          Allergies
         </h2>
         <div className="flex items-center space-x-4">
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
@@ -199,7 +263,12 @@ const [past_accident, setpast_accident] = useState({
   className="overflow-x-auto"
   style={{ display: selected_case_file ? "block" : "none" }}
 >
-  
+  {/* Table Header */}
+  <div className="bg-[var(--button-back-color)] text-white">
+    <div className="grid grid-cols-4 gap-4 p-2 text-[20px]">
+      <h3 className="table-header">Allergies</h3>
+    </div>
+  </div>
 
  
 </div>
@@ -215,7 +284,7 @@ const [past_accident, setpast_accident] = useState({
       {item.lookup_value}
         <span
                 className="ml-1 text-xs font-bold cursor-pointer text-red-500"
-                // onClick={() => handleRemoveDisease(item._id, index)}
+                onClick={() => handleRemoveAllergies(item._id, index)}
               >
                 ✕
               </span>
@@ -239,7 +308,7 @@ const [past_accident, setpast_accident] = useState({
   <Modal show={show} onHide={handleClose} centered size="lg">
         
               <Modal.Header closeButton>
-                <Modal.Title className='form-title'>Add Past Accidents Trauma</Modal.Title>
+                <Modal.Title className='form-title'>Add Allergies</Modal.Title>
               </Modal.Header>
               <Modal.Body>
               
@@ -255,23 +324,23 @@ const [past_accident, setpast_accident] = useState({
            
 
 
-{/*======================== PastAccidentsTraumaItem ====================================================== */}
+{/*======================== allergies ====================================================== */}
 
       <div className='col-span-2'>
-                <h5 className='form-title'>Past Accident Trauma</h5>
+                <h5 className='form-title'>Allergies</h5>
             
             
                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                       <div className="col-span-2">
                         <FormControl fullWidth size="small">
-                          <label className="form-label">Past Accidents Trauma Name</label>
+                          <label className="form-label">Allergey Name</label>
                           <div className="flex flex-wrap gap-2">
-                            {trauma.map((item) => {
-                              const selected = past_accident.PastAccidentsTraumaItem.includes(item._id); 
+                            {allergy.map((item) => {
+                              const selected = allergies.AllergyItem.includes(item._id); 
                               return (
                                 <span
                                   key={item._id}
-                                  onClick={() => toggleArrayField("PastAccidentsTraumaItem", item._id)}
+                                  onClick={() => toggleArrayField("AllergyItem", item._id)}
                                   className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                                     ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                                 >
@@ -304,7 +373,7 @@ const [past_accident, setpast_accident] = useState({
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                onClick={save_patient_past_accident}
+                onClick={save_patient_allergies}
               >
                 Save
               </Button>
@@ -319,25 +388,26 @@ const [past_accident, setpast_accident] = useState({
           </Modal>
 
           {/* ===========================loader================================================ */}
-        {isloading && (
-            <div
-              style={{
-                position: 'fixed',
-                inset: 0,
-                background: 'rgba(255, 255, 255, 0.6)',
-                zIndex: 9999,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <UniqueLoader />
-            </div>
-          )}
+                  {isloading && (
+                      <div
+                        style={{
+                          position: 'fixed',
+                          inset: 0,
+                          background: 'rgba(255, 255, 255, 0.6)',
+                          zIndex: 9999,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <UniqueLoader />
+                      </div>
+                    )}
+                    
 
     </div>
   );
 }
 
-export default Pastaccidenttrauma
+export default Allergies
 

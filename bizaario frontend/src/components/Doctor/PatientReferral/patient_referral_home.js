@@ -20,14 +20,14 @@ import Doctorheader from '../doctorheader';
 import Doctorsidebar from '../doctorsidebar';
 import '../../Doctor/PatientReferral/patient_referral.css'
 import PastIllness from './AllSubForms/past_illness';
-import PastSurgeries from './AllSubForms/past_surgeries';
+import PastSurgeries from './AllSubForms/past_medical_history/past_surgeries';
 import { Link } from 'react-router-dom';
 
 import { Modal,  Form, Row, Col } from 'react-bootstrap';
 import api from '../../../api'
 import { TextField, Select, MenuItem, FormControl, Avatar,Tooltip,IconButton,CircularProgress, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
 import { customMenuProps } from '../../../utils/mui_select_scroll_bar';
-import PresentIllness from './AllSubForms/present_illness';
+import ExistingDisease from './AllSubForms/existing_disease/existing_diseases';
 import OpenMedicalCaseFiles from './AllSubForms/open_medical_case_files';
 import PatientReferralVerify from './AllSubForms/PatientReferralVerify';
 import { useLocation } from 'react-router-dom';
@@ -41,6 +41,7 @@ import PreSurgicalConsiderations from './AllSubForms/PreSurgicalConsiderations';
 import RiskFactor from './AllSubForms/RiskFactor';
 import PatientConcerns from './AllSubForms/PatientConcerns';
 import ImmunizationProfile from './AllSubForms/ImmunizationProfile';
+import PastMedicalHistoryMain from './AllSubForms/past_medical_history/past_medical_history_main';
 
 
 
@@ -70,15 +71,18 @@ const PatientReferralHome = () => {
         <div className="main-content">
       <PatientTabs />
       <PatientDetails patientId={patientId}/>
-      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/>
+      
       {/* <ChiefComplaints  patientId={patientId}/> */}
       {/* <CurrentMedicines /> */}
       {/* <ClinicalOutcome /> */}
       {/* <CurrentTherapy /> */}
       {/* <MedicalSummary /> */}
-      <PresentIllness patientId={patientId} selected_case_file={selected_case_file}/>
+      
+      <ExistingDisease patientId={patientId} selected_case_file={selected_case_file}/>
       <PastIllness patientId={patientId} selected_case_file={selected_case_file}/>
-      <PastSurgeries patientId={patientId} selected_case_file={selected_case_file}/>
+
+      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/>
+      <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/>
        
       <PastMedications />
       <PastTherapy />

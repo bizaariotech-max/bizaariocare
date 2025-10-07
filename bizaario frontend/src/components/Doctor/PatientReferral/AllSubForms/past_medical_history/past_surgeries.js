@@ -1,52 +1,21 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import generalphysician from '../AllSubForms/assets/images/general physician.png'
-import ChiefComplaints from './ChiefComplaints';
-import ChiefComplaintsForMedicalSummary from './chief_complaints_for_medical_summary';
-import DiagnosticsInvestigations from './DiagnosticsInvestigations';
-import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations_for_medical_summary';
-import CurrentMedicinesForMedicalSummary from './current_medicines_for_medical_summary';
-import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
-import { useEffect, useState ,useRef} from 'react'
-import { TextField, Select, MenuItem, FormControl,Typography, Box,Avatar,Tooltip,IconButton,CircularProgress, Button, Radio, FormControlLabel, RadioGroup, FormLabel } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import api from '../../../../api'
+import { useEffect, useState } from 'react'
+import { TextField, Select, MenuItem, FormControl,Typography,  Button, Radio, FormControlLabel, RadioGroup } from '@mui/material';
+import api from '../../../../../api'
 import Swal from 'sweetalert2';
-import UniqueLoader from '../../../loader';
-import { customMenuProps } from '../../../../utils/mui_select_scroll_bar';
-import { Calendar, MapPin } from 'lucide-react';
-import ProfileCard1 from '../AllSubForms/UI/ProfileCard1';
-import ProfileCard2 from '../AllSubForms/UI/ProfileCard2';
-import { Modal,  Form, Row, Col } from 'react-bootstrap';
-import { __postApiData } from "../../../../utils/api";
-import healthicon from '../AllSubForms/assets/images/view health assessment report icon.png';
-import SurgeryProcedurePerformed from './surgery_procedure_performed';
-import CurrentMedicineForPastSurgeries from './current_medicine_for_past_surgries';
+import UniqueLoader from '../../../../loader';
+import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
+import { Modal,} from 'react-bootstrap';
+
 
 const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
 
-     const doctordetails=JSON.parse(localStorage.getItem("user"))
+  const doctordetails=JSON.parse(localStorage.getItem("user"))
+
+
+  
    
-     
-  // Sample data for medical summary
-  const medicalData = {
-    pastIllness: ['Tuberculosis (TB)', 'Pneumonia'],
-  };
-
-    const medicalData1 = [
-  {
-    date: "20/12/2025",
-    doctor: "Cardiologist",
-    // other fields here
-  },
-  {
-    date: "21/12/2025",
-    doctor: "Orthopedic",
-  },
-  // ...
-];
-
-
  const [surgeries, setsurgeries] = useState({
       SurgeriesProcedures:[{
             Date:"",
@@ -240,9 +209,6 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
             
           }
          
-          
-         
-          
           const resp = await api.post(
             `api/v1/admin/medical-history/surgeries-procedures/add-multiple`,
             payload,
@@ -260,7 +226,7 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
             Swal.fire({
               icon: "success",
               title: "Details Added",
-              text: "Chief Complaints Added Successfully...",
+              text: "Past Surgery Details Added Successfully...",
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
@@ -300,50 +266,66 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
       };
 
 
+//=============================== get patient all medical history===================================
+
+    const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
+
+ const getall_patient_medical_history = async () => {
+   try {
+    //  setLoadingSpeciality(true);
+     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
+ 
+     
+        const formatted = resp.data.data.list.map(item => ({
+          caseFileId: item.CaseFileId._id,
+          treatmentType: item.CaseFileId.TreatmentType,
+          surgeries: item.SurgeriesProcedures
+        }));
+        setpatient_past_surgeries(formatted);
+
+ 
+     
+   } catch (error) {
+     console.error(error);
+   } finally {
+    //  setLoadingSpeciality(false);
+   }
+ };
+ 
+ useEffect(()=>
+ {
+ getall_patient_medical_history()
+ },[])
+
+
+
 
 
   return (
-    <div className="space bg-[rgba(189,196,212,0.2)] p-4 rounded-lg border border-gray-200 mt-4">
+    <div>
       {/* Header */}
    
 
-       <div className="flex items-center justify-between mt-2 ">
-              <h2 className="text-xl font-semibold text-gray-900">
+     
+
+            <div className="flex items-center justify-between mt-2  border-b border-gray-200">
+              <h2 className="text-xxl font-semibold text-gray-900">
                 Past Surgeries
               </h2>
               <div className="flex items-center space-x-4">
-                <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
+                <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
                   <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
                   <Plus className="w-4 h-4" />
                 </button>
-                <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
+                <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
                   <Edit className="w-4 h-4" />
                   <span className="text-sm font-medium underline">Edit</span>
                 </button>
               </div>
             </div>
 
-  
-     
-      <div className="">
-        <div className="flex flex-wrap gap-2">
-            <span
-              className="px-3 py-1 bg-[#e2e4f4]  text-sm rounded-md"
-            >
-              Kidney Stone Surgery
-            </span>
 
-               <span
-              className="px-3 py-1 bg-[#e2e4f4]  text-sm rounded-md"
-            >
-              Tansilectomy
-            </span>
-
-        </div>
-      </div>
-
-
-        <div className="flex gap-2 flex-nowrap overflow-x-auto sm:overflow-visible mt-10" style={{cursor:"pointer"}}>
+        {/* <div className="flex gap-2 flex-nowrap overflow-x-auto sm:overflow-visible mt-10" style={{cursor:"pointer"}}>
 
         <div className='medical-card' >
         <img src={generalphysician} alt=''></img>
@@ -370,7 +352,7 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
             <p style={{ margin: 0,  fontWeight: "600",fontFamily:"Lora",whiteSpace: "nowrap" }}>Neurology Surgeries</p>
 
         </div>
-    </div>
+    </div> */}
 
 
     {/* <div className='card-details' style={{marginTop:"20px"}}>
@@ -387,40 +369,40 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
     </div> */}
 
 
-      <div  className="relative pl-10">
+      <div  className="relative">
      
 
         {/* Your existing cards */}
         <div className='card-details' style={{marginTop:"20px"}}>
           {/* <h3 className='table-header'>{item.date}</h3> */}
-          <div style={{display:"flex"}}>
-            <img src={generalphysician} alt='' style={{height:"26px"}} />
-            {/* <p style={{ margin: 0, fontWeight: "600", fontFamily: "Lora", whiteSpace: "nowrap" }}>{item.doctor}</p> */}
-          </div>
+       
              {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" style={{ display: selected_case_file ? "block" : "none" }}>
         {/* Table Header */}
         <div className="bg-[var(--button-back-color)] text-white  " >
           <div className="grid grid-cols-2 gap-4 p-2 text-[20px]">
             <h3 className="table-header">Surgery/Procedure Name</h3>
-            <h3 className="table-header">Clinical Outcome/Patient's Response</h3>
+            <h3 className="table-header">Surgon Name</h3>
           </div>
         </div>
 
         {/* Table Body */}
         <div className="divide-y divide-gray-200">
-          {case_file_data?.[0]?.SurgeriesProcedures?.map((item, index) => (
+          {case_file_data?.[0]?.Status === "Past" &&
+          case_file_data?.[0]?.SurgeriesProcedures?.map((item, index) => (
             <div
               key={item.id}
               className={`grid grid-cols-2 gap-4 p-4 ${index % 2 === 0 ? 'bg-[#f2f3f6]' : 'bg-white'
                 }`}
             >
-              <div className="text-sm text-gray-900 font-medium">
-                {item.SurgeryProcedureName}
-              </div>
-              <div className="text-sm text-gray-900">
-                {item.HospitalClinicName}
-              </div>
+             <div className="text-sm text-gray-900 font-medium">
+              {item?.SurgeryProcedureName?item.SurgeryProcedureName :"—"}
+            </div>
+
+            {/* Duration */}
+            <div className="text-sm text-gray-900">
+             {item?.SurgeonName?item.SurgeonName :"—"}
+            </div>
              
               
             </div>
@@ -428,11 +410,57 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
         </div>
       </div>
 
+      {/* Show patient_all_cheif_complaints section only if case_file_data is empty */}
+{(!case_file_data || case_file_data.length === 0) &&
+  patient_past_surgeries?.map((caseFile, caseIndex) => (
+    <div key={caseFile.caseFileId} className="mb-6">
+      {/* Case File Header */}
+      <h3 className="text-xl font-bold mb-2">
+        {caseFile.treatmentType} (Case File ID: {caseFile.caseFileId})
+      </h3>
+
+      {/* Table Header */}
+      <div className="bg-[var(--button-back-color)] text-white">
+        <div className="bg-[var(--button-back-color)] text-white  " >
+          <div className="grid grid-cols-2 gap-4 p-2 text-[20px]">
+            <h3 className="table-header">Surgery/Procedure Name</h3>
+            <h3 className="table-header">Surgon Name</h3>
+          </div>
+        </div>
+      </div>
+
+      {/* Table Body */}
+      <div className="divide-y divide-gray-200">
+        {caseFile?.surgeries?.map((item, index) => (
+          <div
+            key={index}
+            className={`grid grid-cols-2 gap-4 p-4 ${
+              index % 2 === 0 ? "bg-[#f2f3f6]" : "bg-white"
+            }`}
+          >
+       
+          
+
+           <div className="text-sm text-gray-900 font-medium">
+              {item?.SurgeryProcedureName?item.SurgeryProcedureName :"—"}
+            </div>
+
+            {/* Duration */}
+            <div className="text-sm text-gray-900">
+             {item?.SurgeonName?item.SurgeonName :"—"}
+            </div>
+
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+
         </div>
     
-        <div className='card-details'>
+        {/* <div className='card-details'>
           <CurrentMedicineForPastSurgeries/>
-        </div>
+        </div> */}
     
       
     

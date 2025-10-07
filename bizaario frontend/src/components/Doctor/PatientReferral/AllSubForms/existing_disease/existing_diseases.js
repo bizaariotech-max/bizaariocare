@@ -1,30 +1,29 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import generalphysician from '../AllSubForms/assets/images/general physician.png'
 import { useEffect, useState,useRef } from 'react'
 import { Modal, } from 'react-bootstrap'; 
 import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
 
-import api from '../../../../api'
+import api from '../../../../../api'
 import Swal from 'sweetalert2';
-import UniqueLoader from '../../../loader';
+import UniqueLoader from '../../../../loader';
 
-import ChiefComplaintsForMedicalSummaryPresent from './present_Illness_Sub_Components/chief_complaints_for_medical_summary_present';
-import DiagnosticsInvestigationsForMedicalSummaryPresent from './present_Illness_Sub_Components/Diagnosis_investigations_for_medical_summary_present';
-import CurrentMedicinesForMedicalSummaryPresent from './present_Illness_Sub_Components/current_medicines_for_medical_summary_present';
-import CurrentTherapyForMedicalSummaryPresent from './present_Illness_Sub_Components/current_therapy_for_medical_summary_present';
-import PremiumDoctorCarousel from './PremiumDoctor/PremiumDoctorCarousel';
-import PreExistingDisease from './present_Illness_Sub_Components/pre_existing_disease';
-import FamilyHistory from './present_Illness_Sub_Components/family_history';
-import HabitLifestyle from './present_Illness_Sub_Components/habit_lifestyle';
-import Allergies from './present_Illness_Sub_Components/allergies';
-import Pastaccidenttrauma from './present_Illness_Sub_Components/past_accident_trauma';
-import CurrentMedications from './present_Illness_Sub_Components/current_medications';
-import CurrentTherapies from './present_Illness_Sub_Components/current_therapis';
+import ChiefComplaintsForMedicalSummaryPresent from './chief_complaints_for_medical_summary_present';
+import DiagnosticsInvestigationsForMedicalSummaryPresent from './Diagnosis_investigations_for_medical_summary_present';
+import CurrentMedicinesForMedicalSummaryPresent from './current_medicines_for_medical_summary_present';
+import CurrentTherapyForMedicalSummaryPresent from './current_therapy_for_medical_summary_present';
+import PremiumDoctorCarousel from '../PremiumDoctor/PremiumDoctorCarousel';
+import PreExistingDisease from './pre_existing_disease';
+import FamilyHistory from './family_history';
+import HabitLifestyle from './habit_lifestyle';
+import Allergies from './allergies';
+import Pastaccidenttrauma from './past_accident_trauma';
+import CurrentMedications from './current_medications';
+import CurrentTherapies from './current_therapis';
 
 
 
-const PresentIllness = ({patientId,selected_case_file}) => {
+const ExistingDisease = ({patientId,selected_case_file}) => {
 
   const[loading_for,setloading_for]=useState("")
 
@@ -423,4 +422,4 @@ const handleComponentRefresh = (name) => {
   );
 };
 
-export default PresentIllness;
+export default ExistingDisease;
