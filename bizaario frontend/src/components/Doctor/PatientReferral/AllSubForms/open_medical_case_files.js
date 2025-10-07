@@ -199,8 +199,6 @@ const getall_case_file = async () => {
   try {
     const resp = await api.get(`api/v1/admin/patientCaseFile/listPatientCaseFile?PatientId=${patientId}`);
    
-    
-    
     setCaseFiles(resp.data.data.list)
   
     

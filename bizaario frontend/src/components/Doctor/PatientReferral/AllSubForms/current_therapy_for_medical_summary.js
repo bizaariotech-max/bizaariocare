@@ -188,7 +188,99 @@ const handleTherapyChange = (index, field, value) => {
    },[])
   
 
+   
 
+//========================================= edit==============================================
+
+   const [showEdit, setShowEdit] = useState(false)
+   
+      const handleCloseEdit = () => setShowEdit(false);
+
+      const handleShowEdit = () => {
+  if (patient_all_therapy && patient_all_therapy.length > 0) {
+    const normalizedComplaints = patient_all_therapy[0].therapy.map(
+      ({ createdAt, updatedAt, _id, ...cc }) => ({
+        ...cc,
+        TherapyName: cc.TherapyName? typeof cc.TherapyName ==="string" ?
+                      cc.TherapyName : cc.TherapyName._id : "",
+       PatientResponse:cc.PatientResponse
+
+      })
+    );
+
+    setmedical_history(prev => ({
+      ...prev,
+      Therapies: normalizedComplaints
+    }));
+  }
+
+  setShowEdit(true);
+};
+
+
+ const update_therapy = async () => {
+    setisloading(true);
+    try {
+     const payload=
+          {...medical_history,
+            CaseFileId:selected_case_file,
+            UpdatedBy :doctordetails._id
+            
+          }
+      const resp = await api.put(
+        `api/v1/admin/medical-history/therapies/edit-multiple`,
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+ 
+      
+  
+      const { response_code, response_message } = resp.data.response;
+  
+      if (response_code === "200") {
+        Swal.fire({
+          icon: "success",
+          title: "Details Added",
+          text: "Patient Details Updated Successfully...",
+          showConfirmButton: true,
+          customClass: { confirmButton: "my-swal-button" },
+        }).then(() => {
+          window.location.reload();
+        });
+      } else if (response_code === "400") {
+        // Show server validation error here
+        Swal.fire({
+          icon: "error",
+          title: response_message.errorType || "Error",
+          text: response_message.error,
+          showConfirmButton: true,
+          customClass: { confirmButton: "my-swal-button" },
+        });
+      } else {
+        // Optional: handle other response codes
+        Swal.fire({
+          icon: "warning",
+          title: "Unexpected response",
+          text: "Something went wrong. Please try again.",
+          showConfirmButton: true,
+          customClass: { confirmButton: "my-swal-button" },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Request failed",
+        text: error.message || "Something went wrong",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    } finally {
+      setisloading(false);
+    }
+  };
 
 
   return (
@@ -205,7 +297,7 @@ const handleTherapyChange = (index, field, value) => {
               </button>
               <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
                 <Edit className="w-4 h-4" />
-                <span className="text-sm font-medium underline">Edit</span>
+                <span className="text-sm font-medium underline" onClick={handleShowEdit}>Edit</span>
               </button>
             </div>
           </div>
@@ -397,6 +489,115 @@ const handleTherapyChange = (index, field, value) => {
                           onClick={save_therapy}
                         >
                           Save
+                        </Button>
+                      </div>
+          
+                
+                        </div> 
+                
+                        </Modal.Body>
+                    
+                   
+                    </Modal>
+
+
+
+{/*================================== edit modal ============================================*/}
+
+
+            <Modal show={showEdit} onHide={handleCloseEdit} centered size="lg">
+                  
+                        <Modal.Header closeButton>
+                          <Modal.Title className='form-title'>Add Medical History(Therapy (ies))</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                        
+                
+                   <div>
+                
+                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                      
+          {/*==================================== add therapy============================================ */}
+          
+           <div className='col-span-2'>
+                  
+                      
+                   {medical_history.Therapies.map((details, index) => (
+                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 ">
+                       
+          
+                           <FormControl fullWidth size="small">
+                            <label className="form-label">Therapy Name </label>
+                             <Select
+                            labelId="content-type-label"
+                            name="TherapyName"
+                           value={details.TherapyName}
+                           onChange={(e) => handleTherapyChange(index, "TherapyName",e.target.value,)} 
+                            displayEmpty
+                            MenuProps={customMenuProps}
+                            renderValue={(selected) => {
+                              if (!selected) {
+                                return <span style={{ color: "#9ca3af" }}>Therapy Name </span>; 
+                              }
+                              return all_therapy_master?.find((item) => item._id === selected)?.lookup_value;
+                            }}
+                          >
+                            <MenuItem value="">
+                              <em>Therapy Name</em>
+                            </MenuItem>
+                            {all_therapy_master?.map((type) => (
+                              <MenuItem key={type._id} value={type._id}>
+                                {type.lookup_value}
+                              </MenuItem>
+                            ))}
+                        </Select>
+          
+                            </FormControl>
+          
+                       <FormControl fullWidth size="small">
+                            <label className="form-label">Patient’s Response  </label>
+                            <TextField
+                            type='text'
+                            placeholder="Patient Response" 
+                            name="PatientResponse" 
+                            size="small" 
+                            value={details.PatientResponse} 
+                            onChange={(e) => handleTherapyChange(index, "PatientResponse",e.target.value,)} 
+                            />
+                            </FormControl>
+          
+                         <div className="flex justify-between mt-2">
+                        <Button
+                          style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                          onClick={handleAddMoreClinicalTherapy}
+                        >
+                          Add More
+                        </Button>
+          
+                        
+                      </div>
+                      
+                  </div> 
+          
+                  
+          
+                      ))}
+                         
+                </div> 
+          
+          
+              </div> 
+          
+             
+                         
+                         <div className="flex justify-end mt-4">
+                     
+          
+                        <Button
+                          style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                          onClick={update_therapy}
+                        >
+                          Update
                         </Button>
                       </div>
           

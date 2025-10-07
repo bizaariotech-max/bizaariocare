@@ -19,10 +19,6 @@ const DiagnosticsInvestigationsForMedicalSummary = ({patientId,selected_case_fil
      const doctordetails=JSON.parse(localStorage.getItem("user"))
 
 
- 
-
-
-
 
   //============================= main form state start ============================================
   
@@ -59,7 +55,7 @@ const DiagnosticsInvestigationsForMedicalSummary = ({patientId,selected_case_fil
     ...prev,                        
     ClinicalDiagnoses: [              
       ...(prev.ClinicalDiagnoses || []),
-      { Date: "", Investigation_Category: "", Investigation: "", Abnormalities:[], UploadReport: [],UploadInterpretation:[] } // new item
+      { Date: "", InvestigationCategory: "", Investigation: "", Abnormalities:[], ReportUrl: [],InterpretationUrl:[] } // new item
     ],
   }));
 };
@@ -324,6 +320,102 @@ const save_diagnostics_investigations = async () => {
  },[])
 
 
+ 
+ 
+ 
+
+//===================================== edit===============================================
+
+    const [showEdit, setShowEdit] = useState(false)
+  
+    const handleShowEdit = () => {
+  if (patient_all_diagnostics && patient_all_diagnostics.length > 0) {
+    const normalizedComplaints = patient_all_diagnostics[0].clinicaldiagnoses.map(
+      ({ createdAt, updatedAt, _id, ...cc }) => ({
+        ...cc,
+        Abnormalities: cc.Abnormalities.map(s => (typeof s === "string" ? s : s._id)),
+        InvestigationCategory: cc.InvestigationCategory? typeof cc.InvestigationCategory === "string"
+            ? cc.InvestigationCategory
+            : cc.InvestigationCategory._id
+          : ""       
+     
+      })
+    );
+
+    setmedical_history(prev => ({
+      ...prev,
+      ClinicalDiagnoses: normalizedComplaints
+    }));
+  }
+
+  setShowEdit(true);
+};
+
+
+const handleCloseEdit = () => setShowEdit(false);
+
+const update_diagnostics_investigations = async () => {
+  setisloading(true);
+  try {
+    const payload=
+          {...medical_history,
+            CaseFileId:selected_case_file,
+            UpdatedBy:doctordetails._id
+          }
+    const resp = await api.put(
+      `api/v1/admin/medical-history/clinical-diagnoses/edit-multiple`,
+      payload,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    
+
+    const { response_code, response_message } = resp.data.response;
+
+    if (response_code === "200") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Added",
+        text: "Patient Details Updated Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else if (response_code === "400") {
+      // Show server validation error here
+      Swal.fire({
+        icon: "error",
+        title: response_message.errorType || "Error",
+        text: response_message.error,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    } else {
+      // Optional: handle other response codes
+      Swal.fire({
+        icon: "warning",
+        title: "Unexpected response",
+        text: "Something went wrong. Please try again.",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: "error",
+      title: "Request failed",
+      text: error.message || "Something went wrong",
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  } finally {
+    setisloading(false);
+  }
+};
 
 
 
@@ -341,7 +433,7 @@ const save_diagnostics_investigations = async () => {
           </button>
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <Edit className="w-4 h-4" />
-            <span className="text-sm font-medium underline">Edit</span>
+            <span className="text-sm font-medium underline" onClick={handleShowEdit}>Edit</span>
           </button>
         </div>
       </div>
@@ -637,6 +729,198 @@ const save_diagnostics_investigations = async () => {
                 </Modal>
 
 
+
+{/*================================== edit modal ==============================================*/}
+
+
+        <Modal show={showEdit} onHide={handleCloseEdit} centered size="lg">
+              
+                    <Modal.Header closeButton>
+                      <Modal.Title className='form-title'>Edit Medical History(Clinical Diagnoses)</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                    
+            
+               <div>
+            
+                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                      
+      {/*======================== clinical Diagnosis ================================================*/}
+      
+      
+      
+              <div className='col-span-2'>
+                <h5 className='form-title'>Clinical Diagnoses </h5>
+                  {medical_history.ClinicalDiagnoses.map((details, index) => (
+            
+                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                      
+                       <FormControl fullWidth size="small">
+                        <label className="form-label">Date </label>
+                        <TextField
+                        type='date'
+                        placeholder="Date" 
+                        name="Date" 
+                        size="small" 
+                        value={details.Date ? new Date(details.Date).toISOString().split("T")[0] : ""} 
+                        onChange={(e)=>handleClinicalDiagnosisChange(index,"Date",e.target.value)} 
+                        />
+                        </FormControl>
+      
+                          <FormControl fullWidth size="small">
+                    <label className="form-label">Investigation Category </label>
+                  <Select
+                        labelId="content-type-label"
+                        name="InvestigationCategory"
+                       value={details.InvestigationCategory}
+                        onChange={(e)=>handleClinicalDiagnosisChange(index,"InvestigationCategory",e.target.value)}
+                        displayEmpty
+                        MenuProps={customMenuProps}
+                        renderValue={(selected) => {
+                          if (!selected) {
+                            return <span style={{ color: "#9ca3af" }}>Investigation Category </span>; 
+                          }
+                          return all_investigation_category?.find((item) => item._id === selected)?.lookup_value;
+                        }}
+                      >
+                        <MenuItem value="">
+                          <em>Investigation Category </em>
+                        </MenuItem>
+                        {all_investigation_category?.map((type) => (
+                          <MenuItem key={type._id} value={type._id}>
+                            {type.lookup_value}
+                          </MenuItem>
+                        ))}
+                                    
+        
+                    </Select>
+                    </FormControl>
+      
+                            <FormControl fullWidth size="small">
+                    <label className="form-label">Investigation </label>
+                  <Select
+                        labelId="content-type-label"
+                        name="Nationality"
+                       value={details.Investigation}
+                       onChange={(e)=>handleClinicalDiagnosisChange(index,"Investigation",e.target.value)}
+                        displayEmpty
+                        MenuProps={customMenuProps}
+                        renderValue={(selected) => {
+                          if (!selected) {
+                            return <span style={{ color: "#9ca3af" }}>Investigation </span>; 
+                          }
+                          return all_investigation_master?.find((item) => item._id === selected)?.InvestigationName;
+                        }}
+                      >
+                        <MenuItem value="">
+                          <em>Investigation </em>
+                        </MenuItem>
+                        {all_investigation_master?.map((type) => (
+                          <MenuItem key={type._id} value={type._id}>
+                            {type.InvestigationName}
+                          </MenuItem>
+                        ))}
+                                    
+        
+                    </Select>
+                    </FormControl>
+      
+                       <div className="col-span-2">
+                      <FormControl fullWidth size="small">
+                      <label className="form-label">Abnormalities </label>
+                      <div className="flex flex-wrap gap-2">
+                        {all_symptom_class_master.map((item) => {
+                          const selected = (details?.Abnormalities || []).includes(item._id); 
+                          return (
+                            <span
+                              key={item._id}
+                              onClick={() => toggleArrayFieldClinicalDiagnosis(index,"Abnormalities",item._id,)}
+                              className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                                ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                            >
+                              {item.lookup_value}
+                              {selected && (
+                                <span
+                                  className="ml-1 text-xs font-bold cursor-pointer"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    // handleSymptomSelect(item._id,index);
+                                  }}
+                                >
+                                  ✕
+                                </span>
+                              )}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </FormControl>
+                    </div>
+      
+                      <FormControl fullWidth size="small">
+                        <label className="form-label">Upload Report </label>
+                        <TextField
+                        type='file'
+                        placeholder="Date" 
+                        name="ReportUrl" 
+                        size="small" 
+                        // value={details.ReportUrl}
+                        onChange={(e)=>handlesingleImageChange(index,e,"ReportUrl")} 
+                        />
+                        </FormControl>
+            
+                      <FormControl fullWidth size="small">
+                        <label className="form-label">Upload Interpretation </label>
+                        <TextField
+                        type='file'
+                        placeholder="Date" 
+                        name="DateOfBirth" 
+                        size="small" 
+                        // value={details.InterpretationUrl} 
+                        onChange={(e)=>handlesingleImageChange(index,e,"InterpretationUrl")} 
+                        />
+                        </FormControl>
+            
+                      
+                <div className="flex justify-between mt-2">
+                    <Button
+                      style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                      onClick={handleAddMoreClinicalDiagnosis}
+                    >
+                      Add More
+                    </Button>
+      
+                    
+                  </div>
+                  
+              </div> 
+      
+                ))}
+                     
+            </div> 
+    
+          </div> 
+      
+         
+                     
+                     <div className="flex justify-end mt-4">
+                 
+      
+                    <Button
+                      style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                      onClick={update_diagnostics_investigations}
+                    >
+                      Update
+                    </Button>
+                  </div>
+      
+            
+                    </div> 
+            
+                    </Modal.Body>
+                
+               
+                </Modal>
 
     </div>
   );

@@ -90,26 +90,38 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
   });
 };
 
-    const toggleArrayField = (index, field, itemId) => {
+ const toggleArrayField = (index, field, item) => {
   setmedical_history(prev => {
     const updatedChiefComplaints = [...prev.ChiefComplaints];
     const complaint = { ...updatedChiefComplaints[index] };
     const currentArray = complaint[field] || [];
 
-    if (currentArray.includes(itemId)) {
-      complaint[field] = currentArray.filter(id => id !== itemId);
+    const itemId = typeof item === "string" ? item : item._id;
+
+    // Check if item exists
+    const exists = currentArray.some(s =>
+      typeof s === "string" ? s === itemId : s._id === itemId
+    );
+
+    if (exists) {
+      // Remove item
+      complaint[field] = currentArray.filter(s =>
+        typeof s === "string" ? s !== itemId : s._id !== itemId
+      );
     } else {
-      complaint[field] = [...currentArray, itemId];
+      // Add item
+      complaint[field] = [...currentArray, item];
     }
 
     updatedChiefComplaints[index] = complaint;
 
     return {
       ...prev,
-      ChiefComplaints: updatedChiefComplaints
+      ChiefComplaints: updatedChiefComplaints,
     };
   });
 };
+
 
 
 //========================================= color bar=============================================
@@ -351,10 +363,100 @@ const handleAddMore = () => {
  },[])
 
 
+// ==============================edit chief complaints============================================
+
+ const [showEdit, setShowEdit] = useState(false)
+
+const handleShowEdit = () => {
+  if (patient_all_cheif_complaints && patient_all_cheif_complaints.length > 0) {
+    const normalizedComplaints = patient_all_cheif_complaints[0].complaints.map(
+      ({ createdAt, updatedAt, _id, ...cc }) => ({
+        ...cc,
+        Symptoms: cc.Symptoms.map(s => (typeof s === "string" ? s : s._id)),
+        AggravatingFactors: cc.AggravatingFactors.map(a => (typeof a === "string" ? a : a._id)),
+        Duration: {
+          Value: cc.Duration.Value,
+          Unit: typeof cc.Duration.Unit === "string" ? cc.Duration.Unit : cc.Duration.Unit._id
+        }
+      })
+    );
+
+    setmedical_history(prev => ({
+      ...prev,
+      ChiefComplaints: normalizedComplaints
+    }));
+  }
+
+  setShowEdit(true);
+};
+
+
+        const handleCloseEdit = () => setShowEdit(false);
 
 
 
-
+      const update_chif_complaints = async () => {
+        setisloading(true);
+        try {
+          const payload=
+          {...medical_history,
+            CaseFileId:selected_case_file,
+            UpdatedBy :doctordetails._id
+          }
+         
+          
+          const resp = await api.put(
+            `api/v1/admin/medical-history/chief-complaints/edit-multiple`,
+            payload,
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        
+          const { response_code, response_message } = resp.data.response;
+      
+          if (response_code === "200") {
+            Swal.fire({
+              icon: "success",
+              title: "Details Added",
+              text: "Chief Complaints Updated Successfully...",
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            }).then(() => {
+              window.location.reload();
+            });
+          } else if (response_code === "400") {
+            // Show server validation error here
+            Swal.fire({
+              icon: "error",
+              title: response_message.errorType || "Error",
+              text: response_message.error,
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            });
+          } else {
+            // Optional: handle other response codes
+            Swal.fire({
+              icon: "warning",
+              title: "Unexpected response",
+              text: "Something went wrong. Please try again.",
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            });
+          }
+        } catch (error) {
+          console.error(error);
+          Swal.fire({
+            icon: "error",
+            title: "Request failed",
+            text: error.message || "Something went wrong",
+            showConfirmButton: true,
+            customClass: { confirmButton: "my-swal-button" },
+          });
+        } finally {
+          setisloading(false);
+        }
+      };
 
 
 
@@ -376,7 +478,7 @@ const handleAddMore = () => {
           </button>
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <Edit className="w-4 h-4" />
-            <span className="text-sm font-medium underline">Edit</span>
+            <span className="text-sm font-medium underline" onClick={handleShowEdit}>Edit</span>
           </button>
         </div>
       </div>
@@ -620,19 +722,7 @@ const handleAddMore = () => {
                               
   
               </Select>
-                    {/* Dropdown for Days/Weeks/Months */}
-                    {/* <Select
-                      name="Unit"
-                      defaultValue="Days"
-                      size="small"
-                      value={details.Duration.Unit}
-                      onChange={(e) => handleChiefComplaintsChange(index, "Duration", e.target.value, "Unit")}
-                      style={{ width: '150px' }}
-                    >
-                      <MenuItem value="Days">Days</MenuItem>
-                      <MenuItem value="Weeks">Weeks</MenuItem>
-                      <MenuItem value="Months">Months</MenuItem>
-                    </Select> */}
+                   
                   </div>
                 </FormControl>
       
@@ -658,21 +748,7 @@ const handleAddMore = () => {
 
           ))}
                
-           
-
-      
-              </div> 
-
-
-
-
-
-
-
-
-
- 
-
+    </div> 
 
     </div> 
 
@@ -696,6 +772,202 @@ const handleAddMore = () => {
           
          
           </Modal>
+
+
+
+{/* ====================================edit modal ============================================*/}
+
+
+<Modal show={showEdit} onHide={handleCloseEdit} centered size="lg">
+        
+              <Modal.Header closeButton>
+                <Modal.Title className='form-title'>Edit Medical History(Chief Complaints) </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+              
+      
+         <div>
+      
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+              
+{/*======================== chief complaints============================================ */}
+
+        <div className='col-span-2'>
+          <h5 className='form-title'>Edit Chief Complaints</h5>
+            {medical_history.ChiefComplaints.map((details, index) => (
+      
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                
+                 <div className="col-span-2">
+                <FormControl fullWidth size="small">
+                <label className="form-label">Symptom Class</label>
+                <div className="flex flex-wrap gap-2">
+                  {all_symptom_class_master.map((item) => {
+                   const selected = (details?.Symptoms || []).some(
+                      (s) => typeof s === "string" ? s === item._id : s._id === item._id
+                    );
+
+                    return (
+                      <span
+                        key={item._id}
+                        onClick={() => toggleArrayField(index, "Symptoms", item._id)}
+                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                      >
+                        {item.lookup_value}
+                        {selected && (
+                          <span
+                            className="ml-1 text-xs font-bold cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // handleSymptomSelect(item._id,index);
+                            }}
+                          >
+                            ✕
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+              </FormControl>
+              </div>
+
+      
+             
+
+                 <div className="col-span-2">
+                <FormControl fullWidth size="small">
+                <label className="form-label">Aggravating Factors</label>
+                <div className="flex flex-wrap gap-2">
+                  {allaggravating_master.map((item) => {
+                      const selected = (details?.AggravatingFactors || []).some(
+                      (s) => typeof s === "string" ? s === item._id : s._id === item._id
+                    );
+                    return (
+                      <span
+                        key={item._id}
+                       onClick={() => toggleArrayField(index, "AggravatingFactors", item._id)}
+                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                      >
+                        {item.lookup_value}
+                        {selected && (
+                          <span
+                            className="ml-1 text-xs font-bold cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // handleSymptomSelect(item._id,index);
+                            }}
+                          >
+                            ✕
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+              </FormControl>
+              </div>
+
+           
+      
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Duration</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {/* Number input */}
+                    <TextField
+                      type="number"
+                      name="Value"
+                      placeholder="Enter Number"
+                      size="small"
+                      value={details.Duration.Value} 
+                       onChange={(e) => handleChiefComplaintsChange(index, "Duration", e.target.value, "Value")} 
+                      style={{ flex: 1 }}
+                    />
+                
+                 <Select
+                  labelId="content-type-label"
+                  name="InvestigationCategory"
+                  value={
+                      typeof details?.Duration?.Unit === "string"
+                        ? details.Duration.Unit
+                        : details?.Duration?.Unit?._id || ""
+                    }
+                  onChange={(e) => handleChiefComplaintsChange(index, "Duration", e.target.value, "Unit")}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Unit </span>; 
+                    }
+                    return all_unit_list?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Unit </em>
+                  </MenuItem>
+                  {all_unit_list?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+                   
+                  </div>
+                </FormControl>
+      
+                  <FormControl fullWidth size="small">
+                  <label className="form-label">Severity Grade </label>
+                  {renderColorBar(index)}
+                  </FormControl>
+      
+          <div className="flex justify-between mt-2">
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={handleAddMore}
+              >
+                Add More
+              </Button>
+
+              
+            </div>
+
+                </div> 
+
+                
+
+          ))}
+               
+    </div> 
+
+    </div> 
+
+   
+               
+               <div className="flex justify-end mt-4">
+           
+
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={update_chif_complaints}
+              >
+                Update
+              </Button>
+            </div>
+
+      
+              </div> 
+      
+              </Modal.Body>
+          
+         
+          </Modal>
+
+
+
 
     </div>
   );

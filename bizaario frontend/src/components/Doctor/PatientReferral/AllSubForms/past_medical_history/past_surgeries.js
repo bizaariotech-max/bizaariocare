@@ -143,8 +143,8 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
  const handleAddMore = () => {
    setsurgeries(prev => ({
      ...prev,                          // keep previous properties
-     SurgeryProcedure: [                // overwrite or add to ChiefComplaints
-       ...(prev.SurgeryProcedure || []),
+     SurgeriesProcedures: [                // overwrite or add to ChiefComplaints
+       ...(prev.SurgeriesProcedures || []),
        { Date: "", HospitalClinicName: "", SurgeonName: "", SurgeonNumber: "", MedicalSpeciality:"",
         SurgeryProcedureName:"",BloodTransfusionNeeded:"",AnaesthesiaType:"",RecoveryCycle:"",PostSurgeryComplications:"",
         DischargeSummaryUrlNote:""
@@ -174,6 +174,30 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
         getallmedical_speciality()
     
       },[])
+
+
+      //================================== get surgery procedure list============================================
+
+  const[all_surgery_procedure,setall_surgery_procedure]=useState([])
+
+      const getall_surgery_procedure=async()=>
+      {
+        try {
+          const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"procedure_master"})
+          setall_surgery_procedure(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    
+      useEffect(()=>
+      {
+        getall_surgery_procedure()
+    
+      },[])
+
 
 
 //================================== get unit list============================================
@@ -217,9 +241,6 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
             }
           );
         
-       
-          
-      
           const { response_code, response_message } = resp.data.response;
       
           if (response_code === "200") {
@@ -268,7 +289,7 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
 
 //=============================== get patient all medical history===================================
 
-    const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
+const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
 
  const getall_patient_medical_history = async () => {
    try {
@@ -297,7 +318,108 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
  getall_patient_medical_history()
  },[])
 
+ 
 
+//======================================== edit================================================
+
+
+  const [showEdit, setShowEdit] = useState(false)
+  
+  const handleCloseEdit = () => setShowEdit(false);
+
+
+  
+
+  const handleShowEdit = () => {
+  if (patient_past_surgeries && patient_past_surgeries.length > 0) {
+    const normalizedComplaints = patient_past_surgeries[0].surgeries.map(
+      ({ createdAt, updatedAt, _id, ...cc }) => ({
+        ...cc,
+        MedicalSpeciality: cc.MedicalSpeciality ?typeof cc.MedicalSpeciality==="string" ?
+          cc.MedicalSpeciality : cc.MedicalSpeciality._id :"",
+        SurgeryProcedureName: cc.SurgeryProcedureName ? typeof cc.SurgeryProcedureName==="string" ?
+          cc.SurgeryProcedureName : cc.SurgeryProcedureName._id :"",
+        PostSurgeryComplications: cc.PostSurgeryComplications.map(a => (typeof a === "string" ? a : a._id)),
+        RecoveryCycle: {
+          Value: cc.RecoveryCycle.Value,
+          Unit: typeof cc.RecoveryCycle.Unit === "string" ? cc.RecoveryCycle.Unit : cc.RecoveryCycle.Unit._id
+        }
+      })
+    );
+
+    setsurgeries(prev => ({
+      ...prev,
+      SurgeriesProcedures: normalizedComplaints
+    }));
+  }
+
+  setShowEdit(true);
+};
+
+
+  const update_surgery = async () => {
+        // setisloading(true);
+        try {
+          const payload=
+          {...surgeries,
+            CaseFileId:selected_case_file,
+            UpdatedBy:doctordetails._id
+            
+          }
+         
+          const resp = await api.put(
+            `api/v1/admin/medical-history/surgeries-procedures/edit-multiple`,
+            payload,
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        console.log(resp);
+        
+          const { response_code, response_message } = resp.data.response;
+      
+          if (response_code === "200") {
+            Swal.fire({
+              icon: "success",
+              title: "Details Added",
+              text: "Past Surgery Details Added Successfully...",
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            }).then(() => {
+              window.location.reload();
+            });
+          } else if (response_code === "400") {
+            // Show server validation error here
+            Swal.fire({
+              icon: "error",
+              title: response_message.errorType || "Error",
+              text: response_message.error,
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            });
+          } else {
+            // Optional: handle other response codes
+            Swal.fire({
+              icon: "warning",
+              title: "Unexpected response",
+              text: "Something went wrong. Please try again.",
+              showConfirmButton: true,
+              customClass: { confirmButton: "my-swal-button" },
+            });
+          }
+        } catch (error) {
+          console.error(error);
+          Swal.fire({
+            icon: "error",
+            title: "Request failed",
+            text: error.message || "Something went wrong",
+            showConfirmButton: true,
+            customClass: { confirmButton: "my-swal-button" },
+          });
+        } finally {
+          // setisloading(false);
+        }
+      };
 
 
 
@@ -305,9 +427,6 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
     <div>
       {/* Header */}
    
-
-     
-
             <div className="flex items-center justify-between mt-2  border-b border-gray-200">
               <h2 className="text-xxl font-semibold text-gray-900">
                 Past Surgeries
@@ -319,7 +438,7 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
                 </button>
                 <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
                   <Edit className="w-4 h-4" />
-                  <span className="text-sm font-medium underline">Edit</span>
+                  <span className="text-sm font-medium underline" onClick={handleShowEdit}>Edit</span>
                 </button>
               </div>
             </div>
@@ -396,7 +515,7 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
                 }`}
             >
              <div className="text-sm text-gray-900 font-medium">
-              {item?.SurgeryProcedureName?item.SurgeryProcedureName :"—"}
+              {item?.SurgeryProcedureName?item.SurgeryProcedureName.lookup_value :"—"}
             </div>
 
             {/* Duration */}
@@ -442,7 +561,7 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
           
 
            <div className="text-sm text-gray-900 font-medium">
-              {item?.SurgeryProcedureName?item.SurgeryProcedureName :"—"}
+              {item?.SurgeryProcedureName?item.SurgeryProcedureName.lookup_value :"—"}
             </div>
 
             {/* Duration */}
@@ -579,16 +698,35 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
                     </Select>
                     </FormControl>
 
-                   <FormControl fullWidth size="small">
+                
+
+                     <FormControl fullWidth size="small">
                     <label className="form-label">Surgery/ Procedure Name </label>
-                    <TextField
-                    type='text'
-                    placeholder="Surgery/ Procedure Name" 
-                    name="SurgeryProcedureName" 
-                    size="small" 
-                    value={details.SurgeryProcedureName} 
-                    onChange={(e)=>handlesurgery_change(index,"SurgeryProcedureName",e.target.value)} 
-                    />
+                  <Select
+                        labelId="content-type-label"
+                        name="MedicalSpeciality"
+                        value={details.SurgeryProcedureName}
+                        onChange={(e)=>handlesurgery_change(index,"SurgeryProcedureName",e.target.value)}
+                        displayEmpty
+                        MenuProps={customMenuProps}
+                        renderValue={(selected) => {
+                          if (!selected) {
+                            return <span style={{ color: "#9ca3af" }}>Surgery Procedure </span>; 
+                          }
+                          return all_surgery_procedure?.find((item) => item._id === selected)?.lookup_value;
+                        }}
+                      >
+                        <MenuItem value="">
+                          <em>Surgery Procedure </em>
+                        </MenuItem>
+                        {all_surgery_procedure?.map((type) => (
+                          <MenuItem key={type._id} value={type._id}>
+                            {type.lookup_value}
+                          </MenuItem>
+                        ))}
+                                    
+        
+                    </Select>
                     </FormControl>
 
                <FormControl component="fieldset" sx={{ mt: 0 }}>
@@ -759,6 +897,309 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
           </Modal>
 
 
+
+{/*======================================== edit modal =========================================*/}
+
+ <Modal show={showEdit} onHide={handleCloseEdit} centered size="lg">
+        
+              <Modal.Header closeButton>
+                <Modal.Title className='form-title'>Surgery/ Procedure</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+              
+      
+         <div>
+      
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4"> */}
+                
+
+
+
+        <div className='col-span-2'>
+          {/* <h5 className='form-title'>Chief Complaints</h5> */}
+            {surgeries?.SurgeriesProcedures?.map((details, index) => (
+      
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4  border border-gray-300 rounded-lg p-4 mt-2">
+                
+                 <FormControl fullWidth size="small">
+                    <label className="form-label">Date </label>
+                    <TextField
+                    type='date'
+                    placeholder="Date" 
+                    name="Date" 
+                    size="small" 
+                  
+                    value={
+                      details.Date
+                        ? new Date(details.Date).toISOString().split("T")[0]
+                        : ""
+                    } 
+                    onChange={(e)=>handlesurgery_change(index,"Date",e.target.value)} 
+                    />
+                    </FormControl>
+
+                   <FormControl fullWidth size="small">
+                    <label className="form-label">Hospital/ Clinic Name </label>
+                    <TextField
+                    type='text'
+                    placeholder="Hospital/ Clinic Name" 
+                    name="HospitalClinicName" 
+                    size="small" 
+                    value={details.HospitalClinicName} 
+                    onChange={(e)=>handlesurgery_change(index,"HospitalClinicName",e.target.value)} 
+                    />
+                    </FormControl>
+
+                <FormControl fullWidth size="small">
+                    <label className="form-label">Surgeon Name </label>
+                    <TextField
+                    type='text'
+                    placeholder="Surgeon Name" 
+                    name="SurgeonName" 
+                    size="small" 
+                    value={details.SurgeonName} 
+                    onChange={(e)=>handlesurgery_change(index,"SurgeonName",e.target.value)} 
+                    />
+                    </FormControl>
+
+                 <FormControl fullWidth size="small">
+                    <label className="form-label">Surgeon Number </label>
+                    <TextField
+                    type='text'
+                    placeholder="Surgeon Number" 
+                    name="SurgeonNumber" 
+                    size="small" 
+                    value={details.SurgeonNumber} 
+                    onChange={(e)=>handlesurgery_change(index,"SurgeonNumber",e.target.value)} 
+                    />
+                    </FormControl>
+
+                     <FormControl fullWidth size="small">
+                    <label className="form-label">Medical Speciality </label>
+                  <Select
+                        labelId="content-type-label"
+                        name="MedicalSpeciality"
+                       value={details.MedicalSpeciality}
+                        onChange={(e)=>handlesurgery_change(index,"MedicalSpeciality",e.target.value)}
+                        displayEmpty
+                        MenuProps={customMenuProps}
+                        renderValue={(selected) => {
+                          if (!selected) {
+                            return <span style={{ color: "#9ca3af" }}>Medical Speciality </span>; 
+                          }
+                          return allmedical_speciality?.find((item) => item._id === selected)?.lookup_value;
+                        }}
+                      >
+                        <MenuItem value="">
+                          <em>Medical Speciality </em>
+                        </MenuItem>
+                        {allmedical_speciality?.map((type) => (
+                          <MenuItem key={type._id} value={type._id}>
+                            {type.lookup_value}
+                          </MenuItem>
+                        ))}
+                                    
+        
+                    </Select>
+                    </FormControl>
+
+                
+
+                     <FormControl fullWidth size="small">
+                    <label className="form-label">Surgery/ Procedure Name </label>
+                  <Select
+                        labelId="content-type-label"
+                        name="MedicalSpeciality"
+                        value={details.SurgeryProcedureName}
+                        onChange={(e)=>handlesurgery_change(index,"SurgeryProcedureName",e.target.value)}
+                        displayEmpty
+                        MenuProps={customMenuProps}
+                        renderValue={(selected) => {
+                          if (!selected) {
+                            return <span style={{ color: "#9ca3af" }}>Surgery Procedure </span>; 
+                          }
+                          return all_surgery_procedure?.find((item) => item._id === selected)?.lookup_value;
+                        }}
+                      >
+                        <MenuItem value="">
+                          <em>Surgery Procedure </em>
+                        </MenuItem>
+                        {all_surgery_procedure?.map((type) => (
+                          <MenuItem key={type._id} value={type._id}>
+                            {type.lookup_value}
+                          </MenuItem>
+                        ))}
+                                    
+        
+                    </Select>
+                    </FormControl>
+
+               <FormControl component="fieldset" sx={{ mt: 0 }}>
+              <Typography sx={{ fontWeight: 500 }} className='form-label'>Was a Blood Transfusion Needed? </Typography>
+              <RadioGroup size="small"
+                row
+                name="EntityTypeId"
+                value={details.BloodTransfusionNeeded}
+                onChange={(e)=>handlesurgery_change(index,"BloodTransfusionNeeded",e.target.value)}
+                sx={{ flexDirection: 'row', alignItems: 'flex-start', gap: 1 }}
+              >
+               
+                
+              <FormControlLabel value="true" control={<Radio />} label="Yes" />
+              <FormControlLabel value="false" control={<Radio />} label="No" />
+                
+                
+               
+              </RadioGroup>
+            </FormControl>
+
+                  <FormControl component="fieldset" sx={{ mt: 0 }}>
+              <Typography sx={{ fontWeight: 500 }} className='form-label'>Anaesthesia Type  </Typography>
+              <RadioGroup size="small"
+                row
+                name="EntityTypeId"
+                value={details.AnaesthesiaType}
+                onChange={(e)=>handlesurgery_change(index,"AnaesthesiaType",e.target.value)}
+                sx={{ flexDirection: 'row', alignItems: 'flex-start', gap: 1 }}
+              >
+               
+                
+              <FormControlLabel value="General" control={<Radio />} label="General" />
+              <FormControlLabel value="Local" control={<Radio />} label="Local" />
+                
+              </RadioGroup>
+            </FormControl>
+
+
+         <FormControl fullWidth size="small">
+              <label className="form-label">Recovery Cycle</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {/* Number input */}
+                <TextField
+                  type="number"
+                  name="Value"
+                  placeholder="Enter Number"
+                  size="small"
+                  defaultValue={details.RecoveryCycle.Value} 
+                  onChange={(e) => handlesurgery_change(index, "RecoveryCycle", e.target.value, "Value")} 
+                  style={{ flex: 1 }}
+                />
+            
+              
+              <Select
+              labelId="content-type-label"
+              name="InvestigationCategory"
+              value={details.RecoveryCycle.Unit} 
+              onChange={(e) => handlesurgery_change(index, "RecoveryCycle", e.target.value, "Unit")}
+              displayEmpty
+              MenuProps={customMenuProps}
+              renderValue={(selected) => {
+                if (!selected) {
+                  return <span style={{ color: "#9ca3af" }}>Unit </span>; 
+                }
+                return all_unit_list?.find((item) => item._id === selected)?.lookup_value;
+              }}
+            >
+              <MenuItem value="">
+                <em>Unit </em>
+              </MenuItem>
+              {all_unit_list?.map((type) => (
+                <MenuItem key={type._id} value={type._id}>
+                  {type.lookup_value}
+                </MenuItem>
+              ))}
+                          
+
+          </Select>
+              
+              </div>
+            </FormControl>
+
+
+              
+               <FormControl fullWidth size="small">
+                <label className="form-label">Upload Discharge Summary/ Note </label>
+                <TextField
+                nam
+                type='file'
+                placeholder="DischargeSummaryUrlNote" 
+                name="DischargeSummaryUrlNote" 
+                size="small" 
+                // value={patient_details.DateOfBirth} 
+                onChange={(e)=>handlesingleImageChange(index,e,"DischargeSummaryUrlNote")} 
+                />
+                </FormControl>
+
+            <div className="col-span-2">
+                <FormControl fullWidth size="small">
+                <label className="form-label">Post Surgery Complications </label>
+                <div className="flex flex-wrap gap-2">
+                  {allmedical_speciality.map((item) => {
+                    const selected = (details?.PostSurgeryComplications || []).includes(item._id); 
+                    return (
+                      <span
+                        key={item._id}
+                        onClick={() => toggleArrayField(index, "PostSurgeryComplications", item._id)}
+                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                      >
+                        {item.lookup_value}
+                        {selected && (
+                          <span
+                            className="ml-1 text-xs font-bold cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // handleSymptomSelect(item._id,index);
+                            }}
+                          >
+                            ✕
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+              </FormControl>
+              </div> 
+
+                </div> 
+
+          ))}
+               
+           
+
+      
+          </div> 
+
+    </div> 
+
+   
+               
+               <div className="flex justify-between mt-4">
+           
+ 
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={handleAddMore}
+              >
+                Add More
+              </Button>
+
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={update_surgery}
+              >
+                Update
+              </Button>
+            </div>
+
+      
+              {/* </div>  */}
+      
+              </Modal.Body>
+          
+         
+          </Modal>
 
 
     </div>

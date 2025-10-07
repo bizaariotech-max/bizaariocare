@@ -399,6 +399,22 @@ const[allcurrent_medicine_data,setallcurrent_medicine_data]=useState([])
 };
 
 
+const handleDownload = async (url, filename) => {
+  try {
+    const response = await fetch(url, { mode: 'cors' }); // fetch the image
+    const blob = await response.blob();
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename || 'prescription.png';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error('Download failed:', err);
+  }
+};
+
+
 
   return (
     <div className="space mt-4">
@@ -422,7 +438,7 @@ const[allcurrent_medicine_data,setallcurrent_medicine_data]=useState([])
       </div>
 
       {/* Table */}
-  {/* Table */}
+
 <div className="overflow-x-auto">
   {/* Table Header */}
   <div className="bg-[var(--button-back-color)] text-white">
@@ -435,39 +451,60 @@ const[allcurrent_medicine_data,setallcurrent_medicine_data]=useState([])
   </div>
 
   {/* Table Body */}
-  {allcurrent_medications.map((item, index) => (
+  {allcurrent_medicine_data?.Medicines?.map((item, index) => (
     <div
       key={index}
-      className={`grid grid-cols-4 gap-4 p-4 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
-                }`}
+      className={`grid grid-cols-4 gap-4 p-4 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}
     >
-      {/* Medicine Name */}
       <div className="text-sm text-gray-900 font-medium">
         {item?.MedicineName?.lookup_value || "—"}
       </div>
 
-      {/* Dosage */}
       <div className="text-sm text-gray-900">
         {item?.Dosage?.lookup_value || "—"}
       </div>
 
-      {/* Duration */}
       <div className="text-sm text-gray-900">
         {item?.DurationInDays ? `${item.DurationInDays} Days` : "—"}
       </div>
 
-      {/* Action (Remove Button) */}
-      {/* <div>
-        <button
-          onClick={() => handleRemoveMedicine(index)}
-          className="text-red-500 hover:text-red-700 font-bold"
-        >
-          ✕
-        </button>
-      </div> */}
+      <div>
+  {allcurrent_medicine_data?.PrescriptionUrls?.length > 0 ? (
+    <button
+      onClick={() =>
+        handleDownload(
+          allcurrent_medicine_data.PrescriptionUrls[0],
+          "prescription.png"
+        )
+      }
+      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:from-indigo-600 hover:to-blue-500 transition-all duration-300"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 12v8m0 0l-4-4m4 4l4-4m-4-8V4m0 4l-4 4m4-4l4 4"
+        />
+      </svg>
+      Download Prescription
+    </button>
+  ) : (
+    <span className="text-gray-400 italic">No Prescription</span>
+  )}
+</div>
+
     </div>
   ))}
 </div>
+
+
 
  
 

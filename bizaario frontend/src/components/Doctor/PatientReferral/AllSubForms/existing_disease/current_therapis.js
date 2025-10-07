@@ -296,38 +296,43 @@ const handleTherapyChange = (index, field, value) => {
     
 
          {/* Table Header */}
-      <div className="bg-[var(--button-back-color)] text-white">
-          <div className="grid grid-cols-[1fr_2fr] gap-4 p-2">
-          <h3 className="table-header">Therapy Name</h3>
-          <h3 className="table-header">Clinical Outcome/Patient's Response</h3>
+    {/* Table Header */}
+<div className="bg-[var(--button-back-color)] text-white">
+  <div className="grid grid-cols-2 gap-4 p-2">
+    <h3 className="table-header text-left font-semibold">
+      Therapy Name
+    </h3>
+    <h3 className="table-header text-left font-semibold">
+      Clinical Outcome / Patient's Response
+    </h3>
+  </div>
+</div>
 
-        </div>
-      </div>
-       
-{
+{/* Table Body */}
+{patient_all_therapy && patient_all_therapy.length > 0 ? (
   patient_all_therapy.map((item, index) => (
- 
-      <div className="divide-y divide-gray-200">
-          <div
-            key={index}
-            className={`grid grid-cols-4 gap-4 p-4 ${
-              index % 2 === 0 ? "bg-[#f2f3f6]" : "bg-white"
-            }`}
-          >
-          
-           <div className="text-sm text-gray-900 font-medium">
-              {item?.TherapyName?.lookup_value || "—"}
-            </div>
-
-            {/* Duration */}
-            <div className="text-sm text-gray-900">
-              {item?.PatientResponse || "—"}
-            </div>
-
-          </div>
-     
+    <div
+      key={index}
+      className={`grid grid-cols-2 gap-4 p-4 ${
+        index % 2 === 0 ? "bg-[#f2f3f6]" : "bg-white"
+      }`}
+    >
+      {/* Column 1: Therapy Name */}
+      <div className="text-sm text-gray-900 font-medium text-left">
+        {item?.TherapyName?.lookup_value || "—"}
       </div>
-  ))}
+
+      {/* Column 2: Patient Response */}
+      <div className="text-sm text-gray-900 text-left">
+        {item?.PatientResponse || "—"}
+      </div>
+    </div>
+  ))
+) : (
+  <div className="p-4 text-center text-gray-500">No data available</div>
+)}
+
+
 
   
 
