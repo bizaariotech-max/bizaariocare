@@ -42,6 +42,8 @@ import RiskFactor from './AllSubForms/RiskFactor';
 import PatientConcerns from './AllSubForms/PatientConcerns';
 import ImmunizationProfile from './AllSubForms/ImmunizationProfile';
 import PastMedicalHistoryMain from './AllSubForms/past_medical_history/past_medical_history_main';
+import CurrentProblemMain from './AllSubForms/current_problem/current_problem_main';
+import PatientProfilingMain from './AllSubForms/patient_profiling/patient_profiling_main';
 
 
 
@@ -78,11 +80,17 @@ const PatientReferralHome = () => {
       {/* <CurrentTherapy /> */}
       {/* <MedicalSummary /> */}
       
+      <CurrentProblemMain patientId={patientId} selected_case_file={selected_case_file}/>
+
+      <PatientProfilingMain patientId={patientId} selected_case_file={selected_case_file}/>
+
+       <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/>
+
       <ExistingDisease patientId={patientId} selected_case_file={selected_case_file}/>
       <PastIllness patientId={patientId} selected_case_file={selected_case_file}/>
 
       <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/>
-      <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/>
+     
        
       <PastMedications />
       <PastTherapy />
