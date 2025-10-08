@@ -51,9 +51,6 @@ const PatientReferralHome = () => {
 
   const location =useLocation()
  
-  console.log(location);
-  
-  
   const patient_details=location.state.patient_details
   const patientId=patient_details._id
 
@@ -79,6 +76,8 @@ const PatientReferralHome = () => {
       {/* <ClinicalOutcome /> */}
       {/* <CurrentTherapy /> */}
       {/* <MedicalSummary /> */}
+      
+      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/>
       
       <CurrentProblemMain patientId={patientId} selected_case_file={selected_case_file}/>
 

@@ -374,7 +374,7 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
               headers: { "Content-Type": "application/json" },
             }
           );
-        console.log(resp);
+ 
         
           const { response_code, response_message } = resp.data.response;
       

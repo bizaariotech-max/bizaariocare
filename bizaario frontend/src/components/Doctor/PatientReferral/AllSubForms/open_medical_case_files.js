@@ -33,7 +33,9 @@ const OpenMedicalCaseFiles = ({patientId,patient_details,setselected_case_file})
       HospitalName : '',
       Date : '',
       MedicalSpeciality:'',
-      Status:""
+      Status:"",
+      Disease:[],
+      Accident:[]
     });
 
 const handleChange = (e) => {
@@ -47,7 +49,7 @@ const handleChange = (e) => {
 
 
 
- const save_chif_complaints = async () => {
+ const save_patient_case_file = async () => {
   setisloading_for(true);
   try {
     const payload={
@@ -143,9 +145,6 @@ const getallmedical_speciality = async () => {
 };
 
 
-
-
-
 // ================================get doctor list========================================
 
  const[allDoctor,setallDoctor]=useState([])
@@ -189,6 +188,55 @@ const getallmedical_speciality = async () => {
         getall_hospitallist()
     
       },[])
+
+    
+//================================== get disease list============================================
+
+    const [loadingDiseases, setLoadingDiseases] = useState(false);
+
+   const[all_disease_master,setall_disease_master]=useState([])
+      const getall_disease_master=async()=>
+      {
+        try {
+          setLoadingDiseases(true)
+            const resp=await api.post('api/v1/common/LookupList/',{lookup_type:"disease_master"})
+          setall_disease_master(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+        finally
+        {
+          setLoadingDiseases(false)
+        }
+      }
+
+//============================= all truma list==================================================
+
+    const [loadingtrauma, setLoadingtrauma] = useState(false);
+
+       const[all_truma_master,setall_truma_master]=useState([])
+      const getall_truma_master=async()=>
+      {
+        try {
+          setLoadingtrauma(true)
+            const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"trauma_master"})
+          setall_truma_master(resp.data.data)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+        finally
+        {
+          setLoadingtrauma(false)
+        }
+      }
+   
+  
+      
+    
 
 
 //============================ get all case file=========================================
@@ -490,6 +538,100 @@ getall_case_file()
                 
                   </FormControl>
 
+              <FormControl fullWidth size="small">
+              <label className="form-label">Disease</label>
+            <Select
+            multiple
+                  labelId="content-type-label"
+                  name="Disease"
+                 value={medical_case_file.Disease || []}
+                 onOpen={() => {
+                    if (all_disease_master.length === 0) { // prevent multiple calls
+                    getall_disease_master();
+                    }
+                }}
+                 onChange={handleChange}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                  // Show placeholder if no items are selected
+                  if (!selected || selected.length === 0) {
+                    return <span className="text-gray-400">Select Disease</span>;
+                  }
+
+                  // Otherwise show selected items as comma-separated text
+                  const selectedLabels = selected
+                    .map((id) => all_disease_master.find((item) => item._id === id)?.lookup_value)
+                    .filter(Boolean);
+                  return selectedLabels.join(", ");
+                }}
+                >
+                  <MenuItem value="">
+                    <em>Select Disease </em>
+                  </MenuItem>
+                 {loadingDiseases ? (
+                    <MenuItem disabled>
+                    <CircularProgress size={20} />
+                    </MenuItem>
+                ) : (
+                    all_disease_master?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                        {type.lookup_value}
+                    </MenuItem>
+                    ))
+                )}
+                              
+  
+              </Select>
+              </FormControl>
+
+                <FormControl fullWidth size="small">
+              <label className="form-label">Accident</label>
+            <Select
+            multiple
+                  labelId="content-type-label"
+                  name="Accident"
+                 value={medical_case_file.Accident || []}
+                 onOpen={() => {
+                    if (all_truma_master.length === 0) { // prevent multiple calls
+                    getall_truma_master();
+                    }
+                }}
+                 onChange={handleChange}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    // Show placeholder if no items are selected
+                    if (!selected || selected.length === 0) {
+                      return <span className="text-gray-400">Select Accident</span>;
+                    }
+
+                    // Otherwise show selected items as comma-separated text
+                    const selectedLabels = selected
+                      .map((id) => all_truma_master.find((item) => item._id === id)?.lookup_value)
+                      .filter(Boolean);
+                    return selectedLabels.join(", ");
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select Accident </em>
+                  </MenuItem>
+                 {loadingtrauma ? (
+                    <MenuItem disabled>
+                    <CircularProgress size={20} />
+                    </MenuItem>
+                ) : (
+                    all_truma_master?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                        {type.lookup_value}
+                    </MenuItem>
+                    ))
+                )}
+                              
+  
+              </Select>
+              </FormControl>
+
                 <div className='col-span-2'>
                    <FormControl fullWidth size="small">
                   <label className="form-label">Treatment Type </label>
@@ -523,7 +665,7 @@ getall_case_file()
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                onClick={save_chif_complaints}
+                onClick={save_patient_case_file}
               >
                 Save
               </Button>

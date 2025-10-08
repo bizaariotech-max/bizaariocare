@@ -340,6 +340,8 @@ const handleAddMore = () => {
    try {
     //  setLoadingSpeciality(true);
      const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
+ 
+     
         const formatted = resp.data.data.list.map(item => ({
           caseFileId: item.CaseFileId._id,
           treatmentType: item.CaseFileId.TreatmentType,
@@ -362,28 +364,42 @@ const handleAddMore = () => {
  },[])
 
 
+
+
 // ==============================edit chief complaints============================================
 
  const [showEdit, setShowEdit] = useState(false)
 
 const handleShowEdit = () => {
   if (patient_all_cheif_complaints && patient_all_cheif_complaints.length > 0) {
-    const normalizedComplaints = patient_all_cheif_complaints[0].complaints.map(
-      ({ createdAt, updatedAt, _id, ...cc }) => ({
-        ...cc,
-        Symptoms: cc.Symptoms.map(s => (typeof s === "string" ? s : s._id)),
-        AggravatingFactors: cc.AggravatingFactors.map(a => (typeof a === "string" ? a : a._id)),
-        Duration: {
-          Value: cc.Duration.Value,
-          Unit: typeof cc.Duration.Unit === "string" ? cc.Duration.Unit : cc.Duration.Unit._id
-        }
-      })
+    // Find record matching selected caseFileId
+    const matchedCase = patient_all_cheif_complaints.find(
+      (item) => item.caseFileId === selected_case_file // replace with your actual state variable name
     );
 
-    setmedical_history(prev => ({
-      ...prev,
-      ChiefComplaints: normalizedComplaints
-    }));
+    if (matchedCase && matchedCase.complaints?.length > 0) {
+      const normalizedComplaints = matchedCase.complaints.map(
+        ({ createdAt, updatedAt, _id, ...cc }) => ({
+          ...cc,
+          Symptoms: cc.Symptoms.map((s) => (typeof s === "string" ? s : s._id)),
+          AggravatingFactors: cc.AggravatingFactors.map((a) =>
+            typeof a === "string" ? a : a._id
+          ),
+          Duration: {
+            Value: cc.Duration?.Value || "",
+            Unit:
+              typeof cc.Duration?.Unit === "string"
+                ? cc.Duration.Unit
+                : cc.Duration?.Unit?._id || "",
+          },
+        })
+      );
+
+      setmedical_history((prev) => ({
+        ...prev,
+        ChiefComplaints: normalizedComplaints,
+      }));
+    }
   }
 
   setShowEdit(true);
@@ -483,7 +499,7 @@ const handleCloseEdit = () => {
         <h3 className="text-xxl font-semibold text-gray-900">
           Chief Complaints
         </h3>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4" style={{display:selected_case_file?"flex":"none"}}>
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
             <Plus className="w-4 h-4" />
