@@ -7,6 +7,12 @@ import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/materia
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
+import PreExistingDisease from './pre_existing_disease';
+import CurrentMedication from './current_medications';
+import CurrentTheripes from './current_therapis';
+import FamilyHistory from './family_history';
+import HabitLifestyle from './habit_lifestyle';
+import Allergies from './allergies';
 
 
 
@@ -19,7 +25,7 @@ const PatientProfilingMain = ({patientId,selected_case_file}) => {
 
  const doctordetails=JSON.parse(localStorage.getItem("user"))
 
-const [isCollapsed, setIsCollapsed] = useState(false);
+const [isCollapsed, setIsCollapsed] = useState(true);
 
 
 
@@ -128,38 +134,134 @@ const handleComponentRefresh = (name) => {
 
   
 
- 
-   
-     <div
-  className={`transition-all duration-500 ease-in-out overflow-auto ${
-    isCollapsed ? "max-h-0 opacity-0" : "max-h-[2000px] opacity-100"
-  }`}
->
-      <div className="flex items-center justify-between mt-2 ">
+        <div className="flex items-center justify-between mt-2 ">
                   <h2 className="text-xl font-semibold text-gray-900">
                     Patient Profiling
                   </h2>
-                </div>
+      
+  
     
+                    <button
+                            onClick={() => setIsCollapsed(!isCollapsed)}
+                            className="text-blue-600 hover:text-blue-700 transition-colors"
+                            >
+                            {isCollapsed ? (
+                                // Double Down Arrow (expand)
+                                <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 5l-7 7-7-7M19 13l-7 7-7-7"
+                                />
+                                </svg>
+                            ) : (
+                                // Double Up Arrow (collapse)
+                                <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M5 19l7-7 7 7M5 11l7-7 7 7"
+                                />
+                                </svg>
+                            )}
+                            </button>   
+
+
+
+            </div>
+
+            
+     <div
+  className={`transition-all duration-300 ease-in-out overflow-auto ${
+    isCollapsed ? "max-h-0 opacity-0" : "max-h-[100%] opacity-100"
+  }`}
+>
     
         {/* Cards */}
 
 
         <div className="card-details">
-          {/* <PastSurgeries
+          <PreExistingDisease
            key={refreshKeys.familyHistory}
             onRefresh={() => handleComponentRefresh("familyHistory")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
-          /> */}
+          />
+        </div>
+
+          <div className="card-details">
+          <CurrentMedication
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+            <div className="card-details">
+          <CurrentTheripes
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+            <div className="card-details">
+          <FamilyHistory
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+            <div className="card-details">
+          <HabitLifestyle
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+            <div className="card-details">
+          <Allergies
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
         </div>
 
       </div>
-   
+
+   </div>
+
+
   </div>
 
-</div>
+
 
   );
 };

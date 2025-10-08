@@ -136,46 +136,46 @@ const handleComponentRefresh = (name) => {
                     Current Problem
                   </h2>
 
-                        <button
-                            onClick={() => setIsCollapsed(!isCollapsed)}
-                            className="text-blue-600 hover:text-blue-700 transition-colors"
+                    <button
+                        onClick={() => setIsCollapsed(!isCollapsed)}
+                        className="text-blue-600 hover:text-blue-700 transition-colors"
+                        >
+                        {isCollapsed ? (
+                            // Double Down Arrow (expand)
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                             >
-                            {isCollapsed ? (
-                                // Double Down Arrow (expand)
-                                <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M19 5l-7 7-7-7M19 13l-7 7-7-7"
-                                />
-                                </svg>
-                            ) : (
-                                // Double Up Arrow (collapse)
-                                <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M5 19l7-7 7 7M5 11l7-7 7 7"
-                                />
-                                </svg>
-                            )}
-                            </button>           
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 5l-7 7-7-7M19 13l-7 7-7-7"
+                            />
+                            </svg>
+                        ) : (
+                            // Double Up Arrow (collapse)
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 19l7-7 7 7M5 11l7-7 7 7"
+                            />
+                            </svg>
+                        )}
+                        </button>           
 
-</div>
+      </div>
  
    
      <div

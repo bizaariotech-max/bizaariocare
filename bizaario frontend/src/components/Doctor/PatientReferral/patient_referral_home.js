@@ -84,31 +84,31 @@ const PatientReferralHome = () => {
 
       <PatientProfilingMain patientId={patientId} selected_case_file={selected_case_file}/>
 
-       <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/>
+       {/* <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/> */}
 
-      <ExistingDisease patientId={patientId} selected_case_file={selected_case_file}/>
-      <PastIllness patientId={patientId} selected_case_file={selected_case_file}/>
+      {/* <ExistingDisease patientId={patientId} selected_case_file={selected_case_file}/> */}
+      {/* <PastIllness patientId={patientId} selected_case_file={selected_case_file}/> */}
 
-      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/>
+      {/* <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/> */}
      
        
-      <PastMedications />
-      <PastTherapy />
-      <OccupationalProfile />
-      <ClinicalFindings />
-      <VitalsPhysicalExaminations />
-      <DiagnosticsInvestigations />
-      <Diagnosis />
+      {/* <PastMedications /> */}
+      {/* <PastTherapy /> */}
+      {/* <OccupationalProfile /> */}
+      {/* <ClinicalFindings /> */}
+      {/* <VitalsPhysicalExaminations /> */}
+      {/* <DiagnosticsInvestigations /> */}
+      {/* <Diagnosis /> */}
       {/* <TreatmentToDate /> */}
-      <PatientResponse /> 
-      <SurgeryProcedurePerformed/>
-      <TherapyGiven/>
-      <LifestyleInterventionsPrescribed/>
-      <ProposedSurgery/>
-      <PreSurgicalConsiderations/>
-      <RiskFactor/>
-      <PatientConcerns/>
-      <ImmunizationProfile/>
+      {/* <PatientResponse />  */}
+      {/* <SurgeryProcedurePerformed/> */}
+      {/* <TherapyGiven/> */}
+      {/* <LifestyleInterventionsPrescribed/> */}
+      {/* <ProposedSurgery/> */}
+      {/* <PreSurgicalConsiderations/> */}
+      {/* <RiskFactor/> */}
+      {/* <PatientConcerns/> */}
+      {/* <ImmunizationProfile/> */}
 
         <div className="mt-6">
               <div className="flex gap-4">
