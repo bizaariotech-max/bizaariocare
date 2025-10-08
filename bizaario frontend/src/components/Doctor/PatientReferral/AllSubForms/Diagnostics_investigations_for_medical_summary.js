@@ -31,9 +31,7 @@ const DiagnosticsInvestigationsForMedicalSummary = ({patientId,selected_case_fil
               Abnormalities  : [],
               ReportUrl : "",
               InterpretationUrl:""
-      }],
-   
-  
+            }],
       });
   
   //=================================== main form state end=========================================
@@ -325,6 +323,7 @@ const save_diagnostics_investigations = async () => {
  
 
 //===================================== edit===============================================
+ const [previewImage, setPreviewImage] = useState(null);
 
     const [showEdit, setShowEdit] = useState(false)
   
@@ -352,7 +351,22 @@ const save_diagnostics_investigations = async () => {
 };
 
 
-const handleCloseEdit = () => setShowEdit(false);
+const handleCloseEdit = () => {
+  setShowEdit(false);
+  setmedical_history({
+    ClinicalDiagnoses: [
+      {
+        Date: "",
+        InvestigationCategory: "",
+        Investigation: "",
+        Abnormalities: [],
+        ReportUrl: "",
+        InterpretationUrl: "",
+      },
+    ],
+  });
+};
+
 
 const update_diagnostics_investigations = async () => {
   setisloading(true);
@@ -867,7 +881,68 @@ const update_diagnostics_investigations = async () => {
                         // value={details.ReportUrl}
                         onChange={(e)=>handlesingleImageChange(index,e,"ReportUrl")} 
                         />
+
+                         {details && (
+       <div className="flex flex-wrap gap-2 mt-2">
+
+          <div key={index} className="relative w-24 h-24">
+            {/* Thumbnail */}
+            <img
+              src={details.ReportUrl}
+              alt={`Prescription ${index + 1}`}
+              className="w-full h-full object-cover rounded-lg border border-gray-300 cursor-pointer"
+              onClick={() => setPreviewImage(details.ReportUrl)}
+            />
+
+            {/* Delete Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setmedical_history((prev) => ({
+                  ...prev,
+                  MedicinesPrescribed: {
+                    ...prev.MedicinesPrescribed,
+                    PrescriptionUrls: prev.MedicinesPrescribed.PrescriptionUrls.filter(
+                      (_, i) => i !== index
+                    ),
+                  },
+                }));
+              }}
+              className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs shadow-md hover:bg-red-600"
+            >
+              ×
+            </button>
+          </div>
+  
+      </div>
+  
+      )}
+
+      
+
+
                         </FormControl>
+                            {previewImage && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+                    {/* Modal Content */}
+                    <div className="relative bg-white rounded-lg p-4 max-w-3xl w-full">
+                      {/* Close Button */}
+                      <button
+                        onClick={() => setPreviewImage(null)}
+                        className="absolute top-2 right-2 text-gray-700 hover:text-gray-900"
+                      >
+                        ✕
+                      </button>
+
+                      {/* Full-size Image */}
+                      <img
+                        src={previewImage}
+                        alt="Full Prescription"
+                        className="max-w-full max-h-[80vh] mx-auto rounded-lg object-contain"
+                      />
+                    </div>
+                  </div>
+                )}
             
                       <FormControl fullWidth size="small">
                         <label className="form-label">Upload Interpretation </label>

@@ -477,7 +477,7 @@ const handleDownload = async (url, filename) => {
           "prescription.png"
         )
       }
-      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:from-indigo-600 hover:to-blue-500 transition-all duration-300"
+      className="view-all flex items-center gap-2 px-4 py-2  text-white font-semibold rounded-lg shadow-md hover:from-indigo-600 hover:to-blue-500 transition-all duration-300"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

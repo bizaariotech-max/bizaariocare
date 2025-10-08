@@ -44,7 +44,6 @@ const ChiefComplaintsForMedicalSummary = ({patientId,selected_case_file,case_fil
 
 
 const [medical_history, setmedical_history] = useState({
-    CaseFileId:"",
       ChiefComplaints:[{
             Symptoms:[],
             Duration : {Value:"",Unit:""},
@@ -391,7 +390,20 @@ const handleShowEdit = () => {
 };
 
 
-        const handleCloseEdit = () => setShowEdit(false);
+const handleCloseEdit = () => {
+  setShowEdit(false);
+  setmedical_history({
+    ChiefComplaints: [
+      {
+        Symptoms: [],
+        Duration: { Value: "", Unit: "" },
+        SeverityGrade: "",
+        AggravatingFactors: [],
+      },
+    ],
+  });
+};
+
 
 
 

@@ -1,12 +1,8 @@
 
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import generalphysician from '../AllSubForms/assets/images/general physician.png'
-import ChiefComplaintsForMedicalSummary from './chief_complaints_for_medical_summary';
-import DiagnosticsInvestigationsForMedicalSummary from './Diagnostics_investigations_for_medical_summary';
-import CurrentTherapyForMedicalSummary from './current_therapy_for_medical_summary';
 import { useEffect, useState } from 'react'
-import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
+import { TextField, Select, MenuItem, FormControl, Button,CircularProgress  } from '@mui/material';
 import api from '../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../loader';
@@ -18,11 +14,6 @@ const CurrentMedicinesForMedicalSummary = ({patientId,selected_case_file,case_fi
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
    
- 
-
-  
-
-
  const [medical_history, setmedical_history] = useState({
     MedicinesPrescribed:{
             Medicines:[{MedicineName:"",Dosage:"",DurationInDays:"" }],
@@ -82,7 +73,10 @@ const handleMedicinePrescribedChange = (field, value, subField = null) => {
 
 //============================== handle multiple image upload==================================
 
+const[image_loading,setimage_loading]=useState(false)
+
 const handlePrescriptionImagesChange = async (e) => {
+  setimage_loading(true)
   const files = e.target.files; // multiple files selected
   if (!files || files.length === 0) return;
 
@@ -97,6 +91,8 @@ const handlePrescriptionImagesChange = async (e) => {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
+
+    
     // ✅ Extract URLs from response
     if (
       resp.data?.response?.response_code === "200" &&
@@ -120,7 +116,12 @@ const handlePrescriptionImagesChange = async (e) => {
   } catch (error) {
     console.error("Prescription images upload error:", error);
   }
+  finally
+  {
+    setimage_loading(false)
+  }
 };
+
 
 
 
@@ -293,7 +294,6 @@ const save_medicine = async () => {
         }));
         setpatient_all_current_medicine(formatted);
 
- 
      
    } catch (error) {
      console.error(error);
@@ -306,6 +306,130 @@ const save_medicine = async () => {
  {
  getall_patient_medical_history()
  },[])
+
+
+ 
+//================================  edit========================================================
+
+ const [previewImage, setPreviewImage] = useState(null);
+
+
+const [showEdit, setShowEdit] = useState(false)
+        
+ const handleCloseEdit = () => {
+  setShowEdit(false);
+  setmedical_history({
+    MedicinesPrescribed: {
+      Medicines: [{ MedicineName: "", Dosage: "", DurationInDays: "" }],
+      RecoveryCycle: { Value: "", Unit: "" },
+      PrescriptionUrls: [],
+    },
+  });
+};
+
+
+const handleShowEdit = () => {
+  if (
+    patient_all_current_medicine &&
+    patient_all_current_medicine.length > 0 &&
+    patient_all_current_medicine[0].current_medicines?.Medicines
+  ) {
+    const normalizedMedicines =
+      patient_all_current_medicine[0].current_medicines.Medicines.map(
+        ({ MedicineName, Dosage, DurationInDays }) => ({
+          MedicineName: MedicineName?._id || MedicineName,
+          Dosage: Dosage?._id || Dosage,
+          DurationInDays,
+        })
+      );
+
+    const PrescriptionUrls =
+      patient_all_current_medicine[0].current_medicines?.PrescriptionUrls || [];
+
+    const RecoveryCycle =
+      patient_all_current_medicine[0].current_medicines?.RecoveryCycle || { Value: "", Unit: "" };
+
+    setmedical_history((prev) => ({
+      ...prev,
+      MedicinesPrescribed: {
+        ...prev.MedicinesPrescribed,
+        Medicines: normalizedMedicines,
+        PrescriptionUrls,
+        RecoveryCycle: {
+          Value: RecoveryCycle.Value,
+          Unit: RecoveryCycle.Unit?._id || RecoveryCycle.Unit,
+        },
+      },
+    }));
+  }
+
+  setShowEdit(true);
+};
+
+
+
+const update_medicine = async () => {
+  setisloading(true);
+  try {
+    const payload=
+          {...medical_history,
+            CaseFileId:selected_case_file,
+            UpdatedBy :doctordetails._id
+          }
+    const resp = await api.put(
+      `api/v1/admin/medical-history/medicines-prescribed/edit`,
+      payload,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+ 
+    
+
+    const { response_code, response_message } = resp.data.response;
+
+    if (response_code === "200") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Updated",
+        text: "Patient Medicines Details Updated Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else if (response_code === "400") {
+      // Show server validation error here
+      Swal.fire({
+        icon: "error",
+        title: response_message.errorType || "Error",
+        text: response_message.error,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    } else {
+      // Optional: handle other response codes
+      Swal.fire({
+        icon: "warning",
+        title: "Unexpected response",
+        text: "Something went wrong. Please try again.",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: "error",
+      title: "Request failed",
+      text: error.message || "Something went wrong",
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  } finally {
+    setisloading(false);
+  }
+};
 
 
 
@@ -326,7 +450,7 @@ const save_medicine = async () => {
           </button>
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <Edit className="w-4 h-4" />
-            <span className="text-sm font-medium underline">Edit</span>
+            <span className="text-sm font-medium underline" onClick={handleShowEdit}>Edit</span>
           </button>
         </div>
       </div>
@@ -335,7 +459,7 @@ const save_medicine = async () => {
       <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
         {/* Table Header */}
         <div className="bg-[var(--button-back-color)] text-white  " >
-          <div className="grid grid-cols-4 gap-4 p-2 text-[20px]">
+          <div className="grid grid-cols-3 gap-4 p-2 text-[20px]">
             <h3 className="table-header">Medicine/Salt Name</h3>
             <h3 className="table-header">Dosage</h3>
             <h3 className="table-header">Frequency</h3>
@@ -348,7 +472,7 @@ const save_medicine = async () => {
           case_file_data[0]?.MedicinesPrescribed?.Medicines?.map((item, index) => (
             <div
               key={item.id}
-              className={`grid grid-cols-4 gap-4 p-4 ${index % 2 === 0 ? 'bg-[#f2f3f6]' : 'bg-white'
+              className={`grid grid-cols-3 gap-4 p-4 ${index % 2 === 0 ? 'bg-[#f2f3f6]' : 'bg-white'
                 }`}
             >
               <div className="text-sm text-gray-900 font-medium">
@@ -377,7 +501,7 @@ const save_medicine = async () => {
 
       {/* Table Header */}
       <div className="bg-[var(--button-back-color)] text-white">
-        <div className="grid grid-cols-4 gap-4 p-2 text-[16px] font-semibold">
+        <div className="grid grid-cols-3 gap-4 p-2 text-[16px] font-semibold">
             <h3 className="table-header">Medicine/Salt Name</h3>
             <h3 className="table-header">Dosage</h3>
             <h3 className="table-header">Frequency</h3>
@@ -389,7 +513,7 @@ const save_medicine = async () => {
         {caseFile?.current_medicines?.Medicines?.map((item, index) => (
           <div
             key={index}
-            className={`grid grid-cols-4 gap-4 p-4 ${
+            className={`grid grid-cols-3 gap-4 p-4 ${
               index % 2 === 0 ? "bg-[#f2f3f6]" : "bg-white"
             }`}
           >
@@ -405,18 +529,10 @@ const save_medicine = async () => {
             </div>
 
             {/* Duration */}
-            <div className="text-sm text-gray-900">
+            <div className="text-sm text-gray-900 pl-4">
               {item?.DurationInDays ||  ""} Days
             </div>
 
-          
-
-            {/* Aggravating Factors */}
-            {/* <div className="text-sm text-gray-900">
-              {(item?.AggravatingFactors || [])
-                .map(ag => ag?.lookup_value)
-                .join(", ") || "—"}
-            </div> */}
           </div>
         ))}
       </div>
@@ -637,6 +753,266 @@ const save_medicine = async () => {
           </Modal>
 
 
+
+{/*====================================== edit modal ===========================================*/}
+
+
+ <Modal show={showEdit} onHide={handleCloseEdit} centered size="lg">
+        
+              <Modal.Header closeButton>
+                <Modal.Title className='form-title'>Edit Medical History(Medicines) </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+              
+      
+         <div>
+      
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
+                
+
+{/* ============================Medicines Prescribed ======================================= */}
+
+ <div className='col-span-2'>
+          <h5 className='form-title'>Medicines Prescribed </h5>
+            
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 ">
+                {medical_history.MedicinesPrescribed.Medicines.map((details, index) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 col-span-2 border border-gray-300 rounded-lg p-2">
+                 <FormControl fullWidth size="small">
+                  <label className="form-label">Medicine Name </label>
+                  <Select
+                  labelId="content-type-label"
+                  name="Nationality"
+                  value={details.MedicineName} 
+                  onChange={(e) => handleMedicineChange(index, "MedicineName", e.target.value)}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Medicine Name </span>; 
+                    }
+                    return all_salt_master?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Medicine Name </em>
+                  </MenuItem>
+                  {all_salt_master?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+            </FormControl>
+
+             <FormControl fullWidth size="small">
+                  <label className="form-label">Dosage </label>
+                       <Select
+                  labelId="content-type-label"
+                  name="Nationality"
+                   value={details.Dosage} 
+                  onChange={(e) => handleMedicineChange(index, "Dosage", e.target.value)} 
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Dosage </span>; 
+                    }
+                    return all_dosage_type?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Dosage </em>
+                  </MenuItem>
+                  {all_dosage_type?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+              </Select>
+              
+                  </FormControl>
+
+                    <FormControl fullWidth size="small">
+                  <label className="form-label">Duration (Days) </label>
+                  <TextField
+                  type='text'
+                  placeholder="Duration In Days" 
+                  name="DurationInDays" 
+                  size="small" 
+                  value={details.DurationInDays} 
+                  onChange={(e) => handleMedicineChange(index, "DurationInDays", e.target.value)} 
+                  />
+                  </FormControl>
+
+                        <div className="flex justify-between mt-8 h-8">
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={handleAddMoreClinicalMedicines}
+              >
+                Add More
+              </Button>
+
+              
+            </div>
+
+            </div>
+            ))}
+             
+                   <FormControl fullWidth size="small">
+                  <label className="form-label">Recovery Cycle</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {/* Number input */}
+                    <TextField
+                      type="number"
+                      name="Value"
+                      placeholder="Enter Number"
+                      size="small"
+                      defaultValue={medical_history.MedicinesPrescribed.RecoveryCycle.Value} 
+                       onChange={(e) => handleMedicinePrescribedChange( "RecoveryCycle", e.target.value, "Value")} 
+                      style={{ flex: 1 }}
+                    />
+                
+                  
+                 <Select
+                  labelId="content-type-label"
+                  name="InvestigationCategory"
+                  value={medical_history.MedicinesPrescribed.RecoveryCycle.Unit} 
+                  onChange={(e) => handleMedicinePrescribedChange("RecoveryCycle",e.target.value, "Unit")}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Unit </span>; 
+                    }
+                    return all_unit_list?.find((item) => item._id === selected)?.lookup_value;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Unit </em>
+                  </MenuItem>
+                  {all_unit_list?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                      {type.lookup_value}
+                    </MenuItem>
+                  ))}
+                              
+  
+              </Select>
+                
+                  </div>
+                </FormControl>
+          
+      
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Upload Prescriptions  </label>
+                  <TextField
+                  inputProps={{ multiple: true }}
+                  type='file'
+                  placeholder="Prescription Urls" 
+                  name="PrescriptionUrls" 
+                  size="small" 
+                  // value={medical_history.MedicinesPrescribed.PrescriptionUrls} 
+                  onChange={(e)=>handlePrescriptionImagesChange(e)} 
+                  />
+
+                  {image_loading && (
+          <div
+           
+          >
+            <CircularProgress size={24} color="primary" />
+          </div>
+        )}
+
+         {medical_history.MedicinesPrescribed.PrescriptionUrls?.length > 0 && (
+       <div className="flex flex-wrap gap-2 mt-2">
+        {medical_history.MedicinesPrescribed.PrescriptionUrls.map((url, index) => (
+          <div key={index} className="relative w-24 h-24">
+            {/* Thumbnail */}
+            <img
+              src={url}
+              alt={`Prescription ${index + 1}`}
+              className="w-full h-full object-cover rounded-lg border border-gray-300 cursor-pointer"
+              onClick={() => setPreviewImage(url)}
+            />
+
+            {/* Delete Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setmedical_history((prev) => ({
+                  ...prev,
+                  MedicinesPrescribed: {
+                    ...prev.MedicinesPrescribed,
+                    PrescriptionUrls: prev.MedicinesPrescribed.PrescriptionUrls.filter(
+                      (_, i) => i !== index
+                    ),
+                  },
+                }));
+              }}
+              className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs shadow-md hover:bg-red-600"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+      </div>
+  
+      )}
+
+
+                  </FormControl>
+
+                  {previewImage && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+                    {/* Modal Content */}
+                    <div className="relative bg-white rounded-lg p-4 max-w-3xl w-full">
+                      {/* Close Button */}
+                      <button
+                        onClick={() => setPreviewImage(null)}
+                        className="absolute top-2 right-2 text-gray-700 hover:text-gray-900"
+                      >
+                        ✕
+                      </button>
+
+                      {/* Full-size Image */}
+                      <img
+                        src={previewImage}
+                        alt="Full Prescription"
+                        className="max-w-full max-h-[80vh] mx-auto rounded-lg object-contain"
+                      />
+                    </div>
+                  </div>
+                )}
+
+
+      
+        </div>   
+      </div> 
+    </div> 
+
+   
+               
+               <div className="flex justify-end mt-4">
+           
+
+              <Button
+                style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
+                onClick={update_medicine}
+              >
+                Update
+              </Button>
+            </div>
+
+      
+              </div> 
+      
+              </Modal.Body>
+          
+         
+          </Modal>
 
 
     </div>

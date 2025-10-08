@@ -194,25 +194,36 @@ const handleTherapyChange = (index, field, value) => {
 
    const [showEdit, setShowEdit] = useState(false)
    
-      const handleCloseEdit = () => setShowEdit(false);
+      const handleCloseEdit = () => {
+  setShowEdit(false);
+  setmedical_history({
+    Therapies: [
+      {
+        TherapyName: "",
+        PatientResponse: "",
+      },
+    ],
+  });
+};
+
 
       const handleShowEdit = () => {
-  if (patient_all_therapy && patient_all_therapy.length > 0) {
-    const normalizedComplaints = patient_all_therapy[0].therapy.map(
-      ({ createdAt, updatedAt, _id, ...cc }) => ({
-        ...cc,
-        TherapyName: cc.TherapyName? typeof cc.TherapyName ==="string" ?
-                      cc.TherapyName : cc.TherapyName._id : "",
-       PatientResponse:cc.PatientResponse
+        if (patient_all_therapy && patient_all_therapy.length > 0) {
+          const normalizedComplaints = patient_all_therapy[0].therapy.map(
+            ({ createdAt, updatedAt, _id, ...cc }) => ({
+              ...cc,
+              TherapyName: cc.TherapyName? typeof cc.TherapyName ==="string" ?
+                            cc.TherapyName : cc.TherapyName._id : "",
+            PatientResponse:cc.PatientResponse
 
-      })
-    );
+            })
+          );
 
-    setmedical_history(prev => ({
-      ...prev,
-      Therapies: normalizedComplaints
-    }));
-  }
+          setmedical_history(prev => ({
+            ...prev,
+            Therapies: normalizedComplaints
+          }));
+        }
 
   setShowEdit(true);
 };
