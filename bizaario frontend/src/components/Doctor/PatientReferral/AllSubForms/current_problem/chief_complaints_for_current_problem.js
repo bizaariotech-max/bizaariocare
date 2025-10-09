@@ -94,11 +94,11 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
     const complaint = { ...updatedChiefComplaints[index] };
     const currentArray = complaint[field] || [];
 
-    const itemId = typeof item === "string" ? item : item._id;
+    const itemId = typeof item === "string" ? item : item?._id;
 
     // Check if item exists
     const exists = currentArray.some(s =>
-      typeof s === "string" ? s === itemId : s._id === itemId
+      typeof s === "string" ? s === itemId : s?._id === itemId
     );
 
     if (exists) {
@@ -225,10 +225,24 @@ const handleAddMore = () => {
 
    const[all_symptom_master,setall_symptom_master]=useState([])
 
+const [selectedSymptomClass, setSelectedSymptomClass] = useState([]);
+
+const handleSymptomClassClick = (id) => {
+  setSelectedSymptomClass((prev) => {
+    let updated;
+    if (prev.includes(id)) {
+      updated = prev.filter((x) => x !== id);
+    } else {
+      updated = [...prev, id];
+    }
+    getall_symptom_master(updated); // 🔥 Call API whenever selection changes
+    return updated;
+  });
+};
+
+
    const getall_symptom_master = async (selectedSymptomClass) => {
-  
-    console.log(selectedSymptomClass);
-    
+
   if (!selectedSymptomClass || selectedSymptomClass.length === 0) return;
 
   try {
@@ -417,8 +431,8 @@ const handleShowEdit = () => {
       const normalizedComplaints = patient_all_cheif_complaints[0].complaints.map(
         ({ createdAt, updatedAt, _id, ...cc }) => ({
           ...cc,
-          Symptoms: cc.Symptoms.map((s) => (typeof s === "string" ? s : s._id)),
-          AggravatingFactors: cc.AggravatingFactors.map((a) =>
+          Symptoms: cc.Symptoms?.map((s) => (typeof s === "string" ? s : s?._id)),
+          AggravatingFactors: cc.AggravatingFactors?.map((a) =>
             typeof a === "string" ? a : a._id
           ),
           Duration: {
@@ -682,37 +696,38 @@ const handleCloseEdit = () => {
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                 
-                 <div className="col-span-2">
-                <FormControl fullWidth size="small">
-                <label className="form-label">Symptom Class</label>
-                <div className="flex flex-wrap gap-2">
-                  {all_symptom_class_master.map((item) => {
-                    const selected = (details?.Symptoms || []).includes(item._id); 
-                    return (
-                      <span
-                        key={item._id}
-                        onClick={() => toggleArrayField(index, "Symptoms", item._id)}
-                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
-                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
-                      >
-                        {item.lookup_value}
-                        {selected && (
-                          <span
-                            className="ml-1 text-xs font-bold cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // handleSymptomSelect(item._id,index);
-                            }}
-                          >
-                            ✕
-                          </span>
-                        )}
-                      </span>
-                    );
-                  })}
-                </div>
-              </FormControl>
-              </div>
+               <div className="col-span-2">
+  <FormControl fullWidth size="small">
+    <label className="form-label">Symptom Class</label>
+    <div className="flex flex-wrap gap-2">
+      {all_symptom_class_master.map((item) => {
+        const selected = selectedSymptomClass.includes(item._id);
+        return (
+          <span
+            key={item._id}
+            onClick={() => handleSymptomClassClick(item._id)}
+            className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+              ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+          >
+            {item.lookup_value}
+            {selected && (
+              <span
+                className="ml-1 text-xs font-bold cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSymptomClassClick(item._id);
+                }}
+              >
+                ✕
+              </span>
+            )}
+          </span>
+        );
+      })}
+    </div>
+  </FormControl>
+</div>
+
 
 
                 <div className="col-span-2">
@@ -720,11 +735,11 @@ const handleCloseEdit = () => {
                               <label className="form-label">Compliant </label>
                               <div className="flex flex-wrap gap-2">
                                 {all_symptom_master?.map((item) => {
-                                  const selected = (details?.Compliant || []).includes(item._id); 
+                                  const selected = (details?.Symptoms || []).includes(item._id); 
                                   return (
                                     <span
                                       key={item._id}
-                                      // onClick={() => handlecomplaintSelect(item._id,index)}
+                                      onClick={() => toggleArrayField(index, "Symptoms", item._id)}
                                       className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                                         ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                                     >
@@ -887,52 +902,83 @@ const handleCloseEdit = () => {
               <Modal.Body>
               
       
-         <div>
+          <div>
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
               
 {/*======================== chief complaints============================================ */}
 
         <div className='col-span-2'>
-          <h5 className='form-title'>Edit Chief Complaints</h5>
+          <h5 className='form-title'>Chief Complaints</h5>
             {medical_history.ChiefComplaints.map((details, index) => (
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                 
-                 <div className="col-span-2">
-                <FormControl fullWidth size="small">
-                <label className="form-label">Symptom Class</label>
-                <div className="flex flex-wrap gap-2">
-                  {all_symptom_class_master.map((item) => {
-                   const selected = (details?.Symptoms || []).some(
-                      (s) => typeof s === "string" ? s === item._id : s._id === item._id
-                    );
+               <div className="col-span-2">
+  <FormControl fullWidth size="small">
+    <label className="form-label">Symptom Class</label>
+    <div className="flex flex-wrap gap-2">
+      {all_symptom_class_master.map((item) => {
+        const selected = selectedSymptomClass.includes(item._id);
+        return (
+          <span
+            key={item._id}
+            onClick={() => handleSymptomClassClick(item._id)}
+            className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+              ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+          >
+            {item.lookup_value}
+            {selected && (
+              <span
+                className="ml-1 text-xs font-bold cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSymptomClassClick(item._id);
+                }}
+              >
+                ✕
+              </span>
+            )}
+          </span>
+        );
+      })}
+    </div>
+  </FormControl>
+</div>
 
-                    return (
-                      <span
-                        key={item._id}
-                        onClick={() => toggleArrayField(index, "Symptoms", item._id)}
-                        className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
-                          ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
-                      >
-                        {item.lookup_value}
-                        {selected && (
-                          <span
-                            className="ml-1 text-xs font-bold cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // handleSymptomSelect(item._id,index);
-                            }}
-                          >
-                            ✕
-                          </span>
-                        )}
-                      </span>
-                    );
-                  })}
-                </div>
-              </FormControl>
-              </div>
+
+
+                <div className="col-span-2">
+                              <FormControl fullWidth size="small">
+                              <label className="form-label">Compliant </label>
+                              <div className="flex flex-wrap gap-2">
+                                {all_symptom_master?.map((item) => {
+                                  const selected = (details?.Symptoms || []).includes(item._id); 
+                                  return (
+                                    <span
+                                      key={item._id}
+                                      onClick={() => toggleArrayField(index, "Symptoms", item._id)}
+                                      className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                                        ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                                    >
+                                      {item.lookup_value}
+                                      {selected && (
+                                        <span
+                                          className="ml-1 text-xs font-bold cursor-pointer"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // handleSymptomSelect(item._id,index);
+                                          }}
+                                        >
+                                          ✕
+                                        </span>
+                                      )}
+                                    </span>
+                                  );
+                                })}
+                              </div>
+                            </FormControl>
+                            </div>
 
       
              
@@ -942,9 +988,7 @@ const handleCloseEdit = () => {
                 <label className="form-label">Aggravating Factors</label>
                 <div className="flex flex-wrap gap-2">
                   {allaggravating_master.map((item) => {
-                      const selected = (details?.AggravatingFactors || []).some(
-                      (s) => typeof s === "string" ? s === item._id : s._id === item._id
-                    );
+                    const selected = (details?.AggravatingFactors || []).includes(item._id); 
                     return (
                       <span
                         key={item._id}
@@ -990,11 +1034,7 @@ const handleCloseEdit = () => {
                  <Select
                   labelId="content-type-label"
                   name="InvestigationCategory"
-                  value={
-                      typeof details?.Duration?.Unit === "string"
-                        ? details.Duration.Unit
-                        : details?.Duration?.Unit?._id || ""
-                    }
+                 value={details.Duration.Unit}
                   onChange={(e) => handleChiefComplaintsChange(index, "Duration", e.target.value, "Unit")}
                   displayEmpty
                   MenuProps={customMenuProps}

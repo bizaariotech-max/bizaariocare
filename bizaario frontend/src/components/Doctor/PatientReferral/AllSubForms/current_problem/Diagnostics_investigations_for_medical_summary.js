@@ -2,7 +2,7 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import { useEffect, useState } from 'react'
-import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
+import { TextField, Select, MenuItem, FormControl, Button,CircularProgress  } from '@mui/material';
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
@@ -176,12 +176,14 @@ const toggleArrayFieldClinicalDiagnosis = (index, field, itemId) => {
                 
   
 //============================ Handle single image upload========================================
+const[image_loading,setimage_loading]=useState(false)
 
 const handlesingleImageChange = async (index, e, fieldName) => {
   const file = e.target.files[0]; // single file
   if (!file) return;
 
   try {
+    setimage_loading(fieldName)
     const formData = new FormData();
     formData.append("file", file);
 
@@ -212,6 +214,10 @@ const handlesingleImageChange = async (index, e, fieldName) => {
   } catch (error) {
     console.error("Image upload error:", error);
   }
+  finally
+  {
+    setimage_loading(false)
+  }
 };
 
 
@@ -224,7 +230,7 @@ const save_diagnostics_investigations = async () => {
   try {
     const payload=
           {...medical_history,
-            CaseFileId:selected_case_file,
+            CaseFileId:patient_all_diagnostics[0]?.caseFileId._id,
             CreatedBy:doctordetails._id
           }
     const resp = await api.post(
@@ -289,11 +295,11 @@ const save_diagnostics_investigations = async () => {
  const getall_patient_medical_history = async () => {
    try {
     //  setLoadingSpeciality(true);
-     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
+     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Ongoing`);
     
      
         const formatted = resp.data.data.list.map(item => ({
-          caseFileId: item.CaseFileId._id,
+          caseFileId: item.CaseFileId,
           treatmentType: item.CaseFileId.TreatmentType,
           clinicaldiagnoses: item.ClinicalDiagnoses
         }));
@@ -369,7 +375,7 @@ const update_diagnostics_investigations = async () => {
   try {
     const payload=
           {...medical_history,
-            CaseFileId:selected_case_file,
+            CaseFileId:patient_all_diagnostics[0]?.caseFileId._id,
             UpdatedBy:doctordetails._id
           }
     const resp = await api.put(
@@ -449,8 +455,7 @@ const update_diagnostics_investigations = async () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
-        {/* Table Header */}
+      {/* <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
         <div className="bg-[var(--button-back-color)] text-white  " >
           <div className="grid grid-cols-3 gap-4 p-2 text-[20px]">
             <h3 className="table-header">Investigation Category</h3>
@@ -459,7 +464,6 @@ const update_diagnostics_investigations = async () => {
           </div>
         </div>
 
-        {/* Table Body */}
         <div className="divide-y divide-gray-200">
           {case_file_data?.length > 0 && case_file_data[0]?.Status === "Past" &&
           case_file_data[0]?.ClinicalDiagnoses?.map((item, index) => (
@@ -481,15 +485,17 @@ const update_diagnostics_investigations = async () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Show patient_all_cheif_complaints section only if case_file_data is empty */}
-{(!case_file_data || case_file_data.length === 0) &&
-  patient_all_diagnostics.map((caseFile, caseIndex) => (
+{
+// (!case_file_data || case_file_data.length === 0) &&
+  patient_all_diagnostics?.map((caseFile, caseIndex) => (
     <div key={caseFile.caseFileId} className="mb-6">
       {/* Case File Header */}
       <h3 className="text-xl font-bold mb-2">
-        {caseFile.treatmentType} (Case File ID: {caseFile.caseFileId})
+        {caseFile.caseFileId.TreatmentType} (Case File ID: {caseFile.caseFileId._id})-
+        {new Date(caseFile.caseFileId.Date).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})}
       </h3>
 
       {/* Table Header */}
@@ -535,11 +541,11 @@ const update_diagnostics_investigations = async () => {
 
 
       {/* Footer Note */}
-      <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"block":"none"}}>
+      {/* <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"block":"none"}}>
         <p className="text-xs text-gray-600">
           1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
         </p>
-      </div>
+      </div> */}
 
 
         <Modal show={show} onHide={handleClose} centered size="lg">
@@ -676,6 +682,13 @@ const update_diagnostics_investigations = async () => {
                         // value={details.ReportUrl}
                         onChange={(e)=>handlesingleImageChange(index,e,"ReportUrl")} 
                         />
+                          {image_loading==="ReportUrl" && (
+            <div
+             
+            >
+              <CircularProgress size={24} color="primary" />
+            </div>
+          )}
                         </FormControl>
             
                       <FormControl fullWidth size="small">
@@ -688,6 +701,13 @@ const update_diagnostics_investigations = async () => {
                         // value={details.InterpretationUrl} 
                         onChange={(e)=>handlesingleImageChange(index,e,"InterpretationUrl")} 
                         />
+                          {image_loading==="InterpretationUrl" && (
+            <div
+             
+            >
+              <CircularProgress size={24} color="primary" />
+            </div>
+          )}
                         </FormControl>
             
                       
@@ -866,58 +886,57 @@ const update_diagnostics_investigations = async () => {
                       </div>
                     </FormControl>
                     </div>
-      
-                      <FormControl fullWidth size="small">
-                        <label className="form-label">Upload Report </label>
-                        <TextField
-                        type='file'
-                        placeholder="Date" 
-                        name="ReportUrl" 
-                        size="small" 
-                        // value={details.ReportUrl}
-                        onChange={(e)=>handlesingleImageChange(index,e,"ReportUrl")} 
-                        />
+      <FormControl fullWidth size="small">
+  <label className="form-label">Upload Report </label>
+  <TextField
+    type="file"
+    placeholder="Date"
+    name="ReportUrl"
+    size="small"
+    onChange={(e) => handlesingleImageChange(index, e, "ReportUrl")}
+  />
 
-                         {details && (
-       <div className="flex flex-wrap gap-2 mt-2">
-
-          <div key={index} className="relative w-24 h-24">
-            {/* Thumbnail */}
-            <img
-              src={details.ReportUrl}
-              alt={`Prescription ${index + 1}`}
-              className="w-full h-full object-cover rounded-lg border border-gray-300 cursor-pointer"
-              onClick={() => setPreviewImage(details.ReportUrl)}
-            />
-
-            {/* Delete Button */}
-            <button
-              type="button"
-              onClick={() => {
-                setmedical_history((prev) => ({
-                  ...prev,
-                  MedicinesPrescribed: {
-                    ...prev.MedicinesPrescribed,
-                    PrescriptionUrls: prev.MedicinesPrescribed.PrescriptionUrls.filter(
-                      (_, i) => i !== index
-                    ),
-                  },
-                }));
-              }}
-              className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs shadow-md hover:bg-red-600"
+   {image_loading==="ReportUrl" && (
+            <div
+             
             >
-              ×
-            </button>
-          </div>
-  
+              <CircularProgress size={24} color="primary" />
+            </div>
+          )}
+
+  {details.ReportUrl && (
+    <div className="flex flex-wrap gap-2 mt-2">
+      <div key={details.ReportUrl} className="relative w-24 h-24">
+        {/* Thumbnail */}
+        <img
+          src={details.ReportUrl}
+          alt={`Report ${index + 1}`}
+          className="w-full h-full object-cover rounded-lg border border-gray-300 cursor-pointer"
+          onClick={() => setPreviewImage(details.ReportUrl)}
+        />
+
+        {/* Delete Button */}
+        <button
+          type="button"
+          onClick={() => {
+            setmedical_history((prev) => {
+              const updated = [...prev.ClinicalDiagnoses];
+              updated[index] = {
+                ...updated[index],
+                ReportUrl: "", // clear the file
+              };
+              return { ...prev, ClinicalDiagnoses: updated };
+            });
+          }}
+          className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs shadow-md hover:bg-red-600"
+        >
+          ×
+        </button>
       </div>
-  
-      )}
+    </div>
+  )}
+</FormControl>
 
-      
-
-
-                        </FormControl>
                             {previewImage && (
                   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
                     {/* Modal Content */}
@@ -940,17 +959,57 @@ const update_diagnostics_investigations = async () => {
                   </div>
                 )}
             
-                      <FormControl fullWidth size="small">
-                        <label className="form-label">Upload Interpretation </label>
-                        <TextField
-                        type='file'
-                        placeholder="Date" 
-                        name="DateOfBirth" 
-                        size="small" 
-                        // value={details.InterpretationUrl} 
-                        onChange={(e)=>handlesingleImageChange(index,e,"InterpretationUrl")} 
-                        />
-                        </FormControl>
+                    <FormControl fullWidth size="small">
+  <label className="form-label">Upload Interpretation </label>
+  <TextField
+    type="file"
+    placeholder="Date"
+    name="InterpretationUrl"
+    size="small"
+    onChange={(e) => handlesingleImageChange(index, e, "InterpretationUrl")}
+  />
+
+   {image_loading==="InterpretationUrl" && (
+            <div
+             
+            >
+              <CircularProgress size={24} color="primary" />
+            </div>
+          )}
+
+  {details.InterpretationUrl && (
+    <div className="flex flex-wrap gap-2 mt-2">
+      <div key={details.InterpretationUrl} className="relative w-24 h-24">
+        {/* Thumbnail */}
+        <img
+          src={details.InterpretationUrl}
+          alt={`Interpretation ${index + 1}`}
+          className="w-full h-full object-cover rounded-lg border border-gray-300 cursor-pointer"
+          onClick={() => setPreviewImage(details.InterpretationUrl)}
+        />
+
+        {/* Delete Button */}
+        <button
+          type="button"
+          onClick={() => {
+            setmedical_history((prev) => {
+              const updated = [...prev.ClinicalDiagnoses];
+              updated[index] = {
+                ...updated[index],
+                InterpretationUrl: "", // clear the file
+              };
+              return { ...prev, ClinicalDiagnoses: updated };
+            });
+          }}
+          className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs shadow-md hover:bg-red-600"
+        >
+          ×
+        </button>
+      </div>
+    </div>
+  )}
+</FormControl>
+
             
                       
                 <div className="flex justify-between mt-2">

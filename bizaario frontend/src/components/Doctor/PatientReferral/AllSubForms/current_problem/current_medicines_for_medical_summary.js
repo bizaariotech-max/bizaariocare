@@ -218,7 +218,7 @@ const save_medicine = async () => {
   try {
     const payload=
           {...medical_history,
-            CaseFileId:selected_case_file,
+            CaseFileId:patient_all_current_medicine[0]?.caseFileId._id,
             CreatedBy:doctordetails._id
           }
     const resp = await api.post(
@@ -373,7 +373,7 @@ const update_medicine = async () => {
   try {
     const payload=
           {...medical_history,
-            CaseFileId:selected_case_file,
+            CaseFileId:patient_all_current_medicine[0]?.caseFileId._id,
             UpdatedBy :doctordetails._id
           }
     const resp = await api.put(

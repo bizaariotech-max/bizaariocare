@@ -94,7 +94,7 @@ const handleTherapyChange = (index, field, value) => {
     try {
      const payload=
           {...medical_history,
-            CaseFileId:selected_case_file,
+            CaseFileId:patient_all_therapy[0]?.caseFileId._id,
             CreatedBy:doctordetails._id
             
           }
@@ -159,11 +159,11 @@ const handleTherapyChange = (index, field, value) => {
    const getall_patient_medical_history = async () => {
      try {
       //  setLoadingSpeciality(true);
-       const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
+       const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Ongoing`);
        
         
           const formatted = resp.data.data.list.map(item => ({
-            caseFileId: item.CaseFileId._id,
+            caseFileId: item.CaseFileId,
             treatmentType: item.CaseFileId.TreatmentType,
             therapy: item.Therapies
           }));
@@ -230,7 +230,7 @@ const handleTherapyChange = (index, field, value) => {
     try {
      const payload=
           {...medical_history,
-            CaseFileId:selected_case_file,
+            CaseFileId:patient_all_therapy[0]?.caseFileId._id,
             UpdatedBy :doctordetails._id
             
           }
@@ -310,8 +310,8 @@ const handleTherapyChange = (index, field, value) => {
           </div>
     
           {/* Table */}
-            <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
-            {/* Table Header */}
+            {/* <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
+     
             <div className="bg-slate-600 text-white">
                <div className="grid grid-cols-2 gap-4 p-2">
                 <div className="table-header">Therapy Name</div>
@@ -319,7 +319,7 @@ const handleTherapyChange = (index, field, value) => {
               </div>
             </div>
     
-            {/* Table Body */}
+      
             <div className="divide-y divide-gray-200">
               {
               case_file_data?.length > 0 && case_file_data[0]?.Status === "Past" &&
@@ -333,14 +333,14 @@ const handleTherapyChange = (index, field, value) => {
                     {item?.TherapyName?.lookup_value || "—"}
                   </div>
 
-                  {/* Duration */}
+              
                   <div className="text-sm text-gray-900 table-body">
                     {item?.PatientResponse || "—"}
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
     
           {/* Footer Note */}
           {/* <div className="p-4  border-t border-gray-200" style={{display:selected_case_file?"block":"none"}}>
@@ -350,12 +350,14 @@ const handleTherapyChange = (index, field, value) => {
           </div> */}
 
 {/* Show patient_all_cheif_complaints section only if case_file_data is empty */}
-{(!case_file_data || case_file_data.length === 0) &&
+{
+// (!case_file_data || case_file_data.length === 0) &&
   patient_all_therapy.map((caseFile, caseIndex) => (
     <div key={caseFile.caseFileId} className="mb-6">
       {/* Case File Header */}
       <h3 className="text-xl font-bold mb-2">
-        {caseFile.treatmentType} (Case File ID: {caseFile.caseFileId})
+         {caseFile.caseFileId.TreatmentType} (Case File ID: {caseFile.caseFileId._id})-
+        {new Date(caseFile.caseFileId.Date).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})}
       </h3>
 
       {/* Table Header */}
