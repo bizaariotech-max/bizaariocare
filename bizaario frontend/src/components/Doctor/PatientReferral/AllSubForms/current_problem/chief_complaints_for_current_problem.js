@@ -20,15 +20,14 @@ const ChiefComplaintsForCurrentProblem = ({patientId,selected_case_file,case_fil
   // Function to render severity grade as color bars
   const renderSeverityGrade = (severity) => {
     const segments = [
-      { color: 'bg-red-600', active: severity >= 1 },
-
-      { color: 'bg-[#ffc001]', active: severity >= 2 },
-      { color: 'bg-[#feff99]', active: severity >= 3 },
-      { color: 'bg-[#92d14f]', active: severity >= 4 },
-      { color: 'bg-[#107c42]', active: severity >= 5 },
-
-
+      { color: 'bg-green-600', active: severity >= 1 },
+      { color: 'bg-green-500', active: severity >= 2 },
+      { color: 'bg-yellow-300', active: severity >= 3 },
+      { color: 'bg-yellow-500', active: severity >= 4 },
+      { color: 'bg-orange-400', active: severity >= 5 },
+      { color: 'bg-red-600', active: severity >= 6 },
     ];
+
     return (
       <div className="flex items-center space-x-1">
         {segments.map((segment, index) => (
@@ -61,7 +60,7 @@ const [medical_history, setmedical_history] = useState({
         const handleClose = () => setShow(false);
 
 
-    //====================== onchage event for ChiefComplaints start=================================
+//====================== onchage event for ChiefComplaints start=================================
 
 
 const handleChiefComplaintsChange = (index, field, value, subField = null) => {
@@ -220,7 +219,50 @@ const handleAddMore = () => {
                   
                     },[])
 
-        //= ================================get all aggravatingFactor======================================
+
+      //============================ get symptom master data=======================================
+
+
+   const[all_symptom_master,setall_symptom_master]=useState([])
+
+   const getall_symptom_master = async (selectedSymptomClass) => {
+  
+    console.log(selectedSymptomClass);
+    
+  if (!selectedSymptomClass || selectedSymptomClass.length === 0) return;
+
+  try {
+    const resp = await api.post('api/v1/admin/LookupList/', {
+      lookupcodes: "symptom_master",
+      parent_lookup_id: selectedSymptomClass, // send array or first ID
+    });
+
+    console.log(resp);
+    
+    setall_symptom_master(resp.data.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+useEffect(() => {
+  medical_history.ChiefComplaints.forEach((cc, index) => {
+    if (cc.Symptoms && cc.Symptoms.length > 0) {
+      getall_symptom_master(cc.Symptoms, index);
+    } else {
+      setall_symptom_master(prev => {
+        const updated = [...prev];
+        updated[index] = [];
+        return updated;
+      });
+    }
+  });
+}, [medical_history.ChiefComplaints]);
+
+
+    
+
+//= ================================get all aggravatingFactor======================================
                   
                   
                         const[allaggravating_master,setallaggravating_master]=useState([])
@@ -272,7 +314,7 @@ const handleAddMore = () => {
         try {
           const payload=
           {...medical_history,
-            CaseFileId:selected_case_file,
+            CaseFileId:patient_all_cheif_complaints[0].caseFileId._id,
             CreatedBy:doctordetails._id
             
           }
@@ -339,12 +381,10 @@ const handleAddMore = () => {
  const getall_patient_medical_history = async () => {
    try {
     //  setLoadingSpeciality(true);
-     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
+     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Ongoing`);
  
-     
         const formatted = resp.data.data.list.map(item => ({
-          caseFileId: item.CaseFileId._id,
-          treatmentType: item.CaseFileId.TreatmentType,
+          caseFileId: item.CaseFileId,
           complaints: item.ChiefComplaints
         }));
         setpatient_all_cheif_complaints(formatted);
@@ -371,14 +411,10 @@ const handleAddMore = () => {
  const [showEdit, setShowEdit] = useState(false)
 
 const handleShowEdit = () => {
-  if (patient_all_cheif_complaints && patient_all_cheif_complaints.length > 0) {
-    // Find record matching selected caseFileId
-    const matchedCase = patient_all_cheif_complaints.find(
-      (item) => item.caseFileId === selected_case_file // replace with your actual state variable name
-    );
+  if (patient_all_cheif_complaints && patient_all_cheif_complaints.length > 0 && patient_all_cheif_complaints[0].complaints ) 
 
-    if (matchedCase && matchedCase.complaints?.length > 0) {
-      const normalizedComplaints = matchedCase.complaints.map(
+    {
+      const normalizedComplaints = patient_all_cheif_complaints[0].complaints.map(
         ({ createdAt, updatedAt, _id, ...cc }) => ({
           ...cc,
           Symptoms: cc.Symptoms.map((s) => (typeof s === "string" ? s : s._id)),
@@ -399,7 +435,7 @@ const handleShowEdit = () => {
         ...prev,
         ChiefComplaints: normalizedComplaints,
       }));
-    }
+ 
   }
 
   setShowEdit(true);
@@ -428,7 +464,7 @@ const handleCloseEdit = () => {
         try {
           const payload=
           {...medical_history,
-            CaseFileId:selected_case_file,
+            CaseFileId:patient_all_cheif_complaints[0].caseFileId._id,
             UpdatedBy :doctordetails._id
           }
          
@@ -499,7 +535,8 @@ const handleCloseEdit = () => {
         <h3 className="text-xxl font-semibold text-gray-900">
           Chief Complaints
         </h3>
-        <div className="flex items-center space-x-4" style={{display:selected_case_file?"flex":"none"}}>
+        {/* <div className="flex items-center space-x-4" style={{display:selected_case_file?"flex":"none"}}> */}
+         <div className="flex items-center space-x-4" >
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
             <Plus className="w-4 h-4" />
@@ -514,11 +551,11 @@ const handleCloseEdit = () => {
       {/* Table */}
       
  {/* Show case_file_data section */}
-<div
+{/* <div
   className="overflow-x-auto"
   style={{ display: selected_case_file ? "block" : "none" }}
 >
-  {/* Table Header */}
+
   <div className="bg-[var(--button-back-color)] text-white">
     <div className="grid grid-cols-4 gap-4 p-2 text-[20px]">
       <h3 className="table-header">Chief Complaints</h3>
@@ -528,9 +565,9 @@ const handleCloseEdit = () => {
     </div>
   </div>
 
-  {/* Table Body */}
+
   <div className="divide-y divide-gray-200">
-    {case_file_data?.length > 0 && case_file_data[0]?.Status === "Past" &&
+    {case_file_data?.length > 0 && case_file_data[0]?.Status === "Ongoing" &&
     case_file_data[0]?.ChiefComplaints?.map((item, index) => (
       <div
         key={item.id}
@@ -553,15 +590,18 @@ const handleCloseEdit = () => {
       </div>
     ))}
   </div>
-</div>
+</div> */}
 
 {/* Show patient_all_cheif_complaints section only if case_file_data is empty */}
-{(!case_file_data || case_file_data.length === 0) &&
+{
+// (!case_file_data || case_file_data.length === 0) &&
   patient_all_cheif_complaints.map((caseFile, caseIndex) => (
     <div key={caseFile.caseFileId} className="mb-6">
       {/* Case File Header */}
       <h3 className="text-xl font-bold mb-2">
-        {caseFile.treatmentType} (Case File ID: {caseFile.caseFileId})
+        {caseFile.caseFileId.TreatmentType} (Case File ID: {caseFile.caseFileId._id})-
+        {new Date(caseFile.caseFileId.Date).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})}
+
       </h3>
 
       {/* Table Header */}
@@ -673,6 +713,39 @@ const handleCloseEdit = () => {
                 </div>
               </FormControl>
               </div>
+
+
+                <div className="col-span-2">
+                              <FormControl fullWidth size="small">
+                              <label className="form-label">Compliant </label>
+                              <div className="flex flex-wrap gap-2">
+                                {all_symptom_master?.map((item) => {
+                                  const selected = (details?.Compliant || []).includes(item._id); 
+                                  return (
+                                    <span
+                                      key={item._id}
+                                      // onClick={() => handlecomplaintSelect(item._id,index)}
+                                      className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                                        ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                                    >
+                                      {item.lookup_value}
+                                      {selected && (
+                                        <span
+                                          className="ml-1 text-xs font-bold cursor-pointer"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            // handleSymptomSelect(item._id,index);
+                                          }}
+                                        >
+                                          ✕
+                                        </span>
+                                      )}
+                                    </span>
+                                  );
+                                })}
+                              </div>
+                            </FormControl>
+                            </div>
 
       
              

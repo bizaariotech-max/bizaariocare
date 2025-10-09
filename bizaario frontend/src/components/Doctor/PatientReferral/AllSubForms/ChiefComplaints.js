@@ -169,8 +169,7 @@ const handleAddMore = () => {
    const[all_symptom_master,setall_symptom_master]=useState([])
 
    const getall_symptom_master = async (selectedSymptomClass) => {
-    console.log(selectedSymptomClass);
-    
+
   if (!selectedSymptomClass || selectedSymptomClass.length === 0) return;
 
   try {
@@ -178,7 +177,6 @@ const handleAddMore = () => {
       lookupcodes: "symptom_master",
       parent_lookup_id: selectedSymptomClass, // send array or first ID
     });
-    console.log('Symptom master response:', resp);
     setall_symptom_master(resp.data.data);
   } catch (error) {
     console.error(error);
@@ -194,8 +192,6 @@ const handleAddMore = () => {
       {
         try {
           const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"aggravating_factor_master"})
-          console.log(resp);
-          
           setallaggravating_master(resp.data.data)
           
         } catch (error) {
@@ -341,8 +337,6 @@ const renderColorBar = (index) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log(resp);
-    
 
     const { response_code, response_message } = resp.data.response;
 

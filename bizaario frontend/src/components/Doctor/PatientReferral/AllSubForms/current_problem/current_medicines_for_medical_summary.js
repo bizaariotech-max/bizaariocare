@@ -284,10 +284,10 @@ const save_medicine = async () => {
  const getall_patient_medical_history = async () => {
    try {
     //  setLoadingSpeciality(true);
-     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
+     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Ongoing`);
   
         const formatted = resp.data.data.list.map(item => ({
-          caseFileId: item.CaseFileId._id,
+          caseFileId: item.CaseFileId,
           treatmentType: item.CaseFileId.TreatmentType,
           current_medicines: item.MedicinesPrescribed
 
@@ -455,9 +455,9 @@ const update_medicine = async () => {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
-        {/* Table Header */}
+
+      {/* <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
+     
         <div className="bg-[var(--button-back-color)] text-white  " >
           <div className="grid grid-cols-3 gap-4 p-2 text-[20px]">
             <h3 className="table-header">Medicine/Salt Name</h3>
@@ -466,7 +466,7 @@ const update_medicine = async () => {
           </div>
         </div>
 
-        {/* Table Body */}
+
         <div className="divide-y divide-gray-200">
           {case_file_data?.length > 0 && case_file_data[0]?.Status === "Past" &&
           case_file_data[0]?.MedicinesPrescribed?.Medicines?.map((item, index) => (
@@ -488,15 +488,17 @@ const update_medicine = async () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
     {/* Show patient_all_cheif_complaints section only if case_file_data is empty */}
-{(!case_file_data || case_file_data.length === 0) &&
-  patient_all_current_medicine.map((caseFile, caseIndex) => (
+{
+// (!case_file_data || case_file_data.length === 0) &&
+  patient_all_current_medicine?.map((caseFile, caseIndex) => (
     <div key={caseFile.caseFileId} className="mb-6">
       {/* Case File Header */}
       <h3 className="text-xl font-bold mb-2">
-        {caseFile.treatmentType} (Case File ID: {caseFile.caseFileId})
+        {caseFile.caseFileId.TreatmentType} (Case File ID: {caseFile.caseFileId._id})-
+        {new Date(caseFile.caseFileId.Date).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})}
       </h3>
 
       {/* Table Header */}
@@ -540,11 +542,11 @@ const update_medicine = async () => {
   ))}
 
       {/* Footer Note */}
-      <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"block":"none"}}>
+      {/* <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"block":"none"}}>
         <p className="text-xs text-gray-600">
           1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
         </p>
-      </div>
+      </div> */}
 
 
 

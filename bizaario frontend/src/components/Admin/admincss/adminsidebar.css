@@ -163,6 +163,7 @@
   text-align: center;
   transition: background-color 0.3s ease;
   border: 1px solid white;
+  margin: 10px;
 }
 
 .sidebar-item.logout-item:hover {
