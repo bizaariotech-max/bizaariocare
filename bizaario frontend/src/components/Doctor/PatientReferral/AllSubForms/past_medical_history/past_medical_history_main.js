@@ -8,6 +8,11 @@ import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
 import PastSurgeries from './past_surgeries';
+import PastIllness from './past_illness';
+import PastAccident from './past_accident';
+import PastMedicinesForCurrentProblem from './past_medicines_for_medical_summary';
+import PastTherapyForCurrentProblem from './past_therapy_for_medical_summary';
+import PastDiagnosticsInvestigationsForCurrentProblem from './Past_Diagnostics_investigations_for_medical_summary';
 
 
 
@@ -99,41 +104,6 @@ const[medical_history_id,setmedical_history_id]=useState("")
   }, []);
 
 
- 
-  
-
-//========================== modal open or close start==========================================
-      
-        const [show, setShow] = useState(false)
-          const handleShow = () => setShow(true);
-          const handleClose = () => setShow(false);
-
-
-
-    
-   //======================= get all data of truma-master=========================================
-
-    const[alltruma,setalltruma]=useState([])
-      const gettruma=async()=>
-      {
-        try {
-          
-          const resp=await api.post('api/v1/common/LookupList',{lookup_type: "trauma_master"})
-          setalltruma(resp?.data?.data || []);
-         
-        } catch (error) {
-          console.log(error);
-          
-        }
-      }
-    
-      useEffect(()=>
-      {
-        gettruma()
-    
-      },[])
-
-
   
   const [refreshKeys, setRefreshKeys] = useState({
   preExisting: 0,
@@ -221,10 +191,59 @@ const handleComponentRefresh = (name) => {
 
         {/* Cards */}
 
-      
+       <div className="card-details">
+          <PastIllness
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+         <div className="card-details">
+          <PastAccident
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+            <div className="card-details">
+          <PastMedicinesForCurrentProblem
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+            <div className="card-details">
+          <PastTherapyForCurrentProblem
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
 
         <div className="card-details">
           <PastSurgeries
+           key={refreshKeys.familyHistory}
+            onRefresh={() => handleComponentRefresh("familyHistory")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+        
+            <div className="card-details">
+          <PastDiagnosticsInvestigationsForCurrentProblem
            key={refreshKeys.familyHistory}
             onRefresh={() => handleComponentRefresh("familyHistory")}
             patientId={patientId}

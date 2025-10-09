@@ -424,13 +424,13 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
 
 
   return (
-    <div>
+    <div className="space mt-4">
       {/* Header */}
    
             <div className="flex items-center justify-between mt-2  border-b border-gray-200">
-              <h2 className="text-xxl font-semibold text-gray-900">
+              <h3 className="text-xxl font-semibold text-gray-900">
                 Past Surgeries
-              </h2>
+              </h3>
               <div className="flex items-center space-x-4">
                 <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
                   <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>

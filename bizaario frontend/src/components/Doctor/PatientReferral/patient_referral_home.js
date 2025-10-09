@@ -77,13 +77,15 @@ const PatientReferralHome = () => {
       {/* <CurrentTherapy /> */}
       {/* <MedicalSummary /> */}
       
-      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/>
+      
       
       <CurrentProblemMain patientId={patientId} selected_case_file={selected_case_file}/>
 
       <PatientProfilingMain patientId={patientId} selected_case_file={selected_case_file}/>
 
-       <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/>
+      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/>
+
+      <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/>
 
       {/* <ExistingDisease patientId={patientId} selected_case_file={selected_case_file}/> */}
       {/* <PastIllness patientId={patientId} selected_case_file={selected_case_file}/> */}

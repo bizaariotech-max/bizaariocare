@@ -10,16 +10,14 @@ import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
 import { __postApiData } from "../../../../../utils/api";
 
-const PastIllness = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
+const PastAccident = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
 
  
 
 
-
-const [caseFiles, setCaseFiles] = useState([]);
-
+const [caseFiles, setCaseFiles] = useState([])
 const getall_case_file = async () => {
   try {
     const resp = await api.get(
@@ -40,14 +38,12 @@ const getall_case_file = async () => {
   }
 };
 
-
 useEffect(()=>
 {
 getall_case_file()
 },[])
 
 
- 
 
 
 
@@ -59,45 +55,43 @@ getall_case_file()
       {/* Header */}
       <div className="flex items-center justify-between mt-2  border-b border-gray-200">
         <h3 className="text-xxl font-semibold text-gray-900">
-          Past Illness
+          Past Accident/ Trauma 
         </h3>
        
       </div>
 
-<div className='col-span-2'>
-            
-            
-                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4  p-4">
-                      <div className="col-span-2">
-                        <FormControl fullWidth size="small">
-                         <div className="flex flex-wrap gap-2">
-                      {caseFiles.map((item) => (
-                        <span
-                          key={item._id}
-                          className="px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2"
-                        >
-                          {/* Show all diseases inside this item */}
-                          {item.Disease && item.Disease.length > 0 ? (
-                            item.Disease.map((disease) => (
-                              <span key={disease._id} className="bg-gray-200 px-2 py-0.5 rounded">
-                                {disease.lookup_value}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="text-gray-400">N/A</span>
-                          )}
-                        </span>
-                      ))}
-                    </div>
-
-                        </FormControl>
-                      </div>
-                    </div>
-      
-                    
-                    </div> 
-      
+ <div className='col-span-2'>
+             
+             
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4  p-4">
+                       <div className="col-span-2">
+                         <FormControl fullWidth size="small">
+                          <div className="flex flex-wrap gap-2">
+                       {caseFiles.map((item) => (
+                         <span
+                           key={item._id}
+                           className="px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2"
+                         >
+                           {/* Show all diseases inside this item */}
+                           {item.Accident && item.Accident.length > 0 ? (
+                             item.Accident.map((accident) => (
+                               <span key={accident._id} className="bg-gray-200 px-2 py-0.5 rounded">
+                                 {accident.lookup_value}
+                               </span>
+                             ))
+                           ) : (
+                             <span className="text-gray-400">N/A</span>
+                           )}
+                         </span>
+                       ))}
+                     </div>
  
+                         </FormControl>
+                       </div>
+                     </div>
+       
+                     
+                     </div> 
 
 
    
@@ -135,5 +129,5 @@ getall_case_file()
   );
 }
 
-export default PastIllness
+export default PastAccident
 

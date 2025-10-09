@@ -14,9 +14,8 @@ const ChiefComplaintsForCurrentProblem = ({patientId,selected_case_file,case_fil
 
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
-
   
-
+   
   // Function to render severity grade as color bars
   const renderSeverityGrade = (severity) => {
     const segments = [
@@ -56,7 +55,14 @@ const [medical_history, setmedical_history] = useState({
     //========================== modal open or close start==========================================
     
       const [show, setShow] = useState(false)
-        const handleShow = () => setShow(true);
+      const handleShow = async () => {
+        setisloading(true)
+          await save_patient_case_file(); // ✅ wait for save to finish
+          await getall_patient_medical_history(); // ✅ fetch updated list
+          setShow(true); // ✅ open after data fetched
+          setisloading(false)
+        };
+
         const handleClose = () => setShow(false);
 
 
@@ -251,7 +257,7 @@ const handleSymptomClassClick = (id) => {
       parent_lookup_id: selectedSymptomClass, // send array or first ID
     });
 
-    console.log(resp);
+   
     
     setall_symptom_master(resp.data.data);
   } catch (error) {
@@ -318,6 +324,7 @@ useEffect(() => {
         getall_unitlist()
     
       },[])
+
 
 
 
@@ -537,6 +544,84 @@ const handleCloseEdit = () => {
       };
 
 
+//=================== auto generate medical case file for ongoing status============================
+
+ const [medical_case_file, setmedical_case_file] = useState({
+      ParentCaseFileId:null,
+      TreatmentType : 'OPD Visit Record',
+      DoctorId : doctordetails._id,
+      DoctorName : '',
+      HospitalId : null,
+      HospitalName : '',
+      Date: new Date().toISOString().split('T')[0],
+      MedicalSpeciality:null,
+      Status:"Ongoing",
+      Disease:[],
+      Accident:[]
+    });
+
+ const save_patient_case_file = async () => {
+  // setisloading_for(true);
+  try {
+    const payload={
+      ...medical_case_file,
+      PatientId:patientId
+    }
+    const resp = await api.post(
+      `api/v1/admin/patientCaseFile/savepatientCaseFile`,
+      payload,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  
+
+    
+
+    // const { response_code, response_message } = resp.data.response;
+
+    // if (response_code === "200") {
+    //   Swal.fire({
+    //     icon: "success",
+    //     title: "Details Added",
+    //     text: "Medical Case File Added Successfully...",
+    //     showConfirmButton: true,
+    //     customClass: { confirmButton: "my-swal-button" },
+    //   }).then(() => {
+    //     window.location.reload();
+    //   });
+    // } else if (response_code === "400") {
+    
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: response_message.errorType || "Error",
+    //     text: response_message.error,
+    //     showConfirmButton: true,
+    //     customClass: { confirmButton: "my-swal-button" },
+    //   });
+    // } else {
+    
+    //   Swal.fire({
+    //     icon: "warning",
+    //     title: "Unexpected response",
+    //     text: "Something went wrong. Please try again.",
+    //     showConfirmButton: true,
+    //     customClass: { confirmButton: "my-swal-button" },
+    //   });
+    // }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: "error",
+      title: "Request failed",
+      text: error.message || "Something went wrong",
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  } finally {
+    // setisloading_for(false);
+  }
+};
 
 
 

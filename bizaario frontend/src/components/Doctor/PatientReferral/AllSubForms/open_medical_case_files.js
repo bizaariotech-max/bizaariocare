@@ -25,6 +25,7 @@ const OpenMedicalCaseFiles = ({patientId,patient_details,setselected_case_file})
   const[isloading_for,setisloading_for]=useState(false)
 
     const [medical_case_file, setmedical_case_file] = useState({
+      ParentCaseFileId:null,
       PatientId:"",
       TreatmentType : '',
       DoctorId : '',
@@ -248,7 +249,6 @@ const getall_case_file = async () => {
     const resp = await api.get(`api/v1/admin/patientCaseFile/listPatientCaseFile?PatientId=${patientId}`);
    
     setCaseFiles(resp.data.data.list)
-  
     
   } catch (error) {
     console.error(error);
@@ -262,7 +262,7 @@ useEffect(()=>
 getall_case_file()
 },[])
 
-console.log(caseFiles);
+
 
 
 //===================================== change status api===========================================
@@ -270,14 +270,46 @@ console.log(caseFiles);
 
 const change_casefile_status = async (id,status) => {
   try {
+    setisloading_for(true)
     const resp = await api.put(`api/v1/admin/medical-history/status/casefile/${id}`,{"Status":status,});
-    console.log(resp);
+   
+     const { response_code, response_message } = resp.data.response;
+          
+              if (response_code === "200") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Details Updated",
+                  text: "Case File Status Updated Successfully...",
+                  showConfirmButton: true,
+                  customClass: { confirmButton: "my-swal-button" },
+                }).then(() => {
+                  window.location.reload();
+                });
+              } else if (response_code === "400") {
+                // Show server validation error here
+                Swal.fire({
+                  icon: "error",
+                  title: response_message.errorType || "Error",
+                  text: response_message.error,
+                  showConfirmButton: true,
+                  customClass: { confirmButton: "my-swal-button" },
+                });
+              } else {
+                // Optional: handle other response codes
+                Swal.fire({
+                  icon: "warning",
+                  title: "Unexpected response",
+                  text: "Something went wrong. Please try again.",
+                  showConfirmButton: true,
+                  customClass: { confirmButton: "my-swal-button" },
+                });
+              }
     
    
   } catch (error) {
     console.error(error);
   } finally {
-    setLoadingSpeciality(false);
+    setisloading_for(false);
   }
 };
 
@@ -324,6 +356,40 @@ const change_casefile_status = async (id,status) => {
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                 
+                  <FormControl fullWidth size="small">
+              <label className="form-label">Parent Case File</label>
+            <Select
+                  labelId="content-type-label"
+                  name="ParentCaseFileId"
+                 value={medical_case_file.ParentCaseFileId}
+               
+                 onChange={handleChange}
+                  displayEmpty
+                  MenuProps={customMenuProps}
+                  renderValue={(selected) => {
+                    if (!selected) {
+                      return <span style={{ color: "#9ca3af" }}>Select Parent Case File </span>; 
+                    }
+                    return caseFiles?.find((item) => item._id === selected)?.TreatmentType;
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select Parent Case File </em>
+                  </MenuItem>
+                 {
+                    caseFiles?.map((type) => (
+                    <MenuItem key={type._id} value={type._id}>
+                        {type.TreatmentType}-
+                         ({new Date(type.Date).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})})
+                    </MenuItem>
+                    ))
+                }
+                              
+  
+              </Select>
+              </FormControl>
+
+
                     <FormControl fullWidth size="small">
                   <label className="form-label">Patient Name </label>
                   <TextField
@@ -699,10 +765,16 @@ const change_casefile_status = async (id,status) => {
           key={index}
           className="border rounded-lg shadow-md p-3 bg-[rgba(82,103,125,0.10)]"
         >
+          <div className='flex justify-between'>
           <h3 className=" text-lg text-gray-800 font-thin">
             Medical Case File ID:<br></br>
              <span className="form-title text-lg font-semibold text-gray-800">{file._id || 'N/A'}</span>
           </h3>
+           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
+                     <Edit className="w-4 h-4" />
+                     <span className="text-sm font-medium underline">Edit</span>
+            </button>
+          </div>
           <p className="flex text-sm text-gray-600 gap-2">
             <img src={calendericon} alt='' className='h-5'></img> 
             {new Date(file.Date).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})}
@@ -766,7 +838,21 @@ const change_casefile_status = async (id,status) => {
          
           </Modal>
 
-
+        {isloading_for && (
+                      <div
+                        style={{
+                          position: 'fixed',
+                          inset: 0,
+                          background: 'rgba(255, 255, 255, 0.6)',
+                          zIndex: 9999,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <UniqueLoader />
+                      </div>
+                    )}
 
     </div>
   );
