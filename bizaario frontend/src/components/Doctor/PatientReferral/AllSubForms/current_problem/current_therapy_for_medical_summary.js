@@ -618,7 +618,22 @@ const handleTherapyChange = (index, field, value) => {
                    
                     </Modal>
 
-
+ {isloading && (
+                      <div
+                        style={{
+                          position: 'fixed',
+                          inset: 0,
+                          background: 'rgba(255, 255, 255, 0.6)',
+                          zIndex: 9999,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <UniqueLoader />
+                      </div>
+                    )}
+                    
 
         </div>
   );

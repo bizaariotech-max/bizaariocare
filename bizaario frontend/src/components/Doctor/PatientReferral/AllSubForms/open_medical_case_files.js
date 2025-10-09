@@ -262,8 +262,24 @@ useEffect(()=>
 getall_case_file()
 },[])
 
-
 console.log(caseFiles);
+
+
+//===================================== change status api===========================================
+
+
+const change_casefile_status = async (id,status) => {
+  try {
+    const resp = await api.put(`api/v1/admin/medical-history/status/casefile/${id}`,{"Status":status,});
+    console.log(resp);
+    
+   
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoadingSpeciality(false);
+  }
+};
 
 
 
@@ -688,7 +704,8 @@ console.log(caseFiles);
              <span className="form-title text-lg font-semibold text-gray-800">{file._id || 'N/A'}</span>
           </h3>
           <p className="flex text-sm text-gray-600 gap-2">
-            <img src={calendericon} alt='' className='h-5'></img> {file.Date || 'N/A'}
+            <img src={calendericon} alt='' className='h-5'></img> 
+            {new Date(file.Date).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})}
           </p>
           <p className="text-sm text-gray-600">
             Treatment Type: <strong>{file?.TreatmentType || 'N/A'}</strong>
@@ -699,18 +716,15 @@ console.log(caseFiles);
           <div className='flex justify-between'>
           <p className=" flex text-sm text-gray-600">
             <strong>Medical Speciality:</strong>
+           
             {
-              allmedical_speciality?.find((item) => item._id === file.MedicalSpeciality)
-                ?.lookup_value || 'N/A'
+              file.MedicalSpeciality?.lookup_value ? file.MedicalSpeciality.lookup_value : "N/A"
             }
-            {/* {
-              file.MedicalSpeciality
-            } */}
             
           </p>
 
               <p className=" flex text-sm text-gray-600">
-            <strong>Status:</strong>{' N/A'}
+            <strong>Status:</strong>
             {
               file.Status
             }
@@ -718,10 +732,10 @@ console.log(caseFiles);
           </p>
 
           <div className='flex justify-between gap-2'>
-            <button className='classic-button'>
+            <button className='classic-button' onClick={()=>change_casefile_status(file._id,"Ongoing")} style={{display:file.Status==="Ongoing"?"none":"flex"}}>
               Ongoing
             </button>
-            <button className='classic-button'>
+            <button className='classic-button' onClick={()=>change_casefile_status(file._id,"Past")} style={{display:file.Status==="Past"?"none":"flex"}}>
               Past
             </button>
            <button

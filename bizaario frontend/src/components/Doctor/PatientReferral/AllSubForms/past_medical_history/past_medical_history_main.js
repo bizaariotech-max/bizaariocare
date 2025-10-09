@@ -19,7 +19,7 @@ const PastMedicalHistoryMain = ({patientId,selected_case_file}) => {
 
  const doctordetails=JSON.parse(localStorage.getItem("user"))
 
-const [isCollapsed, setIsCollapsed] = useState(false);
+const [isCollapsed, setIsCollapsed] = useState(true);
 
 
 
@@ -162,49 +162,60 @@ const handleComponentRefresh = (name) => {
    <div className="space">
   <div className="bg-[rgba(189,196,212,0.2)] p-4 rounded-lg border border-gray-200">
 
-  
-
- 
-   
-     <div
-  className={`transition-all duration-500 ease-in-out overflow-auto ${
-    isCollapsed ? "max-h-0 opacity-0" : "max-h-[2000px] opacity-100"
-  }`}
->
       <div className="flex items-center justify-between mt-2 ">
                   <h2 className="text-xl font-semibold text-gray-900">
                     Past Medical History
                   </h2>
-                  {/* <div className="flex items-center space-x-4">
-                    <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
-                      <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
-                      <Plus className="w-4 h-4" />
-                    </button>
-                    <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
-                      <Edit className="w-4 h-4" />
-                      <span className="text-sm font-medium underline">Edit</span>
-                    </button>
-                  </div> */}
+              
+                <button
+                        onClick={() => setIsCollapsed(!isCollapsed)}
+                        className="text-blue-600 hover:text-blue-700 transition-colors"
+                        >
+                        {isCollapsed ? (
+                            // Double Down Arrow (expand)
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 5l-7 7-7-7M19 13l-7 7-7-7"
+                            />
+                            </svg>
+                        ) : (
+                            // Double Up Arrow (collapse)
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 19l7-7 7 7M5 11l7-7 7 7"
+                            />
+                            </svg>
+                        )}
+                        </button>    
+
                 </div>
     
-      
+        
+     <div
+  className={`transition-all duration-300 ease-in-out overflow-auto ${
+    isCollapsed ? "max-h-0 opacity-0" : "max-h-[100%] opacity-100"
+  }`}
+>
          
-          <div className="">
-            <div className="flex flex-wrap gap-2">
-                <span
-                  className="px-3 py-1 bg-[#e2e4f4]  text-sm rounded-md"
-                >
-                  Kidney Stone Surgery
-                </span>
-    
-                   <span
-                  className="px-3 py-1 bg-[#e2e4f4]  text-sm rounded-md"
-                >
-                  Tansilectomy
-                </span>
-    
-            </div>
-          </div>
+         
 
        
 
@@ -222,102 +233,9 @@ const handleComponentRefresh = (name) => {
           />
         </div>
 
-      </div>
-   
-  </div>
-
-  {/* Footer Note */}
-  <div className="p-4 border-t border-gray-200">
-    <p className="text-xs text-gray-600">
-      1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact
-      8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
-    </p>
-  </div>
-
-
-  {/*======================== modal for add pre existing disease ================================*/}
-
-
-   <Modal show={show} onHide={handleClose} centered size="lg">
-          
-                <Modal.Header closeButton>
-                  <Modal.Title className='form-title'>Add Pre-Existing Disease (s)</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                
-        
-           <div>
-        
-                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
-                
-  {/*======================== chief complaints============================================ */}
-  
-          <div className='col-span-2'>
-          
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
-                          
-                           <div className="col-span-2">
-                          <FormControl fullWidth size="small">
-                          <label className="form-label">Disease Name</label>
-                          <div className="flex flex-wrap gap-2">
-                            {alltruma.map((item) => {
-                              const selected = (item?.Symptoms || []).includes(item._id); 
-                              return (
-                                <span
-                                  key={item._id}
-                                  // onClick={() => toggleArrayField(index, "Symptoms", item._id)}
-                                  className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
-                                    ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
-                                >
-                                  {item.lookup_value}
-                                  {selected && (
-                                    <span
-                                      className="ml-1 text-xs font-bold cursor-pointer"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        // handleSymptomSelect(item._id,index);
-                                      }}
-                                    >
-                                      ✕
-                                    </span>
-                                  )}
-                                </span>
-                              );
-                            })}
-                          </div>
-                        </FormControl>
-                        </div>
-          
-                
-                          </div> 
-                 
-
-            </div> 
-  
-      </div> 
-  
      
-                 
-                 <div className="flex justify-end mt-4">
-             
-  
-                <Button
-                  style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                  // onClick={save_chif_complaints}
-                >
-                  Save
-                </Button>
-              </div>
-  
-        
-                </div> 
-        
-                </Modal.Body>
-            
-           
-            </Modal>
-
-
+   </div>
+  </div>
 
 
 

@@ -83,7 +83,7 @@ const PatientReferralHome = () => {
 
       <PatientProfilingMain patientId={patientId} selected_case_file={selected_case_file}/>
 
-       {/* <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/> */}
+       <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/>
 
       {/* <ExistingDisease patientId={patientId} selected_case_file={selected_case_file}/> */}
       {/* <PastIllness patientId={patientId} selected_case_file={selected_case_file}/> */}
