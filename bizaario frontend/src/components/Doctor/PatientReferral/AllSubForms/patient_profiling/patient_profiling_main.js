@@ -196,8 +196,8 @@ const handleComponentRefresh = (name) => {
 
         <div className="card-details">
           <PreExistingDisease
-           key={refreshKeys.familyHistory}
-            onRefresh={() => handleComponentRefresh("familyHistory")}
+           key={refreshKeys.preExisting}
+            onRefresh={() => handleComponentRefresh("preExisting")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -206,8 +206,8 @@ const handleComponentRefresh = (name) => {
 
           <div className="card-details">
           <CurrentMedication
-           key={refreshKeys.familyHistory}
-            onRefresh={() => handleComponentRefresh("familyHistory")}
+           key={refreshKeys.medicines}
+            onRefresh={() => handleComponentRefresh("medicines")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -216,8 +216,8 @@ const handleComponentRefresh = (name) => {
 
             <div className="card-details">
           <CurrentTheripes
-           key={refreshKeys.familyHistory}
-            onRefresh={() => handleComponentRefresh("familyHistory")}
+           key={refreshKeys.therapy}
+            onRefresh={() => handleComponentRefresh("therapy")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -236,8 +236,8 @@ const handleComponentRefresh = (name) => {
 
             <div className="card-details">
           <HabitLifestyle
-           key={refreshKeys.familyHistory}
-            onRefresh={() => handleComponentRefresh("familyHistory")}
+           key={refreshKeys.habits}
+            onRefresh={() => handleComponentRefresh("habits")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -246,8 +246,8 @@ const handleComponentRefresh = (name) => {
 
             <div className="card-details">
           <Allergies
-           key={refreshKeys.familyHistory}
-            onRefresh={() => handleComponentRefresh("familyHistory")}
+           key={refreshKeys.allergies}
+            onRefresh={() => handleComponentRefresh("allergies")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}

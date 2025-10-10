@@ -884,9 +884,9 @@ form.contact-form-fields textarea::placeholder {
 
 
 
-/* html {
+html {
   overflow-y: scroll;
-} */
+}
 
 
 
@@ -1035,6 +1035,11 @@ gap: 10px;
 {
   border-radius: 12px !important;
 }
+
+
+
+
+
 
 
 

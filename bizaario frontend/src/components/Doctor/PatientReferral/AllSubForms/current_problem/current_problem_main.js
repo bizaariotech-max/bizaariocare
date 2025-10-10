@@ -104,15 +104,10 @@ const[medical_history_id,setmedical_history_id]=useState("")
 
 
   const [refreshKeys, setRefreshKeys] = useState({
-  preExisting: 0,
-  familyHistory: 0,
-  habits: 0,
-  allergies: 0,
-  trauma: 0,
-  complaints: 0,
+  chifcomplaint: 0,
+  currentmedicine: 0,
+  currenttherapy: 0,
   diagnostics: 0,
-  medicines: 0,
-  therapy: 0,
 });
 
 // Function to trigger refresh for a single component
@@ -197,8 +192,8 @@ const handleComponentRefresh = (name) => {
 
         <div className="card-details">
           <ChiefComplaintsForCurrentProblem
-           key={refreshKeys.familyHistory}
-            onRefresh={() => handleComponentRefresh("familyHistory")}
+           key={refreshKeys.chifcomplaint}
+            onRefresh={() => handleComponentRefresh("chifcomplaint")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -207,8 +202,8 @@ const handleComponentRefresh = (name) => {
 
           <div className="card-details">
           <CurrentMedicinesForCurrentProblem
-           key={refreshKeys.familyHistory}
-            onRefresh={() => handleComponentRefresh("familyHistory")}
+           key={refreshKeys.currentmedicine}
+            onRefresh={() => handleComponentRefresh("currentmedicine")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -217,8 +212,8 @@ const handleComponentRefresh = (name) => {
 
            <div className="card-details">
           <CurrentTherapyForCurrentProblem
-           key={refreshKeys.familyHistory}
-            onRefresh={() => handleComponentRefresh("familyHistory")}
+           key={refreshKeys.currenttherapy}
+            onRefresh={() => handleComponentRefresh("currenttherapy")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}
@@ -227,8 +222,8 @@ const handleComponentRefresh = (name) => {
 
            <div className="card-details">
           <DiagnosticsInvestigationsForCurrentProblem
-           key={refreshKeys.familyHistory}
-            onRefresh={() => handleComponentRefresh("familyHistory")}
+           key={refreshKeys.diagnostics}
+            onRefresh={() => handleComponentRefresh("diagnostics")}
             patientId={patientId}
             selected_case_file={selected_case_file}
             case_file_data={case_file_data}

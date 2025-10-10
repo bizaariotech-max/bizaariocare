@@ -11,7 +11,7 @@ import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap';
 
 
-const CurrentMedication = ({patientId,selected_case_file,case_file_data}) => {
+const CurrentMedication = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
    
@@ -230,7 +230,8 @@ const save_medication = async () => {
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
-        window.location.reload();
+        // window.location.reload();
+        onRefresh()
       });
     } else if (response_code === "400") {
       // Show server validation error here
@@ -363,7 +364,8 @@ const[allcurrent_medicine_data,setallcurrent_medicine_data]=useState([])
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
-        window.location.reload();
+        // window.location.reload();
+        onRefresh()
       });
     } else if (response_code === "400") {
       // Show server validation error here

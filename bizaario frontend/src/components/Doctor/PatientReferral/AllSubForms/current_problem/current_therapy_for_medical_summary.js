@@ -11,7 +11,7 @@ import { Modal, } from 'react-bootstrap';
 
 
 
-const CurrentTherapyForCurrentProblem = ({patientId,selected_case_file,case_file_data}) => {
+const CurrentTherapyForCurrentProblem = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
      const doctordetails=JSON.parse(localStorage.getItem("user"))
 
@@ -118,7 +118,8 @@ const handleTherapyChange = (index, field, value) => {
           showConfirmButton: true,
           customClass: { confirmButton: "my-swal-button" },
         }).then(() => {
-          window.location.reload();
+          // window.location.reload();
+          onRefresh()
         });
       } else if (response_code === "400") {
         // Show server validation error here
@@ -254,7 +255,8 @@ const handleTherapyChange = (index, field, value) => {
           showConfirmButton: true,
           customClass: { confirmButton: "my-swal-button" },
         }).then(() => {
-          window.location.reload();
+          // window.location.reload();
+          onRefresh()
         });
       } else if (response_code === "400") {
         // Show server validation error here

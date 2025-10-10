@@ -11,7 +11,7 @@ import { Modal, } from 'react-bootstrap';
 
 
 
-const PastTherapyForCurrentProblem = ({patientId,selected_case_file,case_file_data}) => {
+const PastTherapyForCurrentProblem = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
      const doctordetails=JSON.parse(localStorage.getItem("user"))
 
@@ -94,7 +94,7 @@ const handleTherapyChange = (index, field, value) => {
     try {
      const payload=
           {...medical_history,
-            CaseFileId:patient_all_therapy[0]?.caseFileId._id,
+            CaseFileId:selected_case_file,
             CreatedBy:doctordetails._id
             
           }
@@ -118,7 +118,8 @@ const handleTherapyChange = (index, field, value) => {
           showConfirmButton: true,
           customClass: { confirmButton: "my-swal-button" },
         }).then(() => {
-          window.location.reload();
+          // window.location.reload();
+          onRefresh()
         });
       } else if (response_code === "400") {
         // Show server validation error here
@@ -254,7 +255,8 @@ const handleTherapyChange = (index, field, value) => {
           showConfirmButton: true,
           customClass: { confirmButton: "my-swal-button" },
         }).then(() => {
-          window.location.reload();
+          // window.location.reload();
+          onRefresh()
         });
       } else if (response_code === "400") {
         // Show server validation error here
@@ -297,7 +299,7 @@ const handleTherapyChange = (index, field, value) => {
             <h3 className="text-xxl font-semibold text-gray-900">
               Past Therapies (ies)
             </h3>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4" style={{display:selected_case_file?"flex":"none"}}>
               <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
                 <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
                 <Plus className="w-4 h-4" />
@@ -310,9 +312,9 @@ const handleTherapyChange = (index, field, value) => {
           </div>
     
           {/* Table */}
-            {/* <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
+            <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
      
-            <div className="bg-slate-600 text-white">
+            <div className="bg-[var(--button-back-color)] text-white">
                <div className="grid grid-cols-2 gap-4 p-2">
                 <div className="table-header">Therapy Name</div>
                 <div className="table-header">Clinical Outcome/Patient's Response</div>
@@ -340,7 +342,7 @@ const handleTherapyChange = (index, field, value) => {
                 </div>
               ))}
             </div>
-          </div> */}
+          </div> 
     
           {/* Footer Note */}
           {/* <div className="p-4  border-t border-gray-200" style={{display:selected_case_file?"block":"none"}}>
@@ -351,7 +353,7 @@ const handleTherapyChange = (index, field, value) => {
 
 {/* Show patient_all_cheif_complaints section only if case_file_data is empty */}
 {
-// (!case_file_data || case_file_data.length === 0) &&
+(!case_file_data || case_file_data.length === 0) &&
   patient_all_therapy.map((caseFile, caseIndex) => (
     <div key={caseFile.caseFileId} className="mb-6">
       {/* Case File Header */}

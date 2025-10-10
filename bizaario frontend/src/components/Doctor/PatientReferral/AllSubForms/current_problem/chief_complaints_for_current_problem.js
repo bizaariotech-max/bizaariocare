@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
-import { useEffect, useState } from 'react'
+import { useEffect, useState,useRef } from 'react'
 import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/material';
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
@@ -10,7 +10,7 @@ import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
 
 
-const ChiefComplaintsForCurrentProblem = ({patientId,selected_case_file,case_file_data}) => {
+const ChiefComplaintsForCurrentProblem = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
@@ -52,22 +52,7 @@ const [medical_history, setmedical_history] = useState({
     });
 
 
-    //========================== modal open or close start==========================================
-    
-      const [show, setShow] = useState(false)
-      const handleShow = async () => {
-        setisloading(true)
-          await save_patient_case_file(); // ✅ wait for save to finish
-          await getall_patient_medical_history(); // ✅ fetch updated list
-          setShow(true); // ✅ open after data fetched
-          setisloading(false)
-        };
-
-        const handleClose = () => setShow(false);
-
-
-//====================== onchage event for ChiefComplaints start=================================
-
+   
 
 const handleChiefComplaintsChange = (index, field, value, subField = null) => {
   setmedical_history(prev => {
@@ -234,16 +219,9 @@ const handleAddMore = () => {
 const [selectedSymptomClass, setSelectedSymptomClass] = useState([]);
 
 const handleSymptomClassClick = (id) => {
-  setSelectedSymptomClass((prev) => {
-    let updated;
-    if (prev.includes(id)) {
-      updated = prev.filter((x) => x !== id);
-    } else {
-      updated = [...prev, id];
-    }
-    getall_symptom_master(updated); // 🔥 Call API whenever selection changes
-    return updated;
-  });
+  setSelectedSymptomClass((prev) =>
+    prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+  );
 };
 
 
@@ -265,19 +243,13 @@ const handleSymptomClassClick = (id) => {
   }
 };
 
+
+
+
+
 useEffect(() => {
-  medical_history.ChiefComplaints.forEach((cc, index) => {
-    if (cc.Symptoms && cc.Symptoms.length > 0) {
-      getall_symptom_master(cc.Symptoms, index);
-    } else {
-      setall_symptom_master(prev => {
-        const updated = [...prev];
-        updated[index] = [];
-        return updated;
-      });
-    }
-  });
-}, [medical_history.ChiefComplaints]);
+  getall_symptom_master(selectedSymptomClass);
+}, [selectedSymptomClass]);
 
 
     
@@ -361,7 +333,8 @@ useEffect(() => {
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
-              window.location.reload();
+              // window.location.reload();
+              onRefresh()
             });
           } else if (response_code === "400") {
             // Show server validation error here
@@ -424,6 +397,49 @@ useEffect(() => {
  getall_patient_medical_history()
  },[])
 
+
+  //========================== modal open or close start==========================================
+    
+      const [show, setShow] = useState(false)
+  const handleShow = async () => {
+  setisloading(true);
+
+  try {
+    // ✅ If no medical history exists, save and then fetch
+    if (!patient_all_cheif_complaints || patient_all_cheif_complaints.length === 0) {
+      await save_patient_case_file();
+      await getall_patient_medical_history();
+    } else {
+      // ✅ If already available, just refresh data
+      await getall_patient_medical_history();
+    }
+
+    setShow(true); // ✅ open modal after data ready
+  } catch (error) {
+    console.error("Error while opening modal:", error);
+  } finally {
+    setisloading(false);
+  }
+};
+//       const hasLoadedOnce = useRef(false); // ✅ remember if it ran already
+
+// const handleShow = async () => {
+//   setShow(true);
+
+//   // ✅ run only once
+//   if (!hasLoadedOnce.current) {
+//     setisloading(true);
+//     await save_patient_case_file();
+//     await getall_patient_medical_history();
+//     hasLoadedOnce.current = true; // ✅ mark as done
+//     setisloading(false);
+//   }
+// };
+
+        const handleClose = () => setShow(false);
+
+
+//====================== onchage event for ChiefComplaints start=================================
 
 
 
@@ -508,7 +524,8 @@ const handleCloseEdit = () => {
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
-              window.location.reload();
+              // window.location.reload();
+              onRefresh()
             });
           } else if (response_code === "400") {
             // Show server validation error here

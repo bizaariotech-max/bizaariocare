@@ -230,7 +230,7 @@ const save_diagnostics_investigations = async () => {
   try {
     const payload=
           {...medical_history,
-            CaseFileId:patient_all_diagnostics[0]?.caseFileId._id,
+            CaseFileId:selected_case_file,
             CreatedBy:doctordetails._id
           }
     const resp = await api.post(
@@ -375,7 +375,7 @@ const update_diagnostics_investigations = async () => {
   try {
     const payload=
           {...medical_history,
-            CaseFileId:patient_all_diagnostics[0]?.caseFileId._id,
+            CaseFileId:selected_case_file,
             UpdatedBy:doctordetails._id
           }
     const resp = await api.put(
@@ -442,7 +442,7 @@ const update_diagnostics_investigations = async () => {
         <h3 className="text-xxl font-bold text-gray-900">
           Past Investigations/ Diagnostics 
         </h3>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4" style={{display:selected_case_file?"flex":"none"}}>
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
             <Plus className="w-4 h-4" />
@@ -455,7 +455,7 @@ const update_diagnostics_investigations = async () => {
       </div>
 
       {/* Table */}
-      {/* <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
+     <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
         <div className="bg-[var(--button-back-color)] text-white  " >
           <div className="grid grid-cols-3 gap-4 p-2 text-[20px]">
             <h3 className="table-header">Investigation Category</h3>
@@ -485,11 +485,11 @@ const update_diagnostics_investigations = async () => {
             </div>
           ))}
         </div>
-      </div> */}
+      </div> 
 
       {/* Show patient_all_cheif_complaints section only if case_file_data is empty */}
 {
-// (!case_file_data || case_file_data.length === 0) &&
+(!case_file_data || case_file_data.length === 0) &&
   patient_all_diagnostics?.map((caseFile, caseIndex) => (
     <div key={caseFile.caseFileId} className="mb-6">
       {/* Case File Header */}

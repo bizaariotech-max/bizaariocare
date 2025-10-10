@@ -10,7 +10,7 @@ import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap';
 import { __postApiData } from "../../../../../utils/api";
 
-const PastMedicinesForCurrentProblem = ({patientId,selected_case_file,case_file_data}) => {
+const PastMedicinesForCurrentProblem = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
    const doctordetails=JSON.parse(localStorage.getItem("user"))
    
@@ -241,7 +241,8 @@ const save_medicine = async () => {
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
-        window.location.reload();
+        // window.location.reload();
+        onRefresh()
       });
     } else if (response_code === "400") {
       // Show server validation error here
@@ -396,7 +397,8 @@ const update_medicine = async () => {
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
-        window.location.reload();
+        // window.location.reload();
+        onRefresh()
       });
     } else if (response_code === "400") {
       // Show server validation error here
@@ -443,7 +445,7 @@ const update_medicine = async () => {
         <h3 className="text-xxl font-semibold text-gray-900">
           Past Medications 
         </h3>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4" style={{display:selected_case_file?"flex":"none"}}>
           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
             <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
             <Plus className="w-4 h-4" />
@@ -456,7 +458,7 @@ const update_medicine = async () => {
       </div>
 
 
-      {/* <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
+      <div className="overflow-x-auto" style={{display:selected_case_file?"block":"none"}}>
      
         <div className="bg-[var(--button-back-color)] text-white  " >
           <div className="grid grid-cols-3 gap-4 p-2 text-[20px]">
@@ -488,11 +490,11 @@ const update_medicine = async () => {
             </div>
           ))}
         </div>
-      </div> */}
+      </div> 
 
     {/* Show patient_all_cheif_complaints section only if case_file_data is empty */}
 {
-// (!case_file_data || case_file_data.length === 0) &&
+(!case_file_data || case_file_data.length === 0) &&
   patient_all_current_medicine?.map((caseFile, caseIndex) => (
     <div key={caseFile.caseFileId} className="mb-6">
       {/* Case File Header */}

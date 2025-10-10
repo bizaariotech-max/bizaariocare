@@ -10,7 +10,7 @@ import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap';
 import { __postApiData } from "../../../../../utils/api";
 
-const DiagnosticsInvestigationsForCurrentProblem = ({patientId,selected_case_file,case_file_data}) => {
+const DiagnosticsInvestigationsForCurrentProblem = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
      const doctordetails=JSON.parse(localStorage.getItem("user"))
 
@@ -253,7 +253,8 @@ const save_diagnostics_investigations = async () => {
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
-        window.location.reload();
+        // window.location.reload();
+        onRefresh()
       });
     } else if (response_code === "400") {
       // Show server validation error here
@@ -398,7 +399,8 @@ const update_diagnostics_investigations = async () => {
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
-        window.location.reload();
+        // window.location.reload();
+        onRefresh()
       });
     } else if (response_code === "400") {
       // Show server validation error here

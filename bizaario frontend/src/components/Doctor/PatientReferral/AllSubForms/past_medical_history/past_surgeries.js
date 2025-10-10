@@ -11,11 +11,10 @@ import { Modal,} from 'react-bootstrap';
 
 const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
 
+  const[isloading,setisloading]=useState(false)
+
   const doctordetails=JSON.parse(localStorage.getItem("user"))
 
-
-  
-   
  const [surgeries, setsurgeries] = useState({
       SurgeriesProcedures:[{
             Date:"",
@@ -224,7 +223,7 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
 
 
   const save_surgery = async () => {
-        // setisloading(true);
+        setisloading(true);
         try {
           const payload=
           {...surgeries,
@@ -282,7 +281,7 @@ const PastSurgeries = ({patientId,selected_case_file,case_file_data}) => {
             customClass: { confirmButton: "my-swal-button" },
           });
         } finally {
-          // setisloading(false);
+          setisloading(false);
         }
       };
 
@@ -358,7 +357,7 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
 
 
   const update_surgery = async () => {
-        // setisloading(true);
+        setisloading(true);
         try {
           const payload=
           {...surgeries,
@@ -417,7 +416,7 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
             customClass: { confirmButton: "my-swal-button" },
           });
         } finally {
-          // setisloading(false);
+          setisloading(false);
         }
       };
 
@@ -431,7 +430,7 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
               <h3 className="text-xxl font-semibold text-gray-900">
                 Past Surgeries
               </h3>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-4" style={{display:selected_case_file?"flex":"none"}}>
                 <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
                   <span className="text-sm font-medium underline" onClick={handleShow}>Add</span>
                   <Plus className="w-4 h-4" />
@@ -514,12 +513,12 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
               className={`grid grid-cols-2 gap-4 p-4 ${index % 2 === 0 ? 'bg-[#f2f3f6]' : 'bg-white'
                 }`}
             >
-             <div className="text-sm text-gray-900 font-medium">
+             <div className="text-sm text-gray-900 font-medium table-body">
               {item?.SurgeryProcedureName?item.SurgeryProcedureName.lookup_value :"—"}
             </div>
 
             {/* Duration */}
-            <div className="text-sm text-gray-900">
+            <div className="text-sm text-gray-900 table-body">
              {item?.SurgeonName?item.SurgeonName :"—"}
             </div>
              
@@ -560,12 +559,12 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
        
           
 
-           <div className="text-sm text-gray-900 font-medium">
+           <div className="text-sm text-gray-900 font-medium table-body">
               {item?.SurgeryProcedureName?item.SurgeryProcedureName.lookup_value :"—"}
             </div>
 
             {/* Duration */}
-            <div className="text-sm text-gray-900">
+            <div className="text-sm text-gray-900 table-body">
              {item?.SurgeonName?item.SurgeonName :"—"}
             </div>
 
@@ -1201,6 +1200,22 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
          
           </Modal>
 
+                {isloading && (
+                      <div
+                        style={{
+                          position: 'fixed',
+                          inset: 0,
+                          background: 'rgba(255, 255, 255, 0.6)',
+                          zIndex: 9999,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <UniqueLoader />
+                      </div>
+                    )}
+                    
 
     </div>
   );

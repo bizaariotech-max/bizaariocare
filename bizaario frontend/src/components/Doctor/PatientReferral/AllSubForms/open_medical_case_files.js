@@ -314,6 +314,16 @@ const change_casefile_status = async (id,status) => {
 };
 
 
+//============================= edit case file==============================================
+
+const handle_edit_case_file=(file)=>
+{
+  setmedical_case_file({...file,
+                        MedicalSpeciality:file.MedicalSpeciality._id,
+                        DoctorId:file.DoctorId._id,
+                        _id:file._id})
+}
+
 
 
 
@@ -770,7 +780,7 @@ const change_casefile_status = async (id,status) => {
             Medical Case File ID:<br></br>
              <span className="form-title text-lg font-semibold text-gray-800">{file._id || 'N/A'}</span>
           </h3>
-           <button className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
+           <button onClick={()=>handle_edit_case_file(file)} className="flex items-center space-x-2 text-[var(--primary-color)] hover:text-blue-700 transition-colors">
                      <Edit className="w-4 h-4" />
                      <span className="text-sm font-medium underline">Edit</span>
             </button>

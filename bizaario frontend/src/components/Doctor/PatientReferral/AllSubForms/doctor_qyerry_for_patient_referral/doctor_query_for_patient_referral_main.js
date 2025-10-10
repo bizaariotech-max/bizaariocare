@@ -7,18 +7,13 @@ import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/materia
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
-import PastSurgeries from './past_surgeries';
-import PastIllness from './past_illness';
-import PastAccident from './past_accident';
-import PastMedicinesForCurrentProblem from './past_medicines_for_medical_summary';
-import PastTherapyForCurrentProblem from './past_therapy_for_medical_summary';
-import PastDiagnosticsInvestigationsForCurrentProblem from './Past_Diagnostics_investigations_for_medical_summary';
 
 
 
 
 
-const PastMedicalHistoryMain = ({patientId,selected_case_file}) => {
+
+const DoctorQueryForPatientReferralMain = ({patientId,selected_case_file}) => {
 
   const[loading_for,setloading_for]=useState("")
 
@@ -64,12 +59,6 @@ const[medical_history_id,setmedical_history_id]=useState("")
 
  
 //================================== get selected case file data============================================
-const [refreshParent, setRefreshParent] = useState(0);
-
-const handleParentRefresh = () => {
-  setRefreshParent((prev) => prev + 1);
-};
-
 
   const[case_file_data,setcase_file_data]=useState([])
       const getcase_filedetails=async()=>
@@ -85,21 +74,17 @@ const handleParentRefresh = () => {
         }
       }
     
-      // useEffect(()=>
-      // {
-      //   getcase_filedetails()
+      useEffect(()=>
+      {
+        getcase_filedetails()
     
-      // },[selected_case_file])
-
-      useEffect(() => {
-  getcase_filedetails();
-}, [selected_case_file, refreshParent]);
-
+      },[selected_case_file])
 
    
   //=========================== drop down for update status====================================
 
   const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState("Update Status");
   const dropdownRef = useRef(null);
 
   // Close dropdown if clicked outside
@@ -116,10 +101,15 @@ const handleParentRefresh = () => {
 
   
   const [refreshKeys, setRefreshKeys] = useState({
-  pastmedicine: 0,
-  pasttherapy: 0,
-  pastsurgery: 0,
-  pastinvestigation: 0,
+  preExisting: 0,
+  familyHistory: 0,
+  habits: 0,
+  allergies: 0,
+  trauma: 0,
+  complaints: 0,
+  diagnostics: 0,
+  medicines: 0,
+  therapy: 0,
 });
 
 // Function to trigger refresh for a single component
@@ -139,7 +129,7 @@ const handleComponentRefresh = (name) => {
 
       <div className="flex items-center justify-between mt-2 ">
                   <h2 className="text-xl font-semibold text-gray-900">
-                    Past Medical History
+                    Doctor Query for Patient Referral
                   </h2>
               
                 <button
@@ -196,62 +186,18 @@ const handleComponentRefresh = (name) => {
 
         {/* Cards */}
 
-       <div className="card-details">
-          <PastIllness
-            patientId={patientId}
-            selected_case_file={selected_case_file}
-            case_file_data={case_file_data}
-          />
-        </div>
+      
 
-         <div className="card-details">
-          <PastAccident
-            patientId={patientId}
-            selected_case_file={selected_case_file}
-            case_file_data={case_file_data}
-          />
-        </div>
+         
 
-            <div className="card-details">
-          <PastMedicinesForCurrentProblem
-           key={refreshKeys.pastmedicine}
-            onRefresh={() => handleComponentRefresh("pastmedicine")}
-            patientId={patientId}
-            selected_case_file={selected_case_file}
-            case_file_data={case_file_data}
-          />
-        </div>
+        
 
-            <div className="card-details">
-          <PastTherapyForCurrentProblem
-           key={refreshKeys.pasttherapy}
-            onRefresh={() => handleComponentRefresh("pasttherapy")}
-            patientId={patientId}
-            selected_case_file={selected_case_file}
-            case_file_data={case_file_data}
-          />
-        </div>
-
-        <div className="card-details">
-          <PastSurgeries
-           key={refreshKeys.pastsurgery}
-            onRefresh={() => handleComponentRefresh("pastsurgery")}
-            patientId={patientId}
-            selected_case_file={selected_case_file}
-            case_file_data={case_file_data}
-          />
-        </div>
+           
 
       
-            <div className="card-details">
-          <PastDiagnosticsInvestigationsForCurrentProblem
-           key={refreshKeys.pastinvestigation}
-            onRefresh={() => handleComponentRefresh("pastinvestigation")}
-            patientId={patientId}
-            selected_case_file={selected_case_file}
-            case_file_data={case_file_data}
-          />
-        </div>
+
+        
+         
 
      
    </div>
@@ -282,4 +228,4 @@ const handleComponentRefresh = (name) => {
   );
 };
 
-export default PastMedicalHistoryMain;
+export default DoctorQueryForPatientReferralMain;

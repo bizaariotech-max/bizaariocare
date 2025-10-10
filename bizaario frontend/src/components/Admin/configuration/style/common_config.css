@@ -103,7 +103,7 @@
 .MuiInputBase-root.MuiOutlinedInput-root {
   height: 44px !important;
   min-height: 44px !important;
-  border: 1px solid rgba(0, 0, 0, 0.7) !important;
+  /* border: 1px solid rgba(0, 0, 0, 0.7) !important; */
 }
 
 /* 🔹 DataGrid override */
