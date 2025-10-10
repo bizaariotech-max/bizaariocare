@@ -118,8 +118,8 @@ const handleTherapyChange = (index, field, value) => {
           showConfirmButton: true,
           customClass: { confirmButton: "my-swal-button" },
         }).then(() => {
-          // window.location.reload();
-          onRefresh()
+          window.location.reload();
+          // onRefresh()
         });
       } else if (response_code === "400") {
         // Show server validation error here
@@ -162,12 +162,34 @@ const handleTherapyChange = (index, field, value) => {
       //  setLoadingSpeciality(true);
        const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
        
-        
-          const formatted = resp.data.data.list.map(item => ({
-            caseFileId: item.CaseFileId,
+        const list = resp?.data?.data?.list || [];
+
+    // Try to find matching item
+    const matchedItem = list.find(
+      (item) => item?.CaseFileId?._id === selected_case_file
+    );
+
+      let formatted = [];
+
+      if (matchedItem) {
+      // ✅ If match found → only that one
+      formatted = [
+        {
+          caseFileId: matchedItem.CaseFileId,
+            treatmentType: matchedItem.CaseFileId.TreatmentType,
+            therapy: matchedItem.Therapies || []
+        },
+      ];
+    } else {
+      // ✅ If no match → take all
+      formatted = list.map((item) => ({
+      caseFileId: item.CaseFileId,
             treatmentType: item.CaseFileId.TreatmentType,
-            therapy: item.Therapies
-          }));
+            therapy: item.Therapies || []
+      }));
+    }
+
+         
           setpatient_all_therapy(formatted);
   
    
@@ -182,7 +204,7 @@ const handleTherapyChange = (index, field, value) => {
    useEffect(()=>
    {
    getall_patient_medical_history()
-   },[])
+   },[selected_case_file])
   
 
    
@@ -231,7 +253,7 @@ const handleTherapyChange = (index, field, value) => {
     try {
      const payload=
           {...medical_history,
-            CaseFileId:patient_all_therapy[0]?.caseFileId._id,
+            CaseFileId:selected_case_file,
             UpdatedBy :doctordetails._id
             
           }
@@ -255,8 +277,8 @@ const handleTherapyChange = (index, field, value) => {
           showConfirmButton: true,
           customClass: { confirmButton: "my-swal-button" },
         }).then(() => {
-          // window.location.reload();
-          onRefresh()
+          window.location.reload();
+          // onRefresh()
         });
       } else if (response_code === "400") {
         // Show server validation error here

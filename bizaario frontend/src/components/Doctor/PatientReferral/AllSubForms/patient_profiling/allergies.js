@@ -193,7 +193,7 @@ const handleRemoveAllergies = async (allergiesId, index) => {
       );
       const { response_code, response_message } = resp.data.response;
 
-      console.log(resp);
+ 
       
 
       if (response_code === '200') {

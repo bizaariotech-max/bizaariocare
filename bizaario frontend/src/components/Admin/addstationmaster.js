@@ -46,7 +46,7 @@ function Addstationmaster() {
     }
   };
 
-  console.log(allstationmaster);
+
   
 
   const getallorgunits = async () => {
@@ -102,8 +102,7 @@ function Addstationmaster() {
   const addstation_master = async () => {
     try {
       const resp = await api.post("api/v1/admin/SaveStation", stationmaster);
-      console.log(resp);
-      
+   
 
       if (resp.data.response.response_code === "200") {
         Swal.fire({

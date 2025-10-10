@@ -241,8 +241,8 @@ const save_medicine = async () => {
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
-        // window.location.reload();
-        onRefresh()
+        window.location.reload();
+        // onRefresh()
       });
     } else if (response_code === "400") {
       // Show server validation error here
@@ -280,33 +280,54 @@ const save_medicine = async () => {
 
 // =======================get all data of current medicines====================================
 
-    const[patient_all_current_medicine,setpatient_all_current_medicine]=useState([])
+ const [patient_all_current_medicine, setpatient_all_current_medicine] = useState([]);
 
- const getall_patient_medical_history = async () => {
-   try {
-    //  setLoadingSpeciality(true);
-     const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
-  
-        const formatted = resp.data.data.list.map(item => ({
-          caseFileId: item.CaseFileId,
-          treatmentType: item.CaseFileId.TreatmentType,
-          current_medicines: item.MedicinesPrescribed
+const getall_patient_medical_history = async () => {
+  try {
+    const resp = await api.get(
+      `api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`
+    );
 
-        }));
-        setpatient_all_current_medicine(formatted);
+    const list = resp?.data?.data?.list || [];
 
-     
-   } catch (error) {
-     console.error(error);
-   } finally {
-    //  setLoadingSpeciality(false);
-   }
- };
+    // Try to find matching item
+    const matchedItem = list.find(
+      (item) => item?.CaseFileId?._id === selected_case_file
+    );
+
+    let formatted = [];
+
+    if (matchedItem) {
+      // ✅ If match found → only that one
+      formatted = [
+        {
+          caseFileId: matchedItem.CaseFileId,
+          treatmentType: matchedItem.CaseFileId.TreatmentType,
+          current_medicines: matchedItem.MedicinesPrescribed || [],
+        },
+      ];
+    } else {
+      // ✅ If no match → take all
+      formatted = list.map((item) => ({
+        caseFileId: item.CaseFileId,
+        treatmentType: item.CaseFileId?.TreatmentType,
+        current_medicines: item.MedicinesPrescribed || [],
+      }));
+    }
+
+    setpatient_all_current_medicine(formatted);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+useEffect(() => {
+  getall_patient_medical_history();
+}, [selected_case_file]);
+
+
  
- useEffect(()=>
- {
- getall_patient_medical_history()
- },[])
+
 
 
  
@@ -374,7 +395,7 @@ const update_medicine = async () => {
   try {
     const payload=
           {...medical_history,
-            CaseFileId:patient_all_current_medicine[0]?.caseFileId._id,
+            CaseFileId:selected_case_file,
             UpdatedBy :doctordetails._id
           }
     const resp = await api.put(
@@ -397,8 +418,8 @@ const update_medicine = async () => {
         showConfirmButton: true,
         customClass: { confirmButton: "my-swal-button" },
       }).then(() => {
-        // window.location.reload();
-        onRefresh()
+        window.location.reload();
+        // onRefresh()
       });
     } else if (response_code === "400") {
       // Show server validation error here
@@ -432,6 +453,9 @@ const update_medicine = async () => {
     setisloading(false);
   }
 };
+
+
+
 
 
 
@@ -477,6 +501,7 @@ const update_medicine = async () => {
               className={`grid grid-cols-3 gap-4 p-4 ${index % 2 === 0 ? 'bg-[#f2f3f6]' : 'bg-white'
                 }`}
             >
+              
               <div className="text-sm text-gray-900 font-medium table-body">
                 {item?.MedicineName?.lookup_value|| "—"}
               </div>

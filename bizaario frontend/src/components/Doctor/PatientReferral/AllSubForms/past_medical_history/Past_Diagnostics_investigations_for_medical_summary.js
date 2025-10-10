@@ -49,7 +49,7 @@ const PastDiagnosticsInvestigationsForCurrentProblem = ({patientId,selected_case
     ...prev,                        
     ClinicalDiagnoses: [              
       ...(prev.ClinicalDiagnoses || []),
-      { Date: "", InvestigationCategory: "", Investigation: "", Abnormalities:[], ReportUrl: [],InterpretationUrl:[] } // new item
+      { Date: "", InvestigationCategory: "", Investigation: "", Abnormalities:[], ReportUrl:"",InterpretationUrl:""} // new item
     ],
   }));
 };
@@ -297,13 +297,35 @@ const save_diagnostics_investigations = async () => {
     //  setLoadingSpeciality(true);
      const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
     
-     
-        const formatted = resp.data.data.list.map(item => ({
-          caseFileId: item.CaseFileId,
-          treatmentType: item.CaseFileId.TreatmentType,
-          clinicaldiagnoses: item.ClinicalDiagnoses
-        }));
-        setpatient_all_diagnostics(formatted);
+      const list = resp?.data?.data?.list || [];
+
+    // Try to find matching item
+    const matchedItem = list.find(
+      (item) => item?.CaseFileId?._id === selected_case_file
+    );
+
+    let formatted = [];
+
+       if (matchedItem) {
+      // ✅ If match found → only that one
+      formatted = [
+        {
+          caseFileId: matchedItem.CaseFileId,
+          treatmentType: matchedItem.CaseFileId.TreatmentType,
+          clinicaldiagnoses: matchedItem.ClinicalDiagnoses || [],
+        },
+      ];
+    } else {
+      // ✅ If no match → take all
+      formatted = list.map((item) => ({
+        caseFileId: item.CaseFileId,
+        treatmentType: item.CaseFileId?.TreatmentType,
+        clinicaldiagnoses: item.ClinicalDiagnoses || [],
+      }));
+    }
+
+
+    setpatient_all_diagnostics(formatted);
 
  
      
@@ -317,7 +339,7 @@ const save_diagnostics_investigations = async () => {
  useEffect(()=>
  {
  getall_patient_medical_history()
- },[])
+ },[selected_case_file])
 
 
  

@@ -295,13 +295,37 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
     //  setLoadingSpeciality(true);
      const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Past`);
  
+      const list = resp?.data?.data?.list || [];
+
+    // Try to find matching item
+    const matchedItem = list.find(
+      (item) => item?.CaseFileId?._id === selected_case_file
+    );
+
+    let formatted = [];
+
+        if (matchedItem) {
+      // ✅ If match found → only that one
+      formatted = [
+        {
+          caseFileId: matchedItem.CaseFileId,
+          treatmentType: matchedItem.CaseFileId.TreatmentType,
+          surgeries: matchedItem.SurgeriesProcedures || [],
+        },
+      ];
+    } else {
+      // ✅ If no match → take all
+      formatted = list.map((item) => ({
+        caseFileId: item.CaseFileId,
+        treatmentType: item.CaseFileId?.TreatmentType,
+        surgeries: item.SurgeriesProcedures || [],
+      }));
+    }
+
+
      
-        const formatted = resp.data.data.list.map(item => ({
-          caseFileId: item.CaseFileId._id,
-          treatmentType: item.CaseFileId.TreatmentType,
-          surgeries: item.SurgeriesProcedures
-        }));
-        setpatient_past_surgeries(formatted);
+   
+      setpatient_past_surgeries(formatted);
 
  
      
@@ -315,7 +339,7 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
  useEffect(()=>
  {
  getall_patient_medical_history()
- },[])
+ },[selected_case_file])
 
  
 
@@ -534,7 +558,8 @@ const[patient_past_surgeries,setpatient_past_surgeries]=useState([])
     <div key={caseFile.caseFileId} className="mb-6">
       {/* Case File Header */}
       <h3 className="text-xl font-bold mb-2">
-        {caseFile.treatmentType} (Case File ID: {caseFile.caseFileId})
+        {caseFile.caseFileId.TreatmentType} (Case File ID: {caseFile.caseFileId._id})-
+        {new Date(caseFile.caseFileId.Date).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})}
       </h3>
 
       {/* Table Header */}

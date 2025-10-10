@@ -7,6 +7,10 @@ import { TextField, Select, MenuItem, FormControl, Button,  } from '@mui/materia
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
+import PatientReferral from './patient_referral';
+import PatientReferralForSecondOpenioun from './patient_referral_for_second_opinioun';
+import PatientReferralForMedicalTourism from './medical_tourism';
+import DoctorHospitalSelection from './doctor_hospital_selection';
 
 
 
@@ -187,9 +191,45 @@ const handleComponentRefresh = (name) => {
         {/* Cards */}
 
       
-
+    <div className="card-details">
+          <PatientReferral
+           key={refreshKeys.pastsurgery}
+            onRefresh={() => handleComponentRefresh("pastsurgery")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
          
+ <div className="card-details">
+          <PatientReferralForSecondOpenioun
+           key={refreshKeys.pastsurgery}
+            onRefresh={() => handleComponentRefresh("pastsurgery")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
 
+         <div className="card-details">
+          <PatientReferralForMedicalTourism
+           key={refreshKeys.pastsurgery}
+            onRefresh={() => handleComponentRefresh("pastsurgery")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
+
+         <div className="card-details">
+          <DoctorHospitalSelection
+           key={refreshKeys.pastsurgery}
+            onRefresh={() => handleComponentRefresh("pastsurgery")}
+            patientId={patientId}
+            selected_case_file={selected_case_file}
+            case_file_data={case_file_data}
+          />
+        </div>
         
 
            
