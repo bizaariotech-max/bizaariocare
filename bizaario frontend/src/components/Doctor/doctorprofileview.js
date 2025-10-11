@@ -15,6 +15,8 @@ export default function DoctorProfile() {
   {
     try {
       const resp=await api.get(`doctor/getdoctorbyid/${id}`)
+      console.log(resp);
+      
       setdoctorprofile(resp.data.doctor)
       
     } catch (error) {
@@ -181,7 +183,7 @@ export default function DoctorProfile() {
               <h6 className="mt-8 text-lg font-semibold">Bio Video</h6>
             <iframe
         className="w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px] rounded-md shadow-md mt-2"
-        src={doctorprofile.bio_video}
+        src={doctorprofile?.bio_video}
         title="YouTube video"
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -248,7 +250,7 @@ export default function DoctorProfile() {
           <div className="space-y-6">
             <h4 className="font-semibold text-lg">Work Experience</h4>
             {
-            doctorprofile.work_experience.map((item, index) => (
+            doctorprofile?.work_experience?.map((item, index) => (
            <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
       <img
         src="https://api.builder.io/api/v1/image/assets/TEMP/1b856e809c7235f840a5c224f76e47c868c95e60?width=96"
@@ -266,7 +268,7 @@ export default function DoctorProfile() {
             ))}
             <h4 className="font-semibold text-lg mt-6">Our Gallery</h4>
          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-2">
-  {doctorprofile.image_gallary.map((img, idx) => (
+  {doctorprofile?.image_gallary?.map((img, idx) => (
     <div
       key={idx}
       className="w-full rounded-md shadow overflow-hidden"
@@ -286,7 +288,7 @@ export default function DoctorProfile() {
       case "Awards & Certificates":
         return (
          <div className="space-y-6">
-  {doctorprofile.awards_and_achievements.map((a, idx) => (
+  {doctorprofile?.awards_and_achievements?.map((a, idx) => (
     <div
       key={idx}
       className="flex flex-col md:flex-row gap-6 bg-white rounded-lg shadow p-4 items-center md:items-start"
@@ -341,7 +343,7 @@ export default function DoctorProfile() {
       <div className="md:w-2/3 w-full p-4 flex flex-col justify-between">
         <div>
           <h3 className="font-bold text-lg mb-2">{event.event_title || "Event Title"}</h3>
-          <p className="text-sm text-gray-500 mb-2">by {`${doctorprofile.firstName} ${doctorprofile.lastName}` || "Doctor Name"}</p>
+          <p className="text-sm text-gray-500 mb-2">by {`${doctorprofile?.firstName} ${doctorprofile?.lastName}` || "Doctor Name"}</p>
           <p className="font-semibold mb-1">Event Type: {event.event_type}</p>
           <p className="text-sm font-medium mt-1">📍 {event.venue || "Location"}</p>
           <p className="text-sm font-medium mt-1">📅 {event.start_date ? new Date(event.start_date).toLocaleDateString() : "-"} - {event.end_date ? new Date(event.end_date).toLocaleDateString() : "-"}</p>
@@ -384,7 +386,7 @@ export default function DoctorProfile() {
   {/* Doctor Photo + Socials */}
   <div className="flex flex-col items-center md:items-start min-w-[7rem]">
     <img
-      src={doctorprofile.profile_pic}
+      src={doctorprofile?.profile_pic}
       alt="Dr. Dominic Stonehart"
       className="w-28 h-32 md:w-36 md:h-40 object-cover rounded-lg border"
     />
@@ -407,11 +409,11 @@ export default function DoctorProfile() {
       <p className="text-[18px] text-[rgba(0,0,0,0.75)]  font-medium mb-1">
           Specializes in:{" "}
           <span className=" text-[18px] text-[rgba(0,0,0,0.75)]">
-            {doctorprofile.medical_specialty}
+            {doctorprofile?.medical_specialty}
           </span>
         </p>
         <p className="text-gray-800 text-sm mt-1 break-words text-[16px] text-[rgba(0,0,0,0.75)]">
-           {doctorprofile.bio}
+           {doctorprofile?.bio}
         </p>
       </div>
       {/* Profile PDF Link Right (never wraps) */}

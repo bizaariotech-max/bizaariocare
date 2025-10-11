@@ -34,7 +34,7 @@ return null;
 
 
   return (
-    <>
+    <div className='mt-2'>
 
 <section className='spacing-top empoering-section partner-list-home'>
 
@@ -126,7 +126,7 @@ return null;
 
     </div>
 </section>
-    </>
+    </div>
   )
 }
 

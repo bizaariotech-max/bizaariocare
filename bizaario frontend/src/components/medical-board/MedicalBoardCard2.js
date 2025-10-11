@@ -55,7 +55,7 @@ const MedicalBoardCard2 = () => {
       {doctorArr.map((item) => (
         <div
           key={item.id}
-          className="relative max-w-sm bg-white rounded-lg shadow-md flex flex-col"
+          className="relative max-w-sm bg-white rounded-lg shadow-md flex flex-col h-full"
         >
           {/* Header Section */}
     <div className="bg-gray-200 rounded-t-lg relative flex items-center px-1 sm:px-1 py-1">
@@ -100,7 +100,7 @@ const MedicalBoardCard2 = () => {
           </div>
 
           {/* Buttons */}
-          <div className="px-4 pb-4 flex flex-col gap-3 mt-2">
+          <div className="px-4 pb-4 flex flex-col gap-3 mt-auto ">
             <button className=" bg-[var(--button-back-color)] text-[var(--white)] rounded-lg py-3 font-semibold text-center text-base hover:bg-[var(--button-back-hover)] transition">
               Send Medical Query
             </button>
