@@ -38,7 +38,7 @@ const PartnersListHome = () => {
         AssetCategoryLevel1: "68b00db063729ea39b28d0ef",
       });
 
-console.log(resp);
+
 
       const formattedData = resp.data.data.list.map((doc, index) => ({
         id: doc._id || index + 1,

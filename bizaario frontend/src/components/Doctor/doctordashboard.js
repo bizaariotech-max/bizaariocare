@@ -165,7 +165,7 @@ function KnowledgeBankSection() {
                      arrows={false} 
                    responsive={responsive}
                    containerClass=" carousel-container" 
-                   itemClass="pe-md-4 px-1"  
+                   itemClass="pe-md-1 px-1"  
                    infinite={true}  
                    renderDotsOutside={true} 
                    partialVisible={true}
@@ -552,7 +552,7 @@ return (
       {doctorArr.map((item) => (
         <div
           key={item.id}
-          className="relative max-w-sm bg-white rounded-lg shadow-md flex flex-col"
+          className="relative max-w-sm bg-white rounded-lg shadow-md flex flex-col h-full"
         >
           {/* Header Section */}
     <div className="bg-gray-200 rounded-t-lg relative flex items-center px-1 sm:px-1 py-1">
@@ -597,7 +597,7 @@ return (
           </div>
 
           {/* Buttons */}
-          <div className="px-4 pb-4 flex flex-col gap-3 mt-2">
+          <div className="px-4 pb-4 flex flex-col gap-3 mt-auto">
             <button className=" bg-[var(--button-back-color)] text-[var(--white)] rounded-lg py-3 font-semibold text-center text-base hover:bg-[var(--button-back-hover)] transition">
               Send Medical Query
             </button>
@@ -889,73 +889,49 @@ const  PatientDetailsSection=()=> {
 
 
 const Partnerhospital = () => {
+
+    const [hospital_details, sethospital_details] = useState([]);
+
+  const get_hospital_profile = async () => {
+    try {
+      const resp = await api.post("api/v1/admin/assetList", {
+        AssetCategoryLevel1: "68b00db063729ea39b28d0ef",
+      });
+
+
+
+      const formattedData = resp.data.data.list.map((doc, index) => ({
+        id: doc._id || index + 1,
+        name: doc.AssetName,
+        // exp: `${
+        //   (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
+        // } | ${doc.experience || 0} Years Experience`,
+          exp: `${
+          doc.MedicalSpecialties.map((item)=>item.lookup_value)} | ${doc.experience || 5} Years Experience`,
+        location: `${doc.AddressLine1} ${doc.AddressLine2} ${doc.PostalCode}` || "",
+        Specializes: `${
+          (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
+        } `,
+        image: doc.ProfilePicture || null,
+        Website:doc.Website || "",
+        Logo:doc.Logo || ""
+      }));
+
+      sethospital_details(formattedData);
+    } catch (error) {
+      console.error("Error fetching doctor profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    get_hospital_profile();
+  }, []);
+
+
+
                 const [activeTab, setActiveTab] = useState('tab1');
 
-      const hospitalPartnerData = [
-  
-      {
-        id: 1, 
-        name: "NovaCare Hospital",
-        exp: "Multi-specialty / Tertiary Care",
-        location: "123 Health Blvd, Los Angeles, CA",
-        hours:'Open 24/7  ',
-        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
-        URL:  'www.novacarehealth.com ', 
-        image: novacare1
-    },
-      {
-        id: 2, 
-        name: "NovaCare Hospital",
-        exp: "Multi-specialty / Tertiary Care",
-        location: "123 Health Blvd, Los Angeles, CA",
-        hours:'Open 24/7  ',
-        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
-        URL:  'www.novacarehealth.com ', 
-        image: novacare1
-    },
-      {
-        id: 3, 
-        name: "NovaCare Hospital",
-        exp: "Multi-specialty / Tertiary Care",
-        location: "123 Health Blvd, Los Angeles, CA",
-        hours:'Open 24/7  ',
-        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
-        URL:  'www.novacarehealth.com ', 
-        image: novacare1
-    },
-      {
-        id: 4, 
-        name: "NovaCare Hospital",
-        exp: "Multi-specialty / Tertiary Care",
-        location: "123 Health Blvd, Los Angeles, CA",
-        hours:' Open 24/7  ',
-        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
-        URL:  'www.novacarehealth.com ', 
-        image: novacare1
-    },
-      {
-        id: 5, 
-        name: "NovaCare Hospital",
-        exp: "Multi-specialty / Tertiary Care",
-        location: "123 Health Blvd, Los Angeles, CA",
-        hours:' Open 24/7  ',
-        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
-        URL:  'www.novacarehealth.com ', 
-        image: novacare1
-    },
-      {
-        id: 6, 
-        name: "NovaCare Hospital",
-        exp: "Multi-specialty / Tertiary Care",
-        location: "123 Health Blvd, Los Angeles, CA",
-        hours:' Open 24/7  ',
-        Specializes: "Specializes in :  Interventional Cardiology, Heart Failure Management , Preventive Cardiology",
-        URL:  'www.novacarehealth.com ', 
-        image: novacare1
-    },
-  
 
-]
 
   
        const responsive = {
@@ -980,22 +956,11 @@ const Partnerhospital = () => {
     };
 
 
-// const renderContent = () => {
-// switch (activeTab) {
-// case 'tab1': return <div className="row"><PartnersListHome/></div>;
-// case 'tab2': return  <div className="row"><PartnersListHome/></div>;
-// case 'tab3': return <div className="row"><PartnersListHome/></div>;
-// case 'tab4': return <div className="row"><PartnersListHome/></div>;
-// case 'tab5': return <div className="row"><PartnersListHome/></div>;
-// case 'tab6': return <div className="row"><PartnersListHome/></div>;
-// case 'tab7': return <div className="row"><PartnersListHome/></div>;
-// return null;
-// }
-// };
+
   return (
     <>
 
-    <div style={{margin:0}}>
+    <div className='mt-4'>
          <div className="row"> 
                 <div className="col-lg-8 col-12">
                     <h2 className='fw-semibold'>
@@ -1096,121 +1061,77 @@ const Partnerhospital = () => {
                         //  pauseOnHover={false} 
                         //  centerMode={false}
                         containerClass=" carousel-container" 
-                        itemClass="pe-md-4 px-1"  
+                        itemClass="pe-md-1 px-1"  
                         // showDots={true}
                         infinite={true}  
                         renderDotsOutside={true} 
                         partialVisible={true}
                     
                         >
-                {hospitalPartnerData.map((item) => {
+                {hospital_details.map((item) => {
                     return ( 
                                 
-                              <div
-  className="cardiology-card"
-  style={{
-    background: "#FFF",
-    border: "1px solid #c9cacbff",
-    borderRadius: "12px",
-    overflow: "hidden",
-    width: "100%",
-    maxWidth: "400px", // prevent card from stretching too much
-    margin: "auto",
-  }}
->
-  {/* Banner Image */}
-  <div style={{ width: "100%", height: "200px", overflow: "hidden" }}>
-    <img
-      src={item.image}
-      alt="doctor"
-      className="img-fluid"
-      style={{
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-      }}
-    />
-  </div>
+     <div className="relative max-w-sm bg-white rounded-lg shadow-md flex flex-col h-full" key={item.id}>
+  <div className="bg-white border border-gray-300 rounded-lg shadow relative flex flex-col h-full">
+    {/* ✅ Top Banner Image */}
+    <div className="relative w-full h-32 sm:h-52">
+      <img
+        src={item.image}
+        alt="hospital"
+        className="w-full h-full object-cover"
+      />
 
- <div style={{ padding: "0 16px", marginTop: "-50px", display: "flex", alignItems: "center", gap: "12px" }}>
-  {/* Avatar */}
-  <img
-    src={item.image}
-    alt="doctor"
-    style={{
-      width: "80px",
-      height: "80px",
-      borderRadius: "50%",
-      border: "3px solid #fff",
-      objectFit: "cover",
-      boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
-      flexShrink: 0, // prevent shrinking on small screens
-    }}
-  />
+      {/* ✅ Doctor Image overlapping bottom-left */}
+      <img
+        src={item.Logo}
+        alt="doctor"
+        className="absolute -bottom-10 left-4 sm:left-6 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white object-cover shadow z-50"
+      />
+    </div>
 
-  {/* Name and Experience */}
-  <div style={{ textAlign: "left", flex: 1,paddingTop:"60px" }}>
-    <h5
-      style={{
-        color: "#000",
-        fontFamily: "Lora",
-        fontSize: "clamp(16px, 2vw, 20px)",
-        fontWeight: 700,
-        margin: 0,
-      }}
-    >
-      {item.name}
-    </h5>
-    <p
-      style={{
-        color: "rgba(0, 0, 0, 0.70)",
-        fontFamily: "Poppins",
-        fontSize: "clamp(12px, 1.5vw, 14px)",
-        margin: "4px 0 0",
-      }}
-    >
-      {item.exp}
-    </p>
-  </div>
-</div>
-
-
-  {/* Content Section */}
-  <div style={{ padding: "12px 16px" }}>
-    <div className="d-flex pb-2 align-items-center">
-      <img src={locationIcon} alt="icon" style={{ width: "20px", marginRight: "8px" }} />
-      <div style={{ color: "#000", fontFamily: "Poppins", fontSize: "14px" }}>
-        {item.location}
+    {/* ✅ Name + Exp (next to the doctor image) */}
+    <div className="pt-2 sm:pt-2 px-4 sm:px-6">
+      <div className="ml-24 sm:ml-32">
+        <h5 className="text-base sm:text-lg font-bold text-black break-words">
+          {item.name}
+        </h5>
+        <p className="text-xs sm:text-sm text-gray-700 break-words">
+          {item.exp}
+        </p>
       </div>
     </div>
 
-    <div className="d-flex pb-2 align-items-center">
-      <img src={clockIcon} alt="icon" style={{ width: "20px", marginRight: "8px" }} />
-      <div style={{ color: "#000", fontFamily: "Poppins", fontSize: "14px" }}>
-        Hours: <span>{item.hours}</span>
+    {/* ✅ Content */}
+    <div className="px-4 sm:px-6 py-4 space-y-3 flex-1 mt-auto">
+      <div className="flex items-start space-x-2">
+        <img src={locationIcon} alt="location" className="w-5 sm:w-6" />
+        <span className="text-black text-sm sm:text-base break-words">
+          {item.location}
+        </span>
       </div>
-    </div>
-
-    <div className="d-flex pb-2 align-items-center">
-      <img src={webIcon} alt="icon" style={{ width: "20px", marginRight: "8px" }} />
-      <div style={{ color: "#000", fontFamily: "Poppins", fontSize: "14px" }}>
-        Website:{" "}
-        <span className="theme-color" style={{ color: "#1667ED" }}>
-          {item.URL}
+      <div className="flex items-start space-x-2">
+        <img src={clockIcon} alt="clock" className="w-5 sm:w-6" />
+        <span className="text-black text-sm sm:text-base">
+          Hours: {item?.hours ? item.hours : "24/7"}
+        </span>
+      </div>
+      <div className="flex items-start space-x-2">
+        <img src={webIcon} alt="web" className="w-5 sm:w-6" />
+        <span className="text-black text-sm sm:text-base break-words">
+          Website: {item.Website}
         </span>
       </div>
     </div>
-  </div>
 
-  {/* Buttons */}
-  <div style={{ display: "flex", flexDirection: "column", gap: "12px", padding: "16px" }}>
-    <button className='view-all'>
-      Book An Appointment
-    </button>
-
-    <button className='custom-button'>
-      Send Treatment Query
-    </button>
+    {/* ✅ Buttons */}
+    <div className="px-4 pb-4 flex flex-col gap-3 mt-auto">
+      <button className="bg-[#52677D] text-white rounded-lg py-3 text-sm sm:text-base font-semibold">
+        Book An Appointment
+      </button>
+      <button className="bg-white text-[#52677D] border border-gray-300 rounded-lg py-3 text-sm sm:text-base font-semibold">
+        Send Treatment Query
+      </button>
+    </div>
   </div>
 </div>
 
