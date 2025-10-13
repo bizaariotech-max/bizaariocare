@@ -1,52 +1,90 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import doctorimage from "../../assets/images/doctor-2337835_1920 1.png";
+import { __postApiData } from "../../utils/api";
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Dr. Malik",
-    title: "Senior Cardiologist",
-    hospital: "Apollo Hospitals",
-    review:
-      "Traveling from Kenya for my heart surgery felt overwhelming at first, but the hospital team guided me through every step. The doctors explained everything clearly, and after my procedure, I felt safe and well cared for. I'm truly grateful for the warmth and professionalism I experienced.",
-    image: doctorimage,
-  },
-  {
-    id: 2,
-    name: "Dr. Sarah Johnson",
-    title: "Chief of Neurology",
-    hospital: "Mayo Clinic",
-    review:
-      "The comprehensive care and attention to detail provided by this medical team exceeded all my expectations. From diagnosis to recovery, every aspect was handled with utmost professionalism and compassion.",
-    image: doctorimage,
-  },
-  {
-    id: 3,
-    name: "Dr. Michael Chen",
-    title: "Orthopedic Surgeon",
-    hospital: "Johns Hopkins",
-    review:
-      "Having worked in medicine for over 20 years, I can confidently say this facility represents the gold standard in patient care. The innovative treatments and dedicated staff make all the difference.",
-    image: doctorimage,
-  },
-];
+
 
 export default function TestimonialsSection() {
+
+  //============================ get patient testimonials==========================================
+
+  const[patient_testimonial,setpatient_testimonial]=useState([])
+
+const getContentList = async () => {
+      try {
+        const resp = await __postApiData("/api/v1/admin/ContentList",
+           {
+              page: 1,
+              limit: 100,
+              ContentTypeId: "68c8f5fab5cf101deca56536"
+              // "ContentPriority":"Medium"
+          
+          }
+        );
+        
+        if (resp.response.response_code === "200") {
+          setpatient_testimonial(resp.data.list || []);
+        }
+      } catch (error) {
+        console.error("Error fetching content list:", error);
+      } 
+    };
+
+    useEffect(()=>
+    {
+      getContentList()
+
+    },[])
+
+    console.log(patient_testimonial);
+    
+
+//   const testimonials = [
+//   {
+//     id: 1,
+//     name: "Dr. Malik",
+//     title: "Senior Cardiologist",
+//     hospital: "Apollo Hospitals",
+//     review:
+//       "Traveling from Kenya for my heart surgery felt overwhelming at first, but the hospital team guided me through every step. The doctors explained everything clearly, and after my procedure, I felt safe and well cared for. I'm truly grateful for the warmth and professionalism I experienced.",
+//     image: doctorimage,
+//   },
+//   {
+//     id: 2,
+//     name: "Dr. Sarah Johnson",
+//     title: "Chief of Neurology",
+//     hospital: "Mayo Clinic",
+//     review:
+//       "The comprehensive care and attention to detail provided by this medical team exceeded all my expectations. From diagnosis to recovery, every aspect was handled with utmost professionalism and compassion.",
+//     image: doctorimage,
+//   },
+//   {
+//     id: 3,
+//     name: "Dr. Michael Chen",
+//     title: "Orthopedic Surgeon",
+//     hospital: "Johns Hopkins",
+//     review:
+//       "Having worked in medicine for over 20 years, I can confidently say this facility represents the gold standard in patient care. The innovative treatments and dedicated staff make all the difference.",
+//     image: doctorimage,
+//   },
+// ];
+
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const nextTestimonial = () => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    setCurrentIndex((prev) => (prev + 1) % patient_testimonial.length);
   };
 
   const prevTestimonial = () => {
     if (isAnimating) return;
     setIsAnimating(true);
     setCurrentIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
+      (prev) => (prev - 1 + patient_testimonial.length) % patient_testimonial.length
     );
   };
 
@@ -58,11 +96,15 @@ export default function TestimonialsSection() {
   const getVisibleTestimonials = () => {
     const visible = [];
     for (let i = -1; i <= 1; i++) {
-      const index = (currentIndex + i + testimonials.length) % testimonials.length;
-      visible.push({ ...testimonials[index], position: i });
+      const index = (currentIndex + i + patient_testimonial.length) % patient_testimonial.length;
+      visible.push({ ...patient_testimonial[index], position: i });
     }
     return visible;
   };
+
+
+   
+
 
   return (
     <section className="py-10 px-4">
@@ -87,10 +129,10 @@ export default function TestimonialsSection() {
                       setIsAnimating(true);
                       if (isLeft) {
                         setCurrentIndex(
-                          (prev) => (prev - 1 + testimonials.length) % testimonials.length
+                          (prev) => (prev - 1 + patient_testimonial.length) % patient_testimonial.length
                         );
                       } else if (isRight) {
-                        setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+                        setCurrentIndex((prev) => (prev + 1) % patient_testimonial.length);
                       }
                     }
                   }}
@@ -109,8 +151,8 @@ export default function TestimonialsSection() {
                   <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
                     <div className="relative">
                       <img
-                        src={testimonial.image || "/placeholder.svg"}
-                        alt={testimonial.name}
+                        src={testimonial?.ContentImage || "/placeholder.svg"}
+                        alt={testimonial?.ContentTitle}
                         className={`${
                           isCenter ? "w-20 h-20" : "w-16 h-16"
                         } rounded-full object-cover border-4 border-white shadow-lg transition-all duration-300`}
@@ -147,7 +189,7 @@ export default function TestimonialsSection() {
                           : {}
                       }
                     >
-                      "{testimonial.review}"
+                      "{testimonial?.LongDescription}"
                     </blockquote>
 
                     <div className="text-left w-full">
@@ -156,14 +198,14 @@ export default function TestimonialsSection() {
                           isCenter ? "text-lg" : "text-base"
                         }`}
                       >
-                        {testimonial.name}
+                        {testimonial?.AssetId?.AssetName}
                       </h4>
                       <p
                         className={`text-gray-600 ${
                           isCenter ? "text-sm" : "text-xs"
                         }`}
                       >
-                        {testimonial.title}
+                        {testimonial?.AssetId?.MedicalSpecialties?.map((item)=>item.lookup_value).join(',')}
                       </p>
                       <p
                         className={`text-gray-500 mt-1 ${
@@ -191,7 +233,7 @@ export default function TestimonialsSection() {
           </button>
 
           <div className="flex gap-2">
-            {testimonials.map((_, index) => (
+            {patient_testimonial.map((_, index) => (
               <button
                 key={index}
                 onClick={() => {

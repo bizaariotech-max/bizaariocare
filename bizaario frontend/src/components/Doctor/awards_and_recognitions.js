@@ -111,8 +111,17 @@ function AwardsAndRecognitions() {
   const getContentList = async () => {
     try {
       setIsLoading(true);
-      const resp = await __postApiData("/api/v1/admin/ContentList", {});
+      const resp = await __postApiData("/api/v1/admin/ContentList", 
+  {
+            page: 1,
+            limit: 100,
+            ContentTypeId: "68afff10874340d8d79dbf53"
+            // "ContentPriority":"Medium"
+        }
+);
       
+// console.log(resp);
+
       if (resp.response.response_code === "200") {
         setContentList(resp.data.list || []);
       }
@@ -139,6 +148,8 @@ function AwardsAndRecognitions() {
     }
   };
 
+
+  
   // for common api :__getCommenApiDataList
   const fetchDropdownData = async (lookupTypes, stateKey, parent_lookup_id) => {
     updateState({ isLoading: true });
@@ -155,38 +166,44 @@ function AwardsAndRecognitions() {
     }
   };
 
-  useEffect(() => {
-    getContentList();
-    // Fetch dropdown data and set default for Content Type
-    const initializeDropdowns = async () => {
-      try {
-        // Fetch Content Type data
-        const contentTypeData = await __getCommenApiDataList({
-          lookup_type: ["content_type"],
-          parent_lookup_id: null,
-        });
+useEffect(() => {
+  getContentList();
 
+  const initializeDropdowns = async () => {
+    try {
+      // Fetch Content Type data
+      const contentTypeData = await __getCommenApiDataList({
+        lookup_type: ["content_type"],
+        parent_lookup_id: null,
+      });
 
-        // Find and set Digital CME as default
-        const digitalCMEOption = contentTypeData.find(
-          (item) => item.name === "Awards and Recognitions"
-        );
+      // console.log("Fetched Content Types:", contentTypeData);
 
-        updateState({
-          ContentType: contentTypeData,
-          ContentTypeId: digitalCMEOption ? digitalCMEOption.id : "",
-        });
+      // Find and set "Awards and Recognitions" as default
+      const awardsOption = contentTypeData.find(
+        (item) =>
+          item.name?.trim().toLowerCase() ===
+          "awards and recognitions".toLowerCase()
+      );
 
-        // Fetch Asset List data
-        getAssetList();
-      } catch (error) {
-        console.error("Error initializing dropdowns:", error);
-        showToast("Error initializing dropdowns", "error");
-      }
-    };
+      // console.log("Selected Option:", awardsOption);
 
-    initializeDropdowns();
-  }, []);
+      updateState({
+        ContentType: contentTypeData,
+        ContentTypeId: awardsOption ? awardsOption._id : "", // Use _id
+      });
+
+      // Fetch Asset List data
+      getAssetList();
+    } catch (error) {
+      console.error("Error initializing dropdowns:", error);
+      showToast("Error initializing dropdowns", "error");
+    }
+  };
+
+  initializeDropdowns();
+}, []);
+
 
   // DataGrid columns
   const columns = [
@@ -569,8 +586,8 @@ function AwardsAndRecognitions() {
                       Content Type
                     </label>
                     <Select
-                    style={{backgroundColor:"rgba(189,196,212,0.3)"}}
-                    readOnly
+                    // style={{backgroundColor:"rgba(189,196,212,0.3)"}}
+                    // readOnly
                       labelId="content-type-label"
                       name="ContentTypeId"
                       value={ContentTypeId || ""}

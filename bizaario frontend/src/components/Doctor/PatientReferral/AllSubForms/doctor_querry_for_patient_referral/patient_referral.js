@@ -20,44 +20,31 @@ const PatientReferral = ({patientId,selected_case_file,case_file_data,onRefresh}
 
 
 const [patient_referral, setpatient_referral] = useState({
-            medical_speciality:"",
-        
- 
+
+        MedicalSpecialty:"",
+        ReferredCity:"",
+        ReferredDoctors:[],
+        ReferralDateTime:"",
+        ReferralType:"",
+        PriorityLevel:"",
+        AdditionalInformation:""
+
     });
 
 
    
 
-const handleChiefComplaintsChange = (index, field, value, subField = null) => {
-  setpatient_referral(prev => {
-    const updatedChiefComplaints = [...prev.ChiefComplaints];
-    const complaint = { ...updatedChiefComplaints[index] };
-
-    if (subField) {
-      // For nested objects like Duration {Value, Unit}
-      complaint[field] = {
-        ...complaint[field],
-        [subField]: value
-      };
-    } else {
-      // For direct fields like SeverityGrade, Symptoms, AggravatingFactors
-      complaint[field] = value;
-    }
-
-    updatedChiefComplaints[index] = complaint;
-
-    return {
-      ...prev,
-      ChiefComplaints: updatedChiefComplaints
-    };
-  });
+const handlepatient_referralchange = (field, value) => {
+  setpatient_referral(prev => ({
+    ...prev,
+    [field]: Array.isArray(prev[field]) ? [...value] : value
+  }));
 };
 
- const toggleArrayField = (index, field, item) => {
+
+const toggleArrayField = (field, item) => {
   setpatient_referral(prev => {
-    const updatedChiefComplaints = [...prev.ChiefComplaints];
-    const complaint = { ...updatedChiefComplaints[index] };
-    const currentArray = complaint[field] || [];
+    const currentArray = prev[field] || [];
 
     const itemId = typeof item === "string" ? item : item?._id;
 
@@ -66,32 +53,22 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
       typeof s === "string" ? s === itemId : s?._id === itemId
     );
 
-    if (exists) {
-      // Remove item
-      complaint[field] = currentArray.filter(s =>
-        typeof s === "string" ? s !== itemId : s._id !== itemId
-      );
-    } else {
-      // Add item
-      complaint[field] = [...currentArray, item];
-    }
-
-    updatedChiefComplaints[index] = complaint;
+    const updatedArray = exists
+      ? currentArray.filter(s =>
+          typeof s === "string" ? s !== itemId : s._id !== itemId
+        )
+      : [...currentArray, item];
 
     return {
       ...prev,
-      ChiefComplaints: updatedChiefComplaints,
+      [field]: updatedArray
     };
   });
 };
 
 
 
-
-
-
-
-    //============================ get reason for referral data=======================================
+//============================ get reason for referral data========================================
               
               const[form_loading,setform_loading]=useState("")
 
@@ -172,72 +149,71 @@ const getall_medical_speciality = async () => {
 
       const[isloading,setisloading]=useState(false)
       
-      const save_chif_complaints = async () => {
-        setisloading(true);
-        try {
-          const payload=
+     const save_patient_referral = async () => {
+  setisloading(true);
+  try {
+    const payload=
           {...patient_referral,
-            CaseFileId:patient_all_cheif_complaints[0].caseFileId._id,
-            CreatedBy:doctordetails._id
-            
+            CaseFileId:selected_case_file,
+            CreatedBy:doctordetails._id,
+            PatientId:patientId,
+            ReferringDoctor:doctordetails._id
           }
-         
-          
-          const resp = await api.post(
-            `api/v1/admin/medical-history/chief-complaints/add-multiple`,
-            payload,
-            {
-              headers: { "Content-Type": "application/json" },
-            }
-          );
-        
-          
-      
-          const { response_code, response_message } = resp.data.response;
-      
-          if (response_code === "200") {
-            Swal.fire({
-              icon: "success",
-              title: "Details Added",
-              text: "Chief Complaints Added Successfully...",
-              showConfirmButton: true,
-              customClass: { confirmButton: "my-swal-button" },
-            }).then(() => {
-              // window.location.reload();
-              onRefresh()
-            });
-          } else if (response_code === "400") {
-            // Show server validation error here
-            Swal.fire({
-              icon: "error",
-              title: response_message.errorType || "Error",
-              text: response_message.error,
-              showConfirmButton: true,
-              customClass: { confirmButton: "my-swal-button" },
-            });
-          } else {
-            // Optional: handle other response codes
-            Swal.fire({
-              icon: "warning",
-              title: "Unexpected response",
-              text: "Something went wrong. Please try again.",
-              showConfirmButton: true,
-              customClass: { confirmButton: "my-swal-button" },
-            });
-          }
-        } catch (error) {
-          console.error(error);
-          Swal.fire({
-            icon: "error",
-            title: "Request failed",
-            text: error.message || "Something went wrong",
-            showConfirmButton: true,
-            customClass: { confirmButton: "my-swal-button" },
-          });
-        } finally {
-          setisloading(false);
-        }
-      };
+    const resp = await api.post(
+      `api/v1/admin/patientreferral/createPatientReferral`,
+      payload,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+console.log(resp);
+
+    
+
+    const { response_code, response_message } = resp.data.response;
+
+    if (response_code === "201") {
+      Swal.fire({
+        icon: "success",
+        title: "Details Added",
+        text: "Patient Referral Created Successfully...",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      }).then(() => {
+        window.location.reload();
+      });
+    } else if (response_code === "400") {
+      // Show server validation error here
+      Swal.fire({
+        icon: "error",
+        title: response_message.errorType || "Error",
+        text: response_message.error,
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    } else {
+      // Optional: handle other response codes
+      Swal.fire({
+        icon: "warning",
+        title: "Unexpected response",
+        text: "Something went wrong. Please try again.",
+        showConfirmButton: true,
+        customClass: { confirmButton: "my-swal-button" },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: "error",
+      title: "Request failed",
+      text: error.message || "Something went wrong",
+      showConfirmButton: true,
+      customClass: { confirmButton: "my-swal-button" },
+    });
+  } finally {
+    setisloading(false);
+  }
+};
 
 
     const[patient_all_cheif_complaints,setpatient_all_cheif_complaints]=useState([])
@@ -408,6 +384,9 @@ const handleCloseEdit = () => {
 
 
 
+
+
+
   return (
     <div className="space mt-4">
 
@@ -498,7 +477,7 @@ const handleCloseEdit = () => {
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
               
-{/*======================== chief complaints============================================ */}
+{/*======================== patient referral==================================================== */}
 
         <div className='col-span-2'>
           <h5 className='form-title'>Patient Referral</h5>
@@ -544,51 +523,58 @@ const handleCloseEdit = () => {
         
                         </FormControl>
 
-                        <div className="col-span-2">
-                              <FormControl fullWidth size="small">
-                              <label className="form-label">Medical Specialty </label>
-                              <div className="flex flex-wrap gap-2">
-                                {
-                                    form_loading==="medical"?
-                                    (
-                                        <CircularProgress/>
-                                    ) :
-                                    (
-                                all_medical_speciality?.map((item) => {
-                                  const selected = patient_referral.medical_speciality === item._id;
-                                  return (
-                                    <span
-                                      key={item._id}
-                                    //   onClick={() => toggleArrayField(index, "Symptoms", item._id)}
-                                      className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
-                                        ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
-                                    >
-                                      {item.lookup_value}
-                                      {selected && (
-                                        <span
-                                          className="ml-1 text-xs font-bold cursor-pointer"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            // handleSymptomSelect(item._id,index);
-                                          }}
-                                        >
-                                          ✕
-                                        </span>
-                                      )}
-                                    </span>
-                                  );
-                                }))}
-                              </div>
-                            </FormControl>
-                            </div>
+                    <div className="col-span-2">
+                  <FormControl fullWidth size="small">
+                    <label className="form-label">Medical Specialty </label>
+                    <div className="flex flex-wrap gap-2">
+                      {form_loading === "medical" ? (
+                        <CircularProgress />
+                      ) : (
+                        all_medical_speciality?.map((item) => {
+                          const selected = patient_referral.MedicalSpecialty === item._id;
+                          return (
+                            <span
+                              key={item._id}
+                              onClick={() =>
+                                setpatient_referral((prev) => ({
+                                  ...prev,
+                                  MedicalSpecialty: item._id,
+                                }))
+                              }
+                              className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                                ${selected ? "bg-blue-500 text-white" : "bg-[#e2e4f4] text-gray-800"}`}
+                            >
+                              {item.lookup_value}
+                              {selected && (
+                                <span
+                                  className="ml-1 text-xs font-bold cursor-pointer"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setpatient_referral((prev) => ({
+                                      ...prev,
+                                      MedicalSpecialty: "",
+                                    }));
+                                  }}
+                                >
+                                  ✕
+                                </span>
+                              )}
+                            </span>
+                          );
+                        })
+                      )}
+                    </div>
+                  </FormControl>
+                </div>
+
   
                     <FormControl fullWidth size="small">
                         <label className="form-label">Referred City </label>
-                            <Select
+                        <Select
                         labelId="content-type-label"
-                        name="TherapyName"
-                        // value={details.TherapyName}
-                        // onChange={(e) => handleTherapyChange(index, "TherapyName",e.target.value,)} 
+                        name="ReferredCity"
+                        value={patient_referral.ReferredCity}
+                        onChange={(e) => handlepatient_referralchange("ReferredCity",e.target.value,)} 
                         displayEmpty
                         MenuProps={customMenuProps}
                          onOpen={() => {
@@ -619,19 +605,89 @@ const handleCloseEdit = () => {
                     )}
                     </Select>
         
-                        </FormControl>
+                    </FormControl>
 
                     <FormControl fullWidth size="small">
-                        <label className="form-label">Date & Time </label>
+                    <label className="form-label">Date & Time </label>
                     <TextField
                     type='date'
+                    value={patient_referral.ReferralDateTime}
+                    onChange={(e) => handlepatient_referralchange("ReferralDateTime",e.target.value,)} 
                     />
         
-                        </FormControl>
+                    </FormControl>
+
+                     <FormControl fullWidth size="small">
+                    <label className="form-label">Additional Information </label>
+                    <TextField
+                    type='text'
+                    placeholder='Additional Information'
+                    value={patient_referral.AdditionalInformation}
+                    onChange={(e) => handlepatient_referralchange("AdditionalInformation",e.target.value,)}
+                    />
+        
+                    </FormControl>
+
+                     <FormControl fullWidth size="small">
+                        <label className="form-label">Priority Level </label>
+                        <Select
+                        labelId="content-type-label"
+                        name="ReferredCity"
+                        value={patient_referral.PriorityLevel}
+                        onChange={(e) => handlepatient_referralchange("PriorityLevel",e.target.value,)} 
+                        displayEmpty
+                        MenuProps={customMenuProps}
+                            renderValue={(selected) => {
+                            if (!selected) {
+                            return <span style={{ color: "#9ca3af" }}>Priority Level </span>; 
+                            }
+                            return selected;
+                        }}
+                        >
+                        <MenuItem value="">
+                            <em>Priority Level</em>
+                        </MenuItem>
+                      
+                        <MenuItem value="HIGH">HIGH</MenuItem>
+                        <MenuItem value="MEDIUM">MEDIUM</MenuItem>
+                        <MenuItem value="LOW">LOW</MenuItem>
+                        <MenuItem value="URGENT">URGENT</MenuItem>
+                    
+                    </Select>
+        
+                    </FormControl>
+
+                 <FormControl fullWidth size="small">
+  <label className="form-label">Referral Type</label>
+  <Select
+    labelId="referral-type-label"
+    name="ReferralType"
+    value={patient_referral.ReferralType}
+    onChange={(e) => handlepatient_referralchange("ReferralType", e.target.value)}
+    displayEmpty
+    MenuProps={customMenuProps}
+    renderValue={(selected) => {
+      if (!selected) {
+        return <span className="text-gray-400">Referral Type</span>;
+      }
+      return selected; // simply return selected value
+    }}
+  >
+    <MenuItem value="">
+      <em>Referral Type</em>
+    </MenuItem>
+    <MenuItem value="GENERAL">GENERAL</MenuItem>
+    <MenuItem value="SECOND_OPINION">MEDICAL_TOURISM</MenuItem>
+    <MenuItem value="SECOND_OPINION">SECOND_OPINION</MenuItem>
+
+  </Select>
+</FormControl>
+
+
 
                   <div className='col-span-2'>
                         <label className="form-label">Referred Doctor </label>
-                           <PremiumDoctor/>
+                           <PremiumDoctor patientReferral={patient_referral} setPatientReferral={setpatient_referral} />
               </div>
 
         </div> 
@@ -647,7 +703,7 @@ const handleCloseEdit = () => {
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                onClick={save_chif_complaints}
+                onClick={save_patient_referral}
               >
                 Save
               </Button>

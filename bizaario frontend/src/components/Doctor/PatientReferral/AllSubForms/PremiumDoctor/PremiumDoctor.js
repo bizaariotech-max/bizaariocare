@@ -1,194 +1,110 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import api from '../../../../../api'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { Stethoscope, Globe, ChevronDown } from 'lucide-react';
 import DoctorProfileCard from '../../AllSubForms/UI/DoctorProfileCard';
+import { Stethoscope, Globe, ChevronDown } from 'lucide-react';
 
-const PremiumDoctor = () => {
-  const [medicalSpecialty, setMedicalSpecialty] = useState('');
-  const [country, setCountry] = useState('');
-  const [medicalOpen, setMedicalOpen] = useState(false);
-  const [countryOpen, setCountryOpen] = useState(false);
+const PremiumDoctor = ({ patientReferral, setPatientReferral }) => {
+  const [medicalSpecialty, setMedicalSpecialty] = React.useState('');
+  const [country, setCountry] = React.useState('');
+  const [medicalOpen, setMedicalOpen] = React.useState(false);
+  const [countryOpen, setCountryOpen] = React.useState(false);
 
-  const medicalSpecialties = [
-    'Cardiology',
-    'Dermatology',
-    'Emergency Medicine',
-    'Family Medicine',
-    'Gastroenterology',
-    'General Surgery',
-    'Internal Medicine',
-    'Neurology',
-    'Obstetrics & Gynecology',
-    'Oncology',
-    'Ophthalmology',
-    'Orthopedics',
-    'Pediatrics',
-    'Psychiatry',
-    'Radiology',
-    'Urology',
+  const medicalSpecialties = ['Cardiology', 'Dermatology', 'Neurology', 'Oncology'];
+  const countries = ['United States', 'India', 'Germany', 'France'];
+
+   const [doctorArr, setDoctorArr] = useState([]);
+  
+    const getDoctorProfile = async () => {
+      try {
+        const resp = await api.post("api/v1/admin/assetList", {
+          AssetCategoryLevel1: "68b0104063729ea39b28d0fb",
+        });
+  
+        const formattedData = resp.data.data.list.map((doc, index) => ({
+          id: doc._id || index + 1,
+          name: doc.AssetName,
+          // exp: `${
+          //   (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
+          // } | ${doc.experience || 0} Years Experience`,
+            exp: `${
+            doc.MedicalSpecialties[0].lookup_value} | ${doc.experience || 5} Years Experience`,
+          location: `${doc.AddressLine1} ${doc.AddressLine2}${doc.PostalCode}` || "",
+          Specializes: `${
+            (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
+          } `,
+          image: doc.ProfilePicture || null,
+        }));
+  
+        setDoctorArr(formattedData);
+      } catch (error) {
+        console.error("Error fetching doctor profile:", error);
+      }
+    };
+
+    useEffect(()=>
+    {
+      getDoctorProfile()
+
+    },[])
+
+
+
+  const VisionHealthData = [
+    { _id: 'doc1', AssetName: 'Dr. Dominic Stonehart', ProfilePicture: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54', Qualification: 'MBBS, MD, Ms', Specialization: 'Cardiologist', Experience: 20 },
+    { _id: 'doc2', AssetName: 'Dr. Jane Doe', ProfilePicture: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e', Qualification: 'MBBS, MD', Specialization: 'Neurologist', Experience: 15 },
+    { _id: 'doc3', AssetName: 'Dr. John Smith', ProfilePicture: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e', Qualification: 'MBBS', Specialization: 'Dermatologist', Experience: 10 },
   ];
 
-  const countries = [
-    'United States',
-    'Canada',
-    'United Kingdom',
-    'Germany',
-    'France',
-    'Australia',
-    'Japan',
-    'South Korea',
-    'Singapore',
-    'Netherlands',
-    'Sweden',
-    'Switzerland',
-    'India',
-    'Brazil',
-    'Mexico',
-  ];
-
-  const VisionHealthData = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
-
-  // Dropdown styling
-  const selectStyle = { position: 'relative', minWidth: '250px' };
-  const selectButtonStyle = {
-    width: '100%',
-    padding: '12px',
-    border: '1px solid #e0e0e0',
-    borderRadius: '8px',
-    backgroundColor: 'white',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '15px',
-    color: '#666',
-    justifyContent: 'space-between',
-  };
-
-  const dropdownStyle = {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
-    backgroundColor: 'white',
-    border: '1px solid #e0e0e0',
-    borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    zIndex: 1000,
-    maxHeight: '200px',
-    overflowY: 'auto',
-  };
-
-  const optionStyle = {
-    padding: '10px 14px',
-    cursor: 'pointer',
-    borderBottom: '1px solid #f5f5f5',
-  };
-
-  // Carousel settings
   const responsive = {
-    superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 1, partialVisibilityGutter: 40 },
-    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1, partialVisibilityGutter: 30 },
+    superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 1 },
+    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1 },
     tablet: { breakpoint: { max: 1024, min: 768 }, items: 1 },
     mobile: { breakpoint: { max: 768, min: 0 }, items: 1 },
   };
 
+  const selectedDoctors = patientReferral.ReferredDoctors || [];
+  const setSelectedDoctors = (ids) => {
+    setPatientReferral((prev) => ({ ...prev, ReferredDoctors: ids }));
+  };
+
   return (
     <div className="p-4 bg-white rounded-xl shadow-sm">
-      {/* Dropdown Filters */}
+      {/* Filters */}
       <div className="flex flex-wrap gap-4 mb-6">
-        {/* Medical Specialty */}
-        <div style={selectStyle}>
-          <div
-            style={selectButtonStyle}
-            onClick={() => {
-              setMedicalOpen(!medicalOpen);
-              setCountryOpen(false);
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <Stethoscope size={18} />
-              <span style={{ color: medicalSpecialty ? '#333' : '#666' }}>
-                {medicalSpecialty || 'Select Medical Specialty'}
-              </span>
-            </div>
-            <ChevronDown
-              size={18}
-              style={{
-                transform: medicalOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: 'transform 0.2s ease',
-              }}
-            />
+        <div className="relative">
+          <div className="border p-2 rounded-md flex justify-between items-center cursor-pointer" onClick={() => { setMedicalOpen(!medicalOpen); setCountryOpen(false); }}>
+            <Stethoscope size={18} /> <span>{medicalSpecialty || 'Select Medical Specialty'}</span>
+            <ChevronDown size={18} style={{ transform: medicalOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
           </div>
-
           {medicalOpen && (
-            <div style={dropdownStyle}>
-              {medicalSpecialties.map((specialty) => (
-                <div
-                  key={specialty}
-                  style={optionStyle}
-                  onClick={() => {
-                    setMedicalSpecialty(specialty);
-                    setMedicalOpen(false);
-                  }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = '#f5f5f5')}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = 'white')}
-                >
-                  {specialty}
-                </div>
+            <div className="absolute z-10 bg-white border w-full mt-1 rounded-md">
+              {medicalSpecialties.map((s) => (
+                <div key={s} className="p-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setMedicalSpecialty(s); setMedicalOpen(false); }}>{s}</div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Country */}
-        <div style={selectStyle}>
-          <div
-            style={selectButtonStyle}
-            onClick={() => {
-              setCountryOpen(!countryOpen);
-              setMedicalOpen(false);
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <Globe size={18} />
-              <span style={{ color: country ? '#333' : '#666' }}>
-                {country || 'Select Country'}
-              </span>
-            </div>
-            <ChevronDown
-              size={18}
-              style={{
-                transform: countryOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: 'transform 0.2s ease',
-              }}
-            />
+        <div className="relative">
+          <div className="border p-2 rounded-md flex justify-between items-center cursor-pointer" onClick={() => { setCountryOpen(!countryOpen); setMedicalOpen(false); }}>
+            <Globe size={18} /> <span>{country || 'Select Country'}</span>
+            <ChevronDown size={18} style={{ transform: countryOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
           </div>
-
           {countryOpen && (
-            <div style={dropdownStyle}>
-              {countries.map((countryName) => (
-                <div
-                  key={countryName}
-                  style={optionStyle}
-                  onClick={() => {
-                    setCountry(countryName);
-                    setCountryOpen(false);
-                  }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = '#f5f5f5')}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = 'white')}
-                >
-                  {countryName}
-                </div>
+            <div className="absolute z-10 bg-white border w-full mt-1 rounded-md">
+              {countries.map((c) => (
+                <div key={c} className="p-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setCountry(c); setCountryOpen(false); }}>{c}</div>
               ))}
             </div>
           )}
         </div>
       </div>
 
-      {/* Premium Doctor Section */}
-      <div className="bg-[#dce1e5] p-4 rounded-xl mb-6">
+      {/* Premium Doctor Carousel */}
+      <div className="bg-[#dce1e5] p-4 rounded-xl">
         <h2 className="text-2xl font-bold text-blue-600 mb-3">Premium Doctor</h2>
         <Carousel
           arrows={false}
@@ -198,25 +114,16 @@ const PremiumDoctor = () => {
           infinite
           partialVisible
         >
-          {VisionHealthData.map((element) => (
-            <div key={element.id}>
-              <DoctorProfileCard />
-            </div>
+          {doctorArr.map((doctor) => (
+            <DoctorProfileCard
+              key={doctor._id}
+              doctor={doctor}
+              selectedDoctors={selectedDoctors}
+              setSelectedDoctors={setSelectedDoctors}
+            />
           ))}
         </Carousel>
       </div>
-
-      {/* Other Doctors List */}
-      {/* <div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-3">Other Recommended Doctors</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {VisionHealthData.map((element) => (
-            <div key={element.id}>
-              <DoctorProfileCard />
-            </div>
-          ))}
-        </div>
-      </div> */}
     </div>
   );
 };

@@ -294,7 +294,7 @@ function EventMaster() {
         formData,
         "form"
       );
-      console.log("Upload response:", res);
+      // console.log("Upload response:", res);
 
       if (res.response.response_code === "200") {
         // Handle both single object and array responses
@@ -321,10 +321,14 @@ function EventMaster() {
     try {
       updateState({ [`${fieldName}Loading`]: true });
       const uploadedUrl = await __handleUploadFile(file);
+      // console.log(uploadedUrl);
+      
       updateState({
         [fieldName]: [uploadedUrl],
         [`${fieldName}Loading`]: false,
       });
+      
+      
     } catch (error) {
       console.error("Upload error:", error);
       updateState({ [`${fieldName}Loading`]: false });
@@ -338,7 +342,7 @@ function EventMaster() {
       setState({...state,eventPosterLoading:false})
     }
   };
-
+console.log(updateState);
   // Handle multiple image upload
   const handleMultipleImageUpload = async (event, fieldName) => {
       setState({...state,eventAdvertisementLoading:true})

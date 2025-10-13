@@ -12,9 +12,21 @@ const doctorCardButtons = [
   { id: 4, label: "Emergency Response", value: 4000 }
 ];
 
-const DoctorProfileCard = ({ doctor }) => {
+const DoctorProfileCard = ({ doctor, selectedDoctors, setSelectedDoctors }) => {
+
+  
+  const isSelected = selectedDoctors.includes(doctor.id);
+
+  const toggleSelection = () => {
+    if (isSelected) {
+      setSelectedDoctors(selectedDoctors.filter((id) => id !== doctor.id));
+    } else {
+      setSelectedDoctors([...selectedDoctors, doctor.id]);
+    }
+  };
 
 
+  
   return (
     <div className=" pb-2 rounded-xl  mx-auto shadow-sm relative bg-white " style={{ borderRadius: "10px 10px " }} >
       {/* Header Section */}
@@ -23,7 +35,7 @@ const DoctorProfileCard = ({ doctor }) => {
           {/* Doctor Image */}
           <div className="w-20 h-20 rounded-full overflow-hidden  flex-shrink-0 border-2 border-white relative top-[46px]">
             <img
-              src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80"
+              src={doctor?.image}
               alt="Dr. Dominic Stonehart"
               className="w-full h-full object-cover"
             />
@@ -32,20 +44,24 @@ const DoctorProfileCard = ({ doctor }) => {
           {/* Doctor Info */}
           <div className="flex-1">
             <h2 className="lg:text-xl font-bold text-gray-900 mb-1 ">
-              Dr. Dominic Stonehart
+              {doctor?.name}
             </h2>
             <p className=" text-gray-600 mb-1  ">
-              MBBS, MD, Ms
+              {doctor?.Specializes}
             </p>
             <p className="text-md text-gray-600 mb-1">
-              Cardiologist | 20+ Years Experience
+              {doctor?.exp}
             </p>
           </div>
         </div>
 
         {/* Checkbox */}
         <div className=''>
-          <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }} />
+          <Checkbox
+           checked={isSelected}
+            onChange={toggleSelection}
+            onClick={(e) => e.stopPropagation()}
+           sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }} />
         </div>
       </div>
 

@@ -13,7 +13,8 @@ import UniqueLoader from '../loader';
 import { DataGrid } from '@mui/x-data-grid';
 import Adminsidebar from './adminsidebar';
 import Adminheader from './adminheader';
-import '../Admin/admincss/login_master.css'
+// import '../Admin/admincss/login_master.css'
+import { customMenuProps } from '../../utils/mui_select_scroll_bar';
 
 
 function Loginmaster() {
@@ -34,14 +35,23 @@ function Loginmaster() {
 
 
 
-  
+  const [totalCount, setTotalCount] = useState(0);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0, // DataGrid pages start from 0
+    pageSize: 10,
+  });
 
       const[alllogin_list,setalllogin_list]=useState([])
       const getalllogin_list=async()=>
       {
         try {
-          const resp=await api.post('api/v1/admin/UserList',{ page:1, limit:10, search:"" })
+              const resp = await api.post("api/v1/admin/UserList", {
+      page: paginationModel.page + 1, // ✅ DataGrid uses 0-based index, API uses 1-based
+      limit: paginationModel.pageSize,
+      search: "",
+    });
           console.log(resp);
+            setTotalCount(resp.data.data.total);
           
           setalllogin_list(resp.data.data.list)
           
@@ -51,11 +61,9 @@ function Loginmaster() {
         }
       }
     
-      useEffect(()=>
-      {
-        getalllogin_list()
-    
-      },[])
+      useEffect(() => {
+    getalllogin_list();
+  }, [paginationModel]);
 
       const [menuAnchor, setMenuAnchor] = useState(null);
       const [menuRowId, setMenuRowId] = useState(null);
@@ -417,6 +425,7 @@ const handlechange = (e) => {
               name="Entity"
               value={loginmaster.Entity}
               onChange={handlechange}
+              MenuProps={customMenuProps}
                 displayEmpty
                 renderValue={(selected) => {
                   if (!selected) {
@@ -449,6 +458,7 @@ const handlechange = (e) => {
             <Select 
               name="entitytype"
               value={entitytype}
+              MenuProps={customMenuProps}
               onChange={(e)=>setentitytype(e.target.value)}
                  displayEmpty
                 renderValue={(selected) => {
@@ -478,6 +488,7 @@ const handlechange = (e) => {
               name="Entity"
               value={loginmaster.Entity}
               onChange={handlechange}
+              MenuProps={customMenuProps}
                  displayEmpty
                 renderValue={(selected) => {
                   if (!selected) {
@@ -509,6 +520,7 @@ const handlechange = (e) => {
             <Select 
               name="StationId"
               value={loginmaster.ParentStationId}
+              MenuProps={customMenuProps}
               onChange={handlechange}
                   displayEmpty
                 renderValue={(selected) => {
@@ -584,18 +596,19 @@ const handlechange = (e) => {
              <Paper elevation={3} sx={{ p: 2, borderRadius: 2,marginTop:4 }}> 
                             
                                               
-              <DataGrid
-               className="custom-data-grid"
-                rows={rowshospital}
-                columns={columnshospital}
-                pageSize={10}
-                pageSizeOptions={[]} // removes the rows per page selector
-                initialState={{
-                  pagination: { paginationModel: { pageSize: 10, page: 0 } },
-                }}
-                disableSelectionOnClick
-              
-              />
+<DataGrid
+  className="custom-data-grid"
+  rows={rowshospital}
+  columns={columnshospital}
+  paginationMode="server"
+  rowCount={totalCount}
+  paginationModel={paginationModel}
+  onPaginationModelChange={setPaginationModel}
+  pageSizeOptions={[10]}
+  disableSelectionOnClick
+/>
+
+
               </Paper>
       
            </div>

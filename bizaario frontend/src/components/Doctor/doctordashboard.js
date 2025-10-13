@@ -552,7 +552,7 @@ return (
       {doctorArr.map((item) => (
         <div
           key={item.id}
-          className="relative max-w-sm bg-white rounded-lg shadow-md flex flex-col h-full"
+          className="bg-gray-200 rounded-2xl p-2 flex flex-col h-full"
         >
           {/* Header Section */}
     <div className="bg-gray-200 rounded-t-lg relative flex items-center px-1 sm:px-1 py-1">
@@ -1071,7 +1071,7 @@ const Partnerhospital = () => {
                 {hospital_details.map((item) => {
                     return ( 
                                 
-     <div className="relative max-w-sm bg-white rounded-lg shadow-md flex flex-col h-full" key={item.id}>
+     <div className="bg-white-200 rounded-2xl p-0 flex flex-col h-full" key={item.id}>
   <div className="bg-white border border-gray-300 rounded-lg shadow relative flex flex-col h-full">
     {/* ✅ Top Banner Image */}
     <div className="relative w-full h-32 sm:h-52">

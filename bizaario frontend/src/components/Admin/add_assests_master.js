@@ -13,7 +13,8 @@ import UniqueLoader from '../loader';
 import { DataGrid } from '@mui/x-data-grid';
 import Adminsidebar from './adminsidebar';
 import Adminheader from './adminheader';
-import '../Admin/admincss/add_asset_master.css'
+// import '../Admin/admincss/add_asset_master.css'
+import { customMenuProps } from '../../utils/mui_select_scroll_bar';
 
 
 function Addassestsmaster() {
@@ -359,6 +360,7 @@ function Addassestsmaster() {
               name="AssetCategoryLevel1"
               value={assetmaster.AssetCategoryLevel1}
               onChange={handlechange}
+              MenuProps={customMenuProps}
                 displayEmpty
                 renderValue={(selected) => {
                   if (!selected) {
@@ -386,6 +388,7 @@ function Addassestsmaster() {
             <Select 
               name="AssetCategoryLevel2"
               value={assetmaster.AssetCategoryLevel2}
+              MenuProps={customMenuProps}
               onChange={handlechange}
                 displayEmpty
                 renderValue={(selected) => {
@@ -413,6 +416,7 @@ function Addassestsmaster() {
             <Select 
               name="AssetCategoryLevel3"
               value={assetmaster.AssetCategoryLevel3}
+              MenuProps={customMenuProps}
               onChange={handlechange}
                  displayEmpty
                 renderValue={(selected) => {
@@ -440,6 +444,7 @@ function Addassestsmaster() {
             <Select 
               name="StationId"
               value={assetmaster.StationId}
+              MenuProps={customMenuProps}
               onChange={handlechange}
                  displayEmpty
                 renderValue={(selected) => {
@@ -466,6 +471,7 @@ function Addassestsmaster() {
             <Select 
               name="ParentAssetId"
               value={assetmaster.ParentAssetId}
+              MenuProps={customMenuProps}
               onChange={handlechange}
                  displayEmpty
                 renderValue={(selected) => {
@@ -504,6 +510,7 @@ function Addassestsmaster() {
             <Select 
               name="SubscriptionType"
               value={assetmaster.SubscriptionType}
+              MenuProps={customMenuProps}
               onChange={handlechange}
                  displayEmpty
                 renderValue={(selected) => {

@@ -5,6 +5,7 @@ import Header from "../../AppLayout/Header";
 import Footer from "../../AppLayout/Footer";
 import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
+import { __postApiData } from "../../utils/api";
 
 export default function DoctorProfile() {
   const location = useLocation();
@@ -14,10 +15,10 @@ export default function DoctorProfile() {
   const getdoctordata=async()=>
   {
     try {
-      const resp=await api.get(`doctor/getdoctorbyid/${id}`)
+      const resp=await api.get(`api/v1/admin/GetAsset/${id}`)
       console.log(resp);
       
-      setdoctorprofile(resp.data.doctor)
+      setdoctorprofile(resp.data.data)
       
     } catch (error) {
       console.log(error);
@@ -31,6 +32,60 @@ export default function DoctorProfile() {
     getdoctordata()
   },[id])
 
+    const[doctor_digitalcme,setdoctor_digitalcme]=useState([])
+
+  const getdoctor_digitalcme=async()=>
+  {
+    try {
+      // const resp=await api.get(`api/v1/admin/GetAsset/${id}`)
+      const resp = await __postApiData("/api/v1/admin/ContentList",
+               {
+                  page: 1,
+                  limit: 100,
+                  ContentTypeId: "68affee3874340d8d79dbf3b",
+                  AssetId:id
+              });
+                
+          setdoctor_digitalcme(resp.data.list)
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+
+  }
+
+      const[doctor_awards,setdoctor_awards]=useState([])
+
+  const getdoctor_awards=async()=>
+  {
+    try {
+      // const resp=await api.get(`api/v1/admin/GetAsset/${id}`)
+      const resp = await __postApiData("/api/v1/admin/ContentList",
+               {
+                  page: 1,
+                  limit: 100,
+                  ContentTypeId: "68afff10874340d8d79dbf53",
+                  AssetId:id
+              });
+                
+          setdoctor_awards(resp.data.list)
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+
+  }
+
+  useEffect(()=>
+  {
+    getdoctor_digitalcme()
+    getdoctor_awards()
+  },[id])
+
+
+console.log(doctor_awards);
 
   
 
@@ -126,11 +181,11 @@ export default function DoctorProfile() {
   ];
 
  
-  const cmeContents = Array(5).fill({
-    videoSrc: "https://www.youtube.com/embed/bwx2Z69S0YA",
-    title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023",
-    date: "20/07/2025, 02:03"
-  });
+  // const cmeContents = Array(5).fill({
+  //   videoSrc: "https://www.youtube.com/embed/bwx2Z69S0YA",
+  //   title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023",
+  //   date: "20/07/2025, 02:03"
+  // });
 
   const caseStudies = Array(5).fill({
     img: "https://tse2.mm.bing.net/th/id/OIP.WOVyXByfddCawMN5KVQN8AHaFz?pid=Api&P=0&h=180",
@@ -174,7 +229,7 @@ export default function DoctorProfile() {
         return (
           <div className="space-y-6">
             <p className="text-gray-700 leading-relaxed">
-              Dr. Stonehart is a highly qualified and experienced Cardiologist with a strong commitment to patient care, clinical excellence, and ongoing medical innovation. With over 15 years of experience, Dr. Stonehart specializes in the prevention, diagnosis, and treatment of a wide range of heart conditions including coronary artery disease, heart failure, arrhythmias, and hypertension.
+              {doctorprofile?.LongDescription}
             </p>
             <p className="text-gray-700">
               Known for a patient-first approach, Dr. Stonehart combines evidence-based medicine with cutting-edge technologies to deliver personalized treatment. Also involved in continuing medical education and several medical publications.
@@ -197,24 +252,46 @@ export default function DoctorProfile() {
               <h6 className="mt-8 text-lg font-semibold">Digital CME Content</h6>
                <Carousel   arrows={false} 
                 responsive={responsive}  draggable={true} showDots={true} className="mt-2">
-      {cmeContents.map((cme, idx) => (
-        <div key={idx} className="px-2">
-          <div className="bg-gray-100 rounded-md p-2 flex flex-col items-center h-full">
-            <iframe
-              width="100%"
-              height="180"
-              src={cme.videoSrc}
-              title={cme.title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="rounded"
-            />
-            <p className="text-sm mt-2 text-center">{cme.title}</p>
-            <div className="text-xs text-gray-500">{cme.date}</div>
-          </div>
+{doctor_digitalcme.map((cme, idx) => (
+  <div key={idx} className="px-1">
+    <div className="bg-gray-100 rounded-2xl p-2 flex flex-col shadow-sm h-[440px]">
+      
+      {/* ✅ Fixed Image Container */}
+      <div className="w-full h-48 overflow-hidden rounded-lg">
+        <img
+          src={cme?.ContentImage}
+          alt={cme?.ContentTitle}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* ✅ Content Section */}
+      <div className="flex flex-col justify-between flex-1 mt-3 text-left">
+        <div>
+          <p className="text-black font-semibold text-[18px] leading-tight mb-1 ">
+            {cme?.ContentTitle}
+          </p>
+          <p className="text-gray-700 text-[15px] font-normal leading-snug line-clamp-6">
+            {cme?.ShortDescription}
+          </p>
         </div>
-      ))}
+
+        {/* ✅ Date */}
+        <div className="text-gray-500 text-sm mt-2">
+          {new Date(cme?.Date).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          })}
+        </div>
+      </div>
+    </div>
+  </div>
+))}
+
+
+
+
     </Carousel>
             </div>
              <div>
@@ -268,7 +345,7 @@ export default function DoctorProfile() {
             ))}
             <h4 className="font-semibold text-lg mt-6">Our Gallery</h4>
          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-2">
-  {doctorprofile?.image_gallary?.map((img, idx) => (
+  {doctorprofile?.PictureGallery?.map((img, idx) => (
     <div
       key={idx}
       className="w-full rounded-md shadow overflow-hidden"
@@ -288,7 +365,7 @@ export default function DoctorProfile() {
       case "Awards & Certificates":
         return (
          <div className="space-y-6">
-  {doctorprofile?.awards_and_achievements?.map((a, idx) => (
+  {doctor_awards?.map((a, idx) => (
     <div
       key={idx}
       className="flex flex-col md:flex-row gap-6 bg-white rounded-lg shadow p-4 items-center md:items-start"
@@ -296,7 +373,7 @@ export default function DoctorProfile() {
       {/* Award Image */}
       <div className="flex-shrink-0 w-full md:w-40 lg:w-48 aspect-[67/60] rounded-lg overflow-hidden">
     <img
-      src={a.award_image}
+      src={a.ContentImage}
       alt="Award"
       className="w-full h-full object-cover"
     />
@@ -304,9 +381,14 @@ export default function DoctorProfile() {
 
       {/* Content */}
       <div className="flex-1">
-        <h4 className="text-xl font-bold mb-1">{a.award_title}</h4>
-        <p className="text-gray-700 mb-2">{a.awarding_body}</p>
-        <div className="text-xs text-gray-500 mb-1">📅 {a.date}</div>
+        <h4 className="text-xl font-bold mb-1">{a.ContentTitle}</h4>
+        <p className="text-gray-700 mb-2">{a.GrantingBody}</p>
+        <p className="text-gray-700 mb-2">{a.ShortDescription}</p>
+        <div className="text-xs text-gray-500 mb-1">📅  {new Date(a?.Date).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          })}</div>
         <div className="text-xs text-gray-500 mb-2">{a.venue}</div>
         <a
           href="#"
@@ -386,8 +468,8 @@ export default function DoctorProfile() {
   {/* Doctor Photo + Socials */}
   <div className="flex flex-col items-center md:items-start min-w-[7rem]">
     <img
-      src={doctorprofile?.profile_pic}
-      alt="Dr. Dominic Stonehart"
+      src={doctorprofile?.ProfilePicture}
+      alt={doctorprofile?.AssetName}
       className="w-28 h-32 md:w-36 md:h-40 object-cover rounded-lg border"
     />
     {/* Social Icons below image */}
@@ -404,16 +486,16 @@ export default function DoctorProfile() {
     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
       {/* Details Left */}
       <div className="flex-1 min-w-0">
-        <h2 className="text-2xl font-bold mb-1">Dr. {doctorprofile?.firstName} {doctorprofile?.lastName}</h2>
+        <h2 className="text-2xl font-bold mb-1">{doctorprofile?.AssetName} </h2>
         <p className="text-gray-700 font-medium mb-1">{doctorprofile?.qualification?.join(',')}</p>
       <p className="text-[18px] text-[rgba(0,0,0,0.75)]  font-medium mb-1">
           Specializes in:{" "}
           <span className=" text-[18px] text-[rgba(0,0,0,0.75)]">
-            {doctorprofile?.medical_specialty}
+            {doctorprofile?.MedicalSpecialties?.map((item)=>item.lookup_value).join(',')}
           </span>
         </p>
         <p className="text-gray-800 text-sm mt-1 break-words text-[16px] text-[rgba(0,0,0,0.75)]">
-           {doctorprofile?.bio}
+           {doctorprofile?.ShortDescription}
         </p>
       </div>
       {/* Profile PDF Link Right (never wraps) */}

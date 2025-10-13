@@ -20,9 +20,6 @@ import Doctorheader from "./doctorheader";
 function DoctorNewsAndArticles() {
 
   const doctordetails=JSON.parse(localStorage.getItem("user"))
-  console.log(doctordetails);
-  
-
 
   const [isLoading, setIsLoading] = useState(false);
   const [contentList, setContentList] = useState([]);
@@ -108,7 +105,14 @@ function DoctorNewsAndArticles() {
   const getContentList = async () => {
     try {
       setIsLoading(true);
-      const resp = await __postApiData("/api/v1/admin/ContentList", {});
+      const resp = await __postApiData("/api/v1/admin/ContentList", 
+        {
+            page: 1,
+            limit: 100,
+            ContentTypeId: "68afff04874340d8d79dbf4d"
+            // "ContentPriority":"Medium"
+        
+        });
       
       if (resp.response.response_code === "200") {
         setContentList(resp.data.list || []);
