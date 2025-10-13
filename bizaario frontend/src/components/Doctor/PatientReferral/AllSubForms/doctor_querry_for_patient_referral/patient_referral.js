@@ -2,7 +2,7 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import { useEffect, useState,useRef } from 'react'
-import { TextField, Select, MenuItem, FormControl, Button,CircularProgress  } from '@mui/material';
+import { TextField, Select, MenuItem, FormControl, Button,CircularProgress,Chip  } from '@mui/material';
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
@@ -25,14 +25,41 @@ const [patient_referral, setpatient_referral] = useState({
         ReferredCity:"",
         ReferredDoctors:[],
         ReferralDateTime:"",
-        ReferralType:"",
-        PriorityLevel:"",
-        AdditionalInformation:""
-
+        ReasonForReferral:{ReasonType:"",DoctorRemarks:[]},
     });
 
 
-   
+      const [current_remarks, setcurrent_remarks] = useState("");
+
+// Add a new remark
+const addRemarks = () => {
+  if (current_remarks.trim()) {
+    setpatient_referral(prev => ({
+      ...prev,
+      ReasonForReferral: {
+        ...prev.ReasonForReferral,
+        DoctorRemarks: [
+          ...(prev.ReasonForReferral.DoctorRemarks || []),
+          { Remark: current_remarks.trim() } // wrap remark in an object
+        ],
+      },
+    }));
+    setcurrent_remarks("");
+  }
+};
+
+// Remove a remark by index
+const removeremarks = (index) => {
+  setpatient_referral(prev => ({
+    ...prev,
+    ReasonForReferral: {
+      ...prev.ReasonForReferral,
+      DoctorRemarks: prev.ReasonForReferral.DoctorRemarks.filter((_, i) => i !== index),
+    },
+  }));
+};
+
+
 
 const handlepatient_referralchange = (field, value) => {
   setpatient_referral(prev => ({
@@ -378,6 +405,7 @@ const handleCloseEdit = () => {
       };
 
 
+console.log(patient_referral);
 
 
 
@@ -484,44 +512,87 @@ const handleCloseEdit = () => {
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                 
+                  <FormControl fullWidth size="small">
+  <label className="form-label">Reason for Referral </label>
+  <Select
+    labelId="content-type-label"
+    name="ReasonForReferral"
+    value={patient_referral.ReasonForReferral.ReasonType} // bind selected value
+    onChange={(e) => 
+      setpatient_referral(prev => ({
+        ...prev,
+        ReasonForReferral: {
+          ...prev.ReasonForReferral,
+          ReasonType: e.target.value, // update selected reason
+        },
+      }))
+    }
+    displayEmpty
+    MenuProps={customMenuProps}
+    onOpen={() => {
+      if (all_reason_for_referral.length === 0) { // prevent multiple calls
+        getall_reason_for_referral();
+      }
+    }}
+    renderValue={(selected) => {
+      if (!selected) {
+        return <span style={{ color: "#9ca3af" }}>Reason For Referral</span>; 
+      }
+      return all_reason_for_referral?.find((item) => item._id === selected)?.lookup_value;
+    }}
+  >
+    <MenuItem value="">
+      <em>Reason For Referral</em>
+    </MenuItem>
+    {form_loading === "reason" ? (
+      <MenuItem disabled>
+        <CircularProgress size={20} />
+      </MenuItem>
+    ) : (
+      all_reason_for_referral?.map((type) => (
+        <MenuItem key={type._id} value={type._id}>
+          {type.lookup_value}
+        </MenuItem>
+      ))
+    )}
+  </Select>
+</FormControl>
+
+
                    <FormControl fullWidth size="small">
-                        <label className="form-label">Reason for Referral </label>
-                            <Select
-                        labelId="content-type-label"
-                        name="TherapyName"
-                        // value={details.TherapyName}
-                        // onChange={(e) => handleTherapyChange(index, "TherapyName",e.target.value,)} 
-                        displayEmpty
-                        MenuProps={customMenuProps}
-                         onOpen={() => {
-                            if (all_reason_for_referral.length === 0) { // prevent multiple calls
-                            getall_reason_for_referral();
-                            }
-                        }}
-                            renderValue={(selected) => {
-                            if (!selected) {
-                            return <span style={{ color: "#9ca3af" }}>Reason For Referral </span>; 
-                            }
-                            return all_reason_for_referral?.find((item) => item._id === selected)?.lookup_value;
-                        }}
-                        >
-                        <MenuItem value="">
-                            <em>Reason For Referral</em>
-                        </MenuItem>
-                         {form_loading==="reason" ? (
-                        <MenuItem disabled>
-                        <CircularProgress size={20} />
-                        </MenuItem>
-                    ) : (
-                        all_reason_for_referral?.map((type) => (
-                        <MenuItem key={type._id} value={type._id}>
-                            {type.lookup_value}
-                        </MenuItem>
-                        ))
+                    <label variant="subtitle1" className='form-label'>
+                      Doctor's Remarks
+                    </label>
+                    <div className="flex space-x-2">
+                      <TextField
+                        placeholder="Add Doctor Remarks"
+                        value={current_remarks}
+                        onChange={(e) => setcurrent_remarks(e.target.value)}
+                        fullWidth
+                        size="small"
+                      />
+                      <Button
+                        onClick={addRemarks}
+                        variant="outlined"
+                        // startIcon={<AddIcon />}
+                      >
+                        Add
+                      </Button>
+                    </div>
+                    {patient_referral?.ReasonForReferral?.DoctorRemarks.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {patient_referral?.ReasonForReferral?.DoctorRemarks.map((tag, index) => (
+                          <Chip
+                            key={index}
+                            label={tag.Remark}
+                            onDelete={() => removeremarks(index)}
+                            color="primary"
+                            variant="outlined"
+                          />
+                        ))}
+                      </div>
                     )}
-                    </Select>
-        
-                        </FormControl>
+                  </FormControl>
 
                     <div className="col-span-2">
                   <FormControl fullWidth size="small">
@@ -617,7 +688,7 @@ const handleCloseEdit = () => {
         
                     </FormControl>
 
-                     <FormControl fullWidth size="small">
+                     {/* <FormControl fullWidth size="small">
                     <label className="form-label">Additional Information </label>
                     <TextField
                     type='text'
@@ -626,9 +697,9 @@ const handleCloseEdit = () => {
                     onChange={(e) => handlepatient_referralchange("AdditionalInformation",e.target.value,)}
                     />
         
-                    </FormControl>
+                    </FormControl> */}
 
-                     <FormControl fullWidth size="small">
+                     {/* <FormControl fullWidth size="small">
                         <label className="form-label">Priority Level </label>
                         <Select
                         labelId="content-type-label"
@@ -655,9 +726,9 @@ const handleCloseEdit = () => {
                     
                     </Select>
         
-                    </FormControl>
+                    </FormControl> */}
 
-                 <FormControl fullWidth size="small">
+                 {/* <FormControl fullWidth size="small">
   <label className="form-label">Referral Type</label>
   <Select
     labelId="referral-type-label"
@@ -681,7 +752,7 @@ const handleCloseEdit = () => {
     <MenuItem value="SECOND_OPINION">SECOND_OPINION</MenuItem>
 
   </Select>
-</FormControl>
+</FormControl> */}
 
 
 
