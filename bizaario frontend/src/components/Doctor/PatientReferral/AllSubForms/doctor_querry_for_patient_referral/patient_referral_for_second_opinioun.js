@@ -83,6 +83,40 @@ const remove_question = (index) => {
         }
       }
     
+
+// ============================get patient referral id============================================
+
+const [patient_referral_id, setpatient_referral_id] = useState([]);
+
+useEffect(() => {
+  if (!selected_case_file) return; // don't call API if no case file is selected
+
+  const getPatientReferralById = async () => {
+    try {
+      const resp = await api.get(
+        `api/v1/admin/patientreferral/getPatientReferralsByCaseFileId/${selected_case_file}`
+      );
+
+      // Correct path to data array
+      const dataArray = resp.data.response.response_message.data;
+
+      // Extract _id from each item
+      const ids = dataArray.map((item) => item._id);
+
+      console.log(ids); // check the extracted ids
+
+      setpatient_referral_id(ids);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getPatientReferralById();
+}, [selected_case_file]);
+
+
+
                
 
 
@@ -93,13 +127,12 @@ const remove_question = (index) => {
         try {
           const payload=
           {...second_opinion_query,
-            CaseFileId:patient_all_cheif_complaints[0].caseFileId._id,
-            CreatedBy:doctordetails._id
+            UpdatedBy:doctordetails._id
             
           }
          
-          const resp = await api.post(
-            `api/v1/admin/medical-history/chief-complaints/add-multiple`,
+          const resp = await api.put(
+            `api/v1/admin/patientreferral/updateSecondOpinionQuestions/${patient_referral_id}`,
             payload,
             {
               headers: { "Content-Type": "application/json" },
@@ -114,7 +147,7 @@ const remove_question = (index) => {
             Swal.fire({
               icon: "success",
               title: "Details Added",
-              text: "Chief Complaints Added Successfully...",
+              text: "Second Opninoun For Patient Referral Added Successfully...",
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
@@ -179,6 +212,10 @@ const remove_question = (index) => {
  {
  getall_patient_medical_history()
  },[])
+
+
+
+
 
 
   //========================== modal open or close start==========================================

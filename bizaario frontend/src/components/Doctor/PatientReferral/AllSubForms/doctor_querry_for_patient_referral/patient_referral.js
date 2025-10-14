@@ -405,7 +405,7 @@ const handleCloseEdit = () => {
       };
 
 
-console.log(patient_referral);
+
 
 
 

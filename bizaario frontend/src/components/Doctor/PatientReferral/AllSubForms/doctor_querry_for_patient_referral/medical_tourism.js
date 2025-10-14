@@ -20,13 +20,13 @@ const PatientReferralForMedicalTourism = ({patientId,selected_case_file,case_fil
 
 
 const [medical_tourism, setmedical_tourism] = useState({
-      SurgeryProcedure:[],
-      DoctorNote:"",
+      // SurgeryProcedure:[],
+      // DoctorNote:"",
       Comorbidities :[],
-      DefineComorbidity:"",
+      ComorbidityDefinition:"",
       RiskFactors:[],
-      DefineRiskFactor:"",
-      PatientConcern:[],
+      RiskFactorDefinition:"",
+      PatientConcerns:[],
       LogisticalConsiderations:[]
     });
 
@@ -65,7 +65,7 @@ const toggleArrayField = (field, item) => {
 
 
 
-console.log(medical_tourism);
+
 
 
 
@@ -80,8 +80,7 @@ console.log(medical_tourism);
         try {
             setloading_second_opinioun(true)
             const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"second_opinion_query_type"})
-          console.log(resp);
-          
+         
           setall_second_opinion_query_master(resp.data.data)
           
         } catch (error) {
@@ -170,22 +169,50 @@ console.log(medical_tourism);
       },[])
 
 
+const [patient_referral_id, setpatient_referral_id] = useState([]);
+
+useEffect(() => {
+  if (!selected_case_file) return; // don't call API if no case file is selected
+
+  const getPatientReferralById = async () => {
+    try {
+      const resp = await api.get(
+        `api/v1/admin/patientreferral/getPatientReferralsByCaseFileId/${selected_case_file}`
+      );
+
+      // Correct path to data array
+      const dataArray = resp.data.response.response_message.data;
+
+      // Extract _id from each item
+      const ids = dataArray.map((item) => item._id);
+
+      console.log(ids); // check the extracted ids
+
+      setpatient_referral_id(ids);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getPatientReferralById();
+}, [selected_case_file]);
+
 
       const[isloading,setisloading]=useState(false)
       
-      const save_chif_complaints = async () => {
+      const save_medical_tourism = async () => {
         setisloading(true);
         try {
           const payload=
           {...medical_tourism,
-            CaseFileId:patient_all_cheif_complaints[0].caseFileId._id,
-            CreatedBy:doctordetails._id
+            UpdatedBy:doctordetails._id
             
           }
          
           
-          const resp = await api.post(
-            `api/v1/admin/medical-history/chief-complaints/add-multiple`,
+          const resp = await api.put(
+            `api/v1/admin/patientreferral/updatePreSurgicalConsiderations/${patient_referral_id}`,
             payload,
             {
               headers: { "Content-Type": "application/json" },
@@ -200,7 +227,7 @@ console.log(medical_tourism);
             Swal.fire({
               icon: "success",
               title: "Details Added",
-              text: "Chief Complaints Added Successfully...",
+              text: "Pre-Surgical Considerations Added Successfully...",
               showConfirmButton: true,
               customClass: { confirmButton: "my-swal-button" },
             }).then(() => {
@@ -506,7 +533,7 @@ const handleCloseEdit = () => {
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                 
                  
-                                 <FormControl fullWidth size="small">
+                                 {/* <FormControl fullWidth size="small">
                                <label className="form-label">Surgery/ Procedure</label>
                              <Select
                              multiple
@@ -522,12 +549,11 @@ const handleCloseEdit = () => {
                                    displayEmpty
                                    MenuProps={customMenuProps}
                                    renderValue={(selected) => {
-                                     // Show placeholder if no items are selected
+                                    
                                      if (!selected || selected.length === 0) {
                                        return <span className="text-gray-400">Select Surgery/ Procedure</span>;
                                      }
                  
-                                     // Otherwise show selected items as comma-separated text
                                      const selectedLabels = selected
                                        .map((id) => all_second_opinion_query_master.find((item) => item._id === id)?.lookup_value)
                                        .filter(Boolean);
@@ -551,11 +577,11 @@ const handleCloseEdit = () => {
                                                
                    
                                </Select>
-                               </FormControl>
+                               </FormControl> */}
 
                           
 
-                        <div className='col-span-2'>
+                        {/* <div className='col-span-2'>
                         <FormControl fullWidth>
                         <label className="form-label mb-1">Doctor’s Note</label>
                         <textarea
@@ -565,18 +591,18 @@ const handleCloseEdit = () => {
                             onChange={(e)=>handlemedical_tourismchange("DoctorNote",e.target.value)}
                             style={{
                             width: "100%",
-                            minHeight: "120px", // start height
-                            maxHeight: "400px", // max height if needed
+                            minHeight: "120px", 
+                            maxHeight: "400px", 
                             padding: "10px",
                             fontSize: "15px",
                             borderRadius: "6px",
                             border: "1px solid #c4c4c4",
-                            resize: "vertical", // allow user to resize
+                            resize: "vertical", 
                             overflow: "auto",
                             }}
                         />
                         </FormControl>
-                        </div>
+                        </div> */}
 
                             <FormControl fullWidth size="small">
                                <label className="form-label">Comorbidities </label>
@@ -629,10 +655,10 @@ const handleCloseEdit = () => {
                         <FormControl fullWidth>
                         <label className="form-label mb-1">Define Comorbidity</label>
                         <textarea
-                            name="DefineComorbidity"
+                            name="ComorbidityDefinition"
                             placeholder="Define Comorbidity..."
-                            value={medical_tourism.DefineComorbidity || ""}
-                             onChange={(e)=>handlemedical_tourismchange("DefineComorbidity",e.target.value)}
+                            value={medical_tourism.ComorbidityDefinition || ""}
+                             onChange={(e)=>handlemedical_tourismchange("ComorbidityDefinition",e.target.value)}
                             style={{
                             width: "100%",
                             minHeight: "120px", // start height
@@ -687,8 +713,8 @@ const handleCloseEdit = () => {
                         <textarea
                             name="DefineRiskFactor"
                             placeholder="Define Risk Factor (s)..."
-                            value={medical_tourism.DefineRiskFactor || ""}
-                            onChange={(e)=>handlemedical_tourismchange("DefineRiskFactor",e.target.value)}
+                            value={medical_tourism.RiskFactorDefinition || ""}
+                            onChange={(e)=>handlemedical_tourismchange("RiskFactorDefinition",e.target.value)}
                             style={{
                             width: "100%",
                             minHeight: "120px", // start height
@@ -709,11 +735,11 @@ const handleCloseEdit = () => {
                           <label className="form-label">Patient’s Concern</label>
                           <div className="flex flex-wrap gap-2">
                             {all_patient_concern_master.map((item) => {
-                              const selected = medical_tourism.PatientConcern.includes(item._id); 
+                              const selected = medical_tourism.PatientConcerns.includes(item._id); 
                               return (
                                 <span
                                   key={item._id}
-                                  onClick={() => toggleArrayField("PatientConcern", item._id)}
+                                  onClick={() => toggleArrayField("PatientConcerns", item._id)}
                                   className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                                     ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                                 >
@@ -778,7 +804,7 @@ const handleCloseEdit = () => {
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                onClick={save_chif_complaints}
+                onClick={save_medical_tourism}
               >
                 Save
               </Button>
