@@ -2,7 +2,7 @@
 import React from 'react';
 import { Plus, Edit } from 'lucide-react';
 import { useEffect, useState,useRef } from 'react'
-import { TextField, Select, MenuItem, FormControl, Button,CircularProgress  } from '@mui/material';
+import { TextField, Select, MenuItem, FormControl, Button,CircularProgress,Chip  } from '@mui/material';
 import api from '../../../../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
@@ -14,84 +14,53 @@ import PremiumDoctor from '../PremiumDoctor/PremiumDoctor';
 const PatientReferralForSecondOpenioun = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
 
 
-   const doctordetails=JSON.parse(localStorage.getItem("user"))
+const doctordetails=JSON.parse(localStorage.getItem("user"))
   
-  
-
-
 const [second_opinion_query, setsecond_opinion_query] = useState({
-
-            Second_Opinion_Query:[],
-        
-    });
+            SecondOpinionQueries:[],
+            Questions:[],
+            AdditionalInformation:""
+        });
 
 
    
 
-const handleChiefComplaintsChange = (index, field, value, subField = null) => {
-  setsecond_opinion_query(prev => {
-    const updatedChiefComplaints = [...prev.ChiefComplaints];
-    const complaint = { ...updatedChiefComplaints[index] };
-
-    if (subField) {
-      // For nested objects like Duration {Value, Unit}
-      complaint[field] = {
-        ...complaint[field],
-        [subField]: value
-      };
-    } else {
-      // For direct fields like SeverityGrade, Symptoms, AggravatingFactors
-      complaint[field] = value;
-    }
-
-    updatedChiefComplaints[index] = complaint;
-
-    return {
-      ...prev,
-      ChiefComplaints: updatedChiefComplaints
-    };
-  });
+const handleSecondOpinionChange = (field, value) => {
+  setsecond_opinion_query(prev => ({
+    ...prev,
+    [field]: value 
+  }));
 };
 
- const toggleArrayField = (index, field, item) => {
-  setsecond_opinion_query(prev => {
-    const updatedChiefComplaints = [...prev.ChiefComplaints];
-    const complaint = { ...updatedChiefComplaints[index] };
-    const currentArray = complaint[field] || [];
 
-    const itemId = typeof item === "string" ? item : item?._id;
+      const [current_question, setcurrent_question] = useState("");
 
-    // Check if item exists
-    const exists = currentArray.some(s =>
-      typeof s === "string" ? s === itemId : s?._id === itemId
-    );
-
-    if (exists) {
-      // Remove item
-      complaint[field] = currentArray.filter(s =>
-        typeof s === "string" ? s !== itemId : s._id !== itemId
-      );
-    } else {
-      // Add item
-      complaint[field] = [...currentArray, item];
-    }
-
-    updatedChiefComplaints[index] = complaint;
-
-    return {
+// Add a new remark
+const addquestions = () => {
+  if (current_question?.trim()) {
+    setsecond_opinion_query(prev => ({
       ...prev,
-      ChiefComplaints: updatedChiefComplaints,
-    };
-  });
+      Questions: [
+        ...(prev.Questions || []),  // spread existing questions
+        current_question.trim()      // add new question as a string
+      ]
+    }));
+    setcurrent_question(""); // clear input
+  }
+};
+
+// Remove a remark by index
+const remove_question = (index) => {
+  setsecond_opinion_query(prev => ({
+    ...prev,
+    Questions: prev.Questions.filter((_, i) => i !== index)
+  }));
 };
 
 
 
 
-
-
-
-  //============================= all truma list==================================================
+//============================= all second opinioun list==================================================
 
     const [loading_second_opinioun, setloading_second_opinioun] = useState(false);
 
@@ -101,9 +70,8 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
         try {
             setloading_second_opinioun(true)
             const resp=await api.post('api/v1/admin/LookupList/',{lookupcodes:"second_opinion_query_type"})
-          console.log(resp);
-          
-          setall_second_opinion_query_master(resp.data.data)
+    
+            setall_second_opinion_query_master(resp.data.data)
           
         } catch (error) {
           console.log(error);
@@ -120,7 +88,7 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
 
       const[isloading,setisloading]=useState(false)
       
-      const save_chif_complaints = async () => {
+      const save_second_opinious = async () => {
         setisloading(true);
         try {
           const payload=
@@ -130,7 +98,6 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
             
           }
          
-          
           const resp = await api.post(
             `api/v1/admin/medical-history/chief-complaints/add-multiple`,
             payload,
@@ -188,11 +155,11 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
       };
 
 
-    const[patient_all_cheif_complaints,setpatient_all_cheif_complaints]=useState([])
+  const[patient_all_cheif_complaints,setpatient_all_cheif_complaints]=useState([])
 
  const getall_patient_medical_history = async () => {
    try {
-    //  setLoadingSpeciality(true);
+ 
      const resp = await api.get(`api/v1/admin/medical-history/list?PatientId=${patientId}&Status=Ongoing`);
  
         const formatted = resp.data.data.list.map(item => ({
@@ -205,8 +172,6 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
      
    } catch (error) {
      console.error(error);
-   } finally {
-    //  setLoadingSpeciality(false);
    }
  };
  
@@ -227,7 +192,7 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
     const handleClose = () => setShow(false);
 
 
-//====================== onchage event for ChiefComplaints start=================================
+//====================== onchage event for second opinioun start=================================
 
 
 
@@ -284,7 +249,7 @@ const handleCloseEdit = () => {
 
 
 
-      const update_chif_complaints = async () => {
+      const update_second_opinioun = async () => {
         setisloading(true);
         try {
           const payload=
@@ -349,12 +314,7 @@ const handleCloseEdit = () => {
       };
 
 
-
-
-
-
-
-
+  
   return (
     <div className="space mt-4">
 
@@ -425,12 +385,6 @@ const handleCloseEdit = () => {
 
 
 
-      {/* Footer Note */}
-      {/* <div className="p-4 bg-gray-50 border-t border-gray-200" style={{display:selected_case_file?"flex":"none"}}>
-        <p className="text-xs text-gray-600">
-          1. Added By Dr Gaurav Pande (Cardiology) (Regards M1234), (Contact 8373915529, Date/ Time 20 Sep 2025, 11:57 AM IST, Noida
-        </p>
-      </div> */}
 
 
   <Modal show={show} onHide={handleClose} centered size="lg">
@@ -445,7 +399,7 @@ const handleCloseEdit = () => {
       
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
               
-{/*======================== chief complaints============================================ */}
+{/*======================== second opinioun===================================================== */}
 
         <div className='col-span-2'>
           <h5 className='form-title'>Specific Questions for Second Opinion</h5>
@@ -453,72 +407,110 @@ const handleCloseEdit = () => {
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 border border-gray-300 rounded-lg p-4">
                 
                  
-                                 <FormControl fullWidth size="small">
-                               <label className="form-label">Second Opinion Query</label>
-                             <Select
-                             multiple
-                                   labelId="content-type-label"
-                                   name="Accident"
-                                  value={second_opinion_query.Second_Opinion_Query || []}
-                                  onOpen={() => {
-                                     if (all_second_opinion_query_master.length === 0) { // prevent multiple calls
-                                     getall_second_opinion_query_master();
-                                     }
-                                 }}
-                                //   onChange={handleChiefComplaintsChange}
-                                   displayEmpty
-                                   MenuProps={customMenuProps}
-                                   renderValue={(selected) => {
-                                     // Show placeholder if no items are selected
-                                     if (!selected || selected.length === 0) {
-                                       return <span className="text-gray-400">Select Second Opinion Query</span>;
-                                     }
-                 
-                                     // Otherwise show selected items as comma-separated text
-                                     const selectedLabels = selected
-                                       .map((id) => all_second_opinion_query_master.find((item) => item._id === id)?.lookup_value)
-                                       .filter(Boolean);
-                                     return selectedLabels.join(", ");
-                                   }}
-                                 >
-                                   <MenuItem value="">
-                                     <em>Select Second Opinion Query </em>
-                                   </MenuItem>
-                                  {loading_second_opinioun ? (
-                                     <MenuItem disabled>
-                                     <CircularProgress size={20} />
-                                     </MenuItem>
-                                 ) : (
-                                     all_second_opinion_query_master?.map((type) => (
-                                     <MenuItem key={type._id} value={type._id}>
-                                         {type.lookup_value}
-                                     </MenuItem>
-                                     ))
-                                 )}
-                                               
-                   
-                               </Select>
-                               </FormControl>
+                          <FormControl fullWidth size="small">
+  <label className="form-label">Second Opinion Query</label>
+
+  <Select
+    multiple
+    labelId="content-type-label"
+    name="SecondOpinionQueries"
+    value={second_opinion_query.SecondOpinionQueries || []} // ✅ stores _id array
+    onOpen={() => {
+      if (all_second_opinion_query_master.length === 0) {
+        getall_second_opinion_query_master();
+      }
+    }}
+    onChange={(e) =>
+      handleSecondOpinionChange("SecondOpinionQueries", e.target.value)
+    }
+    displayEmpty
+    MenuProps={customMenuProps}
+    renderValue={(selected) => {
+      if (!selected || selected.length === 0) {
+        return (
+          <span className="text-gray-400">
+            Select Second Opinion Query
+          </span>
+        );
+      }
+
+      // Map selected _ids to their labels
+      const selectedLabels = selected
+        .map((id) =>
+          all_second_opinion_query_master.find(
+            (item) => item._id === id
+          )?.lookup_value
+        )
+        .filter(Boolean);
+
+      return selectedLabels.join(", ");
+    }}
+  >
+    <MenuItem disabled value="">
+      <em>Select Second Opinion Query</em>
+    </MenuItem>
+
+    {loading_second_opinioun ? (
+      <MenuItem disabled>
+        <CircularProgress size={20} />
+      </MenuItem>
+    ) : (
+      all_second_opinion_query_master?.map((type) => (
+        <MenuItem key={type._id} value={type._id}>
+          {type.lookup_value}
+        </MenuItem>
+      ))
+    )}
+  </Select>
+</FormControl>
+
 
                             <FormControl fullWidth size="small">
                             <label className="form-label">Question</label>
+                             <div className='flex space-x-2'>
                              <TextField
                             placeholder='Question'
                             labelId="content-type-label"
-                            name="Accident"
-                            value={second_opinion_query.Second_Opinion_Query || []}
-                        //   onChange={handleChiefComplaintsChange}
+                            name="Questions"
+                            value={current_question}
+                            onChange={(e) => setcurrent_question(e.target.value)}
                                   />
-                            </FormControl>
+                            <Button
+                            onClick={addquestions}
+                            variant="outlined"
+                            // startIcon={<AddIcon />}
+                          >
+                            Add
+                          </Button>
+                          </div>
+
+                {Array.isArray(second_opinion_query?.Questions) && second_opinion_query.Questions.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {second_opinion_query.Questions.map((question, index) => (
+                      <Chip
+                        key={index}
+                        label={question}
+                        onDelete={() => remove_question(index)}
+                        color="primary"
+                        variant="outlined"
+                      />
+                    ))}
+                  </div>
+                )}
+
+
+
+                          </FormControl>
+                        
 
 <div className='col-span-2'>
  <FormControl fullWidth>
   <label className="form-label mb-1">Additional Information</label>
   <textarea
-    name="Second_Opinion_Query"
+    name="AdditionalInformation"
     placeholder="Enter additional Information..."
-    value={second_opinion_query.Second_Opinion_Query || ""}
-    onChange={handleChiefComplaintsChange} // your handler
+    value={second_opinion_query.AdditionalInformation || ""}
+    onChange={(e)=>handleSecondOpinionChange("AdditionalInformation",e.target.value)}
     style={{
       width: "100%",
       minHeight: "120px", // start height
@@ -555,7 +547,7 @@ const handleCloseEdit = () => {
 
               <Button
                 style={{ backgroundColor: "#52677D", fontFamily: "Lora", color: "white" }}
-                onClick={save_chif_complaints}
+                onClick={save_second_opinious}
               >
                 Save
               </Button>

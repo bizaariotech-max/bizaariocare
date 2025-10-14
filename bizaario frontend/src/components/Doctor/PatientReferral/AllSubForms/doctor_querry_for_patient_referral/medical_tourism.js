@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import UniqueLoader from '../../../../loader';
 import { customMenuProps } from '../../../../../utils/mui_select_scroll_bar';
 import { Modal, } from 'react-bootstrap'; 
-import PremiumDoctor from '../PremiumDoctor/PremiumDoctor';
+
 
 
 const PatientReferralForMedicalTourism = ({patientId,selected_case_file,case_file_data,onRefresh}) => {
@@ -19,45 +19,30 @@ const PatientReferralForMedicalTourism = ({patientId,selected_case_file,case_fil
   
 
 
-const [second_opinion_query, setsecond_opinion_query] = useState({
-
-            Second_Opinion_Query:[],
-        
+const [medical_tourism, setmedical_tourism] = useState({
+      SurgeryProcedure:[],
+      DoctorNote:"",
+      Comorbidities :[],
+      DefineComorbidity:"",
+      RiskFactors:[],
+      DefineRiskFactor:"",
+      PatientConcern:[],
+      LogisticalConsiderations:[]
     });
 
 
    
-
-const handleChiefComplaintsChange = (index, field, value, subField = null) => {
-  setsecond_opinion_query(prev => {
-    const updatedChiefComplaints = [...prev.ChiefComplaints];
-    const complaint = { ...updatedChiefComplaints[index] };
-
-    if (subField) {
-      // For nested objects like Duration {Value, Unit}
-      complaint[field] = {
-        ...complaint[field],
-        [subField]: value
-      };
-    } else {
-      // For direct fields like SeverityGrade, Symptoms, AggravatingFactors
-      complaint[field] = value;
-    }
-
-    updatedChiefComplaints[index] = complaint;
-
-    return {
-      ...prev,
-      ChiefComplaints: updatedChiefComplaints
-    };
-  });
+const handlemedical_tourismchange = (field, value) => {
+  setmedical_tourism(prev => ({
+    ...prev,
+    [field]: value 
+  }));
 };
 
- const toggleArrayField = (index, field, item) => {
-  setsecond_opinion_query(prev => {
-    const updatedChiefComplaints = [...prev.ChiefComplaints];
-    const complaint = { ...updatedChiefComplaints[index] };
-    const currentArray = complaint[field] || [];
+
+const toggleArrayField = (field, item) => {
+  setmedical_tourism(prev => {
+    const currentArray = prev[field] || []; // get current array
 
     const itemId = typeof item === "string" ? item : item?._id;
 
@@ -66,27 +51,21 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
       typeof s === "string" ? s === itemId : s?._id === itemId
     );
 
-    if (exists) {
-      // Remove item
-      complaint[field] = currentArray.filter(s =>
-        typeof s === "string" ? s !== itemId : s._id !== itemId
-      );
-    } else {
-      // Add item
-      complaint[field] = [...currentArray, item];
-    }
-
-    updatedChiefComplaints[index] = complaint;
-
     return {
       ...prev,
-      ChiefComplaints: updatedChiefComplaints,
+      [field]: exists
+        ? currentArray.filter(s =>
+            typeof s === "string" ? s !== itemId : s._id !== itemId
+          ) // remove item
+        : [...currentArray, item] // add item
     };
   });
 };
 
 
 
+
+console.log(medical_tourism);
 
 
 
@@ -198,7 +177,7 @@ const handleChiefComplaintsChange = (index, field, value, subField = null) => {
         setisloading(true);
         try {
           const payload=
-          {...second_opinion_query,
+          {...medical_tourism,
             CaseFileId:patient_all_cheif_complaints[0].caseFileId._id,
             CreatedBy:doctordetails._id
             
@@ -330,7 +309,7 @@ const handleShowEdit = () => {
         })
       );
 
-      setsecond_opinion_query((prev) => ({
+      setmedical_tourism((prev) => ({
         ...prev,
         ChiefComplaints: normalizedComplaints,
       }));
@@ -343,7 +322,7 @@ const handleShowEdit = () => {
 
 const handleCloseEdit = () => {
   setShowEdit(false);
-  setsecond_opinion_query({
+  setmedical_tourism({
     ChiefComplaints: [
       {
         Symptoms: [],
@@ -362,7 +341,7 @@ const handleCloseEdit = () => {
         setisloading(true);
         try {
           const payload=
-          {...second_opinion_query,
+          {...medical_tourism,
             CaseFileId:patient_all_cheif_complaints[0].caseFileId._id,
             UpdatedBy :doctordetails._id
           }
@@ -532,14 +511,14 @@ const handleCloseEdit = () => {
                              <Select
                              multiple
                                    labelId="content-type-label"
-                                   name="Accident"
-                                  value={second_opinion_query.Second_Opinion_Query || []}
+                                   name="SurgeryProcedure"
+                                  value={medical_tourism.SurgeryProcedure || []}
                                   onOpen={() => {
                                      if (all_second_opinion_query_master.length === 0) { // prevent multiple calls
                                      getall_second_opinion_query_master();
                                      }
                                  }}
-                                //   onChange={handleChiefComplaintsChange}
+                                  onChange={(e)=>handlemedical_tourismchange("SurgeryProcedure",e.target.value)}
                                    displayEmpty
                                    MenuProps={customMenuProps}
                                    renderValue={(selected) => {
@@ -580,10 +559,10 @@ const handleCloseEdit = () => {
                         <FormControl fullWidth>
                         <label className="form-label mb-1">Doctor’s Note</label>
                         <textarea
-                            name="Second_Opinion_Query"
+                            name="DoctorNote"
                             placeholder="Doctor’s Note..."
-                            value={second_opinion_query.Second_Opinion_Query || ""}
-                            onChange={handleChiefComplaintsChange} // your handler
+                            value={medical_tourism.DoctorNote || ""}
+                            onChange={(e)=>handlemedical_tourismchange("DoctorNote",e.target.value)}
                             style={{
                             width: "100%",
                             minHeight: "120px", // start height
@@ -604,14 +583,14 @@ const handleCloseEdit = () => {
                              <Select
                              multiple
                                    labelId="content-type-label"
-                                   name="Accident"
-                                  value={second_opinion_query.Second_Opinion_Query || []}
+                                   name="Comorbidities"
+                                  value={medical_tourism.Comorbidities || []}
                                   onOpen={() => {
                                      if (all_second_opinion_query_master.length === 0) { // prevent multiple calls
                                      getall_second_opinion_query_master();
                                      }
                                  }}
-                                //   onChange={handleChiefComplaintsChange}
+                                onChange={(e)=>handlemedical_tourismchange("Comorbidities",e.target.value)}
                                    displayEmpty
                                    MenuProps={customMenuProps}
                                    renderValue={(selected) => {
@@ -650,10 +629,10 @@ const handleCloseEdit = () => {
                         <FormControl fullWidth>
                         <label className="form-label mb-1">Define Comorbidity</label>
                         <textarea
-                            name="Second_Opinion_Query"
+                            name="DefineComorbidity"
                             placeholder="Define Comorbidity..."
-                            value={second_opinion_query.Second_Opinion_Query || ""}
-                            onChange={handleChiefComplaintsChange} // your handler
+                            value={medical_tourism.DefineComorbidity || ""}
+                             onChange={(e)=>handlemedical_tourismchange("DefineComorbidity",e.target.value)}
                             style={{
                             width: "100%",
                             minHeight: "120px", // start height
@@ -669,44 +648,47 @@ const handleCloseEdit = () => {
                         </FormControl>
                         </div>
 
-                        <div className="col-span-2">
-                        <FormControl fullWidth size="small">
-                          <label className="form-label">Risk Factors</label>
-                          <div className="flex flex-wrap gap-2">
-                            {all_risk_factor_master.map((item) => {
-                              const selected = all_risk_factor_master.includes(item._id); 
-                              return (
-                                <span
-                                  key={item._id}
-                                  onClick={() => toggleArrayField("AllergyItem", item._id)}
-                                  className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
-                                    ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
-                                >
-                                  {item.lookup_value}
-                                  {selected && (
-                                    <span
-                                      className="ml-1 text-xs font-bold cursor-pointer"
-                                      onClick={(e) => e.stopPropagation()}
-                                    >
-                                      ✕
-                                    </span>
-                                  )}
-                                </span>
-                              );
-                            })}
-                          </div>
-                        </FormControl>
-                      </div>
+                    <div className="col-span-2">
+                  <FormControl fullWidth size="small">
+                    <label className="form-label">Risk Factors</label>
+                    <div className="flex flex-wrap gap-2">
+                      {all_risk_factor_master.map((item) => {
+                        // ✅ check if this _id exists in selected RiskFactors
+                        const selected = medical_tourism.RiskFactors.includes(item._id);
+
+                        return (
+                          <span
+                            key={item._id}
+                            onClick={() => toggleArrayField("RiskFactors", item._id)}
+                            className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
+                              ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
+                          >
+                            {item.lookup_value}
+                            {selected && (
+                              <span
+                                className="ml-1 text-xs font-bold cursor-pointer"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                ✕
+                              </span>
+                            )}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </FormControl>
+                </div>
+
                    
                    
                     <div className='col-span-2'>
                         <FormControl fullWidth>
                         <label className="form-label mb-1">Define Risk Factor (s)</label>
                         <textarea
-                            name="Second_Opinion_Query"
+                            name="DefineRiskFactor"
                             placeholder="Define Risk Factor (s)..."
-                            value={second_opinion_query.Second_Opinion_Query || ""}
-                            onChange={handleChiefComplaintsChange} // your handler
+                            value={medical_tourism.DefineRiskFactor || ""}
+                            onChange={(e)=>handlemedical_tourismchange("DefineRiskFactor",e.target.value)}
                             style={{
                             width: "100%",
                             minHeight: "120px", // start height
@@ -727,11 +709,11 @@ const handleCloseEdit = () => {
                           <label className="form-label">Patient’s Concern</label>
                           <div className="flex flex-wrap gap-2">
                             {all_patient_concern_master.map((item) => {
-                              const selected = all_patient_concern_master.includes(item._id); 
+                              const selected = medical_tourism.PatientConcern.includes(item._id); 
                               return (
                                 <span
                                   key={item._id}
-                                  onClick={() => toggleArrayField("AllergyItem", item._id)}
+                                  onClick={() => toggleArrayField("PatientConcern", item._id)}
                                   className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                                     ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                                 >
@@ -756,11 +738,11 @@ const handleCloseEdit = () => {
                           <label className="form-label">Logistical Considerations</label>
                           <div className="flex flex-wrap gap-2">
                             {all_logistical_consideration_master.map((item) => {
-                              const selected = all_logistical_consideration_master.includes(item._id); 
+                              const selected = medical_tourism.LogisticalConsiderations.includes(item._id); 
                               return (
                                 <span
                                   key={item._id}
-                                  onClick={() => toggleArrayField("AllergyItem", item._id)}
+                                  onClick={() => toggleArrayField("LogisticalConsiderations", item._id)}
                                   className={`px-3 py-1 text-sm rounded-md cursor-pointer flex items-center gap-2 
                                     ${selected ? 'bg-blue-500 text-white' : 'bg-[#e2e4f4] text-gray-800'}`}
                                 >

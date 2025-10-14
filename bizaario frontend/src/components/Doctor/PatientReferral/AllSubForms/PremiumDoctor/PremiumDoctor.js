@@ -65,7 +65,7 @@ const PremiumDoctor = ({ patientReferral, setPatientReferral }) => {
     mobile: { breakpoint: { max: 768, min: 0 }, items: 1 },
   };
 
-  const selectedDoctors = patientReferral.ReferredDoctors || [];
+  const selectedDoctors = patientReferral?.ReferredDoctors || [];
   const setSelectedDoctors = (ids) => {
     setPatientReferral((prev) => ({ ...prev, ReferredDoctors: ids }));
   };
