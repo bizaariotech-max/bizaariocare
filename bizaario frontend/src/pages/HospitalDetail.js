@@ -19,14 +19,18 @@ const HospitalDetail = () => {
       if (resp.data && resp.data.data) {
         const hospital = resp.data.data;
         const formattedData = {
-          id: hospital._id,
+          id: hospital._id, // asset id
           name: hospital.AssetName,
-          location: `${hospital.AddressLine1} ${hospital.AddressLine2} ${hospital.PostalCode}` || "",
+          location:
+            `${hospital.AddressLine1} ${hospital.AddressLine2} ${hospital.PostalCode}` ||
+            "",
           specialties: hospital.MedicalSpecialties || [],
           image: hospital.ProfilePicture || null,
           website: hospital.Website || "",
           logo: hospital.Logo || "",
-          description: hospital.Description || "Leading healthcare provider committed to excellence in patient care.",
+          description:
+            hospital.Description ||
+            "Leading healthcare provider committed to excellence in patient care.",
           stationName: hospital.StationId?.StationName || "",
           subscriptionType: hospital.SubscriptionType?.lookup_value || "",
           assetCategory: hospital.AssetCategoryLevel1?.lookup_value || "",
@@ -35,7 +39,8 @@ const HospitalDetail = () => {
           numberOfDoctors: hospital.NumberOfDoctors || 0,
           numberOfICUBeds: hospital.NumberOfICUBeds || 0,
           numberOfOTs: hospital.NumberOfOTs || 0,
-          numberOfConsultingPhysicians: hospital.NumberOfConsultingPhysicians || 0,
+          numberOfConsultingPhysicians:
+            hospital.NumberOfConsultingPhysicians || 0,
           numberOfNursingStaff: hospital.NumberOfNursingStaff || 0,
           numberOfDepartments: hospital.NumberOfDepartments || 0,
           registrationNumber: hospital.RegistrationNumber || "",
@@ -70,12 +75,14 @@ const HospitalDetail = () => {
           specialization: hospital.Specialization || [],
           fellowships: hospital.Fellowships || [],
           // Verification checks
-          incorporationCredentialCheck: hospital.IncorporationCredentialCheck || false,
+          incorporationCredentialCheck:
+            hospital.IncorporationCredentialCheck || false,
           employmentCheck: hospital.EmploymentCheck || false,
-          educationalCredentialCheck: hospital.EducationalCredentialCheck || false,
+          educationalCredentialCheck:
+            hospital.EducationalCredentialCheck || false,
           criminalRecordCheck: hospital.CriminalRecordCheck || false,
           patientTestimonyCheck: hospital.PatientTestimonyCheck || false,
-          onlineReputationCheck: hospital.OnlineReputationCheck || false
+          onlineReputationCheck: hospital.OnlineReputationCheck || false,
         };
         setHospitalData(formattedData);
       } else {
