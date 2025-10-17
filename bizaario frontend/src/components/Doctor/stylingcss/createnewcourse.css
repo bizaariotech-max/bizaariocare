@@ -16,10 +16,14 @@ margin-top: 10px;
 }
 
 .custom-data-grid {
-  height: 600px !important; /* Override inline/SX styles */
-  border-radius: 8px !important;
+  height: 600px !important;
+  /*Overrideinline/SXstyles*/border-radius: 8px !important;
   overflow-y: scroll !important;
   scrollbar-gutter: stable !important;
+  -webkit-border-radius: 8px !important;
+  -moz-border-radius: 8px !important;
+  -ms-border-radius: 8px !important;
+  -o-border-radius: 8px !important;
 }
 
 /* Column headers */

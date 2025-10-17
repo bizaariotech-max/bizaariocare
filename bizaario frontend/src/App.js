@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-rou
 import Home from './pages/Home';
 import About from './pages/About';
 import HospitalsPartners from './pages/HospitalsPartners';
+import HospitalDetail from './pages/HospitalDetail';
 
 import MedicalBoardPage from './pages/MedicalBoardPage';
 import NewsArticles from './pages/NewsArticles';
@@ -98,6 +99,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/partners" element={<HospitalsPartners />} />
+      <Route path="/hospital/:id" element={<HospitalDetail />} />
       <Route path="/medical-board" element={<MedicalBoardPage />} />
       <Route path="/news-articles" element={<NewsArticles />} />
       <Route path="/news-articles/id" element={<NewsArticles />} />
