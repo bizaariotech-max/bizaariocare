@@ -1,118 +1,124 @@
-import React from 'react'
-import Carousel from 'react-multi-carousel';
+import React from "react";
+import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Play } from 'lucide-react';
+import { Play } from "lucide-react";
 import { IoIosPlay } from "react-icons/io";
-import doctor1 from '../../../../../assets/images/hospital-profile/doctor1.png'
-import cardImg from '../../../../../assets/images/hospital-profile/img1.png'
-import gallery1 from '../../../../../assets/images/hospital-profile/img1.png'
-import gallery2 from '../../../../../assets/images/hospital-profile/img2.png'
-import gallery3 from '../../../../../assets/images/hospital-profile/img3.png'
-import gallery4 from '../../../../../assets/images/hospital-profile/img4.png'
-import gallery5 from '../../../../../assets/images/hospital-profile/img5.png'
-import gallery6 from '../../../../../assets/images/hospital-profile/img6.png'
+import doctor1 from "../../../../../assets/images/hospital-profile/doctor1.png";
+import cardImg from "../../../../../assets/images/hospital-profile/img1.png";
+import gallery1 from "../../../../../assets/images/hospital-profile/img1.png";
+import gallery2 from "../../../../../assets/images/hospital-profile/img2.png";
+import gallery3 from "../../../../../assets/images/hospital-profile/img3.png";
+import gallery4 from "../../../../../assets/images/hospital-profile/img4.png";
+import gallery5 from "../../../../../assets/images/hospital-profile/img5.png";
+import gallery6 from "../../../../../assets/images/hospital-profile/img6.png";
 
 const galleryArr = [
   {
-    img: gallery1
+    img: gallery1,
   },
   {
-    img: gallery2
+    img: gallery2,
   },
   {
-    img: gallery3
+    img: gallery3,
   },
   {
-    img: gallery4
+    img: gallery4,
   },
   {
-    img: gallery5
+    img: gallery5,
   },
   {
-    img: gallery6
+    img: gallery6,
   },
-]
-
+];
 
 const DigitalCmeArr = [
   {
-    duration: '20Min',
-    date: '20/12/2025',
-    title: 'Advanced Cardiac Life Support - 2024',
-    description: 'Attended cardiology update workshop on heart failure management, 2024',
-    doctor: 'Doctor Malik',
-    role: 'Senior Cardiologist, Apollo Hospitals',
-    img: doctor1
+    duration: "20Min",
+    date: "20/12/2025",
+    title: "Advanced Cardiac Life Support - 2024",
+    description:
+      "Attended cardiology update workshop on heart failure management, 2024",
+    doctor: "Doctor Malik",
+    role: "Senior Cardiologist, Apollo Hospitals",
+    img: doctor1,
   },
   {
-    duration: '20Min',
-    date: '20/12/2025',
-    title: 'Advanced Cardiac Life Support - 2024',
-    description: 'Attended cardiology update workshop on heart failure management, 2024',
-    doctor: 'Doctor Malik',
-    role: 'Senior Cardiologist, Apollo Hospitals',
-    img: doctor1
+    duration: "20Min",
+    date: "20/12/2025",
+    title: "Advanced Cardiac Life Support - 2024",
+    description:
+      "Attended cardiology update workshop on heart failure management, 2024",
+    doctor: "Doctor Malik",
+    role: "Senior Cardiologist, Apollo Hospitals",
+    img: doctor1,
   },
   {
-    duration: '20Min',
-    date: '20/12/2025',
-    title: 'Advanced Cardiac Life Support - 2024',
-    description: 'Attended cardiology update workshop on heart failure management, 2024',
-    doctor: 'Doctor Malik',
-    role: 'Senior Cardiologist, Apollo Hospitals',
-    img: doctor1
+    duration: "20Min",
+    date: "20/12/2025",
+    title: "Advanced Cardiac Life Support - 2024",
+    description:
+      "Attended cardiology update workshop on heart failure management, 2024",
+    doctor: "Doctor Malik",
+    role: "Senior Cardiologist, Apollo Hospitals",
+    img: doctor1,
   },
   {
-    duration: '20Min',
-    date: '20/12/2025',
-    title: 'Advanced Cardiac Life Support - 2024',
-    description: 'Attended cardiology update workshop on heart failure management, 2024',
-    doctor: 'Doctor Malik',
-    role: 'Senior Cardiologist, Apollo Hospitals',
-    img: doctor1
-  }
+    duration: "20Min",
+    date: "20/12/2025",
+    title: "Advanced Cardiac Life Support - 2024",
+    description:
+      "Attended cardiology update workshop on heart failure management, 2024",
+    doctor: "Doctor Malik",
+    role: "Senior Cardiologist, Apollo Hospitals",
+    img: doctor1,
+  },
 ];
 const InnovativeCaseArr = [
   {
-    duration: '20Min',
-    date: '20/12/2025',
-    title: 'Advanced Cardiac Life Support - 2024',
-    description: 'Attended cardiology update workshop on heart failure management, 2024',
-    doctor: 'Doctor Malik',
-    role: 'Senior Cardiologist, Apollo Hospitals',
-    img: cardImg
+    duration: "20Min",
+    date: "20/12/2025",
+    title: "Advanced Cardiac Life Support - 2024",
+    description:
+      "Attended cardiology update workshop on heart failure management, 2024",
+    doctor: "Doctor Malik",
+    role: "Senior Cardiologist, Apollo Hospitals",
+    img: cardImg,
   },
   {
-    duration: '20Min',
-    date: '20/12/2025',
-    title: 'Advanced Cardiac Life Support - 2024',
-    description: 'Attended cardiology update workshop on heart failure management, 2024',
-    doctor: 'Doctor Malik',
-    role: 'Senior Cardiologist, Apollo Hospitals',
-    img: cardImg
+    duration: "20Min",
+    date: "20/12/2025",
+    title: "Advanced Cardiac Life Support - 2024",
+    description:
+      "Attended cardiology update workshop on heart failure management, 2024",
+    doctor: "Doctor Malik",
+    role: "Senior Cardiologist, Apollo Hospitals",
+    img: cardImg,
   },
   {
-    duration: '20Min',
-    date: '20/12/2025',
-    title: 'Advanced Cardiac Life Support - 2024',
-    description: 'Attended cardiology update workshop on heart failure management, 2024',
-    doctor: 'Doctor Malik',
-    role: 'Senior Cardiologist, Apollo Hospitals',
-    img: cardImg
+    duration: "20Min",
+    date: "20/12/2025",
+    title: "Advanced Cardiac Life Support - 2024",
+    description:
+      "Attended cardiology update workshop on heart failure management, 2024",
+    doctor: "Doctor Malik",
+    role: "Senior Cardiologist, Apollo Hospitals",
+    img: cardImg,
   },
   {
-    duration: '20Min',
-    date: '20/12/2025',
-    title: 'Advanced Cardiac Life Support - 2024',
-    description: 'Attended cardiology update workshop on heart failure management, 2024',
-    doctor: 'Doctor Malik',
-    role: 'Senior Cardiologist, Apollo Hospitals',
-    img: cardImg
-  }
+    duration: "20Min",
+    date: "20/12/2025",
+    title: "Advanced Cardiac Life Support - 2024",
+    description:
+      "Attended cardiology update workshop on heart failure management, 2024",
+    doctor: "Doctor Malik",
+    role: "Senior Cardiologist, Apollo Hospitals",
+    img: cardImg,
+  },
 ];
 export default function AboutContent({ hospitalData }) {
   const responsive = {
-
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
       items: 3,
@@ -125,13 +131,12 @@ export default function AboutContent({ hospitalData }) {
     },
     tablet: {
       breakpoint: { max: 1024, min: 767 },
-      items: 2
+      items: 2,
     },
     mobile: {
       breakpoint: { max: 767, min: 0 },
       items: 1,
-
-    }
+    },
   };
   return (
     <>
@@ -139,7 +144,7 @@ export default function AboutContent({ hospitalData }) {
         <p className="pb-3">{hospitalData?.description || "N/A"}</p>
         <p>{hospitalData?.additionalInfo || "N/A"}</p>
       </div>
-      <div className="space-top">
+      <div className="mt-10 lg:mt-20">
         <h2 className="pb-4 text-xl font-semibold lg:text-3xl">
           Hospital Tour
         </h2>
@@ -161,9 +166,9 @@ export default function AboutContent({ hospitalData }) {
         )}
       </div>
 
-      <div className="space-top">
+      <div className="mt-10 lg:mt-20">
         <div>
-          <h2 className="pb-6 text-xl font-semibold lg:text-3xl">
+          <h2 className="pb-4 text-xl font-semibold lg:text-3xl">
             Digital CME Contents
           </h2>
         </div>
@@ -177,7 +182,7 @@ export default function AboutContent({ hospitalData }) {
           //additionalTransfrom={-20}
           //  pauseOnHover={false}
           //  centerMode={false}
-          containerClass=" carousel-container"
+          containerClass="carousel-container"
           itemClass=" px-2"
           showDots={false}
           infinite={true}
@@ -187,8 +192,7 @@ export default function AboutContent({ hospitalData }) {
         >
           {DigitalCmeArr.map((event, index) => (
             <div key={index}>
-              <div className="w-full bg-[#e5e7ee]  rounded-2xl shadow-lg overflow-hidden">
-                {/* Video Thumbnail */}
+              <div className="w-full bg-[#e5e7ee]  rounded-2xl  overflow-hidden">
                 <div className="relative flex items-center justify-center h-auto px-4 py-4 cursor-pointer group">
                   <div>
                     <img
@@ -203,8 +207,6 @@ export default function AboutContent({ hospitalData }) {
                   </div>
                   {/* <div className="absolute inset-0 transition-all duration-300 bg-black bg-opacity-0 group-hover:bg-opacity-10"></div> */}
                 </div>
-
-                {/* Content */}
                 <div className="px-4 pb-6">
                   {/* Duration and Date */}
                   <div className="flex items-center gap-6 mb-3 text-sm text-black/80">
@@ -247,7 +249,7 @@ export default function AboutContent({ hospitalData }) {
       </div>
 
       {/* ==============Innovative Case Studies============== */}
-      <div className="space-top">
+      <div className="mt-10 lg:mt-20">
         <div>
           <h2 className="pb-6 text-xl font-semibold lg:text-3xl">
             Innovative Case Studies
@@ -275,7 +277,7 @@ export default function AboutContent({ hospitalData }) {
           >
             {InnovativeCaseArr.map((event, index) => (
               <div key={index}>
-                <div className="w-full bg-[#e5e7ee]  rounded-2xl shadow-lg overflow-hidden">
+                <div className="w-full bg-[#e5e7ee]  rounded-2xl overflow-hidden">
                   {/* Video Thumbnail */}
                   <div className="relative flex items-center justify-center h-auto px-4 py-4 cursor-pointer group">
                     <div>
@@ -329,7 +331,7 @@ export default function AboutContent({ hospitalData }) {
           </Carousel>
         </div>
       </div>
-      <div className="mb-5 space-top lg:mb-10">
+      <div className="mt-10 mb-5 lg:mt-20 lg:mb-10">
         <div>
           <h2 className="pb-6 text-xl font-semibold lg:text-3xl">
             Our Gallery
@@ -355,7 +357,6 @@ export default function AboutContent({ hospitalData }) {
                 className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 transition-colors duration-300 bg-black/0 group-hover:bg-black/20"></div>
-            
             </div>
           ))}
         </div>

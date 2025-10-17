@@ -23,12 +23,12 @@ const HospitalProfile = ({ hospitalData }) => (
               className="h-auto max-w-full rounded-md"
             />
           </div>
-          <div>
-            <div className="flex flex-col justify-between gap-4 mb-2 md:items-center md:flex-row">
+          <div className="w-full">
+            <div className="flex flex-col justify-between gap-2 mb-4 md:mb-0 md:flex-row">
               <h3 className="text-2xl font-semibold ">
                 {hospitalData?.name || "Apollo Hospital"}
               </h3>
-              <button className="border text-[var(--primary)] border-[var(--primary)] rounded-md py-3 px-4 flex items-center gap-2">
+              <button className="border-2 text-[var(--primary)] border-[var(--primary)] rounded-md py-3 px-4 flex items-center gap-2">
                 <MdFileDownload
                   className="inline text-[var(--primary)]"
                   size={20}
@@ -112,9 +112,13 @@ const HospitalProfile = ({ hospitalData }) => (
             )}
           </div>
           <div className="flex flex-col gap-4 mt-4 md:flex-row">
-            <button className="btn-outline">Send Treatment Query</button>
+            <button className="w-full px-3 bg-[var(--button-back-white-color)] text-[var(--button-back-color)] border border-gray-300 rounded-lg py-3 font-semibold text-center text-base hover:bg-gray-50 transition">
+              Send Treatment Query
+            </button>
             <div>
-              <button className="w-full btn-fill">Book Appointment</button>
+              <button className="lg:min-w-[200px] bg-[var(--button-back-color)] text-[var(--white)] rounded-lg py-3 font-semibold text-center text-base hover:bg-[var(--button-back-hover)] transition">
+                Book Appointment
+              </button>
             </div>
           </div>
         </div>
