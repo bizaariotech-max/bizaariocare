@@ -4,6 +4,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import clock from '../../assets/images/clock.png';
 import calender from '../../assets/images/calendar.png';
+import { NavLink } from 'react-router-dom';
 
 const EmpoweringContent2 = () => {
   const responsive = {
@@ -17,9 +18,9 @@ const EmpoweringContent2 = () => {
 
   const get_digital_cme_content = async () => {
     try {
-      const resp = await api.post('api/v1/admin/ContentList', {
-        ContentTypeId: '68affee3874340d8d79dbf3b',
-        ContentPriority: 'Medium',
+      const resp = await api.post("api/v1/admin/ContentList", {
+        ContentTypeId: "68affee3874340d8d79dbf3b",
+        // ContentPriority: 'Medium',
       });
       setdigital_cme(resp.data.data.list);
       console.log(resp);
@@ -33,7 +34,7 @@ const EmpoweringContent2 = () => {
   }, []);
 
   return (
-    <div className="doctor-slider mt-4 relative">
+    <div className="relative mt-4 doctor-slider">
       <Carousel
         arrows={false}
         responsive={responsive}
@@ -43,42 +44,54 @@ const EmpoweringContent2 = () => {
         partialVisible
       >
         {digital_cme?.map((element) => (
-          <div
-            key={element.id}
-            className="bg-gray-200 rounded-2xl p-2 flex flex-col h-full"
+          <NavLink
+            key={element._id || element.id}
+            to={`/news-articles/${element._id || element.id}`}
+            state={{ article: element }}
+            className="block h-full text-decoration-none"
           >
-            <img
-              src={element.ContentImage}
-              alt="doctor"
-              className="w-full h-64 object-cover rounded-xl"
-            />
+            <div className="flex flex-col h-full p-2 bg-gray-200 rounded-2xl hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+              <img
+                src={element.ContentImage}
+                alt="doctor"
+                className="object-cover w-full h-64 rounded-xl"
+              />
 
-            <div className="flex items-center gap-4 mt-3 text-gray-600 text-sm">
-              <img src={calender} className="w-3.5 h-3.5" alt="" />
-              <p>{new Date(element.Date).toLocaleDateString()}</p>
-            </div>
-
-            <div className="mt-4 flex-1 flex flex-col justify-between">
-              <div>
-                <p className="text-black font-bold text-lg">{element.ContentTitle}</p>
-                <p className="text-gray-700 text-sm mt-1 line-clamp-3">{element.ShortDescription}</p>
+              <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
+                <img src={calender} className="w-3.5 h-3.5" alt="" />
+                <p>{new Date(element.Date).toLocaleDateString()}</p>
               </div>
 
-              <div className="flex items-center gap-3 mt-4">
-                <img
-                  src={element.AssetId.ProfilePicture}
-                  alt={element.name}
-                  className="w-9 h-9 rounded-full border-2 border-white object-cover"
-                />
+              <div className="flex flex-col justify-between flex-1 mt-4">
                 <div>
-                  <p className="text-black text-sm font-medium">{element.AssetId.AssetName}</p>
-                  <p className="text-gray-500 text-xs">
-                    {(element.AssetId.MedicalSpecialties || []).map((item) => item.lookup_value).join(', ')}
+                  <p className="text-lg font-bold text-black">
+                    {element.ContentTitle}
                   </p>
+                  <p className="mt-1 text-sm text-gray-700 line-clamp-3">
+                    {element.ShortDescription}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 mt-4">
+                  <img
+                    src={element.AssetId.ProfilePicture}
+                    alt={element.name}
+                    className="object-cover border-2 border-white rounded-full w-9 h-9"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-black">
+                      {element.AssetId.AssetName}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {(element.AssetId.MedicalSpecialties || [])
+                        .map((item) => item.lookup_value)
+                        .join(", ")}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </NavLink>
         ))}
       </Carousel>
     </div>

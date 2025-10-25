@@ -14,9 +14,9 @@ const testimonialArr = [
     id: "4",
   },
 ];
-const PatientTestimonial = ({ hospitalData }) => {
-  // Use dynamic testimonials from hospitalData or fallback to static data
-  const testimonials = hospitalData?.patientTestimonials || [
+const PatientTestimonial = ({ doctorData }) => {
+  // Use dynamic testimonials from doctorData or fallback to static data
+  const testimonials = doctorData?.patientTestimonials || [
     {
       _id: "1",
       ContentTitle: "From Fear to Healing: My Experience with Expert Care",
@@ -49,7 +49,7 @@ const PatientTestimonial = ({ hospitalData }) => {
 
   return (
     <div className="space-y-6">
-      {testimonials.map((item) => (
+      {testimonials?.map((item) => (
         <div
           className="bg-[#f2f3f6] p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
           key={item._id}

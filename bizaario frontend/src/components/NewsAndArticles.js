@@ -189,7 +189,7 @@ const getContentList = async () => {
 
   return (
     <section className="spacing-top">
-      <div className="news-section container">
+      <div className="container news-section">
         {/* Header */}
         <div className="row">
                 <div className="col-lg-8 col-12">
@@ -211,7 +211,7 @@ const getContentList = async () => {
                 </div>
 
         {/* Tabs */}
-         <div className="medical-tab-buttons mb-4 w-full px-0">  
+         <div className="w-full px-0 mb-4 medical-tab-buttons">  
                 <Carousel
                   arrows={false}
                   responsive={responsive}
@@ -254,63 +254,64 @@ const getContentList = async () => {
                      >
                  {contentList.map((element) => {
                  return (
-     
-               <div
-              key={element.id}
-              className="rounded-2xl bg-[#BDC4D44D] p-3 h-full"
-            >
-              {/* Image */}
-              <img
-                src={element.ContentImage}
-                alt="doctor"
-                className="w-full h-[257px] rounded-lg object-cover mx-auto"
-              />
+                   <NavLink
+                     key={element._id || element.id}
+                     to={`/news-articles/${element._id || element.id}`}
+                     state={{ article: element }}
+                     className="block h-full text-decoration-none"
+                   >
+                     <div className="rounded-2xl bg-[#BDC4D44D] p-3 h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                       {/* Image */}
+                       <img
+                         src={element.ContentImage}
+                         alt="doctor"
+                         className="w-full h-[257px] rounded-lg object-cover mx-auto"
+                       />
 
-              {/* Info Row */}
-            <div className="flex gap-12 mt-2">
-              {/* Time */}
-              <div className="flex items-center gap-1.5">
-                <img src={clock} alt="" className="w-[22px] h-[22px] object-contain" />
-                <span className="text-[12px] font-normal text-black/70 leading-none">
-                  {element?.time ? element.time : "00:20"}
-                </span>
-              </div>
+                       {/* Info Row */}
+                       <div className="flex gap-12 mt-2">
+                         {/* Time */}
+                         <div className="flex items-center gap-1.5">
+                           <img src={clock} alt="" className="w-[22px] h-[22px] object-contain" />
+                           <span className="text-[12px] font-normal text-black/70 leading-none">
+                             {element?.time ? element.time : "00:20"}
+                           </span>
+                         </div>
 
-              {/* Date */}
-              <div className="flex items-center gap-1.5">
-                <img src={calender} alt="" className="w-[22px] h-[22px] object-contain" />
-                <span className="text-[12px] font-normal text-black/70 leading-none">
-                  {element?.Date
-                    ? new Date(element.Date).toLocaleDateString("en-GB", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })
-                    : "8 Oct 2025"}
-                </span>
-              </div>
+                         {/* Date */}
+                         <div className="flex items-center gap-1.5">
+                           <img src={calender} alt="" className="w-[22px] h-[22px] object-contain" />
+                           <span className="text-[12px] font-normal text-black/70 leading-none">
+                             {element?.Date
+                               ? new Date(element.Date).toLocaleDateString("en-GB", {
+                                   day: "numeric",
+                                   month: "short",
+                                   year: "numeric",
+                                 })
+                               : "8 Oct 2025"}
+                           </span>
+                         </div>
 
-              {/* Views */}
-              <div className="flex items-center gap-1.5">
-                <img src={eye} alt="" className="w-[22px] h-[22px] object-contain" />
-                <span className="text-[12px] font-normal text-black/70 leading-none">
-                  {element?.views ? element.views : "1980"}
-                </span>
-              </div>
-            </div>
+                         {/* Views */}
+                         <div className="flex items-center gap-1.5">
+                           <img src={eye} alt="" className="w-[22px] h-[22px] object-contain" />
+                           <span className="text-[12px] font-normal text-black/70 leading-none">
+                             {element?.views ? element.views : "1980"}
+                           </span>
+                         </div>
+                       </div>
 
-
-              {/* Content */}
-              <div className="content mt-4 text-start">
-                <p className="text-black text-[20px] font-bold leading-normal mb-1">
-                  {element.ContentTitle}
-                </p>
-                <p className="text-[#52677D] text-[16px] font-normal leading-normal mb-1">
-                  {element.ShortDescription}
-                </p>
-              </div>
-            </div>
-
+                       {/* Content */}
+                       <div className="mt-4 content text-start">
+                         <p className="text-black text-[20px] font-bold leading-normal mb-1">
+                           {element.ContentTitle}
+                         </p>
+                         <p className="text-[#52677D] text-[16px] font-normal leading-normal mb-1">
+                           {element.ShortDescription}
+                         </p>
+                       </div>
+                     </div>
+                   </NavLink>
                  )
                  })}
      </Carousel>

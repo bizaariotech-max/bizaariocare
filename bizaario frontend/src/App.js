@@ -4,14 +4,16 @@ import Home from './pages/Home';
 import About from './pages/About';
 import HospitalsPartners from './pages/HospitalsPartners';
 import HospitalDetail from './pages/HospitalDetail';
+import DoctorDetail from "./pages/DoctorDetail";
+import ArticleDetail from "./components/news-article-page/ArticleDetail.js";
 
-import MedicalBoardPage from './pages/MedicalBoardPage';
-import NewsArticles from './pages/NewsArticles';
-import ContactUs from'./pages/ContactUs';
+import MedicalBoardPage from "./pages/MedicalBoardPage";
+import NewsArticles from "./pages/NewsArticles";
+import ContactUs from "./pages/ContactUs";
 import RegisterPage from "./components/register";
 import SignIn from "./components/signin";
 import Admindashboard from "./components/Admin/admindashboard";
-import AdminAddDoctorHospital from '../src/components/Admin/adddoctor'
+import AdminAddDoctorHospital from "../src/components/Admin/adddoctor";
 import Doctordashboard from "./components/Doctor/doctordashboard";
 import Createnewcourse from "./components/Doctor/createnewcourse";
 import Createdigitalcme from "./components/Doctor/digital_cme";
@@ -93,133 +95,255 @@ import AddNewPatientDetails from "./components/Doctor/PatientReferral/AllSubForm
 
 function App() {
   return (
-   
     <BrowserRouter>
       <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/partners" element={<HospitalsPartners />} />
-      <Route path="/hospital/:id" element={<HospitalDetail />} />
-      <Route path="/medical-board" element={<MedicalBoardPage />} />
-      <Route path="/news-articles" element={<NewsArticles />} />
-      <Route path="/news-articles/id" element={<NewsArticles />} />
-      <Route path="/contact" element={<ContactUs />} />
-       <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/partners" element={<HospitalsPartners />} />
+
+        <Route path="/hospital/:id" element={<HospitalDetail />} />
+        <Route path="/doctor/:id" element={<DoctorDetail />} />
+        <Route path="/medical-board" element={<MedicalBoardPage />} />
+        <Route path="/news-articles" element={<NewsArticles />} />
+        <Route path="/news-articles/:id" element={<ArticleDetail />} />
+
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/signin" element={<SignIn />} />
 
         <Route path="/change-password" element={<ChangePassword />} />
 
-         <Route path="/admindashboard" element={<Admindashboard/>}></Route>
-        <Route path="/adddoctor" element={<AdminAddDoctorHospital/>}></Route>
-        <Route path="/doctordashboard" element={<Doctordashboard/>}></Route>
-        <Route path="/createnewcourse" element={<Createnewcourse/>}></Route>
+        <Route path="/admindashboard" element={<Admindashboard />}></Route>
+        <Route path="/adddoctor" element={<AdminAddDoctorHospital />}></Route>
+        <Route path="/doctordashboard" element={<Doctordashboard />}></Route>
+        <Route path="/createnewcourse" element={<Createnewcourse />}></Route>
 
-
-        <Route path="/createdigitalcmequestionbank" element={<Createdititalcmequestionbank/>}></Route> 
-        <Route path="/createsubadmin" element={<Createsubadmin/>}></Route> 
-        <Route path="/editdoctorprofile" element={<Editdoctorprofile/>}></Route> 
-        <Route path="/editdoctorworkexperience" element={<Updateworkexperience/>}></Route> 
-        <Route path="/editupcomingevents" element={<Updateupcomingevent/>}></Route>
-        <Route path="/editawards" element={<Updateawards/>}></Route> 
-        <Route path="/viewdoctorprofile" element={<DoctorProfile/>}></Route> 
-        <Route path="/addpatientdetails" element={<ActivePatient/>}></Route> 
+        <Route
+          path="/createdigitalcmequestionbank"
+          element={<Createdititalcmequestionbank />}
+        ></Route>
+        <Route path="/createsubadmin" element={<Createsubadmin />}></Route>
+        <Route
+          path="/editdoctorprofile"
+          element={<Editdoctorprofile />}
+        ></Route>
+        <Route
+          path="/editdoctorworkexperience"
+          element={<Updateworkexperience />}
+        ></Route>
+        <Route
+          path="/editupcomingevents"
+          element={<Updateupcomingevent />}
+        ></Route>
+        <Route path="/editawards" element={<Updateawards />}></Route>
+        <Route path="/viewdoctorprofile" element={<DoctorProfile />}></Route>
+        <Route path="/addpatientdetails" element={<ActivePatient />}></Route>
 
         {/*======================== admin configuration ============================*/}
 
-        <Route path="/addcountry_group_master" element={<Addcountrygroupmaster/>}></Route> 
-        <Route path="/add-org-master" element={<Addorgunit/>}></Route>
-        <Route path="/addassest_category_master" element={<AddAssetCategoryMaster/>}></Route> 
-        <Route path="/addassest_category_master_level2" element={<AddAssetCategoryMasterLevel2/>}></Route>
-        <Route path="/addassest_category_master_level3" element={<AddAssetCategoryMasterLevel3/>}></Route>
-        <Route path="/add_event_type_master" element={<Addeventtype/>}></Route>
-        <Route path="/add-content-type" element={<Addcontenttype/>}></Route>
-        <Route path="/add-service-category" element={<Addservicecategory/>}></Route>
-        <Route path="/add-medical-specility" element={<Addmedicalspecility/>}></Route>
-        <Route path="/add-subscription" element={<Addsubscription/>}></Route>
-        <Route path="/add-relationship-master" element={<RelationshipMaster/>}></Route>
-        <Route path="/add-insuranceprovider-master" element={<InsuranceProviderMaster/>}></Route>
+        <Route
+          path="/addcountry_group_master"
+          element={<Addcountrygroupmaster />}
+        ></Route>
+        <Route path="/add-org-master" element={<Addorgunit />}></Route>
+        <Route
+          path="/addassest_category_master"
+          element={<AddAssetCategoryMaster />}
+        ></Route>
+        <Route
+          path="/addassest_category_master_level2"
+          element={<AddAssetCategoryMasterLevel2 />}
+        ></Route>
+        <Route
+          path="/addassest_category_master_level3"
+          element={<AddAssetCategoryMasterLevel3 />}
+        ></Route>
+        <Route path="/add_event_type_master" element={<Addeventtype />}></Route>
+        <Route path="/add-content-type" element={<Addcontenttype />}></Route>
+        <Route
+          path="/add-service-category"
+          element={<Addservicecategory />}
+        ></Route>
+        <Route
+          path="/add-medical-specility"
+          element={<Addmedicalspecility />}
+        ></Route>
+        <Route path="/add-subscription" element={<Addsubscription />}></Route>
+        <Route
+          path="/add-relationship-master"
+          element={<RelationshipMaster />}
+        ></Route>
+        <Route
+          path="/add-insuranceprovider-master"
+          element={<InsuranceProviderMaster />}
+        ></Route>
 
+        <Route path="/add-stationmaster" element={<Addstationmaster />}></Route>
+        <Route path="/add-assestmaster" element={<Addassestsmaster />}></Route>
+        <Route path="/login-master" element={<Loginmaster />}></Route>
+        <Route
+          path="/complete-doctor-details"
+          element={<CompleteDoctorDetails />}
+        ></Route>
 
-        <Route path="/add-stationmaster" element={<Addstationmaster/>}></Route>
-        <Route path="/add-assestmaster" element={<Addassestsmaster/>}></Route>
-        <Route path="/login-master" element={<Loginmaster/>}></Route>
-        <Route path="/complete-doctor-details" element={<CompleteDoctorDetails/>}></Route>
-
-              {/* admin content master */}
+        {/* admin content master */}
         <Route path="/content-master" element={<ContentMaster />}></Route>
         <Route path="/event-master" element={<EventMaster />}></Route>
 
-{/*================================== doctor section route ===============================*/}
+        {/*================================== doctor section route ===============================*/}
 
-        <Route path="/createdigitalcme" element={<DigitalCme/>}></Route>
-        <Route path="/news_and_articles" element={<DoctorNewsAndArticles/>}></Route>
-        <Route path="/awards-and-recognitions" element={<AwardsAndRecognitions/>}></Route>
-        <Route path="/patient-testimonials" element={<PatientTestimonials/>}></Route>
-        <Route path="/opd-srugicla-camps" element={<OpdSurgicalCamps/>}></Route>
-        <Route path="/workshop" element={<Workshop/>}></Route>
+        <Route path="/createdigitalcme" element={<DigitalCme />}></Route>
+        <Route
+          path="/news_and_articles"
+          element={<DoctorNewsAndArticles />}
+        ></Route>
+        <Route
+          path="/awards-and-recognitions"
+          element={<AwardsAndRecognitions />}
+        ></Route>
+        <Route
+          path="/patient-testimonials"
+          element={<PatientTestimonials />}
+        ></Route>
+        <Route
+          path="/opd-srugicla-camps"
+          element={<OpdSurgicalCamps />}
+        ></Route>
+        <Route path="/workshop" element={<Workshop />}></Route>
 
-        <Route path="/complete-patient-details" element={<CompletePatientDetails/>}></Route>
+        <Route
+          path="/complete-patient-details"
+          element={<CompletePatientDetails />}
+        ></Route>
 
         {/*==================== bizaario master section ==================================*/}
 
-        <Route path="/patient-referral-type" element={<PatientReferralType/>}></Route>
-        <Route path="/symptom-class-master" element={<SymptomClassMaster/>}></Route>
-        <Route path="/symptom-master" element={<SymptomMaster/>}></Route>
-        <Route path="/aggravating-factor-master" element={<AggravatingFactorMaster/>}></Route>
-        <Route path="/pharmaceutical-salt-type-master" element={<PharmaceuticalSaltTypeMaster/>}></Route>
-        <Route path="/pharmaceutical-salt-master" element={<PharmaceuticalSaltMaster/>}></Route>
-        <Route path="/dosage-type-master" element={<DosageMaster/>}></Route>
-        <Route path="/medicine-frequency-master" element={<MedicineFrequencyMaster/>}></Route>
-        <Route path="/procedure-master" element={<ProcedureMaster/>}></Route>
-        <Route path="/disease-master" element={<DiseaseMaster/>}></Route>
-        <Route path="/allergy-category-master" element={<AllergyCategory/>}></Route>
-        <Route path="/allergy-master" element={<AllergyMaster/>}></Route>
-        <Route path="/truma-category-master" element={<TrumaCategory/>}></Route>
-        <Route path="/trauma-master" element={<TraumaMaster/>}></Route>
-        <Route path="/occupation-category-master" element={<OccupationCategory/>}></Route>
-        <Route path="/occupation-master" element={<OccupationMaster/>}></Route>
-        <Route path="/habit-category-master" element={<HabitCategory/>}></Route>
-        <Route path="/habit-master" element={<HabitMaster/>}></Route>
-        <Route path="/therapy-master" element={<TherapyMaster/>}></Route>
-        <Route path="/reason-for-referral-master" element={<ReasonForReferral/>}></Route>
-        <Route path="/investigation-category-master" element={<InvestigationCategory/>}></Route>
-        <Route path="/investigation-master" element={<InvestigationMaster/>}></Route>
-        <Route path="/diagnosis-master" element={<DiagnosisMaster/>}></Route>
-        <Route path="/diagnosis-type-master" element={<DiagnosisTypeMaster/>}></Route>
-        <Route path="/lifestyle-intervention-master" element={<LifestyleInterventionMaster/>}></Route>
-        <Route path="/second-opinion-query-master" element={<SecondOpinionQueryMaster/>}></Route>
-        <Route path="/comorbidity-master" element={<ComorbidityMaster/>}></Route>
-        <Route path="/risk-factor-master" element={<RiskFactorMaster/>}></Route>
-        <Route path="/patient-concern-master" element={<PatientConcernMaster/>}></Route>
-        <Route path="/logistical-consideration-master" element={<LogsticalConsiderationMaster/>}></Route>
+        <Route
+          path="/patient-referral-type"
+          element={<PatientReferralType />}
+        ></Route>
+        <Route
+          path="/symptom-class-master"
+          element={<SymptomClassMaster />}
+        ></Route>
+        <Route path="/symptom-master" element={<SymptomMaster />}></Route>
+        <Route
+          path="/aggravating-factor-master"
+          element={<AggravatingFactorMaster />}
+        ></Route>
+        <Route
+          path="/pharmaceutical-salt-type-master"
+          element={<PharmaceuticalSaltTypeMaster />}
+        ></Route>
+        <Route
+          path="/pharmaceutical-salt-master"
+          element={<PharmaceuticalSaltMaster />}
+        ></Route>
+        <Route path="/dosage-type-master" element={<DosageMaster />}></Route>
+        <Route
+          path="/medicine-frequency-master"
+          element={<MedicineFrequencyMaster />}
+        ></Route>
+        <Route path="/procedure-master" element={<ProcedureMaster />}></Route>
+        <Route path="/disease-master" element={<DiseaseMaster />}></Route>
+        <Route
+          path="/allergy-category-master"
+          element={<AllergyCategory />}
+        ></Route>
+        <Route path="/allergy-master" element={<AllergyMaster />}></Route>
+        <Route
+          path="/truma-category-master"
+          element={<TrumaCategory />}
+        ></Route>
+        <Route path="/trauma-master" element={<TraumaMaster />}></Route>
+        <Route
+          path="/occupation-category-master"
+          element={<OccupationCategory />}
+        ></Route>
+        <Route path="/occupation-master" element={<OccupationMaster />}></Route>
+        <Route
+          path="/habit-category-master"
+          element={<HabitCategory />}
+        ></Route>
+        <Route path="/habit-master" element={<HabitMaster />}></Route>
+        <Route path="/therapy-master" element={<TherapyMaster />}></Route>
+        <Route
+          path="/reason-for-referral-master"
+          element={<ReasonForReferral />}
+        ></Route>
+        <Route
+          path="/investigation-category-master"
+          element={<InvestigationCategory />}
+        ></Route>
+        <Route
+          path="/investigation-master"
+          element={<InvestigationMaster />}
+        ></Route>
+        <Route path="/diagnosis-master" element={<DiagnosisMaster />}></Route>
+        <Route
+          path="/diagnosis-type-master"
+          element={<DiagnosisTypeMaster />}
+        ></Route>
+        <Route
+          path="/lifestyle-intervention-master"
+          element={<LifestyleInterventionMaster />}
+        ></Route>
+        <Route
+          path="/second-opinion-query-master"
+          element={<SecondOpinionQueryMaster />}
+        ></Route>
+        <Route
+          path="/comorbidity-master"
+          element={<ComorbidityMaster />}
+        ></Route>
+        <Route
+          path="/risk-factor-master"
+          element={<RiskFactorMaster />}
+        ></Route>
+        <Route
+          path="/patient-concern-master"
+          element={<PatientConcernMaster />}
+        ></Route>
+        <Route
+          path="/logistical-consideration-master"
+          element={<LogsticalConsiderationMaster />}
+        ></Route>
 
         {/*===================== bizaario master section route end ===========================*/}
 
-      <Route path="/health-profilling-questions" element={<HealthProfillingQuestions/>}></Route>
+        <Route
+          path="/health-profilling-questions"
+          element={<HealthProfillingQuestions />}
+        ></Route>
 
+        {/*======================= complete patient profile secion============================= */}
+        <Route path="/patient-referral-for" element={<ReferralFor />}></Route>
+        <Route path="/patient-profiling" element={<PatientProfiling />}></Route>
 
+        {/*=========================== patient referral============================================= */}
 
-{/*======================= complete patient profile secion============================= */}
-         <Route path="/patient-referral-for" element={<ReferralFor/>}></Route>
-         <Route path="/patient-profiling" element={<PatientProfiling/>}></Route>
+        <Route
+          path="/patient-referral-home"
+          element={<PatientReferralHome />}
+        ></Route>
+        <Route
+          path="/patient-referral"
+          element={<PatientReferralVerify />}
+        ></Route>
 
-{/*=========================== patient referral============================================= */}
+        <Route
+          path="/add-new-patient"
+          element={<AddNewPatientDetails />}
+        ></Route>
 
- <Route path="/patient-referral-home" element={<PatientReferralHome/>}></Route>
-  <Route path="/patient-referral" element={<PatientReferralVerify/>}></Route>
-
-   <Route path="/add-new-patient" element={<AddNewPatientDetails/>}></Route>
-
-  <Route path="/patient-referral/appoint-doctors" element={<PremiumDoctor />}></Route>
-
+        <Route
+          path="/patient-referral/appoint-doctors"
+          element={<PremiumDoctor />}
+        ></Route>
       </Routes>
       {/* <ActivePatient/> */}
-      
-        
     </BrowserRouter>
-
-   
   );
 }
 

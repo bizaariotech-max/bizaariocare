@@ -118,7 +118,9 @@ const InnovativeCaseArr = [
     img: cardImg,
   },
 ];
-export default function AboutContent({ hospitalData }) {
+export default function AboutContent({ doctorData }) {
+
+  console.log(doctorData, "doctorData in about tab");
   // State for dynamic content
   const [digitalCMEContent, setDigitalCMEContent] = useState([]);
   const [caseStudyContent, setCaseStudyContent] = useState([]);
@@ -131,7 +133,7 @@ export default function AboutContent({ hospitalData }) {
         page: 1,
         limit: 20,
         ContentTypeId: "68affee3874340d8d79dbf3b", // Digital CME
-        AssetId: hospitalData?.id,
+        AssetId: doctorData?.id,
       });
 
       if (digitalCMEResponse.data?.data?.list) {
@@ -143,7 +145,7 @@ export default function AboutContent({ hospitalData }) {
         page: 1,
         limit: 20,
         ContentTypeId: "68f2328a1f3b87f8f330fa5c", // Case Study
-        AssetId: hospitalData?.id,
+        AssetId: doctorData?.id,
       });
 
       console.log(caseStudyResponse,"Case Study Content")
@@ -156,10 +158,10 @@ export default function AboutContent({ hospitalData }) {
   };
 
   useEffect(() => {
-    if (hospitalData?.id) {
+    if (doctorData?.id) {
       fetchContent();
     }
-  }, [hospitalData?.id]);
+  }, [doctorData?.id]);
 
   const responsive = {
     superLargeDesktop: {
@@ -184,16 +186,16 @@ export default function AboutContent({ hospitalData }) {
   return (
     <>
       <div className="">
-        <p className="pb-3">{hospitalData?.description || "N/A"}</p>
-        <p>{hospitalData?.ShortDescription || "N/A"}</p>
+        <p className="pb-3">{doctorData?.description || "N/A"}</p>
+        <p>{doctorData?.ShortDescription || "N/A"}</p>
       </div>
       <div className="mt-10 lg:mt-20">
         <h2 className="pb-4 text-xl font-semibold lg:text-3xl">
           Hospital Tour
         </h2>
-        {hospitalData?.videoGallery && hospitalData.videoGallery.length > 0 ? (
+        {doctorData?.videoGallery && doctorData.videoGallery.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {hospitalData.videoGallery.map((videoUrl, index) => (
+            {doctorData.videoGallery.map((videoUrl, index) => (
               <div key={index} className="p-4 bg-gray-400 rounded-lg">
                 <video className="max-h-[350px] w-full rounded-lg" controls>
                   <source src={videoUrl} type="video/mp4" />
@@ -204,7 +206,7 @@ export default function AboutContent({ hospitalData }) {
           </div>
         ) : (
           <div className="p-4 text-center bg-gray-100 rounded-lg">
-            <p className="text-gray-600">No hospital tour video available</p>
+            <p className="text-gray-600">No doctor video available</p>
           </div>
         )}
       </div>
@@ -425,7 +427,7 @@ export default function AboutContent({ hospitalData }) {
         </div> */}
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 md:gap-4">
-          {(hospitalData?.pictureGallery || galleryArr).map((item, index) => (
+          {(doctorData?.pictureGallery || galleryArr).map((item, index) => (
             <div
               key={item._id || index}
               className="relative w-full overflow-hidden transition-all duration-300 shadow-md cursor-pointer aspect-square rounded-xl hover:shadow-lg group"
