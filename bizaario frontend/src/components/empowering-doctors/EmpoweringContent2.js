@@ -50,7 +50,7 @@ const EmpoweringContent2 = () => {
             state={{ article: element }}
             className="block h-full text-decoration-none"
           >
-            <div className="flex flex-col h-full p-2 bg-gray-200 rounded-2xl hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+            <div className="flex flex-col h-full p-2 transition-shadow duration-300 bg-gray-200 cursor-pointer rounded-2xl hover:shadow-lg">
               <img
                 src={element.ContentImage}
                 alt="doctor"

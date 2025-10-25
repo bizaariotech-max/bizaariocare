@@ -64,7 +64,7 @@ console.log(doctorData, "doctorData on medical tabs");
                 </div>
               </div>
             ))}
-            <h4 className="mt-6 text-lg font-semibold">Our Gallery</h4>
+            {/* <h4 className="mt-6 text-lg font-semibold">Our Gallery</h4>
             <div className="grid grid-cols-2 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {doctorData?.PictureGallery?.map((img, idx) => (
                 <div
@@ -79,7 +79,7 @@ console.log(doctorData, "doctorData on medical tabs");
                   />
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         );
       case "awards":

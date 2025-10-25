@@ -83,6 +83,7 @@ const HospitalDetail = () => {
           criminalRecordCheck: hospital.CriminalRecordCheck || false,
           patientTestimonyCheck: hospital.PatientTestimonyCheck || false,
           onlineReputationCheck: hospital.OnlineReputationCheck || false,
+          doctors: hospital.HospitalDoctors || [],
         };
         setHospitalData(formattedData);
       } else {

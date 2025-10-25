@@ -71,7 +71,7 @@ const DoctorsTabContent = ({ hospitalData }) => {
   return (
     <div className="space-top">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-        {doctors.map((doctor, index) => (
+        {doctors?.map((doctor, index) => (
           <div key={index}>
             <div className="flex items-center justify-center ">
               <div className="w-full border border-gray-200 rounded-lg">
@@ -81,8 +81,8 @@ const DoctorsTabContent = ({ hospitalData }) => {
                     <div className="lg:relative lg:top-[30px]">
                       <div className="w-20 h-20 rounded-full bg-white p-[3px] shadow-lg ">
                         <img
-                          src={doctor.img || doctor.profilePicture || doctorImg}
-                          alt={doctor.name || doctor.doctorName || "Doctor"}
+                          src={doctor.img || doctor.ProfilePicture || doctorImg}
+                          alt={doctor.name || doctor.AssetName || "Doctor"}
                           className="object-cover w-full h-full rounded-full"
                         />
                       </div>
@@ -90,8 +90,8 @@ const DoctorsTabContent = ({ hospitalData }) => {
 
                     <div className="flex flex-col justify-center item-end ps-2">
                       <h3 className="text-xl font-semibold">
-                        {doctor.name ||
-                          doctor.doctorName ||
+                        {doctor.AssetName ||
+                          doctor.AssetName ||
                           "Dr. Dominic Stonehart"}
                       </h3>
                       <p className="text-sm text-gray-600">
@@ -121,7 +121,7 @@ const DoctorsTabContent = ({ hospitalData }) => {
                         Specializes in:{" "}
                       </span>
                       <span className="text-slate-600">
-                        {doctor.specialization ||
+                        {doctor.Specialization ||
                           doctor.specialty ||
                           "Interventional Cardiology, Heart Failure Management, Preventive Cardiology"}
                       </span>
