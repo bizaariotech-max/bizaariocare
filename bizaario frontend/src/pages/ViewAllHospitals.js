@@ -20,36 +20,80 @@ const ViewAllHospitals = () => {
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [specialtiesLoading, setSpecialtiesLoading] = useState(false);
+  const [citiesLoading, setCitiesLoading] = useState(false);
   const [medicalSpecialties, setMedicalSpecialties] = useState([]);
-  const [search, setSearch] = useState('');
-  const [selectedSpecialty, setSelectedSpecialty] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
+  const [cities, setCities] = useState([]);
+  const [search, setSearch] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCityId, setSelectedCityId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalHospitals, setTotalHospitals] = useState(0);
   const [pageSize] = useState(12);
 
-  // Cities for filtering
-  const cities = [
-    'Delhi NCR',
-    'Mumbai', 
-    'Bengaluru',
-    'Noida',
-    'Chennai',
-    'Kolkata',
-    'Hyderabad',
-    'Pune'
-  ];
+  // Fetch cities/stations from API
+  const fetchCities = async () => {
+    setCitiesLoading(true);
+    try {
+      const response = await api.post("api/v1/admin/StationList", {
+        page: 1,
+        limit: 20,
+        OrgUnitLevel: "68affb77874340d8d79dbeaa",
+      });
+
+      if (response.data && response.data.data && response.data.data.list) {
+        const cityList = response.data.data.list.map((station) => ({
+          id: station._id,
+          name: station.StationName || station.Name,
+          displayName: station.StationName || station.Name,
+        }));
+        setCities(cityList);
+      }
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      // Fallback to static cities if API fails
+      setCities([
+        { id: "", name: "Delhi NCR", displayName: "Delhi NCR" },
+        { id: "", name: "Mumbai", displayName: "Mumbai" },
+        { id: "", name: "Bengaluru", displayName: "Bengaluru" },
+        { id: "", name: "Noida", displayName: "Noida" },
+        { id: "", name: "Chennai", displayName: "Chennai" },
+        { id: "", name: "Kolkata", displayName: "Kolkata" },
+        { id: "", name: "Hyderabad", displayName: "Hyderabad" },
+        { id: "", name: "Pune", displayName: "Pune" },
+      ]);
+    } finally {
+      setCitiesLoading(false);
+    }
+  };
+
+  // Cities for filtering (keeping as fallback)
+  // const cities = [
+  //   'Delhi NCR',
+  //   'Mumbai',
+  //   'Bengaluru',
+  //   'Noida',
+  //   'Chennai',
+  //   'Kolkata',
+  //   'Hyderabad',
+  //   'Pune'
+  // ];
 
   // Fetch hospitals with filters
-  const fetchHospitals = async (page = 1, searchTerm = '', specialty = '', city = '') => {
+  const fetchHospitals = async (
+    page = 1,
+    searchTerm = "",
+    specialty = "",
+    cityId = ""
+  ) => {
     setLoading(true);
     try {
       const payload = {
         AssetCategoryLevel1: "68b00db063729ea39b28d0ef", // Hospital category ID
         page: page,
         limit: pageSize,
-        StationId: "",
+        StationId: cityId || "",
       };
 
       // Add filters if they exist
@@ -57,38 +101,51 @@ const ViewAllHospitals = () => {
         payload.MedicalSpecialties = specialty;
       }
 
-      const response = await api.post('api/v1/admin/assetList', payload);
-      
+      const response = await api.post("api/v1/admin/assetList", payload);
+
       if (response.data && response.data.data) {
         let hospitalList = response.data.data.list || [];
-        
-        // Client-side filtering for search and city (if API doesn't support these filters)
+
+        // Client-side filtering for search (city filtering now handled by API)
         if (searchTerm) {
-          hospitalList = hospitalList.filter(hospital =>
-            hospital.AssetName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            hospital.AddressLine1?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            hospital.AddressLine2?.toLowerCase().includes(searchTerm.toLowerCase())
+          hospitalList = hospitalList.filter(
+            (hospital) =>
+              hospital.AssetName?.toLowerCase().includes(
+                searchTerm.toLowerCase()
+              ) ||
+              hospital.AddressLine1?.toLowerCase().includes(
+                searchTerm.toLowerCase()
+              ) ||
+              hospital.AddressLine2?.toLowerCase().includes(
+                searchTerm.toLowerCase()
+              )
           );
         }
 
-        if (city) {
-          hospitalList = hospitalList.filter(hospital =>
-            hospital.AddressLine1?.toLowerCase().includes(city.toLowerCase()) ||
-            hospital.AddressLine2?.toLowerCase().includes(city.toLowerCase())
-          );
-        }
+        // Remove city filtering since it's now handled by StationId in API
+        // if (city) {
+        //   hospitalList = hospitalList.filter(hospital =>
+        //     hospital.AddressLine1?.toLowerCase().includes(city.toLowerCase()) ||
+        //     hospital.AddressLine2?.toLowerCase().includes(city.toLowerCase())
+        //   );
+        // }
 
         const formattedHospitals = hospitalList.map((hospital, index) => ({
           id: hospital._id || index + 1,
           name: hospital.AssetName,
-          specialties: hospital.MedicalSpecialties?.map(spec => spec.lookup_value).join(', ') || '',
-          location: `${hospital.AddressLine1 || ''} ${hospital.AddressLine2 || ''} ${hospital.PostalCode || ''}`.trim(),
-          hours: hospital.WorkingHours || '24/7',
-          website: hospital.Website || '',
-          image: hospital.ProfilePicture || '/api/placeholder/400/300',
-          logo: hospital.Logo || '/api/placeholder/100/100',
-          phone: hospital.PhoneNumber || '',
-          email: hospital.Email || '',
+          specialties:
+            hospital.MedicalSpecialties?.map((spec) => spec.lookup_value).join(
+              ", "
+            ) || "",
+          location: `${hospital.AddressLine1 || ""} ${
+            hospital.AddressLine2 || ""
+          } ${hospital.PostalCode || ""}`.trim(),
+          hours: hospital.WorkingHours || "24/7",
+          website: hospital.Website || "",
+          image: hospital.ProfilePicture || "/api/placeholder/400/300",
+          logo: hospital.Logo || "/api/placeholder/100/100",
+          phone: hospital.PhoneNumber || "",
+          email: hospital.Email || "",
         }));
 
         setHospitals(formattedHospitals);
@@ -96,7 +153,7 @@ const ViewAllHospitals = () => {
         setTotalPages(Math.ceil(formattedHospitals.length / pageSize));
       }
     } catch (error) {
-      console.error('Error fetching hospitals:', error);
+      console.error("Error fetching hospitals:", error);
       setHospitals([]);
     } finally {
       setLoading(false);
@@ -107,15 +164,15 @@ const ViewAllHospitals = () => {
   const fetchSpecialties = async () => {
     setSpecialtiesLoading(true);
     try {
-      const response = await api.post('api/v1/admin/lookupList', {
-        LookupType: 'MedicalSpecialties'
+      const response = await api.post("api/v1/admin/lookupList", {
+        LookupType: "MedicalSpecialties",
       });
-      
+
       if (response.data && response.data.data) {
         setMedicalSpecialties(response.data.data);
       }
     } catch (error) {
-      console.error('Error fetching specialties:', error);
+      console.error("Error fetching specialties:", error);
     } finally {
       setSpecialtiesLoading(false);
     }
@@ -126,7 +183,7 @@ const ViewAllHospitals = () => {
     const value = e.target.value;
     setSearch(value);
     setCurrentPage(1);
-    fetchHospitals(1, value, selectedSpecialty, selectedCity);
+    fetchHospitals(1, value, selectedSpecialty, selectedCityId);
   };
 
   // Handle specialty change
@@ -134,13 +191,15 @@ const ViewAllHospitals = () => {
     const value = e.target.value;
     setSelectedSpecialty(value);
     setCurrentPage(1);
-    fetchHospitals(1, search, value, selectedCity);
+    fetchHospitals(1, search, value, selectedCityId);
   };
 
   // Handle city change
   const handleCityChange = (e) => {
     const value = e.target.value;
-    setSelectedCity(value);
+    const selectedCityObj = cities.find((city) => city.id === value);
+    setSelectedCityId(value);
+    setSelectedCity(selectedCityObj ? selectedCityObj.name : "");
     setCurrentPage(1);
     fetchHospitals(1, search, selectedSpecialty, value);
   };
@@ -148,23 +207,25 @@ const ViewAllHospitals = () => {
   // Handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    fetchHospitals(page, search, selectedSpecialty, selectedCity);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    fetchHospitals(page, search, selectedSpecialty, selectedCityId);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Clear all filters
   const clearFilters = () => {
-    setSearch('');
-    setSelectedSpecialty('');
-    setSelectedCity('');
+    setSearch("");
+    setSelectedSpecialty("");
+    setSelectedCity("");
+    setSelectedCityId("");
     setCurrentPage(1);
-    fetchHospitals(1, '', '', '');
+    fetchHospitals(1, "", "", "");
   };
 
   // Initial data fetch
   useEffect(() => {
     fetchHospitals();
     fetchSpecialties();
+    fetchCities();
   }, []);
 
   // Hospital card skeleton component
@@ -218,7 +279,7 @@ const ViewAllHospitals = () => {
           alt="hospital"
           className="object-cover w-full h-full rounded-t-lg"
           onError={(e) => {
-            e.target.src = '/api/placeholder/400/300';
+            e.target.src = "/api/placeholder/400/300";
           }}
         />
 
@@ -228,7 +289,7 @@ const ViewAllHospitals = () => {
           alt="hospital logo"
           className="absolute z-50 object-cover w-20 h-20 border-4 border-white rounded-full shadow -bottom-10 left-4 sm:left-6 sm:w-24 sm:h-24"
           onError={(e) => {
-            e.target.src = '/api/placeholder/100/100';
+            e.target.src = "/api/placeholder/100/100";
           }}
         />
       </div>
@@ -269,11 +330,7 @@ const ViewAllHospitals = () => {
         </div>
         {hospital.website && (
           <div className="flex items-start space-x-2">
-            <img 
-              src={webIcon} 
-              alt="web" 
-              className="flex-shrink-0 w-5 sm:w-6" 
-            />
+            <img src={webIcon} alt="web" className="flex-shrink-0 w-5 sm:w-6" />
             <span className="text-sm text-black break-words sm:text-base">
               Website: {hospital.website}
             </span>
@@ -283,13 +340,13 @@ const ViewAllHospitals = () => {
 
       {/* Buttons */}
       <div className="flex flex-col gap-3 px-4 pb-4 mt-auto">
-        <button 
+        <button
           onClick={() => navigate(`/hospital/${hospital.id}`)}
           className="bg-[var(--button-back-color)] hover:bg-[var(--button-back-hover)] text-white rounded-lg py-3 text-sm sm:text-base font-semibold transition-colors"
         >
           Book An Appointment
         </button>
-        <button 
+        <button
           onClick={() => navigate(`/hospital/${hospital.id}`)}
           className="bg-white text-[var(--button-back-color)] border border-[var(--button-back-color)] hover:bg-[var(--button-back-color)] hover:text-white rounded-lg py-3 text-sm sm:text-base font-semibold transition-colors"
         >
@@ -359,14 +416,17 @@ const ViewAllHospitals = () => {
                 City
               </label>
               <select
-                value={selectedCity}
+                value={selectedCityId}
                 onChange={handleCityChange}
+                disabled={citiesLoading}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[var(--button-back-color)] focus:border-transparent"
               >
-                <option value="">All Cities</option>
+                <option value="">
+                  {citiesLoading ? "Loading..." : "All Cities"}
+                </option>
                 {cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
+                  <option key={city.id} value={city.id}>
+                    {city.displayName}
                   </option>
                 ))}
               </select>
