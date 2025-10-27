@@ -14,7 +14,7 @@ import "react-multi-carousel/lib/styles.css";
 import { __postApiData } from "../utils/api";
 
 const NewsArticles = () => {
-  const [activeCategory, setActiveCategory] = useState("cardiology");
+  const [activeCategory, setActiveCategory] = useState("all");
   const [articlesData, setArticlesData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -31,12 +31,20 @@ const NewsArticles = () => {
         });
 
         if (resp && resp.data) {
-          setArticlesData(resp.data);
+          // Ensure we always set an array
+          const dataArray = Array.isArray(resp.data)
+            ? resp.data
+            : resp.data.list && Array.isArray(resp.data.list)
+            ? resp.data.list
+            : [];
+          setArticlesData(dataArray);
+        } else {
+          setArticlesData([]);
         }
       } catch (error) {
         console.error("Error fetching articles:", error);
         // Fallback to local data if API fails
-        setArticlesData(cardsData);
+        setArticlesData(Array.isArray(cardsData) ? cardsData : []);
       } finally {
         setLoading(false);
       }
@@ -51,7 +59,11 @@ const NewsArticles = () => {
     desc: "Empowering hospitals, physicians, and patients with real-time communication and clinical collaboration—because better care starts with better connection.",
   };
   const categories = [
+    { key: "all", label: "All Articles" },
     { key: "cardiology", label: "Cardiology" },
+    { key: "gastroenterology", label: "Gastroenterology" },
+    { key: "endocrinology", label: "Endocrinology" },
+    { key: "rheumatology", label: "Rheumatology" },
     { key: "orthopedics", label: "Orthopedics" },
     { key: "pediatrics", label: "Pediatrics" },
     { key: "neurology", label: "Neurology" },
@@ -62,7 +74,9 @@ const NewsArticles = () => {
   const filteredCards =
     activeCategory === "all"
       ? articlesData
-      : articlesData.filter((card) => card.category === activeCategory);
+      : Array.isArray(articlesData)
+      ? articlesData.filter((card) => card.category === activeCategory)
+      : [];
 
   return (
     <>

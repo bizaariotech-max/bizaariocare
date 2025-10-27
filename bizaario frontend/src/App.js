@@ -22,6 +22,8 @@ import Createsubadmin from "./components/Doctor/createsubadmin";
 import { Editdoctorprofile } from "./components/Doctor/editprofile";
 import Layout from "./AppLayout/Layout";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ViewAllDoctors from "./pages/ViewAllDoctors";
+import ViewAllHospitals from "./pages/ViewAllHospitals";
 import Updateworkexperience from "./components/Doctor/updateworkexperience";
 import Updateupcomingevent from "./components/Doctor/updateupcomingevents";
 import Updateawards from "./components/Doctor/updateawards_certificates";
@@ -104,6 +106,8 @@ function App() {
         <Route path="/hospital/:id" element={<HospitalDetail />} />
         <Route path="/doctor/:id" element={<DoctorDetail />} />
         <Route path="/medical-board" element={<MedicalBoardPage />} />
+        <Route path="/view-all-doctors" element={<ViewAllDoctors />} />
+        <Route path="/view-all-hospitals" element={<ViewAllHospitals />} />
         <Route path="/news-articles" element={<NewsArticles />} />
         <Route path="/news-articles/:id" element={<ArticleDetail />} />
 

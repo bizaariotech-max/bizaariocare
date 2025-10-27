@@ -2,6 +2,8 @@ import React from "react";
 // import DoctorCard from '../cards/DoctorCard';
 import doctorImg from "../../../../../assets/images/hospital-profile/doctor1.png";
 import { MapPin, Briefcase } from "lucide-react";
+
+
 export const doctorsArr = [
   {
     id: 1,

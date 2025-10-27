@@ -35,76 +35,98 @@ const MedicalBoardPage = () => {
 
 
   return (
-      <>
-      <Header/>
-          <section>
-              <CommonBanner bannerData={hospitalData} />
-          </section>
-          <section className='spacing-top'>
-              <div className="container ">
-                  <div className="row">
-                       <div className="col-lg-8 col-12">
-                    <h2 className='fw-semibold '>Meet Our Doctor Team</h2>
-                    <p className='light-color'>Empowering hospitals, physicians, and patients with real-time communication and clinical collaboration—because better care starts with better connection.</p>
-                </div>
-                  </div>
-                  <div className="row"> 
-                    <div className=" medical-tab-buttons mb-4"> 
-
-                         <Carousel
-                            arrows={false}
-                            responsive={responsive}
-                            containerClass="carousel-container w-full"
-                            itemClass="px-2"
-                            infinite
-                            partialVisible
-                          >
-
-                        <button className={`cutom-tab-style ${activeTab==='tab1' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
-                        setActiveTab('tab1')}>
-                        Cardiology
-                    </button> 
-                    <button className={`cutom-tab-style ${activeTab==='tab2' ? ' activeTab' : 'gray-btn-style' }`} onClick={()=>
-                        setActiveTab('tab2')}
-                        >
-                        Orthopedics
-                    </button> 
-                    <button className={`cutom-tab-style ${activeTab==='tab3' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
-                        setActiveTab('tab3')}
-                        >
-                        Pediatrics
-                    </button> 
-                    <button className={`cutom-tab-style ${activeTab==='tab4' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
-                        setActiveTab('tab4')}
-                        >
-                        Neurology
-                        </button>
-                        <button className={` cutom-tab-style ${activeTab==='tab5' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
-                        setActiveTab('tab5')}
-                        >
-                        Obstetrics & Gynecology
-                    </button>
-                    <button className={` cutom-tab-style ${activeTab==='tab7' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
-                        setActiveTab('tab7')}
-                        >
-                        Plastic & Reconstructive Surgery
-                    </button> 
-                    <button className={` cutom-tab-style ${activeTab==='tab6' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
-                        setActiveTab('tab6')}
-                        >
-                        Otorhinolaryngology
-                    </button> 
-                   </Carousel>
-                    </div>
-                </div>
-                <div className=''> 
-                  {renderContent()}
-                </div>
+    <>
+      <Header />
+      <section>
+        <CommonBanner bannerData={hospitalData} />
+      </section>
+      <section className="spacing-top">
+        <div className="container ">
+          <div className="row">
+            <div className="col-lg-8 col-12">
+              <h2 className="fw-semibold ">Meet Our Doctor Team</h2>
+              <p className="light-color">
+                Empowering hospitals, physicians, and patients with real-time
+                communication and clinical collaboration—because better care
+                starts with better connection.
+              </p>
             </div>
-          </section>
-          <Footer/>
-      </>
-  )
+          </div>
+          <div className="row">
+            <div className="mb-4  medical-tab-buttons">
+              <Carousel
+                arrows={false}
+                responsive={responsive}
+                containerClass="carousel-container w-full"
+                itemClass="px-2"
+                infinite
+                partialVisible
+              >
+                <button
+                  className={`cutom-tab-style ${
+                    activeTab === "tab1" ? "activeTab" : "gray-btn-style"
+                  }`}
+                  onClick={() => setActiveTab("tab1")}
+                >
+                  Cardiology
+                </button>
+                <button
+                  className={`cutom-tab-style ${
+                    activeTab === "tab2" ? " activeTab" : "gray-btn-style"
+                  }`}
+                  onClick={() => setActiveTab("tab2")}
+                >
+                  Orthopedics
+                </button>
+                <button
+                  className={`cutom-tab-style ${
+                    activeTab === "tab3" ? "activeTab" : "gray-btn-style"
+                  }`}
+                  onClick={() => setActiveTab("tab3")}
+                >
+                  Pediatrics
+                </button>
+                <button
+                  className={`cutom-tab-style ${
+                    activeTab === "tab4" ? "activeTab" : "gray-btn-style"
+                  }`}
+                  onClick={() => setActiveTab("tab4")}
+                >
+                  Neurology
+                </button>
+                <button
+                  className={` cutom-tab-style ${
+                    activeTab === "tab5" ? "activeTab" : "gray-btn-style"
+                  }`}
+                  onClick={() => setActiveTab("tab5")}
+                >
+                  Obstetrics & Gynecology
+                </button>
+                <button
+                  className={` cutom-tab-style ${
+                    activeTab === "tab7" ? "activeTab" : "gray-btn-style"
+                  }`}
+                  onClick={() => setActiveTab("tab7")}
+                >
+                  Plastic & Reconstructive Surgery
+                </button>
+                <button
+                  className={` cutom-tab-style ${
+                    activeTab === "tab6" ? "activeTab" : "gray-btn-style"
+                  }`}
+                  onClick={() => setActiveTab("tab6")}
+                >
+                  Otorhinolaryngology
+                </button>
+              </Carousel>
+            </div>
+          </div>
+          <div className="">{renderContent()}</div>
+        </div>
+      </section>
+      <Footer />
+    </>
+  );
 }
 
 export default MedicalBoardPage
