@@ -94,11 +94,13 @@ import PatientReferralHome from "./components/Doctor/PatientReferral/patient_ref
 import PatientReferralVerify from "./components/Doctor/PatientReferral/AllSubForms/PatientReferralVerify.js";
 import PremiumDoctor from "./components/Doctor/PatientReferral/AllSubForms/PremiumDoctor/PremiumDoctor.js";
 import AddNewPatientDetails from "./components/Doctor/PatientReferral/AllSubForms/Add_New_Patient.js";
+import HospitalDashboard from "./pages/hospital/HospitalDashboard.js";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* website  */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/partners" element={<HospitalsPartners />} />
@@ -117,7 +119,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
 
         <Route path="/change-password" element={<ChangePassword />} />
-
+        {/* doctor admin */}
         <Route path="/admindashboard" element={<Admindashboard />}></Route>
         <Route path="/adddoctor" element={<AdminAddDoctorHospital />}></Route>
         <Route path="/doctordashboard" element={<Doctordashboard />}></Route>
@@ -187,7 +189,7 @@ function App() {
         <Route path="/add-assestmaster" element={<Addassestsmaster />}></Route>
         <Route path="/login-master" element={<Loginmaster />}></Route>
         <Route
-          path="/complete-doctor-details"
+          path="/complete-asset-details"
           element={<CompleteDoctorDetails />}
         ></Route>
 
@@ -344,6 +346,12 @@ function App() {
         <Route
           path="/patient-referral/appoint-doctors"
           element={<PremiumDoctor />}
+        ></Route>
+
+        {/* hospital admin routes */}
+        <Route
+          path="/hospitaldashboard"
+          element={<HospitalDashboard />}
         ></Route>
       </Routes>
       {/* <ActivePatient/> */}

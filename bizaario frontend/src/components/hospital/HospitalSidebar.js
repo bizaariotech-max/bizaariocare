@@ -14,8 +14,10 @@ import completdoctorprofile from "../Doctor/Icon/Dr. Profile.svg";
 import patientreferral from "../Doctor/Icon/Patient Reffral.svg";
 import logout from "../Doctor/Icon/Logout.svg";
 
-const DoctorMenuItems = [
-  { icon: dashboardicon, label: "Dashboard", path: "/doctordashboard" },
+
+// Not in use but kept for reference
+const menuItems = [
+  { icon: dashboardicon, label: "Dashboard", path: "/hospitaldashboard" },
   { icon: digitalcme, label: "Digital CME", path: "/createdigitalcme" },
   { icon: newsarticle, label: "News Articles", path: "/news_and_articles" },
   {
@@ -37,84 +39,21 @@ const DoctorMenuItems = [
   // { icon: addhospitalicon, label: "Create Sub-Admin", path: "/createsubadmin" },
   {
     icon: completdoctorprofile,
-    label: "Complete Doctor Profile",
-    path: "/complete-asset-details",
-  },
-  {
-    icon: patientreferral,
-    label: "Patient Referral",
-    path: "/patient-referral",
-  },
-
-  { icon: logout, label: "Logout" },
-];
-
-const HospitalMenuItems = [
-  { icon: dashboardicon, label: "Dashboard", path: "/hospitaldashboard" },
-  { icon: digitalcme, label: "Digital CME", path: "/createdigitalcme" },
-  { icon: newsarticle, label: "News Articles", path: "/news_and_articles" },
-  {
-    icon: awards_and_recognitions,
-    label: "Awards & Recognitions",
-    path: "/awards-and-recognitions",
-  },
-  {
-    icon: testimonials,
-    label: "Patient Testimonials",
-    path: "/patient-testimonials",
-  },
-  {
-    icon: opd_surgical_camps,
-    label: "OPD/ Surgical Camps",
-    path: "/opd-srugicla-camps",
-  },
-  { icon: workshop, label: "Workshop", path: "/workshop" },
-  {
-    icon: completdoctorprofile,
     label: "Complete Hospital Profile",
-    path: "/complete-asset-details",
+    path: "/complete-doctor-details",
   },
 
   { icon: logout, label: "Logout" },
 ];
 
-const Doctorsidebar = () => {
+const HospitalSidebar = () => {
   const navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState();
+  // Number(localStorage.getItem("openDropdown")) || null
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // 🔹 NEW STATE
   const [isCollapsed, setIsCollapsed] = useState(false);
-
-  // Get menu items based on token and asset category
-  const getMenuItems = () => {
-    const token = localStorage.getItem("token");
-    const userStr = localStorage.getItem("user");
-
-    // If no token, redirect to login
-    if (!token) {
-      navigate("/");
-      return [];
-    }
-
-    if (!userStr) return DoctorMenuItems; // Default to DoctorMenuItems
-
-    try {
-      const user = JSON.parse(userStr);
-      const assetCategory = user?.AssetCategoryLevel1?.lookup_value;
-
-      return assetCategory === "Hospital" ? HospitalMenuItems : DoctorMenuItems;
-    } catch (error) {
-      console.error("Error parsing user data:", error);
-      return DoctorMenuItems;
-    }
-  };
-
-  // Check authentication on component mount
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/");
-    }
-  }, [navigate]);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -187,7 +126,7 @@ const Doctorsidebar = () => {
         </div>
 
         <ul className="sidebar-menu">
-          {getMenuItems().map((item, idx) => (
+          {menuItems.map((item, idx) => (
             <React.Fragment key={idx}>
               <li
                 onClick={() => {
@@ -242,4 +181,4 @@ const Doctorsidebar = () => {
   );
 };
 
-export default Doctorsidebar;
+export default HospitalSidebar;

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import Doctorsidebar from "./doctorsidebar";
-import Doctorheader from "./doctorheader";
+// import HospitalSidebar from "../../components/hospital/HospitalSidebar";
+import CommonHeader from "../../components/common/CommonHeader";
 import { doctorArr } from "../../Data/LocalData";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -29,29 +29,29 @@ import medaidbanner from "../../assets/images/medaidbanner.png";
 import calendar from "../../assets/images/calendar.png";
 import responsivetab from "../../utils/responsive_carousel";
 import { __getCommenApiDataList } from "../../utils/api/commonApi";
-import CommonHeader from "../common/CommonHeader";
+import Doctorsidebar from "../../components/Doctor/doctorsidebar";
 
 function cn(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-// const doctordetails = JSON.parse(localStorage.getItem("user") || "{}");
+// const doctordetails = JSON.parse(localStorage.getItem("user"));
 
-export default function Doctordashboard() {
+export default function HospitalDashboard() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-[#F6F7FF] font-sans">
-      {/* <Doctorheader /> */}
       <CommonHeader />
 
       <div className="layout">
+        {/* <HospitalSidebar /> */}
         <Doctorsidebar />
         <div className="content-wrapper">
           <div className="main-content">
             <KnowledgeBankSection />
             <MedaidBanner />
             <OverviewSection />
-            <PatientDetailsSection />
+            {/* <PatientDetailsSection /> */}
             <MedicalBoard />
             <Partnerhospital />
             <LiveSessions />

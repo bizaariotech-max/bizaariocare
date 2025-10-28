@@ -81,15 +81,56 @@ const Adminsidebar = () => {
     Number(localStorage.getItem("openDropdown")) || null
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // 🔹 NEW STATE
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Check authentication and admin status on component mount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userStr = localStorage.getItem("main_user");
+
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
+    try {
+      const user = JSON.parse(userStr);
+      if (!user?.IsAdmin) {
+        navigate("/doctordashboard"); // Redirect non-admin users
+        return;
+      }
+    } catch (error) {
+      console.error("Error parsing user data:", error);
+      navigate("/");
+    }
+  }, [navigate]);
+
+  // Get menu items based on authentication and admin status
+  const getMenuItems = () => {
+    const token = localStorage.getItem("token");
+    const userStr = localStorage.getItem("main_user");
+
+    if (!token) {
+      navigate("/");
+      return [];
+    }
+
+    try {
+      const user = JSON.parse(userStr);
+      if (!user?.IsAdmin) {
+        return []; // Return empty menu for non-admin users
+      }
+      return menuItems; // Return full menu for admin users
+    } catch (error) {
+      console.error("Error parsing user data:", error);
+      return [];
+    }
+  };
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
     document.body.classList.toggle("sidebar-collapsed");
   };
-
 
   const handleDropdownClick = (idx) => {
     const newDropdown = openDropdown === idx ? null : idx;
@@ -98,6 +139,8 @@ const Adminsidebar = () => {
   };
 
   const logout = () => {
+    // Clear all items from localStorage
+    localStorage.clear();
     Swal.fire({
       icon: "success",
       title: "Logout",
@@ -133,7 +176,7 @@ const Adminsidebar = () => {
 
       {/* Toggle button for mobile */}
       <button
-        className="menu-toggle lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-200 rounded-lg"
+        className="fixed z-50 p-2 bg-gray-200 rounded-lg menu-toggle lg:hidden top-4 left-4"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         aria-label="Toggle menu"
       >
@@ -149,16 +192,13 @@ const Adminsidebar = () => {
         <div className="sidebar-header">
           <img src={logo} alt="Logo" className="sidebar-logo" />
           {/* 🔹 Collapse button */}
-          <button
-            className="collapse-btn"
-            onClick={()=>toggleSidebar()}
-          >
+          <button className="collapse-btn" onClick={() => toggleSidebar()}>
             {isCollapsed ? "»" : "«"}
           </button>
         </div>
 
         <ul className="sidebar-menu">
-          {menuItems.map((item, idx) => (
+          {getMenuItems().map((item, idx) => (
             <React.Fragment key={idx}>
               <li
                 onClick={() => {
@@ -171,9 +211,9 @@ const Adminsidebar = () => {
                     setIsMobileMenuOpen(false);
                   }
                 }}
-                 className={`sidebar-item ${
-                item.label.toLowerCase() === "logout" ? "logout-item" : ""
-              } ${openDropdown === idx ? "active" : ""}`}
+                className={`sidebar-item ${
+                  item.label.toLowerCase() === "logout" ? "logout-item" : ""
+                } ${openDropdown === idx ? "active" : ""}`}
               >
                 <img
                   src={item.icon}

@@ -6,6 +6,7 @@ import { FaEdit } from "react-icons/fa";
 import Swal from 'sweetalert2';
 import { Modal, Button, Form } from "react-bootstrap";
 import UniqueLoader from '../loader';
+import CommonHeader from "../common/CommonHeader";
 
 function Updateawards() {
 
@@ -290,297 +291,334 @@ const deleteaward = async (awardIndex) => {
 
   return (
     <div>
-        <Doctorheader/>
-        <Doctorsidebar/>
+      {/* <Doctorheader/> */}
+      <CommonHeader />
 
-        <div className="min-h-screen bg-background">
-              <div className="ml-0 lg:ml-64 pt-4">
-                <div className=" mx-auto p-4 lg:p-8 space-y-6 lg:space-y-8">
-{/*=============================== Award section===============================================*/}
-        
-        
-            <div  className=" rounded-lg p-6">
+      <Doctorsidebar />
+
+      <div className="min-h-screen bg-background">
+        <div className="pt-4 ml-0 lg:ml-64">
+          <div className="p-4 mx-auto space-y-6 lg:p-8 lg:space-y-8">
+            {/*=============================== Award section===============================================*/}
+
+            <div className="p-6 rounded-lg ">
               {/* Header */}
-              <div className="work-experience flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-8 work-experience">
                 <div className="work-experience-heading ">
-                <h3 className=" text-2xl font-semibold text-black">Update Awards & Certificates</h3>
+                  <h3 className="text-2xl font-semibold text-black ">
+                    Update Awards & Certificates
+                  </h3>
                 </div>
-                <div className="work-experincemain flex items-center gap-3">
-                
-                
-                </div>
+                <div className="flex items-center gap-3 work-experincemain"></div>
               </div>
-        
-             
 
+              {user?.awards_and_achievements?.map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    border: "1px solid #ddd",
+                    borderRadius: "12px",
+                    padding: "15px",
+                    marginBottom: "15px",
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                    backgroundColor: "#EFEFEF",
+                  }}
+                >
+                  {/* Left side: hospital logo + details */}
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <img
+                      src={item.award_image[0]}
+                      alt="hospital"
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        marginRight: "12px",
+                        borderRadius: "5%",
+                      }}
+                    />
+                    <div>
+                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>
+                        {item.award_title}
+                      </span>
+                      <br />
+                      <span>{item.awarding_body}</span>
+                      <br></br>
+                      <span style={{ fontSize: "14px" }}>
+                        {new Date(item.date).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
 
+                  {/* Right side: Edit icon */}
 
-{
-  user?.awards_and_achievements?.map((item, index) => (
-    <div
-      key={index}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        border: "1px solid #ddd",
-        borderRadius: "12px",
-        padding: "15px",
-        marginBottom: "15px",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-        backgroundColor: "#EFEFEF",
-      }}
-    >
-      {/* Left side: hospital logo + details */}
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <img
-        src={item.award_image[0]}
-        alt="hospital"
-        style={{ width: "100px", height: "100px", marginRight: "12px",borderRadius:"5%" }}
-    />
-          <div>
-                  <span style={{ fontWeight: "bold", fontSize: "18px" }}>{item.award_title}</span>
-                  <br />
-                   <span>{item.awarding_body}</span><br></br>
-                  <span style={{ fontSize: "14px" }}>
-                   {new Date(item.date).toLocaleDateString()}
-                  </span>
-                </div>
-      </div>
+                  <div className="flex flex-col items-center space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
+                    {/* Show upcoming events button */}
+                    <button
+                      className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                      onClick={() => handleshowaward(item, index)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.2}
+                          d="M26.866 10.587L11.04 26.413c-1.414 1.427-5.64 2.08-6.6 1.133s.72-5.173 2.133-6.6L21.4 5.12A4 4 0 0 1 26.8 5.186a4 4 0 0 1 .133 5.401z"
+                        />
+                      </svg>
+                    </button>
 
-      {/* Right side: Edit icon */}
-  
-
-           <div className="flex flex-col sm:flex-row items-center sm:space-x-2 space-y-2 sm:space-y-0">
-  {/* Show upcoming events button */}
-  <button
-    className="hover:bg-gray-200 p-2 rounded-full flex items-center justify-center"
-    onClick={()=>handleshowaward(item,index)}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 32 32"
-      fill="none"
-      stroke="currentColor"
-      className="w-6 h-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2.2}
-        d="M26.866 10.587L11.04 26.413c-1.414 1.427-5.64 2.08-6.6 1.133s.72-5.173 2.133-6.6L21.4 5.12A4 4 0 0 1 26.8 5.186a4 4 0 0 1 .133 5.401z"
-      />
-    </svg>
-  </button>
-
-  {/* Delete button */}
-  <button
-    onClick={() => deleteaward(index)}
-    className="hover:bg-gray-200 p-2 rounded-full flex items-center justify-center"
-  >
-    <span className="material-icons text-red-600 text-[22px]">delete</span>
-  </button>
-</div>
-    </div>
-  ))
-}
-
-        
-            </div>
-        
-                  
-        
-        
-        
-                 
+                    {/* Delete button */}
+                    <button
+                      onClick={() => deleteaward(index)}
+                      className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200"
+                    >
+                      <span className="material-icons text-red-600 text-[22px]">
+                        delete
+                      </span>
+                    </button>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/*======================== update awards modal ========================================*/}
+
+      <Modal
+        show={showaward}
+        onHide={handlecloseaward}
+        centered
+        size="lg"
+        dialogClassName="custom-modal"
+      >
+        <Modal.Body style={{ padding: "20px 50px " }}>
+          <button
+            type="button"
+            onClick={handlecloseaward}
+            style={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              border: "2px solid black",
+              borderRadius: "50%", // fully round
+              background: "transparent",
+              fontSize: "2rem",
+              cursor: "pointer",
+              fontWeight: "bold",
+              width: "35px",
+              height: "35px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            &times; {/* or use a bootstrap icon */}
+          </button>
+          <Modal.Title style={{ fontWeight: "bold" }}>
+            Update Reward and Certificates{" "}
+          </Modal.Title>
+
+          <div className="mt-4 row">
+            <div className="mb-3 col-md-6">
+              <label className="form-label fw-bold">Award Title</label>
+              <input
+                name="award_title"
+                type="text"
+                className="form-control"
+                defaultValue={doctorprofileaward.award_title}
+                onChange={handlechangeaward}
+              />
+            </div>
+
+            <div className="mb-3 col-md-6">
+              <label className="form-label fw-bold">Awarding Body</label>
+              <input
+                name="awarding_body"
+                type="text"
+                className="form-control"
+                defaultValue={doctorprofileaward.awarding_body}
+                onChange={handlechangeaward}
+              />
+            </div>
+
+            <div className="mb-3 col-md-6">
+              <label className="form-label fw-bold">Date</label>
+              <input
+                name="date"
+                type="date"
+                className="form-control"
+                defaultValue={doctorprofileaward.date}
+                onChange={handlechangeaward}
+              />
+            </div>
+
+            <div className="mb-3 col-md-6">
+              <label className="form-label fw-bold">Venue</label>
+              <input
+                name="venue"
+                type="text"
+                className="form-control"
+                defaultValue={doctorprofileaward.venue}
+                onChange={handlechangeaward}
+              />
+            </div>
+
+            <div className="mb-3 col-md-6">
+              <label className="form-label fw-bold">Video Url</label>
+              <input
+                name="video_url"
+                type="text"
+                className="form-control"
+                defaultValue={doctorprofileaward.video_url}
+                onChange={handlechangeaward}
+              />
+            </div>
+
+            <label className="form-label fw-bold">Award Image</label>
+            <div className="grid grid-cols-2 gap-4 mb-6 gallery-image sm:grid-cols-3 lg:grid-cols-5 lg:gap-6">
+              {doctorprofileaward.award_image?.length > 0 ? (
+                doctorprofileaward.award_image.map((imgUrl, index) => (
+                  <div
+                    key={index}
+                    className="relative  aspect-[4/3] rounded-md overflow-hidden border shadow-sm"
+                  >
+                    {/* Image */}
+                    <img
+                      src={imgUrl}
+                      alt={`Gallery ${index + 1}`}
+                      className="object-cover w-full h-full"
+                    />
+
+                    {/* Delete button */}
+                    <button
+                      onClick={() => handleDeleteAwardImage(index)}
+                      className="absolute top-0 right-0 flex items-center justify-center p-1 transition bg-white rounded-bl-md hover:bg-red-100"
+                    >
+                      <span
+                        className="material-icons"
+                        style={{ color: "red", fontSize: "22px" }}
+                      >
+                        delete
+                      </span>
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-gray-500 col-span-full">
+                  No images available
+                </p>
+              )}
+            </div>
+
+            <div class="upload-drop-zone">
+              <div class="upload-drop-icon">&#8682;</div>
+              <div class="upload-instructions">
+                <strong>Drag or Drop Your Photo &amp; Video</strong>
+                <div class="upload-or">Or</div>
+                <label class="upload-browse">
+                  <input
+                    name="award_image"
+                    multiple
+                    type="file"
+                    hidden
+                    onChange={handlechangeawardimage}
+                  />
+                  <span>Browse the File</span>
+                </label>
+                <div class="upload-info">
+                  Upload in PDF, JPEG, PNG, .jpg, .gif format
+                  <br />
+                  (Not more than 20MB)
+                </div>
               </div>
-        
-{/*======================== update awards modal ========================================*/}
+            </div>
 
-<Modal show={showaward} onHide={handlecloseaward} centered size="lg"  dialogClassName="custom-modal">
-        <Modal.Body style={{padding:"20px 50px "}}>
-            <button
-      type="button"
-      onClick={handlecloseaward}
-     style={{
-      position: "absolute",
-      top: 10,
-      right: 10,
-      border: "2px solid black",
-      borderRadius: "50%",  // fully round
-      background: "transparent",
-      fontSize: "2rem",
-      cursor: "pointer",
-      fontWeight: "bold",
-      width: "35px",
-      height: "35px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
+            <label className="form-label fw-bold">Picture Gallery</label>
+            <div className="grid grid-cols-2 gap-4 mb-6 gallery-image sm:grid-cols-3 lg:grid-cols-5 lg:gap-6">
+              {doctorprofileaward.picture_gallary?.length > 0 ? (
+                doctorprofileaward.picture_gallary.map((imgUrl, index) => (
+                  <div
+                    key={index}
+                    className="relative  aspect-[4/3] rounded-md overflow-hidden border shadow-sm"
+                  >
+                    {/* Image */}
+                    <img
+                      src={imgUrl}
+                      alt={`Gallery ${index + 1}`}
+                      className="object-cover w-full h-full"
+                    />
 
-    >
-      &times; {/* or use a bootstrap icon */}
-    </button>
-          <Modal.Title style={{fontWeight:"bold"}}>Update Reward and Certificates </Modal.Title>
-        
- 
-          <div className="row mt-4">
-          <div className="col-md-6 mb-3">
-            <label className="form-label fw-bold">Award Title</label>
-            <input name="award_title" type="text" className="form-control" defaultValue={doctorprofileaward.award_title} onChange={handlechangeaward} />
+                    {/* Delete button */}
+                    <button
+                      onClick={() => handleDeletepicturegallary(index)}
+                      className="absolute top-0 right-0 flex items-center justify-center p-1 transition bg-white rounded-bl-md hover:bg-red-100"
+                    >
+                      <span
+                        className="material-icons"
+                        style={{ color: "red", fontSize: "22px" }}
+                      >
+                        delete
+                      </span>
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-gray-500 col-span-full">
+                  No images available
+                </p>
+              )}
+            </div>
+
+            <div class="upload-drop-zone">
+              <div class="upload-drop-icon">&#8682;</div>
+              <div class="upload-instructions">
+                <strong>Drag or Drop Your Photo &amp; Video</strong>
+                <div class="upload-or">Or</div>
+                <label class="upload-browse">
+                  <input
+                    name="picture_gallary"
+                    multiple
+                    type="file"
+                    hidden
+                    onChange={handlechangepicturegallary}
+                  />
+                  <span>Browse the File</span>
+                </label>
+                <div class="upload-info">
+                  Upload in PDF, JPEG, PNG, .jpg, .gif format
+                  <br />
+                  (Not more than 20MB)
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-3 text-center">
+              <button
+                onClick={updateaward}
+                className="btn btn-sm"
+                style={{
+                  backgroundColor: "#F86F03",
+                  color: "white",
+                  borderRadius: "5px",
+                  width: "80px",
+                  padding: "8px",
+                }}
+              >
+                Update
+              </button>
+            </div>
           </div>
-
-          <div className="col-md-6 mb-3">
-            <label className="form-label fw-bold">Awarding Body</label>
-            <input name="awarding_body" type="text" className="form-control" defaultValue={doctorprofileaward.awarding_body} onChange={handlechangeaward} />
-          </div>
-          
-         
-          <div className="col-md-6 mb-3">
-            <label className="form-label fw-bold">Date</label>
-            <input name="date" type="date" className="form-control"  defaultValue={doctorprofileaward.date}  onChange={handlechangeaward}/>
-          </div>
-
-          <div className="col-md-6 mb-3">
-            <label className="form-label fw-bold">Venue</label>
-            <input name="venue" type="text" className="form-control" defaultValue={doctorprofileaward.venue} onChange={handlechangeaward} />
-          </div>
-
-          
-
-           <div className="col-md-6 mb-3">
-            <label className="form-label fw-bold">Video Url</label>
-            <input name="video_url" type="text" className="form-control" defaultValue={doctorprofileaward.video_url} onChange={handlechangeaward} />
-          </div>
-
-
-    <label className="form-label fw-bold">Award Image</label>
-    <div className="gallery-image grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mb-6">
-  {doctorprofileaward.award_image?.length > 0 ? (
-    doctorprofileaward.award_image.map((imgUrl, index) => (
-      <div
-        key={index}
-        className="relative  aspect-[4/3] rounded-md overflow-hidden border shadow-sm"
-      >
-        {/* Image */}
-        <img
-          src={imgUrl}
-          alt={`Gallery ${index + 1}`}
-          className="w-full h-full object-cover"
-        />
-
-        {/* Delete button */}
-        <button
-          onClick={() => handleDeleteAwardImage(index)}
-          className="absolute top-0 right-0 p-1 flex items-center justify-center bg-white rounded-bl-md hover:bg-red-100 transition"
-        >
-          <span
-            className="material-icons"
-            style={{ color: "red", fontSize: "22px" }}
-          >
-            delete
-          </span>
-        </button>
-      </div>
-    ))
-  ) : (
-    <p className="col-span-full text-center text-gray-500">
-      No images available
-    </p>
-  )}
-</div>
-
-
-
-
-     <div class="upload-drop-zone">
-    <div class="upload-drop-icon">&#8682;</div>
-    <div class="upload-instructions">
-      <strong>Drag or Drop Your Photo &amp; Video</strong>
-      <div class="upload-or">Or</div>
-      <label class="upload-browse">
-        <input name="award_image" multiple type="file" hidden onChange={handlechangeawardimage} />
-        <span>Browse the File</span>
-      </label>
-      <div class="upload-info">
-        Upload in PDF, JPEG, PNG, .jpg, .gif format<br/>
-        (Not more than 20MB)
-      </div>
-    </div>
-  </div>
-
-   <label className="form-label fw-bold">Picture Gallery</label>
-<div className="gallery-image grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mb-6">
-  {doctorprofileaward.picture_gallary?.length > 0 ? (
-    doctorprofileaward.picture_gallary.map((imgUrl, index) => (
-      <div
-        key={index}
-        className="relative  aspect-[4/3] rounded-md overflow-hidden border shadow-sm"
-      >
-        {/* Image */}
-        <img
-          src={imgUrl}
-          alt={`Gallery ${index + 1}`}
-          className="w-full h-full object-cover"
-        />
-
-        {/* Delete button */}
-        <button
-          onClick={() => handleDeletepicturegallary(index)}
-          className="absolute top-0 right-0 p-1 flex items-center justify-center bg-white rounded-bl-md hover:bg-red-100 transition"
-        >
-          <span
-            className="material-icons"
-            style={{ color: "red", fontSize: "22px" }}
-          >
-            delete
-          </span>
-        </button>
-      </div>
-    ))
-  ) : (
-    <p className="col-span-full text-center text-gray-500">
-      No images available
-    </p>
-  )}
-</div>
-
-     <div class="upload-drop-zone">
-    <div class="upload-drop-icon">&#8682;</div>
-    <div class="upload-instructions">
-      <strong>Drag or Drop Your Photo &amp; Video</strong>
-      <div class="upload-or">Or</div>
-      <label class="upload-browse">
-        <input name="picture_gallary" multiple type="file" hidden onChange={handlechangepicturegallary} />
-        <span>Browse the File</span>
-      </label>
-      <div class="upload-info">
-        Upload in PDF, JPEG, PNG, .jpg, .gif format<br/>
-        (Not more than 20MB)
-      </div>
-    </div>
-  </div>
-         
-  
-
-
-
-        <div className="text-center mt-3">
-  <button 
-    onClick={updateaward} 
-    className="btn btn-sm" 
-    style={{ backgroundColor: "#F86F03", color: "white", borderRadius: "5px", width: "80px",padding:"8px" }}
-  >
-    Update
-  </button>
-</div>
-
-          </div>
-    
-  
-
         </Modal.Body>
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -592,25 +630,23 @@ const deleteaward = async (awardIndex) => {
         </Modal.Footer> */}
       </Modal>
 
-
       {loading && (
-  <div
-    style={{
-      position: 'fixed',
-      inset: 0,
-      background: 'rgba(255, 255, 255, 0.6)',
-      zIndex: 9999,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    <UniqueLoader />
-  </div>
-)}
-      
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(255, 255, 255, 0.6)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <UniqueLoader />
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
 export default Updateawards

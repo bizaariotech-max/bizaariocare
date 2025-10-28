@@ -15,6 +15,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { __postApiData } from "../../utils/api";
 import Doctorsidebar from "./doctorsidebar";
 import Doctorheader from "./doctorheader";
+import CommonHeader from "../common/CommonHeader";
 
 function OpdSurgicalCamps() {
 
@@ -556,108 +557,118 @@ useEffect(() => {
 
   return (
     <div>
-     <Doctorheader />
+      {/* <Doctorheader /> */}
+      <CommonHeader />
 
       <div className="layout">
         <Doctorsidebar />
         <div className="content-wrapper">
           <div className="main-content">
-         <div className='profile-header'>
-                  <h3>Enter Details for Opd/Surgical Camps</h3>
-                  <p>Add or update the required details for the opd/surgical camps to keep records accurate and complete.</p>
-                  </div>
-              {/* Form */}
-                 <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-            <div className="form-grid">
-                
-                  {/* Asset Dropdown */}
-                  <FormControl fullWidth>
-                    <label className='form-label'>Asset Id</label>
-                    <Select
+            <div className="profile-header">
+              <h3>Enter Details for Opd/Surgical Camps</h3>
+              <p>
+                Add or update the required details for the opd/surgical camps to
+                keep records accurate and complete.
+              </p>
+            </div>
+            {/* Form */}
+            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+              <div className="form-grid">
+                {/* Asset Dropdown */}
+                <FormControl fullWidth>
+                  <label className="form-label">Asset Id</label>
+                  <Select
                     readOnly
-                    style={{backgroundColor:"rgba(189,196,212,0.3)"}}
-                      labelId="asset-label"
-                      name="AssetId"
-                      value={AssetId || ""}
-                      onChange={handleChange}
-                      displayEmpty
+                    style={{ backgroundColor: "rgba(189,196,212,0.3)" }}
+                    labelId="asset-label"
+                    name="AssetId"
+                    value={AssetId || ""}
+                    onChange={handleChange}
+                    displayEmpty
                     renderValue={(selected) => {
                       if (!selected) {
                         return <span style={{ color: "#9ca3af" }}>Asset</span>; // grey placeholder
                       }
-                      return AssetList.find((item) => item._id === selected)?.AssetName;
+                      return AssetList.find((item) => item._id === selected)
+                        ?.AssetName;
                     }}
-                    >
-                      <MenuItem value="">
-                        <em>Select Asset</em>
+                  >
+                    <MenuItem value="">
+                      <em>Select Asset</em>
+                    </MenuItem>
+                    {AssetList.map((asset) => (
+                      <MenuItem key={asset._id} value={asset._id}>
+                        {asset.AssetName}
                       </MenuItem>
-                      {AssetList.map((asset) => (
-                        <MenuItem key={asset._id} value={asset._id}>
-                          {asset.AssetName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                    ))}
+                  </Select>
+                </FormControl>
 
-                  {/* Station Dropdown */}
-                  <FormControl fullWidth>
-                    <label className='form-label'>Station Id</label>
-                    <Select
-                      labelId="station-label"
-                      name="StationId"
-                      value={StationId || ""}
-                      onChange={handleChange}
-                           displayEmpty
+                {/* Station Dropdown */}
+                <FormControl fullWidth>
+                  <label className="form-label">Station Id</label>
+                  <Select
+                    labelId="station-label"
+                    name="StationId"
+                    value={StationId || ""}
+                    onChange={handleChange}
+                    displayEmpty
                     renderValue={(selected) => {
                       if (!selected) {
-                        return <span style={{ color: "#9ca3af" }}>Station</span>; // grey placeholder
+                        return (
+                          <span style={{ color: "#9ca3af" }}>Station</span>
+                        ); // grey placeholder
                       }
-                      return StationList.find((item) => item._id === selected)?.StationName;
+                      return StationList.find((item) => item._id === selected)
+                        ?.StationName;
                     }}
-                    >
-                      <MenuItem value="">
-                        <em>Select Station</em>
+                  >
+                    <MenuItem value="">
+                      <em>Select Station</em>
+                    </MenuItem>
+                    {StationList.map((station) => (
+                      <MenuItem key={station._id} value={station._id}>
+                        {station.StationName}
                       </MenuItem>
-                      {StationList.map((station) => (
-                        <MenuItem key={station._id} value={station._id}>
-                          {station.StationName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                    ))}
+                  </Select>
+                </FormControl>
 
-                  {/* Event Type Dropdown */}
-                  <FormControl fullWidth>
-                    <label className='form-label'>Event Type Id</label>
-                    <Select
+                {/* Event Type Dropdown */}
+                <FormControl fullWidth>
+                  <label className="form-label">Event Type Id</label>
+                  <Select
                     readOnly
-                    style={{backgroundColor:"rgba(189,196,212,0.3)"}}
-                      labelId="event-type-label"
-                      name="EventTypeId"
-                      value={EventTypeId || ""}
-                      onChange={handleChange}
-                      displayEmpty
-                      renderValue={(selected) => {
+                    style={{ backgroundColor: "rgba(189,196,212,0.3)" }}
+                    labelId="event-type-label"
+                    name="EventTypeId"
+                    value={EventTypeId || ""}
+                    onChange={handleChange}
+                    displayEmpty
+                    renderValue={(selected) => {
                       if (!selected) {
-                        return <span style={{ color: "#9ca3af" }}>Event Type</span>; // grey placeholder
+                        return (
+                          <span style={{ color: "#9ca3af" }}>Event Type</span>
+                        ); // grey placeholder
                       }
-                      return EventTypeList.find((item) => item._id === selected)?.name;
+                      return EventTypeList.find((item) => item._id === selected)
+                        ?.name;
                     }}
-                    >
-                      <MenuItem value="">
-                        <em>Select Event Type</em>
+                  >
+                    <MenuItem value="">
+                      <em>Select Event Type</em>
+                    </MenuItem>
+                    {EventTypeList.map((type) => (
+                      <MenuItem key={type.id} value={type.id}>
+                        {type.name}
                       </MenuItem>
-                      {EventTypeList.map((type) => (
-                        <MenuItem key={type.id} value={type.id}>
-                          {type.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                    ))}
+                  </Select>
+                </FormControl>
 
-                  {/* Event Title */}
-                   <FormControl fullWidth>
-                    <label className='form-label'>Event Title</label>
+                {/* Event Title */}
+                <FormControl fullWidth>
+                  <label className="form-label">Event Title</label>
                   <TextField
                     name="EventTitle"
                     placeholder="Event Title"
@@ -666,11 +677,11 @@ useEffect(() => {
                     fullWidth
                     required
                   />
-                  </FormControl>
+                </FormControl>
 
-                  {/* Event Venue */}
-                     <FormControl fullWidth>
-                    <label className='form-label'>Event Venue</label>
+                {/* Event Venue */}
+                <FormControl fullWidth>
+                  <label className="form-label">Event Venue</label>
                   <TextField
                     placeholder="Event Venue"
                     name="EventVenue"
@@ -679,40 +690,41 @@ useEffect(() => {
                     fullWidth
                     required
                   />
-                  </FormControl>
+                </FormControl>
 
-                  {/* Registration Currency */}
-                  <FormControl fullWidth>
-                    <label className='form-label'>
-                      Registration Currency
-                    </label>
-                    <Select
-                      labelId="currency-label"
-                      name="RegistrationCurrency"
-                      value={RegistrationCurrency || ""}
-                      onChange={handleChange}
-                      displayEmpty
-                      renderValue={(selected) => {
+                {/* Registration Currency */}
+                <FormControl fullWidth>
+                  <label className="form-label">Registration Currency</label>
+                  <Select
+                    labelId="currency-label"
+                    name="RegistrationCurrency"
+                    value={RegistrationCurrency || ""}
+                    onChange={handleChange}
+                    displayEmpty
+                    renderValue={(selected) => {
                       if (!selected) {
-                        return <span style={{ color: "#9ca3af" }}>Event Type</span>; // grey placeholder
+                        return (
+                          <span style={{ color: "#9ca3af" }}>Event Type</span>
+                        ); // grey placeholder
                       }
-                      return CurrencyList.find((item) => item._id === selected)?.name;
+                      return CurrencyList.find((item) => item._id === selected)
+                        ?.name;
                     }}
-                    >
-                      <MenuItem value="">
-                        <em>Select Currency</em>
+                  >
+                    <MenuItem value="">
+                      <em>Select Currency</em>
+                    </MenuItem>
+                    {CurrencyList.map((currency) => (
+                      <MenuItem key={currency.id} value={currency.id}>
+                        {currency.name}
                       </MenuItem>
-                      {CurrencyList.map((currency) => (
-                        <MenuItem key={currency.id} value={currency.id}>
-                          {currency.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                    ))}
+                  </Select>
+                </FormControl>
 
-                  {/* Registration Fee */}
-                    <FormControl fullWidth>
-                    <label className='form-label'>Registration Fee</label>
+                {/* Registration Fee */}
+                <FormControl fullWidth>
+                  <label className="form-label">Registration Fee</label>
                   <TextField
                     placeholder="Registration Fee"
                     name="RegistrationFee"
@@ -721,138 +733,130 @@ useEffect(() => {
                     fullWidth
                     type="number"
                   />
-                  </FormControl>
+                </FormControl>
 
-                
-                  {/* Event Poster Upload */}
-                  <div className="space-y-2">
-                    <label  className="form-label">
-                      Event Poster
-                    </label>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) =>
-                          handleSingleImageUpload(e, "EventPoster")
+                {/* Event Poster Upload */}
+                <div className="space-y-2">
+                  <label className="form-label">Event Poster</label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) =>
+                        handleSingleImageUpload(e, "EventPoster")
+                      }
+                      style={{ display: "none" }}
+                      id="event-poster-upload"
+                      disabled={eventPosterLoading}
+                    />
+                    <label htmlFor="event-poster-upload">
+                      <Button
+                        variant="outlined"
+                        component="span"
+                        startIcon={
+                          eventPosterLoading ? (
+                            <CircularProgress size={20} />
+                          ) : (
+                            <CloudUploadIcon />
+                          )
                         }
-                        style={{ display: "none" }}
-                        id="event-poster-upload"
                         disabled={eventPosterLoading}
-                      />
-                      <label htmlFor="event-poster-upload">
-                        <Button
-                          variant="outlined"
-                          component="span"
-                          startIcon={
-                            eventPosterLoading ? (
-                              <CircularProgress size={20} />
-                            ) : (
-                              <CloudUploadIcon />
-                            )
-                          }
-                          disabled={eventPosterLoading}
-                          className="cursor-pointer"
-                        >
-                          {eventPosterLoading
-                            ? "Uploading..."
-                            : "Upload Poster"}
-                        </Button>
-                      </label>
-                    </div>
-                    {EventPoster.length > 0 && (
-                      <div className="grid grid-cols-2 gap-2">
-                        {EventPoster.map((url, index) => (
-                          <div key={index} className="relative">
-                            <img
-                              src={url}
-                              alt={`Event Poster ${index + 1}`}
-                              className="object-cover w-full h-32 border rounded"
-                            />
-                            <IconButton
-                              onClick={() => removeImage(index, "EventPoster")}
-                              className="absolute text-white bg-red-500 top-1 right-1"
-                              size="small"
-                            >
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Event Advertisement Upload */}
-                  <div className="space-y-2">
-                    <label className="form-label">
-                      Event Advertisement
+                        className="cursor-pointer"
+                      >
+                        {eventPosterLoading ? "Uploading..." : "Upload Poster"}
+                      </Button>
                     </label>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={(e) =>
-                          handleMultipleImageUpload(e, "EventAdvertisement")
+                  </div>
+                  {EventPoster.length > 0 && (
+                    <div className="grid grid-cols-2 gap-2">
+                      {EventPoster.map((url, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={url}
+                            alt={`Event Poster ${index + 1}`}
+                            className="object-cover w-full h-32 border rounded"
+                          />
+                          <IconButton
+                            onClick={() => removeImage(index, "EventPoster")}
+                            className="absolute text-white bg-red-500 top-1 right-1"
+                            size="small"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Event Advertisement Upload */}
+                <div className="space-y-2">
+                  <label className="form-label">Event Advertisement</label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) =>
+                        handleMultipleImageUpload(e, "EventAdvertisement")
+                      }
+                      style={{ display: "none" }}
+                      id="event-advertisement-upload"
+                      disabled={eventAdvertisementLoading}
+                    />
+                    <label htmlFor="event-advertisement-upload">
+                      <Button
+                        variant="outlined"
+                        component="span"
+                        startIcon={
+                          eventAdvertisementLoading ? (
+                            <CircularProgress size={20} />
+                          ) : (
+                            <CloudUploadIcon />
+                          )
                         }
-                        style={{ display: "none" }}
-                        id="event-advertisement-upload"
                         disabled={eventAdvertisementLoading}
-                      />
-                      <label htmlFor="event-advertisement-upload">
-                        <Button
-                          variant="outlined"
-                          component="span"
-                          startIcon={
-                            eventAdvertisementLoading ? (
-                              <CircularProgress size={20} />
-                            ) : (
-                              <CloudUploadIcon />
-                            )
-                          }
-                          disabled={eventAdvertisementLoading}
-                          className="cursor-pointer"
-                        >
-                          {eventAdvertisementLoading
-                            ? "Uploading..."
-                            : "Upload Advertisements"}
-                        </Button>
-                      </label>
-                    </div>
-                    {EventAdvertisement.length > 0 && (
-                      <div className="grid grid-cols-2 gap-2">
-                        {EventAdvertisement.map((url, index) => (
-                          <div key={index} className="relative">
-                            <img
-                              src={url}
-                              alt={`Event Advertisement ${index + 1}`}
-                              className="object-cover w-full h-32 border rounded"
-                            />
-                            <IconButton
-                              onClick={() =>
-                                removeImage(index, "EventAdvertisement")
-                              }
-                              className="absolute text-white bg-red-500 top-1 right-1"
-                              size="small"
-                            >
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                    {/* Event Schedule Section */}
-                  <div className="space-y-4">
-                    <label variant="h6" className="form-label">
-                      <u>Event Schedule</u>
+                        className="cursor-pointer"
+                      >
+                        {eventAdvertisementLoading
+                          ? "Uploading..."
+                          : "Upload Advertisements"}
+                      </Button>
                     </label>
+                  </div>
+                  {EventAdvertisement.length > 0 && (
+                    <div className="grid grid-cols-2 gap-2">
+                      {EventAdvertisement.map((url, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={url}
+                            alt={`Event Advertisement ${index + 1}`}
+                            className="object-cover w-full h-32 border rounded"
+                          />
+                          <IconButton
+                            onClick={() =>
+                              removeImage(index, "EventAdvertisement")
+                            }
+                            className="absolute text-white bg-red-500 top-1 right-1"
+                            size="small"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                {/* Event Schedule Section */}
+                <div className="space-y-4">
+                  <label variant="h6" className="form-label">
+                    <u>Event Schedule</u>
+                  </label>
 
-                      <FormControl fullWidth>
-                    <label className='form-label'>Date</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormControl fullWidth>
+                      <label className="form-label">Date</label>
                       <TextField
                         placeholder="Date"
                         name="Date"
@@ -862,10 +866,10 @@ useEffect(() => {
                         fullWidth
                         InputLabelProps={{ shrink: true }}
                       />
-                      </FormControl>
+                    </FormControl>
 
                     <FormControl fullWidth>
-                    <label className='form-label'>Start Time</label>
+                      <label className="form-label">Start Time</label>
                       <TextField
                         placeholder="Start Time"
                         name="StartTime"
@@ -875,12 +879,12 @@ useEffect(() => {
                         fullWidth
                         InputLabelProps={{ shrink: true }}
                       />
-                      </FormControl>
-                    </div>
+                    </FormControl>
+                  </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <FormControl fullWidth>
-                       <label className='form-label'>End Time</label>
+                      <label className="form-label">End Time</label>
                       <TextField
                         placeholder="End Time"
                         name="EndTime"
@@ -890,10 +894,10 @@ useEffect(() => {
                         fullWidth
                         InputLabelProps={{ shrink: true }}
                       />
-                      </FormControl>
+                    </FormControl>
 
-                      <FormControl fullWidth>
-                       <label className='form-label'>Number of Slots</label>
+                    <FormControl fullWidth>
+                      <label className="form-label">Number of Slots</label>
                       <TextField
                         placeholder="Number of Slots"
                         name="NoOfSlots"
@@ -902,92 +906,87 @@ useEffect(() => {
                         onChange={handleScheduleChange}
                         fullWidth
                       />
-                      </FormControl>
-                    </div>
-
-                    <Button
-                      onClick={addSchedule}
-                      variant="outlined"
-                      startIcon={<AddIcon />}
-                      className="w-full"
-                    >
-                      Add Schedule
-                    </Button>
-
-                    {/* Display added schedules */}
-                    {EventSchedule.length > 0 && (
-                      <div className="space-y-2">
-                        <Typography
-                          variant="subtitle2"
-                          className="text-gray-600"
-                        >
-                          Added Schedules:
-                        </Typography>
-                        {EventSchedule.map((schedule, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-2 rounded bg-gray-50"
-                          >
-                            <span className="text-sm">
-                              {schedule.Date} | {schedule.StartTime} -{" "}
-                              {schedule.EndTime} | Slots: {schedule.NoOfSlots}
-                            </span>
-                            <IconButton
-                              onClick={() => removeSchedule(index)}
-                              size="small"
-                              color="error"
-                            >
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    </FormControl>
                   </div>
 
+                  <Button
+                    onClick={addSchedule}
+                    variant="outlined"
+                    startIcon={<AddIcon />}
+                    className="w-full"
+                  >
+                    Add Schedule
+                  </Button>
+
+                  {/* Display added schedules */}
+                  {EventSchedule.length > 0 && (
+                    <div className="space-y-2">
+                      <Typography variant="subtitle2" className="text-gray-600">
+                        Added Schedules:
+                      </Typography>
+                      {EventSchedule.map((schedule, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-2 rounded bg-gray-50"
+                        >
+                          <span className="text-sm">
+                            {schedule.Date} | {schedule.StartTime} -{" "}
+                            {schedule.EndTime} | Slots: {schedule.NoOfSlots}
+                          </span>
+                          <IconButton
+                            onClick={() => removeSchedule(index)}
+                            size="small"
+                            color="error"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Submit Button */}
-                  <Button
-                  className="submit-button"
-                    onClick={__handleSaveEvent}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <CircularProgress size={24} color="inherit" />
-                    ) : event_id ? (
-                      "Update Event"
-                    ) : (
-                      "Save Event"
-                    )}
-                  </Button>
-                  </Paper>
-             
+              <Button
+                className="submit-button"
+                onClick={__handleSaveEvent}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : event_id ? (
+                  "Update Event"
+                ) : (
+                  "Save Event"
+                )}
+              </Button>
+            </Paper>
 
-              {/* Table */}
-                 <Paper elevation={3} sx={{ p: 2, borderRadius: 2,marginTop:4 }}>
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5, 10, 20]}
-                    disableSelectionOnClick
-                    loading={isLoading}
-                    className="custom-data-grid"
-                    autoHeight
-                    pagination
-                    // getRowId={(row) => row._id}
-                    // initialState={{
-                    //   pagination: {
-                    //     paginationModel: { pageSize: 10, page: 0 },
-                    //   },
-                    // }}
-                    // pageSizeOptions={[10]}
-                  />
-                  </Paper>
-                </div>
-                </div>
-                </div>
+            {/* Table */}
+            <Paper elevation={3} sx={{ p: 2, borderRadius: 2, marginTop: 4 }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 20]}
+                disableSelectionOnClick
+                loading={isLoading}
+                className="custom-data-grid"
+                autoHeight
+                pagination
+                // getRowId={(row) => row._id}
+                // initialState={{
+                //   pagination: {
+                //     paginationModel: { pageSize: 10, page: 0 },
+                //   },
+                // }}
+                // pageSizeOptions={[10]}
+              />
+            </Paper>
+          </div>
+        </div>
+      </div>
       {isLoading && <UniqueLoader />}
     </div>
   );

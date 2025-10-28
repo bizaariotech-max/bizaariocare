@@ -1,26 +1,23 @@
-
 import React, { useState } from "react";
 import "../styles/signin.css";
 import image from "../assets/images/Optimize Your Mental Health with 24-7 Shalom Psychiatry 1.png";
 import { useNavigate } from "react-router-dom";
-import api from '../api'
-import Swal from 'sweetalert2';
+import api from "../api";
+import Swal from "sweetalert2";
 import ChangePasswordModal from "./changepassworddoctor";
 import logo from "../assets/images/image 13.png";
-import { FaEye, FaEyeSlash } from "react-icons/fa";  // 👁️ eye icons
-
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁️ eye icons
 
 function SignIn() {
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
-   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
-
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   // Step 1: Track selected role in state
   const [role, setRole] = useState("admin"); // default is 'admin'
 
-  const [Email,setEmail]=useState("")
-  const[Password,setPassword]=useState("")
-    const [showPassword, setShowPassword] = useState(false);
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   // Optionally, you can show different forms or adapt text for each role
   // const getFormTitle = () => {
   //   if (role === "admin")  return "Admin Sign in";
@@ -29,87 +26,92 @@ function SignIn() {
   //   return "Sign in";
   // };
 
-const login = async (e) => {
-  e.preventDefault();
-
-  if (Email === 'admin' && Password === '123') {
-    navigate('/admindashboard');
-    return;
-  }
-
+  const login = async (e) => {
+    e.preventDefault();
 
     try {
-      const resp = await api.post('api/v1/admin/AssetLogin', { Email, Password });
+      const resp = await api.post("api/v1/admin/AssetLogin", {
+        Email,
+        Password,
+      });
 
       // Success
       Swal.fire({
-        icon: 'success',
-        title: 'Login Successful',
-        text: resp.data.message || 'Welcome!',
+        icon: "success",
+        title: "Login Successful",
+        text: resp.data.message || "Welcome!",
         showConfirmButton: true,
-         customClass: {
-          confirmButton: 'my-swal-button',
+        customClass: {
+          confirmButton: "my-swal-button",
         },
       });
 
       console.log(resp);
-      
-      localStorage.setItem('token', resp.data.data.token);
-      localStorage.setItem('user', JSON.stringify(resp.data.data.user.Entity));
-      localStorage.setItem('main_user', JSON.stringify(resp.data.data.user));
 
-      navigate('/doctordashboard');
+      localStorage.setItem("token", resp.data.data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(resp.data.data.user.Entity || {})
+      );
+      localStorage.setItem("main_user", JSON.stringify(resp.data.data.user));
 
+      // Dynamic routing based on IsAdmin flag and asset category
+      const user = resp.data.data.user;
+      const isAdmin = user.IsAdmin;
+
+      if (isAdmin) {
+        navigate("/admindashboard");
+      } else {
+        const assetCategory = user.Entity?.AssetCategoryLevel1?.lookup_value;
+
+        if (assetCategory === "Hospital") {
+          navigate("/hospitaldashboard");
+        } else if (assetCategory === "Doctor") {
+          navigate("/doctordashboard");
+        } else {
+          // Default fallback for other asset types
+          navigate("/doctordashboard");
+        }
+      }
     } catch (error) {
       const status = error.response?.status;
-      const message = error.response?.data?.message || 'Something went wrong!';
+      const message = error.response?.data?.message || "Something went wrong!";
 
       if (status === 403) {
         Swal.fire({
-          icon: 'warning',
-          title: 'Change Password Required',
+          icon: "warning",
+          title: "Change Password Required",
           text: message,
           showConfirmButton: true,
-             customClass: {
-          confirmButton: 'my-swal-button',
-        },
-        }).then(()=>
-        {
-         setShowChangePasswordModal(true);
+          customClass: {
+            confirmButton: "my-swal-button",
+          },
+        }).then(() => {
+          setShowChangePasswordModal(true);
         });
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'Login Failed',
+          icon: "error",
+          title: "Login Failed",
           text: message,
           showConfirmButton: true,
-             customClass: {
-          confirmButton: 'my-swal-button',
-        },
+          customClass: {
+            confirmButton: "my-swal-button",
+          },
         });
       }
     }
-
-};
-
-
+  };
 
   return (
     <div className="signin-container">
-    
-  
-      <div className="visual-side" >
-        <img
-          src={image}
-          alt=""
-        />
+      <div className="visual-side">
+        <img src={image} alt="" />
       </div>
 
-
-
-      <div className="form-side" >
+      <div className="form-side">
         <form className="signin-form">
-            <div className="logo-container">
+          <div className="logo-container">
             <img src={logo} alt="logo" />
           </div>
           <h2>Welcome Back</h2>
@@ -117,18 +119,25 @@ const login = async (e) => {
             <span>Need an account?</span>
             <a href="/register">Sign Up</a>
           </div>
-          
-        
 
           {/* Step 3: The form updates (even just the heading here) */}
-           {/* <h2>Sign In</h2> */}
+          {/* <h2>Sign In</h2> */}
           <div className="input-group">
-           
             <label>Username</label>
-            <input type="text" placeholder="Username" required  onChange={(e)=>setEmail(e.target.value)}/>
+            <input
+              type="text"
+              placeholder="Username"
+              required
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <label>Password</label>
-            <input type={showPassword ? "text" : "password"} placeholder="Password" required onChange={(e)=>setPassword(e.target.value)}/>
-              <span
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              required
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span
               className="toggle-password"
               onClick={() => setShowPassword(!showPassword)}
             >
@@ -137,7 +146,14 @@ const login = async (e) => {
           </div>
           <div className="options">
             <label>
-              <input type="checkbox" style={{marginRight:"10px",transform: "scale(1.5)",accentColor: "#4d7bf3"}} />
+              <input
+                type="checkbox"
+                style={{
+                  marginRight: "10px",
+                  transform: "scale(1.5)",
+                  accentColor: "#4d7bf3",
+                }}
+              />
               Remember me
             </label>
             <a href="/forgot">Forgot Password?</a>
@@ -145,10 +161,7 @@ const login = async (e) => {
           <button className="login-btn" onClick={login}>
             Login
           </button>
-{
-  showChangePasswordModal ? <ChangePasswordModal/> :""
-}
-        
+          {showChangePasswordModal ? <ChangePasswordModal /> : ""}
 
           {/* <div className="or-divider">OR</div>
           <div className="social-row">
@@ -166,7 +179,6 @@ const login = async (e) => {
             </button>
           </div> */}
         </form>
-
       </div>
     </div>
   );

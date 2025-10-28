@@ -45,76 +45,84 @@ import PastMedicalHistoryMain from './AllSubForms/past_medical_history/past_medi
 import CurrentProblemMain from './AllSubForms/current_problem/current_problem_main';
 import PatientProfilingMain from './AllSubForms/patient_profiling/patient_profiling_main';
 import DoctorQueryForPatientReferralMain from './AllSubForms/doctor_querry_for_patient_referral/doctor_query_for_patient_referral_main';
-
-
+import CommonHeader from "../../common/CommonHeader";
 
 const PatientReferralHome = () => {
+  const location = useLocation();
 
-  const location =useLocation()
- 
-  const patient_details=location.state.patient_details
-  const patientId=patient_details._id
+  const patient_details = location.state.patient_details;
+  const patientId = patient_details._id;
 
-  const[selected_case_file,setselected_case_file]=useState("")
+  const [selected_case_file, setselected_case_file] = useState("");
 
-
- 
-  
-  
   return (
     <>
-    <Doctorheader />
+      {/* <Doctorheader /> */}
+      <CommonHeader />
 
       <div className="layout">
         <Doctorsidebar />
         <div className="content-wrapper">
-        <div className="main-content">
-      <PatientTabs />
-      <PatientDetails patientId={patientId}/>
-      
-      {/* <ChiefComplaints  patientId={patientId}/> */}
-      {/* <CurrentMedicines /> */}
-      {/* <ClinicalOutcome /> */}
-      {/* <CurrentTherapy /> */}
-      {/* <MedicalSummary /> */}
-      
-      
-      
-      <CurrentProblemMain patientId={patientId} selected_case_file={selected_case_file}/>
+          <div className="main-content">
+            <PatientTabs />
+            <PatientDetails patientId={patientId} />
 
-      <PatientProfilingMain patientId={patientId} selected_case_file={selected_case_file}/>
+            {/* <ChiefComplaints  patientId={patientId}/> */}
+            {/* <CurrentMedicines /> */}
+            {/* <ClinicalOutcome /> */}
+            {/* <CurrentTherapy /> */}
+            {/* <MedicalSummary /> */}
 
-      <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/>
+            <CurrentProblemMain
+              patientId={patientId}
+              selected_case_file={selected_case_file}
+            />
 
-      <PastMedicalHistoryMain patientId={patientId} selected_case_file={selected_case_file}/>
+            <PatientProfilingMain
+              patientId={patientId}
+              selected_case_file={selected_case_file}
+            />
 
-      <DoctorQueryForPatientReferralMain patientId={patientId} selected_case_file={selected_case_file}/>
+            <OpenMedicalCaseFiles
+              patientId={patientId}
+              patient_details={patient_details}
+              setselected_case_file={setselected_case_file}
+            />
 
-      {/* <ExistingDisease patientId={patientId} selected_case_file={selected_case_file}/> */}
-      {/* <PastIllness patientId={patientId} selected_case_file={selected_case_file}/> */}
+            <PastMedicalHistoryMain
+              patientId={patientId}
+              selected_case_file={selected_case_file}
+            />
 
-      {/* <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/> */}
-     
-       
-      {/* <PastMedications /> */}
-      {/* <PastTherapy /> */}
-      {/* <OccupationalProfile /> */}
-      {/* <ClinicalFindings /> */}
-      {/* <VitalsPhysicalExaminations /> */}
-      {/* <DiagnosticsInvestigations /> */}
-      {/* <Diagnosis /> */}
-      {/* <TreatmentToDate /> */}
-      {/* <PatientResponse />  */}
-      {/* <SurgeryProcedurePerformed/> */}
-      {/* <TherapyGiven/> */}
-      {/* <LifestyleInterventionsPrescribed/> */}
-      {/* <ProposedSurgery/> */}
-      {/* <PreSurgicalConsiderations/> */}
-      {/* <RiskFactor/> */}
-      {/* <PatientConcerns/> */}
-      {/* <ImmunizationProfile/> */}
+            <DoctorQueryForPatientReferralMain
+              patientId={patientId}
+              selected_case_file={selected_case_file}
+            />
 
-        <div className="mt-6">
+            {/* <ExistingDisease patientId={patientId} selected_case_file={selected_case_file}/> */}
+            {/* <PastIllness patientId={patientId} selected_case_file={selected_case_file}/> */}
+
+            {/* <OpenMedicalCaseFiles patientId={patientId} patient_details={patient_details} setselected_case_file={setselected_case_file}/> */}
+
+            {/* <PastMedications /> */}
+            {/* <PastTherapy /> */}
+            {/* <OccupationalProfile /> */}
+            {/* <ClinicalFindings /> */}
+            {/* <VitalsPhysicalExaminations /> */}
+            {/* <DiagnosticsInvestigations /> */}
+            {/* <Diagnosis /> */}
+            {/* <TreatmentToDate /> */}
+            {/* <PatientResponse />  */}
+            {/* <SurgeryProcedurePerformed/> */}
+            {/* <TherapyGiven/> */}
+            {/* <LifestyleInterventionsPrescribed/> */}
+            {/* <ProposedSurgery/> */}
+            {/* <PreSurgicalConsiderations/> */}
+            {/* <RiskFactor/> */}
+            {/* <PatientConcerns/> */}
+            {/* <ImmunizationProfile/> */}
+
+            <div className="mt-6">
               <div className="flex gap-4">
                 {/* Outline Button */}
                 <button className="px-4 py-2  border-2 border-[var(--primary-color)] text-[var(--primary-color)] rounded-md  hover:bg-[var(--primary-color)] hover:text-white transition lora">
@@ -123,18 +131,18 @@ const PatientReferralHome = () => {
 
                 {/* Filled Button */}
                 <button className="lora px-4 py-2 bg-[var(--primary-color)] text-white rounded-md  hover:bg-[var(--primary-color)] transition">
-                  <Link to="/patient-referral/appoint-doctors" className="no-underline text-white">
+                  <Link
+                    to="/patient-referral/appoint-doctors"
+                    className="text-white no-underline"
+                  >
                     Patient Referral
                   </Link>
                 </button>
               </div>
             </div>
-
-
-         </div>
+          </div>
         </div>
       </div>
-
 
       {/* <Modal show={show} onHide={handleClose} centered size="lg">
         
@@ -188,9 +196,8 @@ const PatientReferralHome = () => {
           
          
           </Modal> */}
-
     </>
-  )
-}
+  );
+};
 
 export default PatientReferralHome

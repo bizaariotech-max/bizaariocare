@@ -15,14 +15,11 @@ import "../Admin/ContentMaster/content_master.css";
 import { __postApiData } from "../../utils/api";
 import Doctorsidebar from "./doctorsidebar";
 import Doctorheader from "./doctorheader";
-
+import CommonHeader from "../common/CommonHeader";
 
 function AwardsAndRecognitions() {
-
-  const doctordetails=JSON.parse(localStorage.getItem("user"))
+  const doctordetails = JSON.parse(localStorage.getItem("user"));
   console.log(doctordetails);
-  
-
 
   const [isLoading, setIsLoading] = useState(false);
   const [contentList, setContentList] = useState([]);
@@ -95,32 +92,28 @@ function AwardsAndRecognitions() {
     setToast({ ...toast, open: false });
   };
 
-
   useEffect(() => {
-  if (doctordetails) {
-    setState(prev => 
-      prev.AssetId !== doctordetails._id 
-        ? { ...prev, AssetId: doctordetails._id } 
-        : prev
-    );
-  }
-}, [doctordetails]);
-
+    if (doctordetails) {
+      setState((prev) =>
+        prev.AssetId !== doctordetails._id
+          ? { ...prev, AssetId: doctordetails._id }
+          : prev
+      );
+    }
+  }, [doctordetails]);
 
   // Fetch content list
   const getContentList = async () => {
     try {
       setIsLoading(true);
-      const resp = await __postApiData("/api/v1/admin/ContentList", 
-  {
-            page: 1,
-            limit: 100,
-            ContentTypeId: "68afff10874340d8d79dbf53"
-            // "ContentPriority":"Medium"
-        }
-);
-      
-// console.log(resp);
+      const resp = await __postApiData("/api/v1/admin/ContentList", {
+        page: 1,
+        limit: 100,
+        ContentTypeId: "68afff10874340d8d79dbf53",
+        // "ContentPriority":"Medium"
+      });
+
+      // console.log(resp);
 
       if (resp.response.response_code === "200") {
         setContentList(resp.data.list || []);
@@ -148,8 +141,6 @@ function AwardsAndRecognitions() {
     }
   };
 
-
-  
   // for common api :__getCommenApiDataList
   const fetchDropdownData = async (lookupTypes, stateKey, parent_lookup_id) => {
     updateState({ isLoading: true });
@@ -166,44 +157,43 @@ function AwardsAndRecognitions() {
     }
   };
 
-useEffect(() => {
-  getContentList();
+  useEffect(() => {
+    getContentList();
 
-  const initializeDropdowns = async () => {
-    try {
-      // Fetch Content Type data
-      const contentTypeData = await __getCommenApiDataList({
-        lookup_type: ["content_type"],
-        parent_lookup_id: null,
-      });
+    const initializeDropdowns = async () => {
+      try {
+        // Fetch Content Type data
+        const contentTypeData = await __getCommenApiDataList({
+          lookup_type: ["content_type"],
+          parent_lookup_id: null,
+        });
 
-      // console.log("Fetched Content Types:", contentTypeData);
+        // console.log("Fetched Content Types:", contentTypeData);
 
-      // Find and set "Awards and Recognitions" as default
-      const awardsOption = contentTypeData.find(
-        (item) =>
-          item.name?.trim().toLowerCase() ===
-          "awards and recognitions".toLowerCase()
-      );
+        // Find and set "Awards and Recognitions" as default
+        const awardsOption = contentTypeData.find(
+          (item) =>
+            item.name?.trim().toLowerCase() ===
+            "awards and recognitions".toLowerCase()
+        );
 
-      // console.log("Selected Option:", awardsOption);
+        // console.log("Selected Option:", awardsOption);
 
-      updateState({
-        ContentType: contentTypeData,
-        ContentTypeId: awardsOption ? awardsOption._id : "", // Use _id
-      });
+        updateState({
+          ContentType: contentTypeData,
+          ContentTypeId: awardsOption ? awardsOption._id : "", // Use _id
+        });
 
-      // Fetch Asset List data
-      getAssetList();
-    } catch (error) {
-      console.error("Error initializing dropdowns:", error);
-      showToast("Error initializing dropdowns", "error");
-    }
-  };
+        // Fetch Asset List data
+        getAssetList();
+      } catch (error) {
+        console.error("Error initializing dropdowns:", error);
+        showToast("Error initializing dropdowns", "error");
+      }
+    };
 
-  initializeDropdowns();
-}, []);
-
+    initializeDropdowns();
+  }, []);
 
   // DataGrid columns
   const columns = [
@@ -536,84 +526,88 @@ useEffect(() => {
 
   return (
     <div>
-      <Doctorheader />
+      {/* <Doctorheader /> */}
+      <CommonHeader />
 
       <div className="layout">
         <Doctorsidebar />
         <div className="content-wrapper">
           <div className="main-content">
+            <div className="profile-header">
+              <h3>Enter Details for Awards And Recognitions</h3>
+              <p>
+                Add or update the required details for the awards and
+                recognitions to keep records accurate and complete.
+              </p>
+            </div>
 
-          <div className='profile-header'>
-                  <h3>Enter Details for Awards And Recognitions</h3>
-                  <p>Add or update the required details for the awards and recognitions to keep records accurate and complete.</p>
-                  </div>
-       
-                {/* Form */}
-                <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+            {/* Form */}
+            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
               <div className="form-grid">
-               
-                  {/* Asset Dropdown */}
-                  <FormControl fullWidth>
-                    <label className='form-label'>Asset</label>
-                    <Select
-                    style={{backgroundColor:"rgba(189,196,212,0.3)"}}
+                {/* Asset Dropdown */}
+                <FormControl fullWidth>
+                  <label className="form-label">Asset</label>
+                  <Select
+                    style={{ backgroundColor: "rgba(189,196,212,0.3)" }}
                     readOnly
-                      labelId="asset-label"
-                      value={AssetId || ""}
-                      onChange={handleChange}
-                      displayEmpty
-                      renderValue={(selected) => {
-                        if (!selected) {
-                          return <span style={{ color: "#9ca3af" }}>Asset</span>; // grey placeholder
-                        }
-                        return AssetList.find((item) => item._id === selected)?.AssetName;
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>Select Asset</em>
+                    labelId="asset-label"
+                    value={AssetId || ""}
+                    onChange={handleChange}
+                    displayEmpty
+                    renderValue={(selected) => {
+                      if (!selected) {
+                        return <span style={{ color: "#9ca3af" }}>Asset</span>; // grey placeholder
+                      }
+                      return AssetList.find((item) => item._id === selected)
+                        ?.AssetName;
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Select Asset</em>
+                    </MenuItem>
+                    {AssetList.map((asset) => (
+                      <MenuItem key={asset._id} value={asset._id}>
+                        {asset.AssetName}
                       </MenuItem>
-                      {AssetList.map((asset) => (
-                        <MenuItem key={asset._id} value={asset._id}>
-                          {asset.AssetName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                    ))}
+                  </Select>
+                </FormControl>
 
-                  {/* Content Type Dropdown */}
-                  <FormControl fullWidth>
-                    <label className='form-label'>
-                      Content Type
-                    </label>
-                    <Select
+                {/* Content Type Dropdown */}
+                <FormControl fullWidth>
+                  <label className="form-label">Content Type</label>
+                  <Select
                     // style={{backgroundColor:"rgba(189,196,212,0.3)"}}
                     // readOnly
-                      labelId="content-type-label"
-                      name="ContentTypeId"
-                      value={ContentTypeId || ""}
-                      onChange={handleChange}
-                      displayEmpty
-                      renderValue={(selected) => {
-                        if (!selected) {
-                          return <span style={{ color: "#9ca3af" }}>Content Type</span>; // grey placeholder
-                        }
-                        return ContentType.find((item) => item._id === selected)?.name;
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>Select Content Type</em>
+                    labelId="content-type-label"
+                    name="ContentTypeId"
+                    value={ContentTypeId || ""}
+                    onChange={handleChange}
+                    displayEmpty
+                    renderValue={(selected) => {
+                      if (!selected) {
+                        return (
+                          <span style={{ color: "#9ca3af" }}>Content Type</span>
+                        ); // grey placeholder
+                      }
+                      return ContentType.find((item) => item._id === selected)
+                        ?.name;
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Select Content Type</em>
+                    </MenuItem>
+                    {ContentType.map((type) => (
+                      <MenuItem key={type.id} value={type.id}>
+                        {type.name}
                       </MenuItem>
-                      {ContentType.map((type) => (
-                        <MenuItem key={type.id} value={type.id}>
-                          {type.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                    ))}
+                  </Select>
+                </FormControl>
 
-                  {/* Content Title */}
-                  <FormControl fullWidth size="small">
-                    <label className='form-label'>Content Title</label>
+                {/* Content Title */}
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Content Title</label>
                   <TextField
                     placeholder="Content Title"
                     name="ContentTitle"
@@ -622,11 +616,11 @@ useEffect(() => {
                     fullWidth
                     required
                   />
-                  </FormControl>
+                </FormControl>
 
-                  {/* Granting Body */}
-                  <FormControl fullWidth size="small">
-                <label className='form-label'>Granting Body</label>
+                {/* Granting Body */}
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Granting Body</label>
                   <TextField
                     placeholder="Granting Body"
                     name="GrantingBody"
@@ -635,51 +629,51 @@ useEffect(() => {
                     fullWidth
                   />
                 </FormControl>
-               
-                  <FormControl fullWidth size="small">
-                <label className='form-label'>Date</label>
-                    <TextField
-                      placeholder="Date"
-                      name="Date"
-                      type="date"
-                      value={Date}
-                      onChange={handleChange}
-                      fullWidth
-                      InputLabelProps={{ shrink: true }}
-                    />
-                    </FormControl>
 
-                    
-                    <FormControl fullWidth>
-                      <label className='form-label'>
-                        Content Priority
-                      </label>
-                      <Select
-                        labelId="priority-label"
-                        name="ContentPriority"
-                        value={ContentPriority || ""}
-                        onChange={handleChange}
-                displayEmpty
-                renderValue={(selected) => {
-                  if (!selected) {
-                    return <span style={{ color: "#9ca3af" }}>Content Type</span>; // grey placeholder
-                  }
-                  return ContentPriority === selected ? ContentPriority : "";
-                }}
-                      >
-                        <MenuItem value="">
-                          <em>Select Priority</em>
-                        </MenuItem>
-                        <MenuItem value="High">High</MenuItem>
-                        <MenuItem value="Medium">Medium</MenuItem>
-                        <MenuItem value="Low">Low</MenuItem>
-                      </Select>
-                    </FormControl>
-               
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Date</label>
+                  <TextField
+                    placeholder="Date"
+                    name="Date"
+                    type="date"
+                    value={Date}
+                    onChange={handleChange}
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </FormControl>
 
-                  {/* Valid Upto */}
-                     <FormControl fullWidth size="small">
-                <label className='form-label'>Valid Upto</label>
+                <FormControl fullWidth>
+                  <label className="form-label">Content Priority</label>
+                  <Select
+                    labelId="priority-label"
+                    name="ContentPriority"
+                    value={ContentPriority || ""}
+                    onChange={handleChange}
+                    displayEmpty
+                    renderValue={(selected) => {
+                      if (!selected) {
+                        return (
+                          <span style={{ color: "#9ca3af" }}>Content Type</span>
+                        ); // grey placeholder
+                      }
+                      return ContentPriority === selected
+                        ? ContentPriority
+                        : "";
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Select Priority</em>
+                    </MenuItem>
+                    <MenuItem value="High">High</MenuItem>
+                    <MenuItem value="Medium">Medium</MenuItem>
+                    <MenuItem value="Low">Low</MenuItem>
+                  </Select>
+                </FormControl>
+
+                {/* Valid Upto */}
+                <FormControl fullWidth size="small">
+                  <label className="form-label">Valid Upto</label>
                   <TextField
                     placeholder="Valid Upto"
                     name="ValidUpto"
@@ -690,11 +684,10 @@ useEffect(() => {
                     InputLabelProps={{ shrink: true }}
                   />
                 </FormControl>
-                 
 
-                  {/* Short Description */}
+                {/* Short Description */}
                 <FormControl fullWidth size="small">
-                <label className='form-label'>Short Description</label>
+                  <label className="form-label">Short Description</label>
                   <TextField
                     placeholder="Short Description"
                     name="ShortDescription"
@@ -704,11 +697,11 @@ useEffect(() => {
                     multiline
                     rows={1}
                   />
-                  </FormControl>
+                </FormControl>
 
-                  {/* Long Description */}
+                {/* Long Description */}
                 <FormControl fullWidth size="small">
-                <label className='form-label'>Long Description</label>
+                  <label className="form-label">Long Description</label>
                   <TextField
                     placeholder="Long Description"
                     name="LongDescription"
@@ -718,284 +711,272 @@ useEffect(() => {
                     multiline
                     rows={1}
                   />
-                  </FormControl>
+                </FormControl>
 
-                  {/* Meta Tags Section */}
-                 <FormControl fullWidth size="small">
-                    <label variant="subtitle1" className='form-label'>
-                      Meta Tags
-                    </label>
-                    <div className="flex space-x-2">
-                      <TextField
-                        placeholder="Add Meta Tag"
-                        value={currentTag}
-                        onChange={(e) => setCurrentTag(e.target.value)}
-                        fullWidth
-                        size="small"
-                      />
-                      <Button
-                        onClick={addMetaTag}
-                        variant="outlined"
-                        startIcon={<AddIcon />}
-                      >
-                        Add
-                      </Button>
-                    </div>
-                    {MetaTags.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {MetaTags.map((tag, index) => (
-                          <Chip
-                            key={index}
-                            label={tag}
-                            onDelete={() => removeMetaTag(index)}
-                            color="primary"
-                            variant="outlined"
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </FormControl>
-
-  {/* References Section */}
-                  <FormControl fullWidth size="small">
-                    <label variant="subtitle1" className='form-label'>
-                      References
-                    </label>
-                    <div className="flex space-x-2">
-                      <TextField
-                        placeholder="Add Reference"
-                        value={currentReference}
-                        onChange={(e) => setCurrentReference(e.target.value)}
-                        fullWidth
-                        size="small"
-                      />
-                      <Button
-                        onClick={addReference}
-                        variant="outlined"
-                        startIcon={<AddIcon />}
-                      >
-                        Add
-                      </Button>
-                    </div>
-                    {References.length > 0 && (
-                      <div className="space-y-2">
-                        {References.map((ref, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-2 rounded bg-gray-50"
-                          >
-                            <span className="text-sm">{ref}</span>
-                            <IconButton
-                              onClick={() => removeReference(index)}
-                              size="small"
-                              color="error"
-                            >
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </FormControl>
-
-                
-
-                  {/* Video Gallery Section */}
-                 <FormControl fullWidth size="small">
-                    <label variant="subtitle1" className='form-label'>
-                      Video Gallery
-                    </label>
-                    <div className="flex space-x-2">
-                      <TextField
-                        placeholder="Add Video URL"
-                        value={currentVideo}
-                        onChange={(e) => setCurrentVideo(e.target.value)}
-                        fullWidth
-                        size="small"
-                      />
-                      <Button
-                        onClick={addVideo}
-                        variant="outlined"
-                        startIcon={<AddIcon />}
-                      >
-                        Add
-                      </Button>
-                    </div>
-                    {VideoGallery.length > 0 && (
-                      <div className="space-y-2">
-                        {VideoGallery.map((url, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-2 rounded bg-gray-50"
-                          >
-                            <span className="text-sm truncate">{url}</span>
-                            <IconButton
-                              onClick={() => removeVideo(index)}
-                              size="small"
-                              color="error"
-                            >
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </FormControl>
-
-                
-
-                   {/* Content Image Upload */}
-                  <div className="space-y-2">
-                    <label variant="subtitle1" className='form-label'>
-                      Content Image
-                    </label>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) =>
-                          handleSingleImageUpload(e, "ContentImage")
-                        }
-                        style={{ display: "none" }}
-                        id="content-image-upload"
-                        disabled={contentImageLoading}
-                      />
-                      <label htmlFor="content-image-upload">
-                        <Button
+                {/* Meta Tags Section */}
+                <FormControl fullWidth size="small">
+                  <label variant="subtitle1" className="form-label">
+                    Meta Tags
+                  </label>
+                  <div className="flex space-x-2">
+                    <TextField
+                      placeholder="Add Meta Tag"
+                      value={currentTag}
+                      onChange={(e) => setCurrentTag(e.target.value)}
+                      fullWidth
+                      size="small"
+                    />
+                    <Button
+                      onClick={addMetaTag}
+                      variant="outlined"
+                      startIcon={<AddIcon />}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {MetaTags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {MetaTags.map((tag, index) => (
+                        <Chip
+                          key={index}
+                          label={tag}
+                          onDelete={() => removeMetaTag(index)}
+                          color="primary"
                           variant="outlined"
-                          component="span"
-                          startIcon={
-                            contentImageLoading ? (
-                              <CircularProgress size={20} />
-                            ) : (
-                              <CloudUploadIcon />
-                            )
-                          }
-                          disabled={contentImageLoading}
-                          className="cursor-pointer"
-                        >
-                          {contentImageLoading
-                            ? "Uploading..."
-                            : "Upload Image"}
-                        </Button>
-                      </label>
-                    </div>
-                    {ContentImage && (
-                      <div className="relative w-32 h-32">
-                        <img
-                          src={ContentImage}
-                          alt="Content"
-                          className="object-cover w-full h-full border rounded"
                         />
-                        <IconButton
-                          onClick={() => updateState({ ContentImage: "" })}
-                          className="absolute text-white bg-red-500 top-1 right-1"
-                          size="small"
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </div>
-                    )}
-                  </div>
-
-                    {/* Picture Gallery Upload */}
-                  <div className="space-y-2">
-                    <label variant="subtitle1" className='form-label'>
-                      Picture Gallery
-                    </label>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={(e) =>
-                          handleMultipleImageUpload(e, "PictureGallery")
-                        }
-                        style={{ display: "none" }}
-                        id="picture-gallery-upload"
-                        disabled={pictureGalleryLoading}
-                      />
-                      <label htmlFor="picture-gallery-upload">
-                        <Button
-                          variant="outlined"
-                          component="span"
-                          startIcon={
-                            pictureGalleryLoading ? (
-                              <CircularProgress size={20} />
-                            ) : (
-                              <CloudUploadIcon />
-                            )
-                          }
-                          disabled={pictureGalleryLoading}
-                          className="cursor-pointer"
-                        >
-                          {pictureGalleryLoading
-                            ? "Uploading..."
-                            : "Upload Images"}
-                        </Button>
-                      </label>
+                      ))}
                     </div>
-                    {PictureGallery.length > 0 && (
-                      <div className="grid grid-cols-2 gap-2">
-                        {PictureGallery.map((url, index) => (
-                          <div key={index} className="relative">
-                            <img
-                              src={url}
-                              alt={`Gallery ${index + 1}`}
-                              className="object-cover w-full h-32 border rounded"
-                            />
-                            <IconButton
-                              onClick={() =>
-                                removeImage(index, "PictureGallery")
-                              }
-                              className="absolute text-white bg-red-500 top-1 right-1"
-                              size="small"
-                            >
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  
+                  )}
+                </FormControl>
 
+                {/* References Section */}
+                <FormControl fullWidth size="small">
+                  <label variant="subtitle1" className="form-label">
+                    References
+                  </label>
+                  <div className="flex space-x-2">
+                    <TextField
+                      placeholder="Add Reference"
+                      value={currentReference}
+                      onChange={(e) => setCurrentReference(e.target.value)}
+                      fullWidth
+                      size="small"
+                    />
+                    <Button
+                      onClick={addReference}
+                      variant="outlined"
+                      startIcon={<AddIcon />}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {References.length > 0 && (
+                    <div className="space-y-2">
+                      {References.map((ref, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-2 rounded bg-gray-50"
+                        >
+                          <span className="text-sm">{ref}</span>
+                          <IconButton
+                            onClick={() => removeReference(index)}
+                            size="small"
+                            color="error"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </FormControl>
+
+                {/* Video Gallery Section */}
+                <FormControl fullWidth size="small">
+                  <label variant="subtitle1" className="form-label">
+                    Video Gallery
+                  </label>
+                  <div className="flex space-x-2">
+                    <TextField
+                      placeholder="Add Video URL"
+                      value={currentVideo}
+                      onChange={(e) => setCurrentVideo(e.target.value)}
+                      fullWidth
+                      size="small"
+                    />
+                    <Button
+                      onClick={addVideo}
+                      variant="outlined"
+                      startIcon={<AddIcon />}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {VideoGallery.length > 0 && (
+                    <div className="space-y-2">
+                      {VideoGallery.map((url, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-2 rounded bg-gray-50"
+                        >
+                          <span className="text-sm truncate">{url}</span>
+                          <IconButton
+                            onClick={() => removeVideo(index)}
+                            size="small"
+                            color="error"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </FormControl>
+
+                {/* Content Image Upload */}
+                <div className="space-y-2">
+                  <label variant="subtitle1" className="form-label">
+                    Content Image
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) =>
+                        handleSingleImageUpload(e, "ContentImage")
+                      }
+                      style={{ display: "none" }}
+                      id="content-image-upload"
+                      disabled={contentImageLoading}
+                    />
+                    <label htmlFor="content-image-upload">
+                      <Button
+                        variant="outlined"
+                        component="span"
+                        startIcon={
+                          contentImageLoading ? (
+                            <CircularProgress size={20} />
+                          ) : (
+                            <CloudUploadIcon />
+                          )
+                        }
+                        disabled={contentImageLoading}
+                        className="cursor-pointer"
+                      >
+                        {contentImageLoading ? "Uploading..." : "Upload Image"}
+                      </Button>
+                    </label>
+                  </div>
+                  {ContentImage && (
+                    <div className="relative w-32 h-32">
+                      <img
+                        src={ContentImage}
+                        alt="Content"
+                        className="object-cover w-full h-full border rounded"
+                      />
+                      <IconButton
+                        onClick={() => updateState({ ContentImage: "" })}
+                        className="absolute text-white bg-red-500 top-1 right-1"
+                        size="small"
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </div>
+                  )}
+                </div>
+
+                {/* Picture Gallery Upload */}
+                <div className="space-y-2">
+                  <label variant="subtitle1" className="form-label">
+                    Picture Gallery
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) =>
+                        handleMultipleImageUpload(e, "PictureGallery")
+                      }
+                      style={{ display: "none" }}
+                      id="picture-gallery-upload"
+                      disabled={pictureGalleryLoading}
+                    />
+                    <label htmlFor="picture-gallery-upload">
+                      <Button
+                        variant="outlined"
+                        component="span"
+                        startIcon={
+                          pictureGalleryLoading ? (
+                            <CircularProgress size={20} />
+                          ) : (
+                            <CloudUploadIcon />
+                          )
+                        }
+                        disabled={pictureGalleryLoading}
+                        className="cursor-pointer"
+                      >
+                        {pictureGalleryLoading
+                          ? "Uploading..."
+                          : "Upload Images"}
+                      </Button>
+                    </label>
+                  </div>
+                  {PictureGallery.length > 0 && (
+                    <div className="grid grid-cols-2 gap-2">
+                      {PictureGallery.map((url, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={url}
+                            alt={`Gallery ${index + 1}`}
+                            className="object-cover w-full h-32 border rounded"
+                          />
+                          <IconButton
+                            onClick={() => removeImage(index, "PictureGallery")}
+                            className="absolute text-white bg-red-500 top-1 right-1"
+                            size="small"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
-                {/* Submit Button */}
-                  <Button
-                   onClick={__handleSaveContent}
-                    disabled={isLoading}
-                    className="submit-button"
-                  >
-                    {isLoading ? (
-                      <CircularProgress size={24} color="inherit" />
-                    ) : content_id ? (
-                      "Update Content"
-                    ) : (
-                      "Save Content"
-                    )}
-                    
-                  </Button>
+              {/* Submit Button */}
+              <Button
+                onClick={__handleSaveContent}
+                disabled={isLoading}
+                className="submit-button"
+              >
+                {isLoading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : content_id ? (
+                  "Update Content"
+                ) : (
+                  "Save Content"
+                )}
+              </Button>
+            </Paper>
 
-              </Paper>
-
-             {/* Table */}
-              <Paper elevation={3} sx={{ p: 2, borderRadius: 2,marginTop:4 }}> 
-                  <DataGrid
-                  className="custom-data-grid"
-                    rows={rows}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5, 10, 20]}
-                    disableSelectionOnClick
-                    loading={isLoading}
-                    autoHeight
-                    pagination
-                  />
-                </Paper>
-            </div>
-      </div>
+            {/* Table */}
+            <Paper elevation={3} sx={{ p: 2, borderRadius: 2, marginTop: 4 }}>
+              <DataGrid
+                className="custom-data-grid"
+                rows={rows}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 20]}
+                disableSelectionOnClick
+                loading={isLoading}
+                autoHeight
+                pagination
+              />
+            </Paper>
+          </div>
+        </div>
       </div>
 
       {/* Toast Notification */}

@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import bellicon from "../../assets/images/bellicon.png";
 import messageicon from "../../assets/images/mail.png";
+import api from "../../api";
 
-function Doctorheader() {
+function CommonHeader() {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,22 @@ function Doctorheader() {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const doctortokens = localStorage.getItem("token");
+  const doctordetails = JSON.parse(localStorage.getItem("user"));
+
+  const [user, setuser] = useState({});
+  const getdoctorby_id = async () => {
+    try {
+      const resp = await api.get(`api/v1/admin/GetAsset/${doctordetails._id}`);
+      setuser(resp.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getdoctorby_id();
   }, []);
 
   const SearchIcon = () => (
@@ -110,7 +127,7 @@ function Doctorheader() {
   return (
     <div>
       {/* Header */}
-      <header className="bg-[white] shadow-sm px-4 sm:px-6 lg:px-9 py-3 flex flex-col lg:flex-row items-stretch lg:items-center gap-3 sm:gap-4 justify-between relative">
+      <header className="bg-[#F6F7FF] shadow-sm px-4 sm:px-6 lg:px-9 py-3 flex flex-col lg:flex-row items-stretch lg:items-center gap-3 sm:gap-4 justify-between relative">
         {/* Search Bar */}
         <div className="flex flex-row items-center order-2 w-full pl-12 lg:w-auto lg:order-1 sm:pl-8 lg:pl-80">
           <input
@@ -118,7 +135,7 @@ function Doctorheader() {
             placeholder="Search by keyword..."
             className="w-52 sm:w-72 md:w-80 px-3 py-2 sm:px-5 sm:py-4 h-10 sm:h-14 bg-[#E9EBFF] rounded-l-lg text-sm placeholder:text-black/50 outline-none"
           />
-          <button className="px-3 sm:px-5 h-10 sm:h-14 bg-[#E9EBFF] rounded-r-lg hover:bg-[#e5630a] transition-colors flex items-center justify-center">
+          <button className="px-3 sm:px-5 h-10 sm:h-14 bg-[#52677D] rounded-r-lg hover:bg-[#e5630a] transition-colors flex items-center justify-center">
             <SearchIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
@@ -130,7 +147,7 @@ function Doctorheader() {
             <div className="w-4 h-4 bg-[#525FE1] rounded-sm flex items-center justify-center">
               <span className="text-xs text-white">अ</span>
             </div>
-            <span className="text-xs text-black sm:text-sm">English</span>
+            <span className="text-xs text-black/50 sm:text-sm">English</span>
             <ChevronDownIcon />
           </div>
           {/* Notifications */}
@@ -159,15 +176,14 @@ function Doctorheader() {
           >
             <div
               className="w-10 h-10 bg-gray-300 bg-center bg-cover rounded-full sm:w-12 sm:h-12"
-              // style={{ backgroundImage: `url(${doctordetails.user.profile_pic})` }}
+              style={{ backgroundImage: `url(${user?.ProfilePicture})` }}
             ></div>
             {/* Hide text on xs screens to avoid overflow */}
             <div className=" xs:block">
-              <div className="text-black text-16px sm:text-sm truncate max-w-[auto]">
-                Welcome Admin
-              </div>
-              <div className="text-black text-16px sm:text-sm truncate max-w-[auto]">
-                Admin
+              <div className="text-black text-xs sm:text-sm truncate max-w-[auto]">{`Hello ${doctordetails?.AssetName|| "Admin"}`}</div>
+              <div className="text-black/50 text-xs sm:text-sm truncate max-w-[auto]">
+                {/* {doctordetails?.AssetType} */}
+                {user?.AssetType || "Admin"}
               </div>
             </div>
             {isOpen && (
@@ -178,39 +194,19 @@ function Doctorheader() {
                 <ul className="py-2">
                   {/* Profile */}
                   <li
-                    onClick={() => navigate("/editdoctorprofile")}
-                    className="flex items-center gap-3 px-4 py-3 transition duration-200 ease-in-out cursor-pointer hover:bg-blue-50"
+                    onClick={() => navigate("/change-password")}
+                    className="flex items-center gap-3 px-4 py-3 transition duration-200 ease-in-out cursor-pointer"
                   >
-                    <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
-                      <svg
-                        className="w-5 h-5 text-blue-500"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M5.121 17.804A9.937 9.937 0 0112 15c2.21 0 4.21.721 5.879 1.927M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </div>
-                    <span className="font-medium text-gray-700">Profile</span>
+                    <span className="font-medium text-gray-700">
+                      Change Password
+                    </span>
                   </li>
 
                   {/* Divider */}
                   <li className="mx-4 border-t border-gray-200"></li>
 
                   {/* Logout */}
-                  <li className="flex items-center gap-3 px-4 py-3 transition duration-200 ease-in-out cursor-pointer hover:bg-red-50">
-                    <div className="flex items-center justify-center w-8 h-8 bg-red-100 rounded-full">
-                      <svg
-                        className="w-5 h-5 text-red-500"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M17 16l4-4m0 0l-4-4m4 4H7" />
-                      </svg>
-                    </div>
+                  <li className="flex items-center gap-3 px-4 py-3 transition duration-200 ease-in-out cursor-pointer">
                     <span className="font-medium text-red-600">Logout</span>
                   </li>
                 </ul>
@@ -219,8 +215,90 @@ function Doctorheader() {
           </div>
         </div>
       </header>
+
+      <div
+        class="modal fade"
+        id="changePasswordModal"
+        tabindex="-1"
+        aria-labelledby="changePasswordModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="changePasswordModalLabel">
+                Change Password
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div class="modal-body">
+              <form id="changePasswordForm">
+                <div class="mb-3">
+                  <label for="currentPassword" class="form-label">
+                    Current Password
+                  </label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="currentPassword"
+                    placeholder="Enter current password"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="newPassword" class="form-label">
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="newPassword"
+                    placeholder="Enter new password"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label">
+                    Confirm New Password
+                  </label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirmPassword"
+                    placeholder="Confirm new password"
+                    required
+                  />
+                </div>
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                form="changePasswordForm"
+              >
+                Update Password
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
-export default Doctorheader;
+export default CommonHeader;
