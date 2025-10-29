@@ -10,6 +10,7 @@ code {
     monospace;
     --button-back-color:#52677D52677D;
   }
+
 body, html {
   font-family: var(--primary-font);
  
@@ -47,20 +48,6 @@ body, html {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* =================================css for landing page==================================================== */
 
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wdth,wght@100;300;400;500;700&display=swap'); */
@@ -68,10 +55,10 @@ body, html {
 
   /* --roboto: 'Roboto', sans-serif;     */
   /* line-height: 1.5; */
-  --opensans: 'Open Sans', sans-serif;
+  /* --opensans: 'Open Sans', sans-serif; */
   --primary: #43576a;
   --primay: #525fe2;
-  /* --primary:#43576a */
+  /* --primary:#525fe2 */
   --secondary: #f86f03;
   --white: #ffffff;
   --black: #000000;
@@ -97,11 +84,13 @@ body, html {
 
 
   /* Global Font Variables */
-  --primary-font: 'Inter', sans-serif;
+  /* --primary-font: 'Inter', sans-serif; */
+    --primary-font: 'Poppins', sans-serif;
+    /* --primary-font: 'Montserrat', sans-serif; */
   --heading-font: 'Lato', sans-serif;
   --sub-heading-font: 'Poppins', sans-serif;
   --body-font: 'Inter', sans-serif;
-
+  
 
 }
 

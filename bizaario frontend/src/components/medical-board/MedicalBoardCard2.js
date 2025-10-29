@@ -71,7 +71,7 @@ const MedicalBoardCard2 = () => {
               <h5 className="text-base font-bold text-black truncate sm:text-lg">
                 {item.name}
               </h5>
-              <p className="text-xs text-gray-700 break-words sm:text-sm">
+              <p className="text-base text-gray-700 break-words sm:text-base">
                 {item.exp}
               </p>
             </div>
@@ -79,15 +79,15 @@ const MedicalBoardCard2 = () => {
 
           {/* Location & Specialization */}
           <div className="px-4 py-3 mt-16 space-y-2">
-            <div className="flex items-start text-sm text-black">
+            <div className="flex items-start text-base text-black">
               <img
                 src={locationIcon}
                 alt="location"
                 className="flex-shrink-0 w-5 h-5 mr-2"
               />
-              <span>{item.location}</span>
+              <span>{item?.location || "N/A"}</span>
             </div>
-            <div className="flex items-start text-sm">
+            <div className="flex items-start text-base">
               <img
                 src={workIcon}
                 alt="work"
@@ -95,7 +95,9 @@ const MedicalBoardCard2 = () => {
               />
               <span>
                 <strong>Specializes in:</strong>{" "}
-                <span className="text-gray-600">{item.Specializes}</span>
+                <span className="text-base text-gray-600">
+                  {item.Specializes || "N/A"}
+                </span>
               </span>
             </div>
           </div>

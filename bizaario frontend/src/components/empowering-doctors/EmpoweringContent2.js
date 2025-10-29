@@ -34,7 +34,7 @@ const EmpoweringContent2 = () => {
   }, []);
 
   return (
-    <div className="relative mt-4 doctor-slider">
+    <div className="relative mt-4 doctor-slider ">
       <Carousel
         arrows={false}
         responsive={responsive}
@@ -50,7 +50,7 @@ const EmpoweringContent2 = () => {
             state={{ article: element }}
             className="block h-full text-decoration-none"
           >
-            <div className="flex flex-col h-full p-2 transition-shadow duration-300 bg-gray-200 cursor-pointer rounded-2xl hover:shadow-lg">
+            <div className="flex flex-col h-full p-2 transition-shadow duration-300 border cursor-pointer rounded-2xl hover:shadow-lg">
               <img
                 src={element.ContentImage}
                 alt="doctor"
@@ -67,7 +67,7 @@ const EmpoweringContent2 = () => {
                   <p className="text-lg font-bold text-black">
                     {element.ContentTitle}
                   </p>
-                  <p className="mt-1 text-sm text-gray-700 line-clamp-3">
+                  <p className="mt-1 text-gray-700 text- line-clamp-3">
                     {element.ShortDescription}
                   </p>
                 </div>

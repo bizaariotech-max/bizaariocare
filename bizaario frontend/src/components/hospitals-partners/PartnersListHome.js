@@ -114,7 +114,7 @@ const PartnersListHome = () => {
                     <h5 className="text-base font-bold text-black break-words sm:text-lg">
                       {item.name}
                     </h5>
-                    <p className="text-xs text-gray-700 break-words sm:text-sm">
+                    <p className="text-base text-gray-700 break-words sm:text-base">
                       {item.exp}
                     </p>
                   </div>
@@ -128,19 +128,19 @@ const PartnersListHome = () => {
                       alt="location"
                       className="w-5 sm:w-6"
                     />
-                    <span className="text-sm text-black break-words sm:text-base">
+                    <span className="text-base text-black break-words sm:text-base">
                       {item.location}
                     </span>
                   </div>
                   <div className="flex items-start space-x-2">
                     <img src={clockIcon} alt="clock" className="w-5 sm:w-6" />
-                    <span className="text-sm text-black sm:text-base">
+                    <span className="text-base text-black sm:text-base">
                       Hours: {item?.hours ? item.hours : "24/7"}
                     </span>
                   </div>
                   <div className="flex items-start space-x-2">
                     <img src={webIcon} alt="web" className="w-5 sm:w-6" />
-                    <span className="text-sm text-black break-words sm:text-base">
+                    <span className="text-base text-black break-words sm:text-base">
                       Website: {item.Website}
                     </span>
                   </div>
@@ -148,7 +148,7 @@ const PartnersListHome = () => {
 
                 {/* ✅ Buttons */}
                 <div className="flex flex-col gap-3 px-4 pb-4 mt-auto">
-                  <button 
+                  <button
                     className="bg-[#52677D] text-white rounded-lg py-3 text-sm sm:text-base font-semibold"
                     onClick={() => handleViewProfile(item.id)}
                   >
