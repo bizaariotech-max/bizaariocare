@@ -31,6 +31,7 @@ background: rgba(189, 196, 212, 0.30);
 
 .news-card h6 {
   font-size: 1rem;
+  font-family: var(--heading-font);
 }
 
 .content-style {

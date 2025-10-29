@@ -1,5 +1,5 @@
 .live-sessions-container {
-  font-family: Arial, sans-serif;
+  font-family: var(--primary-font);
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
@@ -8,6 +8,7 @@
 .live-sessions-container h1 {
   color: #333;
   margin-bottom: 20px;
+  font-family: var(--heading-font);
 }
 
 .clinic-section {
@@ -20,6 +21,7 @@
 .clinic-section h2 {
   color: #444;
   margin-bottom: 15px;
+  font-family: var(--heading-font);
 }
 
 .doctor-info-header {
@@ -43,6 +45,7 @@
 .filters-section h3 {
   margin-bottom: 10px;
   color: #555;
+  font-family: var(--heading-font);
 }
 
 .filter-controls {

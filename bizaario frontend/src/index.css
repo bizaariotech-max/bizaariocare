@@ -1,6 +1,6 @@
 body {
   margin: 0;
-font-family: sans-serif;
+  font-family: var(--primary-font);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -11,7 +11,7 @@ code {
     --button-back-color:#52677D52677D;
   }
 body, html {
-  font-family: sans-serif;
+  font-family: var(--primary-font);
  
   overflow-x: hidden;
   height: 100%;
@@ -23,11 +23,13 @@ body, html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: var(--primary-font);
 }
 
-
-
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 
 @tailwind base;
@@ -69,6 +71,7 @@ body, html {
   --opensans: 'Open Sans', sans-serif;
   --primary: #43576a;
   --primay: #525fe2;
+  /* --primary:#43576a */
   --secondary: #f86f03;
   --white: #ffffff;
   --black: #000000;
@@ -93,8 +96,11 @@ body, html {
 
 
 
-  --heading-font: 'Lora', serif;
-  --sub-heading-font: sans-serif;
+  /* Global Font Variables */
+  --primary-font: 'Inter', sans-serif;
+  --heading-font: 'Lato', sans-serif;
+  --sub-heading-font: 'Poppins', sans-serif;
+  --body-font: 'Inter', sans-serif;
 
 
 }

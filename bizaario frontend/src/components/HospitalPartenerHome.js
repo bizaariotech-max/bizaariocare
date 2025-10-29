@@ -170,8 +170,8 @@ const HospitalPartenerHome = () => {
                   <select className="form-select border-start-0">
                     <option value="">Select Country</option>
                     <option value="">India</option>
-                    <option value="">Usa</option>
-                    <option value="">SriLanka</option>
+                    <option value="">USA</option>
+                    <option value="">Sri Lanka</option>
                   </select>
                 </div>
               </div>

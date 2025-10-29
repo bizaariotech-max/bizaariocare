@@ -9,6 +9,7 @@
 }
   .bannerContent h1{
     font-size: 62px;
+    font-family: var(--heading-font);
   }
 title{
     font-size: 62px;

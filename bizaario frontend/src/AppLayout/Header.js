@@ -43,7 +43,7 @@ const Header = () => {
 
         {/* Menu Items */}
         <div className={`collapse navbar-collapse ${menuOpen ? 'show' : ''}`} id="navbarNav">
-          <ul className="navbar-nav mx-auto">
+          <ul className="mx-auto navbar-nav">
             <li><NavLink to="/" className='nav-link' onClick={closeMenu}>Home</NavLink></li>
             <li><NavLink to="/about" className='nav-link' onClick={closeMenu}>About</NavLink></li>
             <li><NavLink to="/partners" className='nav-link' onClick={closeMenu}>Hospital Partners</NavLink></li>
@@ -53,7 +53,7 @@ const Header = () => {
           </ul>
 
           {/* Right Side Buttons */}
-          <div className="d-flex align-items-center gap-2 mb-lg-0 mb-3">
+          <div className="gap-2 mb-3 d-flex align-items-center mb-lg-0">
             {/* Language Selector */}
             <div className="dropdown">
               <button
