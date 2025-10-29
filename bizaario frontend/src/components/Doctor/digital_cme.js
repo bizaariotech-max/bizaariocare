@@ -524,14 +524,14 @@ useEffect(() => {
   return (
     <div>
       {/* <Doctorheader /> */}
-      <CommonHeader/>
+      <CommonHeader />
 
       <div className="layout">
         <Doctorsidebar />
         <div className="content-wrapper">
           <div className="main-content">
             <div className="profile-header">
-              <h3>Enter Details for Digital Cme</h3>
+              <h3>Enter Details for Digital CME</h3>
               <p>
                 Add or update the required details for the digital cme to keep
                 records accurate and complete.
