@@ -20,25 +20,26 @@ const HeroSlickSlider = () => {
 //   };
 
   return (
-    <div className=" mx-auto  hero-slick-slider">
-                    <div > 
-                    <div className="item banner-bg "  style={sliderArray.sliderImage}>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-md-8">
-                               
-                                <div className="hero-content">
-                                    <h1 className="hero-title">{sliderArray.bannerTitle}</h1>
-                                    <p className="hero-text " style={{fontFamily:"sans-serif"}}>{sliderArray.dsc}</p>
-                                    <div className="hero-btns">
-                                        {/* <div>
-                                            <a href="/" className="btn  nav-btn-style2  text-white">See How It  Works</a>
+    <div className="mx-auto  hero-slick-slider">
+      <div>
+        <div className="item banner-bg " style={sliderArray.sliderImage}>
+          <div className="container">
+            <div className="row">
+              <div className="col-md-8">
+                <div className="hero-content">
+                  <h1 className="hero-title">{sliderArray.bannerTitle}</h1>
+                  <p className="hero-text paragraph">{sliderArray.dsc}</p>
+                  <div className="hero-btns">
+                    {/* <div>
+                                            <a href="/" className="text-white btn nav-btn-style2">See How It  Works</a>
                                         </div> */}
-                                        <div>
-                                            <a href="/" className="join-our-network" style={{fontFamily:"sans-serif"}}>Join Our Network</a>
-                                        </div> 
-                                    </div>
-                                    {/* <div className="rounded-buttons">
+                    <div>
+                      <a href="/" className="join-our-network paragraph">
+                        Join Our Network
+                      </a>
+                    </div>
+                  </div>
+                  {/* <div className="rounded-buttons">
                                         <div className="pill-button ">
                                             <strong>10,000+</strong> Hospitals connected
                                         </div>
@@ -46,42 +47,37 @@ const HeroSlickSlider = () => {
                                             <strong>10K+ </strong> doctors connected
                                         </div> 
                                     </div> */}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    </div>
-
-<div className="container">
-                <div className="banner-data" > 
-                 
-                    {/* <div className="container">
+      <div className="container">
+        <div className="banner-data">
+          {/* <div className="container">
                         <div className="row">
                             <div className="col-md-8">
                                
                                 </div>
                             </div>
                         </div> */}
-                        <div className="banner-data1">
-                            <h3>120K</h3>
-                            Patient Referral
-                        </div>
-                        <div className="banner-data1">
-                            <h3>2K</h3>
-                            Doctors Connected
-                        </div>
-                        <div className="banner-data1">
-                            <h3>0.5K</h3>
-                            Hospitals Connected
-                        </div>
-                    </div>
-                    </div>
-                    </div>
-                 
-            
-  
+          <div className="banner-data1">
+            <h3>120K</h3>
+            Patient Referral
+          </div>
+          <div className="banner-data1">
+            <h3>2K</h3>
+            Doctors Connected
+          </div>
+          <div className="banner-data1">
+            <h3>0.5K</h3>
+            Hospitals Connected
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

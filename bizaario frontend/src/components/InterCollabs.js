@@ -18,10 +18,9 @@ const InterCollabs = () => {
               <div className="container ">
                  <div className="title">
                         <h2
-                            className="fw-semibold"
+                            className="fw-semibold heading"
                             style={{
                             color: "#000000",
-                            fontFamily:"Lora",
                             fontSize: "36px",
                             fontStyle: "normal",
                             fontWeight: 700,
@@ -32,10 +31,9 @@ const InterCollabs = () => {
                         </h2>
 
                         <p
-                            className="light-color mb-0"
+                            className="light-color mb-0 paragraph"
                             style={{
                             color: "#52677D",
-                            fontFamily:"sans-serif",
                             fontSize: "16px",
                             fontStyle: "normal",
                             fontWeight: 400,

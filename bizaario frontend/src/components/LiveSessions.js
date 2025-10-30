@@ -106,9 +106,9 @@ const LiveSessions = () => {
                     {/* Text Content */}
                     <div>
                         <p
+                        className="heading"
                         style={{
                             color: "white",
-                            fontFamily: "Lora",
                             fontSize: "16px",
                             fontStyle: "normal",
                             fontWeight: 700,
@@ -120,9 +120,9 @@ const LiveSessions = () => {
                         </p>
 
                         <p
+                        className="paragraph"
                         style={{
                             color: "white",
-                            fontFamily: "Poppins",
                             fontSize: "12px",
                             fontStyle: "normal",
                             fontWeight: 400,
@@ -137,9 +137,9 @@ const LiveSessions = () => {
                     <div style={{display:'flex',gap:"5px"}}>
                           <img src={clock} style={{width: "14px",height: "14px",display:"inline-block"}} alt=''></img> 
                            <p
+                            className="paragraph"
                             style={{
                                 color: "white",
-                                fontFamily: "Poppins",
                                 fontSize: "12px",
                                 fontStyle: "normal",
                                 fontWeight: 400,
@@ -152,9 +152,8 @@ const LiveSessions = () => {
                  
                    <div style={{display:'flex',gap:"5px"}}>
                           <img src={calender} style={{width: "14px",height: "14px",display:"inline-block"}} alt=''></img> 
-                            <p  style={{
+                            <p className="paragraph" style={{
                                 color: "white",
-                                fontFamily: "Poppins",
                                 fontSize: "12px",
                                 fontStyle: "normal",
                                 fontWeight: 400,

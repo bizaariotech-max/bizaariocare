@@ -9,8 +9,13 @@ const OnlineClinic = () => {
         <div className="container ">
           <div className="row">
             <div className="col-lg-8 col-12">
-              <h2 className="fw-semibold " style={{fontSize:"36px",fontFamily:"Lora",color:"#000000",fontWeight:700}}>Online Clinics</h2>
-              <p className="light-color" style={{fontFamily:"sans-serif",color:"#52677D"}}>
+              <h2
+                className="fw-semibold heading"
+                style={{ fontSize: "36px", color: "#000000", fontWeight: 700 }}
+              >
+                Online Clinics
+              </h2>
+              <p className="light-color paragraph" style={{ color: "#52677D" }}>
                 Learn from leading doctors and specialists through focused,
                 digestible video content.
               </p>

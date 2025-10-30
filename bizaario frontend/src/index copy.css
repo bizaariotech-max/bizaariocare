@@ -5,122 +5,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ========================================
-   COMPREHENSIVE FONT CONSISTENCY OVERRIDES
-   ======================================== */
-
-/* Override all hardcoded fonts across all CSS files */
-.mb-page,
-.hero-container,
-.hero-content,
-.hero-title,
-.hero-subtitle,
-.hero-stats,
-.mb-banner-content,
-.collaborations-section,
-.empowering-section,
-.awards-section,
-.testimonials-section,
-.news-section,
-.footer-section,
-.live-sessions-section,
-.hospital-partners-section {
-  font-family: var(--primary-font) !important;
-}
-
-/* Headings across all components */
-.mb-banner-content h1,
-.hero-title,
-.collaborations-section h1,
-.collaborations-section h2,
-.empowering-section h1,
-.empowering-section h2,
-.awards-section h1,
-.awards-section h2,
-.testimonials-section h1,
-.testimonials-section h2,
-.news-section h1,
-.news-section h2,
-.live-sessions-section h1,
-.live-sessions-section h2,
-.hospital-partners-section h1,
-.hospital-partners-section h2 {
-  font-family: var(--heading-font) !important;
-}
-
-/* Body text across all components */
-.mb-banner-content p,
-.hero-subtitle,
-.collaborations-section p,
-.empowering-section p,
-.awards-section p,
-.testimonials-section p,
-.news-section p,
-.live-sessions-section p,
-.hospital-partners-section p {
-  font-family: var(--body-font) !important;
-}
-
-/* Override specific CSS classes that use hardcoded fonts */
-.hero-stats h3,
-.hero-stats p,
-.mb-banner-content h1,
-.mb-banner-content p {
-  font-family: var(--heading-font) !important;
-}
-
-.hero-stats p {
-  font-family: var(--body-font) !important;
-}
-
-/* Global overrides for common CSS patterns */
-[class*="title"],
-[class*="heading"],
-[class*="header"] {
-  font-family: var(--heading-font) !important;
-}
-
-[class*="text"],
-[class*="content"],
-[class*="description"],
-[class*="paragraph"] {
-  font-family: var(--body-font) !important;
-}
-
-[class*="subtitle"],
-[class*="subheading"] {
-  font-family: var(--sub-heading-font) !important;
-}
-
-/* Override all Roboto, Lora, Arial font declarations */
-* {
-  font-family: var(--primary-font) !important;
-}
-
-/* Restore proper font hierarchy */
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6,
-[class*="title"],
-[class*="heading"] {
-  font-family: var(--heading-font) !important;
-}
-
-p, span, div:not([class*="title"]):not([class*="heading"]),
-.paragraph, .text, .content {
-  font-family: var(--body-font) !important;
-}
-
-/* Ensure buttons use primary font */
-button, .btn, .button,
-input[type="button"], input[type="submit"] {
-  font-family: var(--primary-font) !important;
-}
-
-/* Form elements */
-input, textarea, select {
-  font-family: var(--primary-font) !important;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -141,11 +25,6 @@ body, html {
   padding: 0;
   box-sizing: border-box;
   font-family: var(--primary-font);
-}
-
-html,
-body {
-  scroll-behavior: smooth;
 }
 
 /** @import must precede all other statements */
@@ -170,98 +49,6 @@ body {
 
 
 /* =================================css for landing page==================================================== */
-
-/* Global Typography Classes */
-.body {
-  font-family: var(--body-font);
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--text-color);
-}
-
-.heading {
-  font-family: var(--heading-font);
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--text-color);
-}
-
-.paragraph {
-  font-family: var(--body-font);
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--text-color);
-}
-
-.subheading {
-  font-family: var(--sub-heading-font);
-  font-weight: 600;
-  line-height: 1.4;
-  color: var(--text-color);
-}
-
-/* STRICT GLOBAL FONT ENFORCEMENT - Override all inconsistent fonts */
-* {
-  font-family: var(--primary-font) !important;
-}
-
-/* Specific element overrides with proper font hierarchy */
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: var(--heading-font) !important;
-}
-
-p, .paragraph, .text, .description, .content {
-  font-family: var(--body-font) !important;
-}
-
-.subheading, .subtitle, .sub-title {
-  font-family: var(--sub-heading-font) !important;
-}
-
-/* Button font consistency */
-button, .btn, .button, input[type="button"], input[type="submit"] {
-  font-family: var(--primary-font) !important;
-}
-
-/* Form elements font consistency */
-input, textarea, select, .form-control, .form-input {
-  font-family: var(--primary-font) !important;
-}
-
-/* Navigation and menu font consistency */
-.nav, .navbar, .menu, .navigation {
-  font-family: var(--primary-font) !important;
-}
-
-/* Card and component font consistency */
-.card, .card-title, .card-text, .card-body {
-  font-family: var(--primary-font) !important;
-}
-
-.card-title, .card-header {
-  font-family: var(--heading-font) !important;
-}
-
-/* Override specific problematic fonts */
-[style*="font-family: 'Roboto'"],
-[style*="font-family: Roboto"],
-[style*="font-family: 'Lora'"],
-[style*="font-family: Lora"],
-[style*="font-family: 'Arial'"],
-[style*="font-family: Arial"],
-[style*="font-family: sans-serif"] {
-  font-family: var(--primary-font) !important;
-}
-
-/* Ensure headings use heading font even with inline styles */
-h1[style*="font-family"],
-h2[style*="font-family"],
-h3[style*="font-family"],
-h4[style*="font-family"],
-h5[style*="font-family"],
-h6[style*="font-family"] {
-  font-family: var(--heading-font) !important;
-}
 
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wdth,wght@100;300;400;500;700&display=swap'); */
 :root {
@@ -298,14 +85,11 @@ h6[style*="font-family"] {
 
   /* Global Font Variables */
   /* --primary-font: 'Inter', sans-serif; */
-    /* --primary-font: 'Poppins', sans-serif; */
-    --primary-font: 'Montserrat', sans-serif;
-  /* --heading-font: 'Lato', sans-serif; */
-  --heading-font:'Montserrat',sans-serif;
-  /* --sub-heading-font: 'Poppins', sans-serif; */
-  --sub-heading-font: 'Arial',sans-serif;
-  /* --body-font: 'Inter', sans-serif; */
-  --body-font:'Arial',sans-serif;
+    --primary-font: 'Poppins', sans-serif;
+    /* --primary-font: 'Montserrat', sans-serif; */
+  --heading-font: 'Lato', sans-serif;
+  --sub-heading-font: 'Poppins', sans-serif;
+  --body-font: 'Inter', sans-serif;
   
 
 }
