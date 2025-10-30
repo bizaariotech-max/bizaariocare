@@ -13,54 +13,61 @@ const InterCollabs = () => {
     }
   };
   return (
-      <>
-          <section className='international-collaborations spacing-top' >
-              <div className="container ">
-                 <div className="title">
-                        <h2
-                            className="fw-semibold heading"
-                            style={{
-                            color: "#000000",
-                            fontSize: "36px",
-                            fontStyle: "normal",
-                            fontWeight: 700,
-                            lineHeight: "normal",
-                            }}
-                        >
-                            International Collaborations
-                        </h2>
+    <>
+      <section className="international-collaborations spacing-top">
+        <div className="container ">
+          <div className="title">
+            <h2
+              className="fw-semibold heading"
+              style={{
+                // color: "#000000",
+                // fontSize: "36px",
+                // fontStyle: "normal",
+                fontWeight: 700,
+                lineHeight: "normal",
+              }}
+            >
+              International Collaborations
+            </h2>
 
-                        <p
-                            className="light-color mb-0 paragraph"
-                            style={{
-                            color: "#52677D",
-                            fontSize: "16px",
-                            fontStyle: "normal",
-                            fontWeight: 400,
-                            lineHeight: "normal",
-                            }}
-                        >
-                            Learn from leading doctors and specialists through focused, digestible
-                            video content.
-                        </p>
-                        </div>
+            <p
+              className="mb-0 light-color paragraph"
+              style={{
+                color: "#52677D",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
+              }}
+            >
+              Learn from leading doctors and specialists through focused,
+              digestible video content.
+            </p>
+          </div>
 
-                  <div className="my-4 medical-tab-buttons" style={{width:"200px"}}> 
-                    <button className={`flex-1 py-2 cutom-tab-style2 ${activeTab==='tab1' ? 'activeTab' : 'lightBg' }`}
-                        onClick={()=> setActiveTab('tab1')}>
-                        India
-                    </button>
-                    <button className={`flex-1 py-2 cutom-tab-style2 ${activeTab==='tab2' ? ' activeTab' : 'lightBg' }`}
-                        onClick={()=> setActiveTab('tab2')}
-                        >
-                        Ethiopia
-                    </button>
-                  </div>
-                <div >{renderContent()}</div>
-            </div>
-        </section>
-      </>
-  )
+          <div className="my-4 medical-tab-buttons" style={{ width: "200px" }}>
+            <button
+              className={`flex-1 py-2 cutom-tab-style2 ${
+                activeTab === "tab1" ? "activeTab" : "lightBg"
+              }`}
+              onClick={() => setActiveTab("tab1")}
+            >
+              India
+            </button>
+            <button
+              className={`flex-1 py-2 cutom-tab-style2 ${
+                activeTab === "tab2" ? " activeTab" : "lightBg"
+              }`}
+              onClick={() => setActiveTab("tab2")}
+            >
+              Ethiopia
+            </button>
+          </div>
+          <div>{renderContent()}</div>
+        </div>
+      </section>
+    </>
+  );
 }
 
 export default InterCollabs

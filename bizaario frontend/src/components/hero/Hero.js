@@ -52,13 +52,13 @@ return (
                                                   <p className="hero-text">{element.dsc}</p>
                                                   <div className="hero-btns ">
                                                       <div>
-                                                          <a href="/" className="btn  nav-btn-style2  text-white">See How It  Works</a>
+                                                          <a href="/" className="text-white btn nav-btn-style2">See How It  Works</a>
                                                       </div>
                                                       <div>
-                                                          <a href="/" className="btn  nav-btn-style">Join Our Network</a>
+                                                          <a href="/" className="btn nav-btn-style">Join Our Network</a>
                                                       </div> 
                                                   </div>
-                                                  <div className="rounded-buttons mt-4 ">
+                                                  <div className="mt-4 rounded-buttons ">
                                                       <div className="pill-button ">
                                                           <strong>10,000+</strong> Hospitals connected
                                                       </div>

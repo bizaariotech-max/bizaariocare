@@ -11,7 +11,10 @@ const OnlineClinic = () => {
             <div className="col-lg-8 col-12">
               <h2
                 className="fw-semibold heading"
-                style={{ fontSize: "36px", color: "#000000", fontWeight: 700 }}
+                style={{
+                  //  fontSize: "36px", color: "#000000",
+                  fontWeight: 700,
+                }}
               >
                 Online Clinics
               </h2>
