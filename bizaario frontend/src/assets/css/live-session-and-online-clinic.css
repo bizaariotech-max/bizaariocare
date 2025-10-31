@@ -1,5 +1,5 @@
 .appoint-table-style thead.table-heading {
-    background-color: #525fe1;
+    background-color: var(--primary);
     padding: 40px;
 }
 
@@ -22,7 +22,7 @@
 }
 
 select.form-select.border-start-0 {
-    color: #7f7f7f;
+    color: var(--gray2);
     border-radius: 10px;
     padding-block: 10px;
 }
@@ -39,6 +39,6 @@ select.form-select:focus {
 
 .live-session video {
     max-height: 400px;
-    background: #3a3e4a;
+    background: var(--primary);
     border-radius: 19px;
 }

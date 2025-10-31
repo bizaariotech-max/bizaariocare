@@ -149,13 +149,13 @@ const PartnersListHome = () => {
                 {/* ✅ Buttons */}
                 <div className="flex flex-col gap-3 px-4 pb-4 mt-auto">
                   <button
-                    className="bg-[#52677D] text-white rounded-lg py-3 text-sm sm:text-base font-semibold"
+                    className="bg-[var(--primary)] text-white rounded-lg py-3 text-sm sm:text-base font-semibold"
                     onClick={() => handleViewProfile(item.id)}
                   >
                     {/* Book An Appointment */}
                     View Profile{" "}
                   </button>
-                  <button className="bg-white text-[#52677D] border border-gray-300 rounded-lg py-3 text-sm sm:text-base font-semibold">
+                  <button className="bg-white text-[var(--primary)] border border-[var(--primary)] rounded-lg py-3 text-sm sm:text-base font-semibold">
                     Send Treatment Query
                   </button>
                 </div>

@@ -32,17 +32,18 @@
 @media screen and (min-width:992px) {
 
   #navbarNav ul li a {
-    font-weight: 600;
+    /* font-weight: 600; */
     font-family: var(--primary-font);
-    color: var(--black);
+    /* color: var(--black); */
+    /* padding: 8px 16px; */
+   
     transition: all 0.3s ease;
     position: relative;
-    padding: 8px 16px;
     border-radius: 6px;
   }
 
   #navbarNav ul li a:hover {
-    color: var(--primay);
+    color: var(--primary);
     background-color: rgba(82, 95, 226, 0.1);
     transform: translateY(-2px);
   }
@@ -50,7 +51,7 @@
   #navbarNav ul li .active {
     font-weight: 600;
     font-family: var(--primary-font);
-    color: var(--primay);
+    color: var(--primary);
     background-color: rgba(82, 95, 226, 0.15);
     border-radius: 6px;
   }
@@ -76,13 +77,13 @@
 }
 
 .main-navbar ul li a:hover {
-  color: var(--primay);
+  color: var(--primary);
   text-decoration: none;
 }
 
 .main-navbar .navbar-toggler {
   border: 0;
-  background-color: var(--primay);
+  background-color: var(--primary);
   border-radius: 8px;
   padding: 10px 12px;
   transition: all 0.3s ease;
@@ -108,14 +109,14 @@
 }
 
 #mainNavbar ul li .active {
-  color: var(--primay);
+  color: var(--primary);
   font-weight: 600;
   font-family: var(--primary-font);
 }
 
 .nav-btn-style {
-  border: 2px solid var(--primay);
-  color: var(--primay);
+  border: 2px solid var(--primary);
+  color: var(--primary);
   font-weight: 600;
   font-family: var(--primary-font);
   padding: 10px 20px;
@@ -126,16 +127,16 @@
 }
 
 .nav-btn-style:hover {
-  border-color: var(--primay);
-  background-color: var(--primay);
+  border-color: var(--primary);
+  background-color: var(--primary);
   color: var(--white);
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(82, 95, 226, 0.3);
 }
 
 .nav-btn-style2 {
-  border: 2px solid var(--primay);
-  background-color: var(--primay);
+  border: 2px solid var(--primary);
+  background-color: var(--primary);
   color: var(--white);
   font-weight: 600;
   font-family: var(--primary-font);
@@ -181,7 +182,7 @@
 
 .main-navbar .navbar-toggler {
   padding: 10px 12px;
-  background: linear-gradient(135deg, var(--primay) 0%, var(--primary) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
   color: var(--white);
   border-radius: 10px;
   border: none;
@@ -200,7 +201,7 @@
 
 
 #navbarNav ul li:hover a {
-  color: var(--primay);
+  color: var(--primary);
   transform: translateX(5px);
 }
 

@@ -6,10 +6,14 @@ import clock from '../../assets/images/clock.png';
 import calender from '../../assets/images/calendar.png';
 import { NavLink } from 'react-router-dom';
 
-const EmpoweringContent2 = () => {
+const EmpoweringContent = () => {
   const responsive = {
     superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 3 },
-    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3, partialVisibilityGutter: 10 },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+      partialVisibilityGutter: 10,
+    },
     tablet: { breakpoint: { max: 1024, min: 767 }, items: 2 },
     mobile: { breakpoint: { max: 767, min: 0 }, items: 1 },
   };
@@ -98,4 +102,4 @@ const EmpoweringContent2 = () => {
   );
 };
 
-export default EmpoweringContent2;
+export default EmpoweringContent;

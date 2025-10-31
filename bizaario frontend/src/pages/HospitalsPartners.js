@@ -185,10 +185,10 @@ const HospitalsPartners = () => {
 
         {/* Buttons */}
         <div className="flex flex-col flex-shrink-0 gap-3 px-4 py-4 mt-auto sm:px-6">
-          <button className="bg-[#52677D] text-white rounded-lg py-3 text-sm sm:text-base font-semibold">
+          <button className="bg-[var(--primary)] text-white rounded-lg py-3 text-sm sm:text-base font-semibold">
             Book An Appointment
           </button>
-          <button className="bg-white text-[#52677D] border border-gray-300 rounded-lg py-3 text-sm sm:text-base font-semibold">
+          <button className="bg-white text-[var(--primary)] border border-[var(--primary)] rounded-lg py-3 text-sm sm:text-base font-semibold">
             Send Treatment Query
           </button>
         </div>

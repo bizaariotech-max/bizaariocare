@@ -57,7 +57,7 @@ body, html {
   /* line-height: 1.5; */
   /* --opensans: 'Open Sans', sans-serif; */
   --primary: #43576a;
-  --primay: #525fe2;
+  --primary: #525fe2;
   /* --primary:#525fe2 */
   --secondary: #f86f03;
   --white: #ffffff;
@@ -330,7 +330,7 @@ button.owl-next span {
 }
 
 /* .btn-custom-white{
-   color: var(--primay);
+   color: var(--primary);
   border:1px solid #ffffff;
     border-radius: 8px;
   padding: 4px 16px;
@@ -351,7 +351,7 @@ button.owl-next span {
 .button-container .btn-custom:hover {
   background-color: var(--white);
   /* border: 1px solid ; */
-  color: var(--primay);
+  color: var(--primary);
 }
 
 .button-container.btn-custom-white:hover {
@@ -362,7 +362,7 @@ button.owl-next span {
 }
 
 .button-container .active-custom-tab {
-  color: var(--primay);
+  color: var(--primary);
   border: 1px solid #ffffff;
   border-radius: 8px;
   padding: 4px 16px;
