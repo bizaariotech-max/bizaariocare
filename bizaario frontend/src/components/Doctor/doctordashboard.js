@@ -30,6 +30,12 @@ import calendar from "../../assets/images/calendar.png";
 import responsivetab from "../../utils/responsive_carousel";
 import { __getCommenApiDataList } from "../../utils/api/commonApi";
 import CommonHeader from "../common/CommonHeader";
+// import Empowering from "../Empowering";
+// import MedicalBoardPartnerHospitals from "../MedicalBoardPartnerHospitals";
+// import HospitalPartenerHome from "../HospitalPartenerHome";
+// import InterCollabs from "../InterCollabs";
+// import LiveSessions2 from "../live-sessions-online-clinic/LiveSessions";
+// import OnlineClinic2 from "../live-sessions-online-clinic/OnlineClinic";
 
 function cn(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -48,6 +54,12 @@ export default function Doctordashboard() {
         <Doctorsidebar />
         <div className="content-wrapper">
           <div className="main-content">
+            {/* <Empowering />
+            <MedicalBoardPartnerHospitals />
+            <HospitalPartenerHome />
+            <InterCollabs /> */}
+            {/* <LiveSessions2 />
+            <OnlineClinic2 /> */}
             <KnowledgeBankSection />
             <MedaidBanner />
             <OverviewSection />

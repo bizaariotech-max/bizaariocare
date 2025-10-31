@@ -7,7 +7,7 @@ import workIcon from "../../assets/images/icons/work.png";
 import api from "../../api";
 import responsive from "../../utils/responsive-card_carousel";
 
-const MedicalBoardCard2 = () => {
+const MedicalBoardCard = () => {
  
 
   const navigate = useNavigate();
@@ -123,4 +123,4 @@ const MedicalBoardCard2 = () => {
   );
 };
 
-export default MedicalBoardCard2;
+export default MedicalBoardCard;

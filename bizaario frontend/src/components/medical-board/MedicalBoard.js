@@ -1,65 +1,138 @@
-import React, { useState } from "react";
-import MedicalBoardCard2 from "./MedicalBoardCard2";
+import React, { useEffect, useState } from "react";
+import MedicalBoardCard from "./MedicalBoardCard";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import responsive from "../../utils/responsive_carousel";
 import { useNavigate } from "react-router-dom";
-// import CardiologyTabContent from './MedicalBoardCard1';
-// import MedicalBoardCard2 from './MedicalBoardCard2';
-
-// import MedicalBoardCard3 from './MedicalBoardCard3';
+import api from "../../api";
+import { __getCommenApiDataList } from "../../utils/api/commonApi";
 
 const MedicalBoard = () => {
   const [activeTab, setActiveTab] = useState("tab1");
   const navigate = useNavigate();
+  const [doctorArr, setDoctorArr] = useState([]); // store fetched doctors
+
+  // ...........
+
+  const [state, setState] = useState({
+    MedicalSpecialties: [],
+    MedicalSpecialty: null,
+    loading: false,
+    specialtiesLoading: false,
+  });
+
+  const { MedicalSpecialties, MedicalSpecialty, loading, specialtiesLoading } =
+    state;
+
+  const updateState = (data) =>
+    setState((prevState) => ({ ...prevState, ...data }));
+
+  const getDoctorProfile = async () => {
+    try {
+      updateState({ loading: true });
+      const resp = await api.post("api/v1/admin/assetList", {
+        AssetCategoryLevel1: "68b0104063729ea39b28d0fb",
+        MedicalSpecialties: MedicalSpecialty?._id || null,
+      });
+
+      const formattedData = resp.data.data.list.map((doc, index) => ({
+        id: doc._id || index + 1,
+        name: doc.AssetName,
+        // exp: `${
+        //   (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
+        // } | ${doc.experience || 0} Years Experience`,
+        exp: `${doc.MedicalSpecialties[0].lookup_value} | ${
+          doc.experience || 5
+        } Years Experience`,
+        location:
+          `${doc.AddressLine1} ${doc.AddressLine2}${doc.PostalCode}` || "",
+        Specializes: `${(doc.MedicalSpecialties || [])
+          .map((item) => item.lookup_value)
+          .join(", ")} `,
+        image: doc.ProfilePicture || null,
+      }));
+
+      setDoctorArr(formattedData);
+    } catch (error) {
+      console.error("Error fetching doctor profile:", error);
+    } finally {
+      updateState({ loading: false });
+    }
+  };
+
+  // Fetch dropdown data using common API
+  const fetchDropdownData = async (lookupTypes, stateKey, parent_lookup_id) => {
+    try {
+      updateState({ specialtiesLoading: true });
+      const data = await __getCommenApiDataList({
+        lookup_type: lookupTypes,
+        parent_lookup_id: parent_lookup_id || null,
+      });
+      updateState({ [stateKey]: data });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      updateState({ specialtiesLoading: false });
+    }
+  };
+
+  useEffect(() => {
+    // Fetch lookup data for dropdowns
+    fetchDropdownData(["medical_speciality"], "MedicalSpecialties");
+  }, []);
+
+  useEffect(() => {
+    getDoctorProfile();
+  }, [MedicalSpecialty]); // Add MedicalSpecialty dependency to refetch when specialty changes
+
   const renderContent = () => {
     switch (activeTab) {
       case "tab1":
         return (
           <div>
-            <MedicalBoardCard2 />
+            <MedicalBoardCard />
           </div>
         );
       case "tab2":
         return (
           <div>
             {" "}
-            <MedicalBoardCard2 />{" "}
+            <MedicalBoardCard />{" "}
           </div>
         );
       case "tab3":
         return (
           <div>
             {" "}
-            <MedicalBoardCard2 />{" "}
+            <MedicalBoardCard />{" "}
           </div>
         );
       case "tab4":
         return (
           <div>
             {" "}
-            <MedicalBoardCard2 />{" "}
+            <MedicalBoardCard />{" "}
           </div>
         );
       case "tab5":
         return (
           <div>
             {" "}
-            <MedicalBoardCard2 />{" "}
+            <MedicalBoardCard />{" "}
           </div>
         );
       case "tab6":
         return (
           <div>
             {" "}
-            <MedicalBoardCard2 />{" "}
+            <MedicalBoardCard />{" "}
           </div>
         );
       case "tab7":
         return (
           <div>
             {" "}
-            <MedicalBoardCard2 />{" "}
+            <MedicalBoardCard />{" "}
           </div>
         );
         return null;
@@ -98,14 +171,52 @@ const MedicalBoard = () => {
                 infinite
                 partialVisible
               >
-                <button
+                {/* <button
                   className={`cutom-tab-style ${
-                    activeTab === "tab1" ? "activeTab" : "gray-btn-style"
+                    activeTab === "all" ? "activeTab" : "gray-btn-style"
+                  } ${
+                    MedicalSpecialties?.length === 0
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
                   }`}
-                  onClick={() => setActiveTab("tab1")}
+                  onClick={() => {
+                    if (MedicalSpecialties?.length > 0) {
+                      setActiveTab("all");
+                      updateState({ MedicalSpecialty: null });
+                    }
+                  }}
                 >
-                  Cardiology
+                  {MedicalSpecialties?.length === 0
+                    ? "Loading..."
+                    : "All Specialties"}
                 </button>
+                {MedicalSpecialties?.length === 0
+                  ? // Loading skeleton for specialty buttons
+                    Array.from({ length: 6 }).map((_, index) => (
+                      <button
+                        key={`skeleton-${index}`}
+                        className="opacity-50 cursor-not-allowed cutom-tab-style gray-btn-style"
+                        disabled
+                      >
+                        Loading...
+                      </button>
+                    ))
+                  : MedicalSpecialties?.map((specialty) => (
+                      <button
+                        key={specialty._id}
+                        className={`cutom-tab-style ${
+                          activeTab === specialty._id
+                            ? "activeTab"
+                            : "gray-btn-style"
+                        }`}
+                        onClick={() => {
+                          setActiveTab(specialty._id);
+                          updateState({ MedicalSpecialty: specialty });
+                        }}
+                      >
+                        {specialty.lookup_value}
+                      </button>
+                    ))} */}
                 <button
                   className={`cutom-tab-style ${
                     activeTab === "tab2" ? "activeTab" : "gray-btn-style"
