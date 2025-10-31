@@ -14,7 +14,7 @@ const InterCollabs = () => {
   };
   return (
     <>
-      <section className="international-collaborations spacing-top">
+      <section className="mt-24 international-collaborations spacing-top">
         <div className="container ">
           <div className="title">
             <h2

@@ -5,7 +5,7 @@ import DoctorAppointmentTable from '../../UI/DoctorAppointmentTable'
 const OnlineClinic = () => {
   return (
     <>
-      <section className="spacing-top">
+      <section className="mt-24 spacing-top">
         <div className="container ">
           <div className="row">
             <div className="col-lg-8 col-12">

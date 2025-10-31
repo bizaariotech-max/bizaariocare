@@ -13,12 +13,11 @@ const MedicalBoardPartnerHospitals = () => {
     }
   };
   return (
-      <>
-          <section className='spacing-top medical-board-partner-hospitals'>
-              <div className="container">
-                    <div className="row">
-                  
-                      {/* <div className="col-lg-12 d-flex  align-items-center"> 
+    <>
+      <section className="mt-24 spacing-top medical-board-partner-hospitals">
+        <div className="container">
+          <div className="row">
+            {/* <div className="col-lg-12 d-flex align-items-center"> 
                           <div className="button-container tab-group-large">
                               <button className={`btn btn-custom   ${activeTab==='tab1' ? 'active-custom-tab' : '' }`}
                                   onClick={()=> setActiveTab('tab1')}>
@@ -30,13 +29,13 @@ const MedicalBoardPartnerHospitals = () => {
                               </button>
                           </div>
                       </div> */}
-                  </div> 
-                   {/* <div >{renderContent()}</div> */}
-                   <MedicalBoard/>
-              </div>
-        </section>
-      </>
-  )
+          </div>
+          {/* <div >{renderContent()}</div> */}
+          <MedicalBoard />
+        </div>
+      </section>
+    </>
+  );
 }
 
 export default MedicalBoardPartnerHospitals

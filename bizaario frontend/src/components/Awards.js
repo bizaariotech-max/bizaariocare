@@ -6,7 +6,7 @@ const Awards = () => {
      
   return (
     <>
-      <section className="spacing-top awards-certification-section position-relative">
+      <section className="mt-24 spacing-top awards-certification-section position-relative ">
         <div className="container">
           <div className="row">
             <div className="mb-2 d-flex justify-content-between align-items-center">

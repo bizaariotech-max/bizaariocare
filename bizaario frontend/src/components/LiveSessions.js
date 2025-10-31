@@ -8,6 +8,7 @@ import calender from '../assets/images/calendar.png'
 const LiveSessions = () => {
   return (
     <div
+      className="mt-24"
       style={{
         position: "relative",
         width: "100%",

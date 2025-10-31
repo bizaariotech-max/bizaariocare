@@ -188,136 +188,140 @@ const getContentList = async () => {
   };
 
   return (
-    <section className="spacing-top">
+    <section className="mt-24 spacing-top news-section">
       <div className="container news-section">
         {/* Header */}
         <div className="row">
-                <div className="col-lg-8 col-12">
-                    <h2 className='fw-semibold'>
-                    News And Articles
-                    </h2>
-                    <p className='light-color'>
-                    Learn from leading doctors and specialists through focused, digestible video content.</p>
-                </div>
-                <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
-                  
-                              <button className="view-all">
-                                  View All &#8594;
-                              </button>
-                             
-                          
-                </div>
-
-                </div>
+          <div className="col-lg-8 col-12">
+            <h2 className="fw-semibold">News And Articles</h2>
+            <p className="light-color">
+              Learn from leading doctors and specialists through focused,
+              digestible video content.
+            </p>
+          </div>
+          <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
+            <button className="view-all">View All &#8594;</button>
+          </div>
+        </div>
 
         {/* Tabs */}
-         <div className="w-full px-0 mb-4 medical-tab-buttons">  
-                <Carousel
-                  arrows={false}
-                  responsive={responsive}
-                  containerClass="carousel-container w-full"
-                  itemClass="px-2"
-                  infinite
-                  partialVisible
-                >
-          {categories.map((cat) => (
-            <button key={cat.key}
-              className={`cutom-tab-style  ${activeCategory === cat.key ? "activeTab " : "tab-btn-style gray-btn-style"}`}
-              onClick={() => setActiveCategory(cat.key)}
-            >
-            {cat.label}
-          </button>
-          ))}
+        <div className="w-full px-0 mb-4 medical-tab-buttons">
+          <Carousel
+            arrows={false}
+            responsive={responsive}
+            containerClass="carousel-container w-full"
+            itemClass="px-2"
+            infinite
+            partialVisible
+          >
+            {categories.map((cat) => (
+              <button
+                key={cat.key}
+                className={`cutom-tab-style  ${
+                  activeCategory === cat.key
+                    ? "activeTab "
+                    : "tab-btn-style gray-btn-style"
+                }`}
+                onClick={() => setActiveCategory(cat.key)}
+              >
+                {cat.label}
+              </button>
+            ))}
           </Carousel>
         </div>
 
-   
-        
-   
-                    <Carousel
-                     //   removeArrowOnDeviceType={["tablet", "mobile"]}
-                       arrows={false} 
-                     responsive={responsive_tab}
-                     // autoPlay={false}
-                     // autoPlaySpeed={3000}
-                     // transitionDuration={2000} 
-                     //additionalTransfrom={-20}
-                     //  pauseOnHover={false} 
-                     //  centerMode={false}
-                     containerClass=" carousel-container" 
-                     itemClass="pe-md-4 px-1"  
-                    //  showDots={true}
-                     infinite={true}  
-                     renderDotsOutside={true} 
-                     partialVisible={true}
-                 
-                     >
-                 {contentList.map((element) => {
-                 return (
-                   <NavLink
-                     key={element._id || element.id}
-                     to={`/news-articles/${element._id || element.id}`}
-                     state={{ article: element }}
-                     className="block h-full text-decoration-none"
-                   >
-                     <div className="rounded-2xl bg-[#BDC4D44D] p-3 h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                       {/* Image */}
-                       <img
-                         src={element.ContentImage}
-                         alt="doctor"
-                         className="w-full h-[257px] rounded-lg object-cover mx-auto"
-                       />
+        <Carousel
+          //   removeArrowOnDeviceType={["tablet", "mobile"]}
+          arrows={false}
+          responsive={responsive_tab}
+          // autoPlay={false}
+          // autoPlaySpeed={3000}
+          // transitionDuration={2000}
+          //additionalTransfrom={-20}
+          //  pauseOnHover={false}
+          //  centerMode={false}
+          containerClass=" carousel-container"
+          itemClass="pe-md-4 px-1"
+          //  showDots={true}
+          infinite={true}
+          renderDotsOutside={true}
+          partialVisible={true}
+        >
+          {contentList.map((element) => {
+            return (
+              <NavLink
+                key={element._id || element.id}
+                to={`/news-articles/${element._id || element.id}`}
+                state={{ article: element }}
+                className="block h-full text-decoration-none"
+              >
+                <div className="rounded-2xl bg-[#BDC4D44D] p-3 h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                  {/* Image */}
+                  <img
+                    src={element.ContentImage}
+                    alt="doctor"
+                    className="w-full h-[257px] rounded-lg object-cover mx-auto"
+                  />
 
-                       {/* Info Row */}
-                       <div className="flex gap-12 mt-2">
-                         {/* Time */}
-                         <div className="flex items-center gap-1.5">
-                           <img src={clock} alt="" className="w-[22px] h-[22px] object-contain" />
-                           <span className="text-[12px] font-normal text-black/70 leading-none">
-                             {element?.time ? element.time : "00:20"}
-                           </span>
-                         </div>
+                  {/* Info Row */}
+                  <div className="flex gap-12 mt-2">
+                    {/* Time */}
+                    <div className="flex items-center gap-1.5">
+                      <img
+                        src={clock}
+                        alt=""
+                        className="w-[22px] h-[22px] object-contain"
+                      />
+                      <span className="text-[12px] font-normal text-black/70 leading-none">
+                        {element?.time ? element.time : "00:20"}
+                      </span>
+                    </div>
 
-                         {/* Date */}
-                         <div className="flex items-center gap-1.5">
-                           <img src={calender} alt="" className="w-[22px] h-[22px] object-contain" />
-                           <span className="text-[12px] font-normal text-black/70 leading-none">
-                             {element?.Date
-                               ? new Date(element.Date).toLocaleDateString("en-GB", {
-                                   day: "numeric",
-                                   month: "short",
-                                   year: "numeric",
-                                 })
-                               : "8 Oct 2025"}
-                           </span>
-                         </div>
+                    {/* Date */}
+                    <div className="flex items-center gap-1.5">
+                      <img
+                        src={calender}
+                        alt=""
+                        className="w-[22px] h-[22px] object-contain"
+                      />
+                      <span className="text-[12px] font-normal text-black/70 leading-none">
+                        {element?.Date
+                          ? new Date(element.Date).toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })
+                          : "8 Oct 2025"}
+                      </span>
+                    </div>
 
-                         {/* Views */}
-                         <div className="flex items-center gap-1.5">
-                           <img src={eye} alt="" className="w-[22px] h-[22px] object-contain" />
-                           <span className="text-[12px] font-normal text-black/70 leading-none">
-                             {element?.views ? element.views : "1980"}
-                           </span>
-                         </div>
-                       </div>
+                    {/* Views */}
+                    <div className="flex items-center gap-1.5">
+                      <img
+                        src={eye}
+                        alt=""
+                        className="w-[22px] h-[22px] object-contain"
+                      />
+                      <span className="text-[12px] font-normal text-black/70 leading-none">
+                        {element?.views ? element.views : "1980"}
+                      </span>
+                    </div>
+                  </div>
 
-                       {/* Content */}
-                       <div className="mt-4 content text-start">
-                         <p className="text-black text-[20px] font-bold leading-normal mb-1">
-                           {element.ContentTitle}
-                         </p>
-                         <p className="text-[#52677D] text-[16px] font-normal leading-normal mb-1">
-                           {element.ShortDescription}
-                         </p>
-                       </div>
-                     </div>
-                   </NavLink>
-                 )
-                 })}
-     </Carousel>
-   
-     
-
+                  {/* Content */}
+                  <div className="mt-4 content text-start">
+                    <p className="text-black text-[20px] font-bold leading-normal mb-1">
+                      {element.ContentTitle}
+                    </p>
+                    <p className="text-[#52677D] text-[16px] font-normal leading-normal mb-1">
+                      {element.ShortDescription}
+                    </p>
+                  </div>
+                </div>
+              </NavLink>
+            );
+          })}
+        </Carousel>
       </div>
     </section>
   );

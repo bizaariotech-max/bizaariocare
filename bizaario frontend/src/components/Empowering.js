@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import EmpoweringContent from "./empowering-doctors/EmpoweringContent";
-// import '../assets/css/empowring.css'
+import "../assets/css/empowring.css";
 import { useNavigate } from "react-router-dom";
 
 const Empowering = () => {
@@ -8,7 +8,7 @@ const Empowering = () => {
 
   return (
     <>
-      <section className="empoering-section spacing-top">
+      <section className="mt-24 empoering-section spacing-top">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 col-12">

@@ -74,8 +74,8 @@ const HospitalPartenerHome = () => {
   };
 
   return (
-    <div className="mt-2">
-      <section className="spacing-top empoering-section partner-list-home">
+    <div className="">
+      <section className="mt-24 mb-24 spacing-top empoering-section partner-list-home">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 col-12">
