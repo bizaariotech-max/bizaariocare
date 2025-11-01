@@ -107,10 +107,10 @@ const getContentList = async () => {
 
 
   return (
-    <section className="py-10 px-4">
-      <div className="max-w-7xl mx-auto">
+    <section className="px-4 py-10">
+      <div className="mx-auto max-w-7xl">
         <div className="relative w-full">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 transition-all duration-500 ease-in-out">
+          <div className="flex flex-col items-center justify-center gap-4 transition-all duration-500 ease-in-out md:flex-row md:gap-8">
             {getVisibleTestimonials().map((testimonial, index) => {
               const isCenter = testimonial.position === 0;
               const isLeft = testimonial.position === -1;
@@ -129,10 +129,14 @@ const getContentList = async () => {
                       setIsAnimating(true);
                       if (isLeft) {
                         setCurrentIndex(
-                          (prev) => (prev - 1 + patient_testimonial.length) % patient_testimonial.length
+                          (prev) =>
+                            (prev - 1 + patient_testimonial.length) %
+                            patient_testimonial.length
                         );
                       } else if (isRight) {
-                        setCurrentIndex((prev) => (prev + 1) % patient_testimonial.length);
+                        setCurrentIndex(
+                          (prev) => (prev + 1) % patient_testimonial.length
+                        );
                       }
                     }
                   }}
@@ -142,13 +146,14 @@ const getContentList = async () => {
                     minHeight: "350px",
                     padding: "30px",
                     borderRadius: "10px",
-                    background: "rgba(189, 196, 212, 0.30)",
+                    // background: "rgba(189, 196, 212, 0.30)",
+                    background: "var(--white)",
                     position: "relative",
                     alignSelf: "stretch", // ✅ keep all cards aligned
                   }}
                 >
                   {/* Avatar */}
-                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
+                  <div className="absolute transform -translate-x-1/2 -top-8 left-1/2">
                     <div className="relative">
                       <img
                         src={testimonial?.ContentImage || "/placeholder.svg"}
@@ -172,7 +177,7 @@ const getContentList = async () => {
                   </div>
 
                   {/* Content */}
-                  <div className="flex flex-col justify-start items-center text-left w-full mt-12">
+                  <div className="flex flex-col items-center justify-start w-full mt-12 text-left">
                     <blockquote
                       className={`text-gray-700 leading-relaxed mb-4 text-left italic w-full ${
                         isCenter ? "text-base" : "text-sm"
@@ -192,7 +197,7 @@ const getContentList = async () => {
                       "{testimonial?.LongDescription}"
                     </blockquote>
 
-                    <div className="text-left w-full">
+                    <div className="w-full text-left">
                       <h4
                         className={`font-semibold text-gray-900 mb-1 ${
                           isCenter ? "text-lg" : "text-base"
@@ -205,7 +210,9 @@ const getContentList = async () => {
                           isCenter ? "text-sm" : "text-xs"
                         }`}
                       >
-                        {testimonial?.AssetId?.MedicalSpecialties?.map((item)=>item.lookup_value).join(',')}
+                        {testimonial?.AssetId?.MedicalSpecialties?.map(
+                          (item) => item.lookup_value
+                        ).join(",")}
                       </p>
                       <p
                         className={`text-gray-500 mt-1 ${
@@ -223,11 +230,11 @@ const getContentList = async () => {
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-center items-center mt-8 gap-4">
+        <div className="flex items-center justify-center gap-4 mt-8">
           <button
             onClick={prevTestimonial}
             disabled={isAnimating}
-            className="rounded-full border-2 border-gray-300 hover:border-blue-600 hover:bg-blue-50 transition-colors bg-transparent p-2"
+            className="p-2 transition-colors bg-transparent border-2 border-gray-300 rounded-full hover:border-blue-600 hover:bg-blue-50"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -254,7 +261,7 @@ const getContentList = async () => {
           <button
             onClick={nextTestimonial}
             disabled={isAnimating}
-            className="rounded-full border-2 border-gray-300 hover:border-blue-600 hover:bg-blue-50 transition-colors bg-transparent p-2"
+            className="p-2 transition-colors bg-transparent border-2 border-gray-300 rounded-full hover:border-blue-600 hover:bg-blue-50"
           >
             <ChevronRight className="w-5 h-5" />
           </button>

@@ -255,7 +255,7 @@ const getContentList = async () => {
                 state={{ article: element }}
                 className="block h-full text-decoration-none"
               >
-                <div className="rounded-2xl bg-[#BDC4D44D] p-3 h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                <div className="rounded-2xl bg-[var(--white)] p-3 h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                   {/* Image */}
                   <img
                     src={element.ContentImage}

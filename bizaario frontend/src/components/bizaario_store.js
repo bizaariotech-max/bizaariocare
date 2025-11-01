@@ -75,14 +75,15 @@ return (
                     key={element.id}
                     style={{
                       borderRadius: "20px",
-                      background: "rgba(189, 196, 212, 0.30)",
+                      // background: "rgba(189, 196, 212, 0.30)",
+                      background: "var(--white)",
                       padding: "20px",
                     }}
                   >
                     <img
                       src={element.image}
                       alt="doctor"
-                      className="mx-auto  img-fluid"
+                      className="mx-auto img-fluid"
                       style={{ width: "100%", height: "363px" }}
                     />
 
@@ -120,7 +121,8 @@ return (
                     <div style={{ width: "100%", marginTop: "10px" }}>
                       <button
                         style={{
-                          background: "#52677D",
+                          // background: "#52677D",
+                          background: "var(--primary)",
                           width: "100%",
                           color: "#fff",
                           border: "none",

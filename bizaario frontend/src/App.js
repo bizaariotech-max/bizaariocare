@@ -95,6 +95,9 @@ import PatientReferralVerify from "./components/Doctor/PatientReferral/AllSubFor
 import PremiumDoctor from "./components/Doctor/PatientReferral/AllSubForms/PremiumDoctor/PremiumDoctor.js";
 import AddNewPatientDetails from "./components/Doctor/PatientReferral/AllSubForms/Add_New_Patient.js";
 import HospitalDashboard from "./pages/hospital/HospitalDashboard.js";
+import AppointmentForm from "./components/live-sessions-online-clinic/appointment/AppointmentForm.js";
+import OnlineMeeting from "./components/live-sessions-online-clinic/online-meeting/OnlineMeeting.js";
+import CompletedConsultation from "./components/live-sessions-online-clinic/appointment/CompletedConsultation.js";
 
 function App() {
   return (
@@ -112,6 +115,13 @@ function App() {
         <Route path="/view-all-hospitals" element={<ViewAllHospitals />} />
         <Route path="/news-articles" element={<NewsArticles />} />
         <Route path="/news-articles/:id" element={<ArticleDetail />} />
+
+        <Route path="/appointment-form" element={<AppointmentForm />} />
+        <Route path="/online-meeting" element={<OnlineMeeting />} />
+        <Route
+          path="/completed-consultation"
+          element={<CompletedConsultation />}
+        />
 
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />

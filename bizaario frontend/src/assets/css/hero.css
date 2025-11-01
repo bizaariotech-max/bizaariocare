@@ -370,7 +370,7 @@ line-height: normal;
 
 
 .banner-data {
-  /* background: #BDC4D4; */
+        /* background: linear-gradient(180deg, #043055 0%, #1268B3 100%); */
   background-color: var(--primary);
   display: flex;
   flex-wrap: wrap;           
