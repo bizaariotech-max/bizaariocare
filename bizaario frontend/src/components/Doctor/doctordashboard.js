@@ -224,17 +224,17 @@ function MedaidBanner() {
   return (
     <div
       className="
-        relative 
-        rounded-lg 
-        overflow-hidden 
-        w-full 
-        min-h-[200px] 
-        aspect-[16/6] 
-        bg-no-repeat 
+        relative
+        rounded-lg
+        overflow-hidden
+        w-full
+        min-h-[200px]
+        aspect-[16/6]
+        bg-no-repeat
         bg-center
         bg-cover
         sm:bg-contain
-        sm:aspect-[16/6] 
+        sm:aspect-[16/6]
         sm:min-h-[200px]
         xs:min-h-[120px] xs:aspect-[16/10]
         mt-2
@@ -487,9 +487,8 @@ const MedicalBoard = () => {
         // exp: `${
         //   (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
         // } | ${doc.experience || 0} Years Experience`,
-        exp: `${doc.MedicalSpecialties[0].lookup_value} | ${
-          doc.experience || 5
-        } Years Experience`,
+        exp: `${doc.MedicalSpecialties[0].lookup_value} | ${doc.experience || 5
+          } Years Experience`,
         location:
           `${doc.AddressLine1} ${doc.AddressLine2}${doc.PostalCode}` || "",
         Specializes: `${(doc.MedicalSpecialties || [])
@@ -576,19 +575,17 @@ const MedicalBoard = () => {
               <Carousel
                 arrows={false}
                 responsive={responsivetab}
-                containerClass="carousel-container w-full"
-                itemClass="px-2"
+                containerClass="carousel-container w-full pb-2"
+                itemClass="px-2 p-3 md:pt-1"
                 infinite
                 partialVisible
               >
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "all" ? "activeTab" : "gray-btn-style"
-                  } ${
-                    MedicalSpecialties.length === 0
+                  className={`cutom-tab-style ${activeTab === "all" ? "activeTab" : "gray-btn-style"
+                    } ${MedicalSpecialties.length === 0
                       ? "opacity-50 cursor-not-allowed"
                       : ""
-                  }`}
+                    }`}
                   onClick={() => {
                     if (MedicalSpecialties.length > 0) {
                       setActiveTab("all");
@@ -601,32 +598,31 @@ const MedicalBoard = () => {
                     : "All Specialties"}
                 </button>
                 {MedicalSpecialties.length === 0
-                  ? // Loading skeleton for specialty buttons
-                    Array.from({ length: 6 }).map((_, index) => (
-                      <button
-                        key={`skeleton-${index}`}
-                        className="opacity-50 cursor-not-allowed cutom-tab-style gray-btn-style"
-                        disabled
-                      >
-                        Loading...
-                      </button>
-                    ))
+                  ?
+                  Array.from({ length: 6 }).map((_, index) => (
+                    <button
+                      key={`skeleton-${index}`}
+                      className="opacity-50 cursor-not-allowed cutom-tab-style gray-btn-style"
+                      disabled
+                    >
+                      Loading...
+                    </button>
+                  ))
                   : MedicalSpecialties.map((specialty) => (
-                      <button
-                        key={specialty._id}
-                        className={`cutom-tab-style ${
-                          activeTab === specialty._id
-                            ? "activeTab"
-                            : "gray-btn-style"
+                    <button
+                      key={specialty._id}
+                      className={`cutom-tab-style mb-3 ${activeTab === specialty._id
+                        ? "activeTab"
+                        : "gray-btn-style"
                         }`}
-                        onClick={() => {
-                          setActiveTab(specialty._id);
-                          updateState({ MedicalSpecialty: specialty });
-                        }}
-                      >
-                        {specialty.lookup_value}
-                      </button>
-                    ))}
+                      onClick={() => {
+                        setActiveTab(specialty._id);
+                        updateState({ MedicalSpecialty: specialty });
+                      }}
+                    >
+                      {/* {specialty.lookup_value} */}
+                    </button>
+                  ))}
               </Carousel>
             </div>
             <div style={{ padding: 0 }} className="position-relative">
@@ -1185,8 +1181,8 @@ const PatientDetailsSection = () => {
 
 const Partnerhospital = () => {
   const [hospital_details, sethospital_details] = useState([]);
-const navigate = useNavigate();
-  
+  const navigate = useNavigate();
+
   const get_hospital_profile = async () => {
     try {
       const resp = await api.post("api/v1/admin/assetList", {
@@ -1199,9 +1195,8 @@ const navigate = useNavigate();
         // exp: `${
         //   (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
         // } | ${doc.experience || 0} Years Experience`,
-        exp: `${doc.MedicalSpecialties.map((item) => item.lookup_value)} | ${
-          doc.experience || 5
-        } Years Experience`,
+        exp: `${doc.MedicalSpecialties.map((item) => item.lookup_value)} | ${doc.experience || 5
+          } Years Experience`,
         location:
           `${doc.AddressLine1} ${doc.AddressLine2} ${doc.PostalCode}` || "",
         Specializes: `${(doc.MedicalSpecialties || [])
@@ -1255,8 +1250,8 @@ const navigate = useNavigate();
               trusted care.
             </p>
           </div>
-          <div className="col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
-            <button 
+          <div className="col-lg-4 col-12 mb-5 md:mb-0 d-flex justify-content-lg-end align-items-start">
+            <button
               className="view-all"
               onClick={() => navigate('/view-all-hospitals')}
             >
@@ -1275,57 +1270,50 @@ const navigate = useNavigate();
             partialVisible
           >
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab1" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab1" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab1")}
             >
               Delhi NCR
             </button>
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab2" ? " activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab2" ? " activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab2")}
             >
               Mumbai
             </button>
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab3" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab3" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab3")}
             >
               Bengaluru
             </button>
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab4" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab4" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab4")}
             >
               Noida
             </button>
             <button
-              className={` cutom-tab-style ${
-                activeTab === "tab5" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={` cutom-tab-style ${activeTab === "tab5" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab5")}
             >
               Delhi NCR
             </button>
             <button
-              className={` cutom-tab-style ${
-                activeTab === "tab7" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={` cutom-tab-style ${activeTab === "tab7" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab7")}
             >
               Mumbai
             </button>
             <button
-              className={` cutom-tab-style ${
-                activeTab === "tab6" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={` cutom-tab-style ${activeTab === "tab6" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab6")}
             >
               Bengaluru
@@ -1363,7 +1351,7 @@ const navigate = useNavigate();
             //  pauseOnHover={false}
             //  centerMode={false}
             containerClass=" carousel-container"
-            itemClass="pe-md-1 px-1"
+            itemClass="pe-md-1 px-1 pb-3"
             // showDots={true}
             infinite={true}
             renderDotsOutside={true}
@@ -1834,57 +1822,50 @@ function OnlineClinic() {
             partialVisible
           >
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab1" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab1" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab1")}
             >
               Cardiology
             </button>
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab2" ? " activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab2" ? " activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab2")}
             >
               Orthopedics
             </button>
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab3" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab3" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab3")}
             >
               Pediatrics
             </button>
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab4" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab4" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab4")}
             >
               Neurology
             </button>
             <button
-              className={` cutom-tab-style ${
-                activeTab === "tab5" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={` cutom-tab-style ${activeTab === "tab5" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab5")}
             >
               Obstetrics & Gynecology
             </button>
             <button
-              className={` cutom-tab-style ${
-                activeTab === "tab7" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={` cutom-tab-style ${activeTab === "tab7" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab7")}
             >
               Plastic & Reconstructive Surgery
             </button>
             <button
-              className={` cutom-tab-style ${
-                activeTab === "tab6" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={` cutom-tab-style ${activeTab === "tab6" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab6")}
             >
               Otorhinolaryngology

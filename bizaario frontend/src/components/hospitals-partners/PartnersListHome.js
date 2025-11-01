@@ -3,40 +3,40 @@ import clockIcon from "../../assets/images/icons/clock.svg"
 import webIcon from "../../assets/images/icons/web.svg"
 import { hospitalPartnerData } from "../../Data/LocalData"
 import api from '../../api'
-import { useState,useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 
 import Carousel from 'react-multi-carousel';
 
 const PartnersListHome = () => {
-       const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 3000 },
-            items: 3
-        },
-        desktop: {
-            breakpoint: { max: 3000, min: 1024 },
-            items: 3, 
-             partialVisibilityGutter: 20
-        },
-        tablet: {
-            breakpoint: { max: 1024, min: 767 },
-            items: 2
-        },
-        mobile: {
-            breakpoint: { max: 767, min: 0 },
-            items: 1,
-           
-        }
-    };
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 3
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+      partialVisibilityGutter: 20
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 767 },
+      items: 2
+    },
+    mobile: {
+      breakpoint: { max: 767, min: 0 },
+      items: 1,
 
-    const [hospital_details, sethospital_details] = useState([]);
-    const navigate = useNavigate();
+    }
+  };
 
-    const handleViewProfile = (hospitalId) => {
-        navigate(`/hospital/${hospitalId}`);
-    };
+  const [hospital_details, sethospital_details] = useState([]);
+  const navigate = useNavigate();
+
+  const handleViewProfile = (hospitalId) => {
+    navigate(`/hospital/${hospitalId}`);
+  };
 
   const get_hospital_profile = async () => {
     try {
@@ -52,15 +52,13 @@ const PartnersListHome = () => {
         // exp: `${
         //   (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
         // } | ${doc.experience || 0} Years Experience`,
-          exp: `${
-          doc.MedicalSpecialties.map((item)=>item.lookup_value)} | ${doc.experience || 5} Years Experience`,
+        exp: `${doc.MedicalSpecialties.map((item) => item.lookup_value)} | ${doc.experience || 5} Years Experience`,
         location: `${doc.AddressLine1} ${doc.AddressLine2} ${doc.PostalCode}` || "",
-        Specializes: `${
-          (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
-        } `,
+        Specializes: `${(doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
+          } `,
         image: doc.ProfilePicture || null,
-        Website:doc.Website || "",
-        Logo:doc.Logo || ""
+        Website: doc.Website || "",
+        Logo: doc.Logo || ""
       }));
 
       sethospital_details(formattedData);
@@ -81,7 +79,7 @@ const PartnersListHome = () => {
           arrows={false}
           responsive={responsive}
           containerClass="carousel-container"
-          itemClass="px-1 sm:px-2"
+          itemClass="px-1 sm:px-2 pb-3"
           infinite={true}
           renderDotsOutside={true}
           partialVisible={true}

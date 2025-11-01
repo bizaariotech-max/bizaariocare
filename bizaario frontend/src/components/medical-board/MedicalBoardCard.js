@@ -8,7 +8,7 @@ import api from "../../api";
 import responsive from "../../utils/responsive-card_carousel";
 
 const MedicalBoardCard = () => {
- 
+
 
   const navigate = useNavigate();
   const [doctorArr, setDoctorArr] = useState([]);
@@ -25,12 +25,10 @@ const MedicalBoardCard = () => {
         // exp: `${
         //   (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
         // } | ${doc.experience || 0} Years Experience`,
-          exp: `${
-          doc.MedicalSpecialties[0].lookup_value} | ${doc.experience || 5} Years Experience`,
+        exp: `${doc.MedicalSpecialties[0].lookup_value} | ${doc.experience || 5} Years Experience`,
         location: `${doc.AddressLine1} ${doc.AddressLine2}${doc.PostalCode}` || "",
-        Specializes: `${
-          (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
-        } `,
+        Specializes: `${(doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
+          } `,
         image: doc.ProfilePicture || null,
       }));
 
@@ -47,7 +45,7 @@ const MedicalBoardCard = () => {
   return (
     <Carousel
       responsive={responsive}
-      itemClass="px-2"
+      itemClass="px-2 pb-3 "
       arrows={false}
       infinite={true}
       partialVisible={true}

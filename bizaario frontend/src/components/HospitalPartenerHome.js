@@ -99,62 +99,55 @@ const HospitalPartenerHome = () => {
                 arrows={false}
                 responsive={responsive}
                 containerClass="carousel-container w-full"
-                itemClass="px-2"
+                itemClass="px-2 pb-3"
                 infinite
                 partialVisible
               >
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab1" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style ${activeTab === "tab1" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab1")}
                 >
                   Delhi NCR
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab2" ? " activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style ${activeTab === "tab2" ? " activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab2")}
                 >
                   Mumbai
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab3" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style ${activeTab === "tab3" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab3")}
                 >
                   Bengaluru
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab4" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style ${activeTab === "tab4" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab4")}
                 >
                   Noida
                 </button>
                 <button
-                  className={` cutom-tab-style ${
-                    activeTab === "tab5" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={` cutom-tab-style ${activeTab === "tab5" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab5")}
                 >
                   Delhi NCR
                 </button>
                 <button
-                  className={` cutom-tab-style ${
-                    activeTab === "tab7" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={` cutom-tab-style ${activeTab === "tab7" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab7")}
                 >
                   Mumbai
                 </button>
                 <button
-                  className={` cutom-tab-style ${
-                    activeTab === "tab6" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={` cutom-tab-style ${activeTab === "tab6" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab6")}
                 >
                   Bengaluru

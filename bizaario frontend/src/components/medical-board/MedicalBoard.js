@@ -41,9 +41,8 @@ const MedicalBoard = () => {
         // exp: `${
         //   (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
         // } | ${doc.experience || 0} Years Experience`,
-        exp: `${doc.MedicalSpecialties[0].lookup_value} | ${
-          doc.experience || 5
-        } Years Experience`,
+        exp: `${doc.MedicalSpecialties[0].lookup_value} | ${doc.experience || 5
+          } Years Experience`,
         location:
           `${doc.AddressLine1} ${doc.AddressLine2}${doc.PostalCode}` || "",
         Specializes: `${(doc.MedicalSpecialties || [])
@@ -153,7 +152,7 @@ const MedicalBoard = () => {
             </div>
             <div className="p-0 col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
               <button
-                className="view-all"
+                className="view-all mb-4 md:mb-0"
                 onClick={() => navigate("/view-all-doctors")}
               >
                 View All &#8594;
@@ -218,49 +217,43 @@ const MedicalBoard = () => {
                       </button>
                     ))} */}
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab2" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style mb-3 ${activeTab === "tab2" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab2")}
                 >
                   Orthopedics
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab3" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style  ${activeTab === "tab3" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab3")}
                 >
                   Pediatrics
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab4" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style  ${activeTab === "tab4" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab4")}
                 >
                   Neurology
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab5" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style  ${activeTab === "tab5" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab5")}
                 >
                   Obstetrics & Gynecology
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab6" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style  ${activeTab === "tab6" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab6")}
                 >
                   Otorhinolaryngology
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab7" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style ${activeTab === "tab7" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab7")}
                 >
                   Plastic & Reconstructive Surgery
