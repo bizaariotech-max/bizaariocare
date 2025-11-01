@@ -462,8 +462,7 @@ h2 {
 
 .spacing-top,
 .spacing-bottom {
-  padding-top: 50px;
-
+  padding-top: 90px;
 }
 
 /* } */
@@ -472,7 +471,7 @@ h2 {
 
   .spacing-top,
   .spacing-bottom {
-    padding-top: 50px;
+    padding-top: 60px;
 
   }
 }
@@ -481,7 +480,7 @@ h2 {
 
   .spacing-top,
   .spacing-bottom {
-    padding-top: 60px;
+    padding-top: 70px;
 
   }
 }
@@ -1281,7 +1280,7 @@ html {
 .activeTab {
   display: flex;
   height: 50px;
-  padding: 14px 24px;
+  /* padding: 4px; */
   justify-content: center;
   align-items: center;
   gap: 10px;

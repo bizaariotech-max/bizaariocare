@@ -6,6 +6,7 @@ import locationIcon from "../../assets/images/icons/location-pin-alt-1-svgrepo-c
 import workIcon from "../../assets/images/icons/work.png";
 import api from "../../api";
 import responsive from "../../utils/responsive-card_carousel";
+import { FaMapMarkerAlt, FaBriefcaseMedical } from "react-icons/fa";
 
 const MedicalBoardCard = () => {
 
@@ -45,7 +46,7 @@ const MedicalBoardCard = () => {
   return (
     <Carousel
       responsive={responsive}
-      itemClass="px-2 pb-3 "
+      itemClass="px-2 pb-3"
       arrows={false}
       infinite={true}
       partialVisible={true}
@@ -53,67 +54,51 @@ const MedicalBoardCard = () => {
       {doctorArr.map((item) => (
         <div
           key={item.id}
-          className="relative flex flex-col h-full max-w-sm bg-white rounded-lg shadow-md"
+          className="relative bg-white border rounded-lg hover:shadow-md transition-all h-full flex flex-col"
         >
-          {/* Header Section */}
-          <div className="relative flex items-center px-1 py-1 bg-gray-200 rounded-t-lg sm:px-1">
-            {/* Doctor Image overlapping bottom-left */}
-            <img
-              src={item.image}
-              alt="doctor"
-              className="absolute object-cover w-20 h-20 border-4 border-white rounded-full shadow -bottom-12 left-4 sm:left-6 sm:w-24 sm:h-24"
-            />
+          <div className="p-3 rounded-t-lg flex flex-col h-full">
+            <div className="w-full max-h-[240px] rounded-lg overflow-hidden">
+              <img
+                src={item?.image}
+                alt="image"
+                className="object-cover w-full h-full"
+              />
+            </div>
 
-            {/* Name + Exp aligned next to image */}
-            <div className="flex flex-col justify-center flex-1 mt-4 ml-24 sm:ml-32 overflow-wrap">
-              <h5 className="text-base font-bold text-black truncate sm:text-lg">
+            <div className="p-4 pb-4 flex-1">
+              <h2 className="font-semibold text-xl mb-1">
                 {item.name}
-              </h5>
-              <p className="text-base text-gray-700 break-words sm:text-base">
+              </h2>
+              <div className="text-gray-700 text-sm mb-3">
                 {item.exp}
-              </p>
+              </div>
+              <div className="flex items-center text-gray-700 text-base mb-3 gap-2">
+                <FaMapMarkerAlt className="mr-1 text-lg text-gray-600" />
+                <span>{item?.location || "N/A"}</span>
+              </div>
+              <div className="flex items-start mb-2">
+                <FaBriefcaseMedical className="mt-1 mr-2 text-lg text-gray-600" />
+                <div>
+                  <span className="font-semibold">Specializes in:</span>
+                  <span className="ml-1 text-gray-700">
+                    {item.Specializes || "N/A"}
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Location & Specialization */}
-          <div className="px-4 py-3 mt-16 space-y-2">
-            <div className="flex items-start text-base text-black">
-              <img
-                src={locationIcon}
-                alt="location"
-                className="flex-shrink-0 w-5 h-5 mr-2"
-              />
-              <span>{item?.location || "N/A"}</span>
+            {/* Footer Buttons */}
+            <div className="flex flex-col gap-3 px-4 pb-4 mt-auto">
+              <button className="bg-[var(--button-back-color)] text-[var(--white)] rounded-lg py-3 font-semibold text-center text-base hover:bg-[var(--button-back-hover)] transition">
+                Send Medical Query
+              </button>
+              <button
+                onClick={() => navigate(`/doctor/${item.id}`)}
+                className="bg-[var(--button-back-white-color)] text-[var(--button-back-color)] border border-gray-300 rounded-lg py-3 font-semibold text-center text-base hover:bg-gray-50 transition"
+              >
+                View Profile
+              </button>
             </div>
-            <div className="flex items-start text-base">
-              <img
-                src={workIcon}
-                alt="work"
-                className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
-              />
-              <span>
-                <strong>Specializes in:</strong>{" "}
-                <span className="text-base text-gray-600">
-                  {item.Specializes || "N/A"}
-                </span>
-              </span>
-            </div>
-          </div>
-
-          {/* Buttons */}
-          <div className="flex flex-col gap-3 px-4 pb-4 mt-auto ">
-            <button className=" bg-[var(--button-back-color)] text-[var(--white)] rounded-lg py-3 font-semibold text-center text-base hover:bg-[var(--button-back-hover)] transition">
-              Send Medical Query
-            </button>
-            <button
-              onClick={() =>
-                // navigate("/viewdoctorprofile", { state: { id: item.id } })
-                navigate(`/doctor/${item.id}`)
-              }
-              className="bg-[var(--button-back-white-color)] text-[var(--button-back-color)] border border-gray-300 rounded-lg py-3 font-semibold text-center text-base hover:bg-gray-50 transition"
-            >
-              View Profile
-            </button>
           </div>
         </div>
       ))}

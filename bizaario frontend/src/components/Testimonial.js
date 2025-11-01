@@ -5,7 +5,7 @@ import TestimonialCard2 from './testimonial/TestimonialCard2'
 const Testimonial = () => {
   return (
     <>
-      <section className="mt-24 spacing-top testmonial-section ">
+      <section className=" spacing-top testmonial-section ">
         <div className="testimonial-card">
           <div className="container ">
             <div className="row">

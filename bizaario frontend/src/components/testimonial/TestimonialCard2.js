@@ -9,66 +9,65 @@ export default function TestimonialsSection() {
 
   //============================ get patient testimonials==========================================
 
-  const[patient_testimonial,setpatient_testimonial]=useState([])
+  const [patient_testimonial, setpatient_testimonial] = useState([])
 
-const getContentList = async () => {
-      try {
-        const resp = await __postApiData("/api/v1/admin/ContentList",
-           {
-              page: 1,
-              limit: 100,
-              ContentTypeId: "68c8f5fab5cf101deca56536"
-              // "ContentPriority":"Medium"
-          
-          }
-        );
-        
-        if (resp.response.response_code === "200") {
-          setpatient_testimonial(resp.data.list || []);
+  const getContentList = async () => {
+    try {
+      const resp = await __postApiData("/api/v1/admin/ContentList",
+        {
+          page: 1,
+          limit: 100,
+          ContentTypeId: "68c8f5fab5cf101deca56536"
+          // "ContentPriority":"Medium"
+
         }
-      } catch (error) {
-        console.error("Error fetching content list:", error);
-      } 
-    };
+      );
 
-    useEffect(()=>
-    {
-      getContentList()
+      if (resp.response.response_code === "200") {
+        setpatient_testimonial(resp.data.list || []);
+      }
+    } catch (error) {
+      console.error("Error fetching content list:", error);
+    }
+  };
 
-    },[])
+  useEffect(() => {
+    getContentList()
 
-    console.log(patient_testimonial);
-    
+  }, [])
 
-//   const testimonials = [
-//   {
-//     id: 1,
-//     name: "Dr. Malik",
-//     title: "Senior Cardiologist",
-//     hospital: "Apollo Hospitals",
-//     review:
-//       "Traveling from Kenya for my heart surgery felt overwhelming at first, but the hospital team guided me through every step. The doctors explained everything clearly, and after my procedure, I felt safe and well cared for. I'm truly grateful for the warmth and professionalism I experienced.",
-//     image: doctorimage,
-//   },
-//   {
-//     id: 2,
-//     name: "Dr. Sarah Johnson",
-//     title: "Chief of Neurology",
-//     hospital: "Mayo Clinic",
-//     review:
-//       "The comprehensive care and attention to detail provided by this medical team exceeded all my expectations. From diagnosis to recovery, every aspect was handled with utmost professionalism and compassion.",
-//     image: doctorimage,
-//   },
-//   {
-//     id: 3,
-//     name: "Dr. Michael Chen",
-//     title: "Orthopedic Surgeon",
-//     hospital: "Johns Hopkins",
-//     review:
-//       "Having worked in medicine for over 20 years, I can confidently say this facility represents the gold standard in patient care. The innovative treatments and dedicated staff make all the difference.",
-//     image: doctorimage,
-//   },
-// ];
+  console.log(patient_testimonial);
+
+
+  //   const testimonials = [
+  //   {
+  //     id: 1,
+  //     name: "Dr. Malik",
+  //     title: "Senior Cardiologist",
+  //     hospital: "Apollo Hospitals",
+  //     review:
+  //       "Traveling from Kenya for my heart surgery felt overwhelming at first, but the hospital team guided me through every step. The doctors explained everything clearly, and after my procedure, I felt safe and well cared for. I'm truly grateful for the warmth and professionalism I experienced.",
+  //     image: doctorimage,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Dr. Sarah Johnson",
+  //     title: "Chief of Neurology",
+  //     hospital: "Mayo Clinic",
+  //     review:
+  //       "The comprehensive care and attention to detail provided by this medical team exceeded all my expectations. From diagnosis to recovery, every aspect was handled with utmost professionalism and compassion.",
+  //     image: doctorimage,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Dr. Michael Chen",
+  //     title: "Orthopedic Surgeon",
+  //     hospital: "Johns Hopkins",
+  //     review:
+  //       "Having worked in medicine for over 20 years, I can confidently say this facility represents the gold standard in patient care. The innovative treatments and dedicated staff make all the difference.",
+  //     image: doctorimage,
+  //   },
+  // ];
 
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -103,12 +102,12 @@ const getContentList = async () => {
   };
 
 
-   
+
 
 
   return (
-    <section className="px-4 py-10">
-      <div className="mx-auto max-w-7xl">
+    <section className="px-4 pt-10 pb-2">
+      <div className="mx-auto max-w-full">
         <div className="relative w-full">
           <div className="flex flex-col items-center justify-center gap-4 transition-all duration-500 ease-in-out md:flex-row md:gap-8">
             {getVisibleTestimonials().map((testimonial, index) => {
@@ -119,11 +118,10 @@ const getContentList = async () => {
               return (
                 <div
                   key={`${testimonial.id}-${currentIndex}-${index}`}
-                  className={`relative transition-all duration-500 flex flex-col items-center ${
-                    isCenter
-                      ? "scale-100 opacity-100 z-20"
-                      : "scale-75 opacity-60 z-10 hidden md:flex"
-                  } ${isCenter ? "" : "hover:opacity-80 cursor-pointer"}`}
+                  className={`relative transition-all duration-300 flex flex-col items-center border rounded-lg p-3 hover:shadow-lg ${isCenter
+                    ? "scale-100 opacity-100 z-20"
+                    : "scale-75 opacity-80 z-10 hidden md:flex"
+                    } ${isCenter ? "" : "hover:opacity-80 cursor-pointer"}`}
                   onClick={() => {
                     if (!isCenter && !isAnimating) {
                       setIsAnimating(true);
@@ -158,19 +156,16 @@ const getContentList = async () => {
                       <img
                         src={testimonial?.ContentImage || "/placeholder.svg"}
                         alt={testimonial?.ContentTitle}
-                        className={`${
-                          isCenter ? "w-20 h-20" : "w-16 h-16"
-                        } rounded-full object-cover border-4 border-white shadow-lg transition-all duration-300`}
+                        className={`${isCenter ? "w-20 h-20" : "w-16 h-16"
+                          } rounded-full object-cover border-4 border-white shadow-lg transition-all duration-300`}
                       />
                       <div
-                        className={`absolute -top-1 -right-1 bg-blue-600 rounded-full p-1 ${
-                          isCenter ? "scale-100" : "scale-75"
-                        } transition-transform duration-300`}
+                        className={`absolute -top-1 -right-1 bg-blue-600 rounded-full p-1 ${isCenter ? "scale-100" : "scale-75"
+                          } transition-transform duration-300`}
                       >
                         <Quote
-                          className={`${
-                            isCenter ? "w-3 h-3" : "w-2 h-2"
-                          } text-white`}
+                          className={`${isCenter ? "w-3 h-3" : "w-2 h-2"
+                            } text-white`}
                         />
                       </div>
                     </div>
@@ -179,18 +174,17 @@ const getContentList = async () => {
                   {/* Content */}
                   <div className="flex flex-col items-center justify-start w-full mt-12 text-left">
                     <blockquote
-                      className={`text-gray-700 leading-relaxed mb-4 text-left italic w-full ${
-                        isCenter ? "text-base" : "text-sm"
-                      }`}
+                      className={`text-gray-700 leading-relaxed mb-4 text-left italic w-full ${isCenter ? "text-base" : "text-sm"
+                        }`}
                       style={
                         !isCenter
                           ? {
-                              display: "-webkit-box",
-                              WebkitLineClamp: 3,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden",
-                              margin: "0", // ✅ no margin top
-                            }
+                            display: "-webkit-box",
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            margin: "0", // ✅ no margin top
+                          }
                           : {}
                       }
                     >
@@ -199,25 +193,22 @@ const getContentList = async () => {
 
                     <div className="w-full text-left">
                       <h4
-                        className={`font-semibold text-gray-900 mb-1 ${
-                          isCenter ? "text-lg" : "text-base"
-                        }`}
+                        className={`font-semibold text-gray-900 mb-1 ${isCenter ? "text-lg" : "text-base"
+                          }`}
                       >
                         {testimonial?.AssetId?.AssetName}
                       </h4>
                       <p
-                        className={`text-gray-600 ${
-                          isCenter ? "text-sm" : "text-xs"
-                        }`}
+                        className={`text-gray-600 ${isCenter ? "text-sm" : "text-xs"
+                          }`}
                       >
                         {testimonial?.AssetId?.MedicalSpecialties?.map(
                           (item) => item.lookup_value
                         ).join(",")}
                       </p>
                       <p
-                        className={`text-gray-500 mt-1 ${
-                          isCenter ? "text-xs" : "text-xs"
-                        }`}
+                        className={`text-gray-500 mt-1 ${isCenter ? "text-xs" : "text-xs"
+                          }`}
                       >
                         {testimonial.hospital}
                       </p>
@@ -249,11 +240,10 @@ const getContentList = async () => {
                     setCurrentIndex(index);
                   }
                 }}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "bg-blue-600 w-6"
-                    : "bg-gray-300 hover:bg-gray-400"
-                }`}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIndex
+                  ? "bg-blue-600 w-6"
+                  : "bg-gray-300 hover:bg-gray-400"
+                  }`}
               />
             ))}
           </div>

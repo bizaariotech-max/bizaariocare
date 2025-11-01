@@ -21,12 +21,12 @@ const DocAppointTableContent = () => {
   };
 
   return (
-    <div className="mt-4 doctor-slider position-relative">
+    <div className="mt-3 doctor-slider position-relative">
       <Carousel
         arrows={false}
         responsive={responsive}
-        containerClass="carousel-container"
-        itemClass="pe-md-4 px-1"
+        containerClass="carousel-container py-3"
+        itemClass="ps-1 pe-3 pb-3 "
         // showDots={true}
         infinite={true}
         renderDotsOutside={true}
@@ -35,14 +35,7 @@ const DocAppointTableContent = () => {
         {doctorArr.map((element) => (
           <div
             key={element.id}
-            style={{
-              borderRadius: "20px",
-              background: "#fff",
-              // padding: "20px",
-              boxShadow: "0px 2px 10px rgba(150,156,173,0.10)",
-              maxWidth: "370px",
-              margin: "auto",
-            }}
+            className="w-full  hover:shadow-lg p-4 rounded-lg bg-white relative transition-all border"
           >
             {/* Profile */}
             <div style={{ position: "relative", width: "100%" }}>
@@ -54,7 +47,7 @@ const DocAppointTableContent = () => {
                   height: "88px",
                   flexDirection: "column",
                   justifyContent: "center",
-                  alignItems: "center", // ✅ center horizontally
+                  alignItems: "center",
                   gap: "10px",
                   alignSelf: "stretch",
                   background: "rgba(189, 196, 212, 0.30)",

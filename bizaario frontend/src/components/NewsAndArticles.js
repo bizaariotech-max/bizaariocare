@@ -1,5 +1,5 @@
 
-import "../assets/css/NewsAndArticles.css"; 
+import "../assets/css/NewsAndArticles.css";
 
 import React, { useEffect, useState } from "react";
 import { cardsData } from "../Data/LocalData";
@@ -22,131 +22,131 @@ import { __postApiData } from "../utils/api";
 const NewsAndArticles = () => {
   const [activeCategory, setActiveCategory] = useState("cardiology");
 
-//  const cardsData = [
-//      {
-//         id: 1,
-//       category: "cardiology",
-//       img: news1,
-//          title: "The trend was noticed during a survey by Bumble",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//       time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//    {
-//       id:2,
-//       category: "cardiology",
-//       img: news2,
-//         title: "The trend was noticed during a survey by Bumble",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//    {
-//       id:3,
-//       category: "cardiology",
-//       img: news3,
-//         title: "The trend was noticed during a survey by Bumble",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//     {id:4,
-//       category: "orthopedics",
-//       img: news2,
-//         title: "Orthopedics Breakthroughs",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//    {
-//       id:5,
-//       category: "pediatrics",
-//       img: news1,
-//         title: "Pediatric Health Updates",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//    {
-//       id:6,
-//       category: "obgyn",
-//       img: news3,
-//         title: "Pediatric Health Updates",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//    {
-//       id:7,
-//       category: "obgyn",
-//       img: news1,
-//         title: "Pediatric Health Updates",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//    {
-//       id:8,
-//       category: "ent",
-//       img: news2,
-//         title: "Pediatric Health Updates",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//    {
-//       id:9,
-//       category: "plastic",
-//       img: news1,
-//         title: "Pediatric Health Updates",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//    {
-//       id:10,
-//       category: "plastic",
-//       img: news1,
-//         title: "Pediatric Health Updates",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     },
-//    {
-//       id:11,
-//       category: "neurology",
-//       img: news1,
-//         title: "Neurology Research",
-//       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
-//             time:"20min",
-//       date:"01/01.2025",
-//       views:"2025"
-//     }
-//   ];
+  //  const cardsData = [
+  //      {
+  //         id: 1,
+  //       category: "cardiology",
+  //       img: news1,
+  //          title: "The trend was noticed during a survey by Bumble",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //       time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //    {
+  //       id:2,
+  //       category: "cardiology",
+  //       img: news2,
+  //         title: "The trend was noticed during a survey by Bumble",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //    {
+  //       id:3,
+  //       category: "cardiology",
+  //       img: news3,
+  //         title: "The trend was noticed during a survey by Bumble",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //     {id:4,
+  //       category: "orthopedics",
+  //       img: news2,
+  //         title: "Orthopedics Breakthroughs",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //    {
+  //       id:5,
+  //       category: "pediatrics",
+  //       img: news1,
+  //         title: "Pediatric Health Updates",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //    {
+  //       id:6,
+  //       category: "obgyn",
+  //       img: news3,
+  //         title: "Pediatric Health Updates",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //    {
+  //       id:7,
+  //       category: "obgyn",
+  //       img: news1,
+  //         title: "Pediatric Health Updates",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //    {
+  //       id:8,
+  //       category: "ent",
+  //       img: news2,
+  //         title: "Pediatric Health Updates",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //    {
+  //       id:9,
+  //       category: "plastic",
+  //       img: news1,
+  //         title: "Pediatric Health Updates",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //    {
+  //       id:10,
+  //       category: "plastic",
+  //       img: news1,
+  //         title: "Pediatric Health Updates",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     },
+  //    {
+  //       id:11,
+  //       category: "neurology",
+  //       img: news1,
+  //         title: "Neurology Research",
+  //       desc:'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est incidunt fuga odit recusandae aliquid aut nostrum placeat exercitationem, laborum quidem quasi. Vero quibusdam ullam numquam reiciendis porro, omnis consequuntur adipisci. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, voluptatem quis fugit labore velit ex doloremque, adipisci, voluptate illum iste modi. Rem molestias ab harum sint beatae error aliquam dolorum. ',
+  //             time:"20min",
+  //       date:"01/01.2025",
+  //       views:"2025"
+  //     }
+  //   ];
 
   const [contentList, setContentList] = useState([]);
 
-const getContentList = async () => {
+  const getContentList = async () => {
     try {
-      const resp = await __postApiData("/api/v1/admin/ContentList", 
+      const resp = await __postApiData("/api/v1/admin/ContentList",
         {
-            page: 1,
-            limit: 100,
-            ContentTypeId: "68afff04874340d8d79dbf4d"
-            // "ContentPriority":"Medium"
-        
+          page: 1,
+          limit: 100,
+          ContentTypeId: "68afff04874340d8d79dbf4d"
+          // "ContentPriority":"Medium"
+
         });
-      
+
       if (resp.response.response_code === "200") {
         setContentList(resp.data.list || []);
       }
@@ -155,11 +155,10 @@ const getContentList = async () => {
     }
   };
 
-  useEffect(()=>
-  {
+  useEffect(() => {
     getContentList()
 
-  },[])
+  }, [])
 
 
   const categories = [
@@ -177,10 +176,10 @@ const getContentList = async () => {
     activeCategory === "all" ? cardsData : cardsData.filter((card) => card.category === activeCategory);
   // console.log(filteredCards, 'filtercards');
 
-   
-        
 
-           const responsive_tab = {
+
+
+  const responsive_tab = {
     superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 3 },
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3, partialVisibilityGutter: 20 },
     tablet: { breakpoint: { max: 1024, min: 767 }, items: 2 },
@@ -188,7 +187,7 @@ const getContentList = async () => {
   };
 
   return (
-    <section className="mt-24 spacing-top news-section">
+    <section className=" spacing-top news-section">
       <div className="container news-section">
         {/* Header */}
         <div className="row">
@@ -209,19 +208,18 @@ const getContentList = async () => {
           <Carousel
             arrows={false}
             responsive={responsive}
-            containerClass="carousel-container w-full"
-            itemClass="px-2"
+            containerClass="carousel-container w-full pb-1"
+            itemClass="ps-1 pe-3 pb-2"
             infinite
             partialVisible
           >
             {categories.map((cat) => (
               <button
                 key={cat.key}
-                className={`cutom-tab-style  ${
-                  activeCategory === cat.key
-                    ? "activeTab "
-                    : "tab-btn-style gray-btn-style"
-                }`}
+                className={`cutom-tab-style  ${activeCategory === cat.key
+                  ? "activeTab "
+                  : "tab-btn-style gray-btn-style"
+                  }`}
                 onClick={() => setActiveCategory(cat.key)}
               >
                 {cat.label}
@@ -240,8 +238,8 @@ const getContentList = async () => {
           //additionalTransfrom={-20}
           //  pauseOnHover={false}
           //  centerMode={false}
-          containerClass=" carousel-container"
-          itemClass="pe-md-4 px-1"
+          containerClass=" carousel-container py-2"
+          itemClass="pe-md-4 px-1 pb-2"
           //  showDots={true}
           infinite={true}
           renderDotsOutside={true}
@@ -255,7 +253,7 @@ const getContentList = async () => {
                 state={{ article: element }}
                 className="block h-full text-decoration-none"
               >
-                <div className="rounded-2xl bg-[var(--white)] p-3 h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                <div className="rounded-2xl bg-[var(--white)] p-3 h-full hover:shadow-lg transition-all cursor-pointer border">
                   {/* Image */}
                   <img
                     src={element.ContentImage}
@@ -287,10 +285,10 @@ const getContentList = async () => {
                       <span className="text-[12px] font-normal text-black/70 leading-none">
                         {element?.Date
                           ? new Date(element.Date).toLocaleDateString("en-GB", {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                            })
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
                           : "8 Oct 2025"}
                       </span>
                     </div>

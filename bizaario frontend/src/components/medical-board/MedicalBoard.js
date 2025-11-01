@@ -159,7 +159,7 @@ const MedicalBoard = () => {
               </button>{" "}
             </div>
           </div>
-
+          {/* =================Trusted Medical Experts tabs================= */}
           <div className="row">
             <div className="w-full px-0 mb-4 medical-tab-buttons">
               <Carousel
@@ -170,52 +170,7 @@ const MedicalBoard = () => {
                 infinite
                 partialVisible
               >
-                {/* <button
-                  className={`cutom-tab-style ${
-                    activeTab === "all" ? "activeTab" : "gray-btn-style"
-                  } ${
-                    MedicalSpecialties?.length === 0
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (MedicalSpecialties?.length > 0) {
-                      setActiveTab("all");
-                      updateState({ MedicalSpecialty: null });
-                    }
-                  }}
-                >
-                  {MedicalSpecialties?.length === 0
-                    ? "Loading..."
-                    : "All Specialties"}
-                </button>
-                {MedicalSpecialties?.length === 0
-                  ? // Loading skeleton for specialty buttons
-                    Array.from({ length: 6 }).map((_, index) => (
-                      <button
-                        key={`skeleton-${index}`}
-                        className="opacity-50 cursor-not-allowed cutom-tab-style gray-btn-style"
-                        disabled
-                      >
-                        Loading...
-                      </button>
-                    ))
-                  : MedicalSpecialties?.map((specialty) => (
-                      <button
-                        key={specialty._id}
-                        className={`cutom-tab-style ${
-                          activeTab === specialty._id
-                            ? "activeTab"
-                            : "gray-btn-style"
-                        }`}
-                        onClick={() => {
-                          setActiveTab(specialty._id);
-                          updateState({ MedicalSpecialty: specialty });
-                        }}
-                      >
-                        {specialty.lookup_value}
-                      </button>
-                    ))} */}
+
                 <button
                   className={`cutom-tab-style mb-3 ${activeTab === "tab2" ? "activeTab" : "gray-btn-style"
                     }`}
@@ -262,6 +217,7 @@ const MedicalBoard = () => {
             </div>
           </div>
         </div>
+        {/* =================Trusted Medical Experts Contant================= */}
         <div style={{ padding: 0 }} className="position-relative">
           {renderContent()}
         </div>

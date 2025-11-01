@@ -83,62 +83,55 @@ export default function DoctorAppointmentTable() {
             arrows={false}
             responsive={responsive}
             containerClass="carousel-container w-full"
-            itemClass="px-2"
+            itemClass="px-2 pb-2"
             infinite
             partialVisible
           >
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab1" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab1" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab1")}
             >
               Cardiology
             </button>
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab2" ? " activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab2" ? " activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab2")}
             >
               Orthopedics
             </button>
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab3" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab3" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab3")}
             >
               Pediatrics
             </button>
             <button
-              className={`cutom-tab-style ${
-                activeTab === "tab4" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={`cutom-tab-style ${activeTab === "tab4" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab4")}
             >
               Neurology
             </button>
             <button
-              className={` cutom-tab-style ${
-                activeTab === "tab5" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={` cutom-tab-style ${activeTab === "tab5" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab5")}
             >
               Obstetrics & Gynecology
             </button>
             <button
-              className={` cutom-tab-style ${
-                activeTab === "tab7" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={` cutom-tab-style ${activeTab === "tab7" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab7")}
             >
               Plastic & Reconstructive Surgery
             </button>
             <button
-              className={` cutom-tab-style ${
-                activeTab === "tab6" ? "activeTab" : "gray-btn-style"
-              }`}
+              className={` cutom-tab-style ${activeTab === "tab6" ? "activeTab" : "gray-btn-style"
+                }`}
               onClick={() => setActiveTab("tab6")}
             >
               Otorhinolaryngology
