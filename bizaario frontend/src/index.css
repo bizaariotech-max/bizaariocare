@@ -1275,7 +1275,7 @@ html {
   font-weight: 400;
   line-height: normal;
   width: 100%;
-  max-width: 10px;
+  /* max-width: 10px; */
 }
 
 .activeTab {
