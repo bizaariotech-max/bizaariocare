@@ -8,12 +8,13 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-    --button-back-color:#52677D52677D;
-  }
+  --button-back-color: #52677D52677D;
+}
 
-body, html {
+body,
+html {
   font-family: var(--primary-font);
- 
+
   overflow-x: hidden;
   height: 100%;
 }
@@ -41,6 +42,7 @@ body, html {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -68,13 +70,13 @@ body, html {
   --gray2: #4e4e4e;
   --gray3: #272727;
 
-  --button-back-color:#52677D;
+  --button-back-color: #52677D;
   --button-back-hover: #43576a;
 
-  --div-background-active:#52677D;
-  --div-background-inactive:rgba(82, 103, 125, 0.15);
+  --div-background-active: #52677D;
+  --div-background-inactive: rgba(82, 103, 125, 0.15);
 
-  --button-back-white-color:#ffffff;
+  --button-back-white-color: #ffffff;
 
 
   --sidebar-width: 220px;
@@ -85,19 +87,19 @@ body, html {
 
   /* Global Font Variables */
   /* --primary-font: 'Inter', sans-serif; */
-    --primary-font: 'Poppins', sans-serif;
-    /* --primary-font: 'Montserrat', sans-serif; */
+  --primary-font: 'Poppins', sans-serif;
+  /* --primary-font: 'Montserrat', sans-serif; */
   --heading-font: 'Lato', sans-serif;
   --sub-heading-font: 'Poppins', sans-serif;
   --body-font: 'Inter', sans-serif;
-  
+
 
 }
 
 
 body.sidebar-collapsed {
-  --sidebar-width: 60px; 
-  
+  --sidebar-width: 60px;
+
 }
 
 
@@ -109,14 +111,12 @@ body.sidebar-collapsed {
   border: none
 }
 
-.my-swal-cancel-button
-{
+.my-swal-cancel-button {
   background-color: red !important;
   color: white !important;
   padding: 8px 20px;
   border-radius: 4px;
   border: none
-
 }
 
 .my-swal-text {
@@ -388,12 +388,12 @@ button.owl-next span {
   border-radius: 10px;
   border: 1px solid transparent;
   /* background: #BDC4D4 !important; */
-
+  margin-bottom: 10px;
 }
-.lightBg
-{
+
+.lightBg {
   border-radius: 10px;
-background: #BDC4D4 !important;
+  background: #BDC4D4 !important;
 
 }
 
@@ -405,7 +405,6 @@ background: #BDC4D4 !important;
   flex-wrap: wrap;
   gap: 15px;
   padding: 0;
-
 
 }
 
@@ -866,16 +865,17 @@ form.contact-form-fields textarea::placeholder {
 /*======================== about us css style================================== */
 
 .team-card {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 
 
 .custom-modal .modal-content {
-  border-radius: 20px; /* Round corners */
+  border-radius: 20px;
+  /* Round corners */
   overflow: hidden;
 }
 
@@ -890,9 +890,8 @@ html {
 /*================================== global css for landing page ===================================*/
 
 
-.fw-semibold
-{
-  color:#000;
+.fw-semibold {
+  color: #000;
   font-family: var(--heading-font);
   font-size: 36px;
   font-style: normal;
@@ -901,25 +900,25 @@ html {
 }
 
 .light-color {
-  color:#52677D;
-  font-family:var(--sub-heading-font);
+  color: #52677D;
+  font-family: var(--sub-heading-font);
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
 
-.view-all
-{
+.view-all {
   display: flex;
   padding: 16px 32px;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  border-radius:10px;
-  background: var(--button-back-color);;
-  color:#FFF;
-  font-family:var(--heading-font);
+  border-radius: 10px;
+  background: var(--button-back-color);
+  ;
+  color: #FFF;
+  font-family: var(--heading-font);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -947,7 +946,7 @@ html {
 /* 🔹 Mobile screens: shrink button */
 @media (max-width: 480px) {
   .notify-me {
-    width:auto !important;
+    width: auto !important;
     height: 40px !important;
     padding: 8px !important;
     font-size: 12px;
@@ -975,8 +974,10 @@ html {
 /* ✅ Add margin-bottom on mobile view */
 @media (max-width: 767px) {
   .view-all {
-    margin-bottom: 16px; /* or whatever you like */
-    width: 100%; /* optional: full width button on mobile */
+    margin-bottom: 16px;
+    /* or whatever you like */
+    width: 100%;
+    /* optional: full width button on mobile */
   }
 }
 
@@ -988,8 +989,8 @@ html {
   align-items: center;
   gap: 10px;
   border-radius: 10px;
-  background: var(--button-back-color);;
-  border: 1px solid transparent; 
+  background: var(--button-back-color);
+  border: 1px solid transparent;
   color: #FFF;
   font-family: sans-serif;
   font-size: 16px;
@@ -997,18 +998,21 @@ html {
   font-weight: 400;
   line-height: normal;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .activeTab {
- display: flex;
+  display: flex;
   height: 50px;
   padding: 14px 24px;
   justify-content: center;
   align-items: center;
   gap: 10px;
   border-radius: 10px;
-  background: var(--button-back-color);;
-  border: 1px solid transparent; /* kept from original */
+  background: var(--button-back-color);
+  ;
+  border: 1px solid transparent;
+  /* kept from original */
   color: #FFF;
   font-family: sans-serif;
   font-size: 18px;
@@ -1019,30 +1023,22 @@ html {
 }
 
 .gray-btn-style {
-border-radius: 10px;
-background: #BDC4D4 !important;
-display: flex;
-height: 50px;
-padding: 0 !important;
-justify-content: center;
-align-items: center;
-gap: 10px;
-color: #52677D !important;
-font-family: sans-serif;
-font-size: 16px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+  border-radius: 10px;
+  background: #BDC4D4 !important;
+  display: flex;
+  height: 50px;
+  padding: 0 !important;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #52677D !important;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
-.card-img-top
-{
+
+.card-img-top {
   border-radius: 12px !important;
 }
-
-
-
-
-
-
-
-

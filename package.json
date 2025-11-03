@@ -32,7 +32,8 @@
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.22.2",
     "swiper": "^11.2.10",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "@zegocloud/zego-uikit-prebuilt": "^2.17.0"
   },
   "scripts": {
     "start": "set NODE_OPTIONS=--max_old_space_size=4096 && react-scripts start",

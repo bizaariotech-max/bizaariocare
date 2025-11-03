@@ -41,9 +41,8 @@ const MedicalBoard = () => {
         // exp: `${
         //   (doc.MedicalSpecialties || []).map((item) => item.lookup_value).join(", ")
         // } | ${doc.experience || 0} Years Experience`,
-        exp: `${doc.MedicalSpecialties[0].lookup_value} | ${
-          doc.experience || 5
-        } Years Experience`,
+        exp: `${doc.MedicalSpecialties[0].lookup_value} | ${doc.experience || 5
+          } Years Experience`,
         location:
           `${doc.AddressLine1} ${doc.AddressLine2}${doc.PostalCode}` || "",
         Specializes: `${(doc.MedicalSpecialties || [])
@@ -153,14 +152,14 @@ const MedicalBoard = () => {
             </div>
             <div className="p-0 col-lg-4 col-12 d-flex justify-content-lg-end align-items-start">
               <button
-                className="view-all"
+                className="view-all mb-4 md:mb-0"
                 onClick={() => navigate("/view-all-doctors")}
               >
                 View All &#8594;
               </button>{" "}
             </div>
           </div>
-
+          {/* =================Trusted Medical Experts tabs================= */}
           <div className="row">
             <div className="w-full px-0 mb-4 medical-tab-buttons">
               <Carousel
@@ -171,96 +170,45 @@ const MedicalBoard = () => {
                 infinite
                 partialVisible
               >
-                {/* <button
-                  className={`cutom-tab-style ${
-                    activeTab === "all" ? "activeTab" : "gray-btn-style"
-                  } ${
-                    MedicalSpecialties?.length === 0
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (MedicalSpecialties?.length > 0) {
-                      setActiveTab("all");
-                      updateState({ MedicalSpecialty: null });
-                    }
-                  }}
-                >
-                  {MedicalSpecialties?.length === 0
-                    ? "Loading..."
-                    : "All Specialties"}
-                </button>
-                {MedicalSpecialties?.length === 0
-                  ? // Loading skeleton for specialty buttons
-                    Array.from({ length: 6 }).map((_, index) => (
-                      <button
-                        key={`skeleton-${index}`}
-                        className="opacity-50 cursor-not-allowed cutom-tab-style gray-btn-style"
-                        disabled
-                      >
-                        Loading...
-                      </button>
-                    ))
-                  : MedicalSpecialties?.map((specialty) => (
-                      <button
-                        key={specialty._id}
-                        className={`cutom-tab-style ${
-                          activeTab === specialty._id
-                            ? "activeTab"
-                            : "gray-btn-style"
-                        }`}
-                        onClick={() => {
-                          setActiveTab(specialty._id);
-                          updateState({ MedicalSpecialty: specialty });
-                        }}
-                      >
-                        {specialty.lookup_value}
-                      </button>
-                    ))} */}
+
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab2" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style mb-3 ${activeTab === "tab2" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab2")}
                 >
                   Orthopedics
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab3" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style  ${activeTab === "tab3" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab3")}
                 >
                   Pediatrics
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab4" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style  ${activeTab === "tab4" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab4")}
                 >
                   Neurology
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab5" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style  ${activeTab === "tab5" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab5")}
                 >
                   Obstetrics & Gynecology
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab6" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style  ${activeTab === "tab6" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab6")}
                 >
                   Otorhinolaryngology
                 </button>
                 <button
-                  className={`cutom-tab-style ${
-                    activeTab === "tab7" ? "activeTab" : "gray-btn-style"
-                  }`}
+                  className={`cutom-tab-style ${activeTab === "tab7" ? "activeTab" : "gray-btn-style"
+                    }`}
                   onClick={() => setActiveTab("tab7")}
                 >
                   Plastic & Reconstructive Surgery
@@ -269,6 +217,7 @@ const MedicalBoard = () => {
             </div>
           </div>
         </div>
+        {/* =================Trusted Medical Experts Contant================= */}
         <div style={{ padding: 0 }} className="position-relative">
           {renderContent()}
         </div>

@@ -8,7 +8,7 @@ const Empowering = () => {
 
   return (
     <>
-      <section className="mt-24 empoering-section spacing-top">
+      <section className=" empoering-section spacing-top">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 col-12">

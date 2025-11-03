@@ -119,6 +119,13 @@ function App() {
         <Route path="/news-articles" element={<NewsArticles />} />
         <Route path="/news-articles/:id" element={<ArticleDetail />} />
 
+        <Route path="/appointment-form" element={<AppointmentForm />} />
+        <Route path="/online-meeting" element={<OnlineMeeting />} />
+        <Route
+          path="/completed-consultation"
+          element={<CompletedConsultation />}
+        />
+
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/register" element={<RegisterPage />} />
