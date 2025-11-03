@@ -54,7 +54,7 @@ const MedicalBoardCard = () => {
       {doctorArr.map((item) => (
         <div
           key={item.id}
-          className="relative bg-white border rounded-lg hover:shadow-md transition-all h-full flex flex-col"
+          className="trusted-medical-card relative bg-white shadow-sm rounded-xl  transition-all h-full flex flex-col overflow-hidden"
         >
           <div className="p-3 rounded-t-lg flex flex-col h-full">
             <div className="w-full max-h-[240px] rounded-lg overflow-hidden">
@@ -65,7 +65,7 @@ const MedicalBoardCard = () => {
               />
             </div>
 
-            <div className="p-4 pb-4 flex-1">
+            <div className="pt-4 pb-2  flex-1">
               <h2 className="font-semibold text-xl mb-1">
                 {item.name}
               </h2>
@@ -88,13 +88,13 @@ const MedicalBoardCard = () => {
             </div>
 
             {/* Footer Buttons */}
-            <div className="flex flex-col gap-3 px-4 pb-4 mt-auto">
-              <button className="bg-[var(--button-back-color)] text-[var(--white)] rounded-lg py-3 font-semibold text-center text-base hover:bg-[var(--button-back-hover)] transition">
+            <div className="flex flex-col xl:flex-row xl:gap-2 gap-3 pb-2 mt-auto">
+              <button className="w-full theme-btn-fill transition">
                 Send Medical Query
               </button>
               <button
                 onClick={() => navigate(`/doctor/${item.id}`)}
-                className="bg-[var(--button-back-white-color)] text-[var(--button-back-color)] border border-gray-300 rounded-lg py-3 font-semibold text-center text-base hover:bg-gray-50 transition"
+                className="w-full theme-btn-ouline"
               >
                 View Profile
               </button>

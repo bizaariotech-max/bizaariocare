@@ -430,12 +430,12 @@ body.sidebar-collapsed {
   margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
 }
 
-.theme-color {
+/* .theme-color {
   color: #525fe1
-}
+} */
 
 .decoration-none {
   text-decoration: none;
@@ -458,17 +458,14 @@ h2 {
   color: #000000;
 }
 
-/* @media screen and (min-width:992px) { */
+
 
 .spacing-top,
 .spacing-bottom {
   padding-top: 90px;
 }
 
-/* } */
-
 @media screen and (max-width:768px) {
-
   .spacing-top,
   .spacing-bottom {
     padding-top: 60px;
@@ -477,19 +474,12 @@ h2 {
 }
 
 @media screen and (max-width:991px) {
-
   .spacing-top,
   .spacing-bottom {
     padding-top: 70px;
 
   }
 }
-
-
-
-
-
-
 
 .doctor-slider p {
   margin-bottom: 0;
@@ -498,15 +488,6 @@ h2 {
 .medical-tab-buttons #swiper-wrapper-5cf761c5d14f237f .swiper-slide {
   /* min-width: 150px!important; */
 }
-
-/* header css */
-/* @media screen and (min-width:991px) { */
-
-/* } */
-
-
-
-
 
 .btn-group1 {
   gap: 20px;
@@ -524,9 +505,6 @@ h2 {
   border-radius: 20px;
 }
 
-
-
-
 .nav-btn-style2:hover {
   border-color: var(--secondary);
   color: var(--secondary);
@@ -539,47 +517,6 @@ h2 {
 }
 
 
-/* **********owl-slider********** */
-:is(#hero-slider, #testmonital-card-owl) .owl-dots .owl-dot.active span,
-.owl-theme .owl-dots .owl-dot:hover span {
-  background: var(--secondary)
-}
-
-span {}
-
-
-button.owl-prev {
-  width: 40px;
-  height: 40px;
-  background-color: #F86F03 !important;
-  display: grid;
-  place-items: center;
-  margin-right: 10px;
-}
-
-
-button.owl-prev span {
-  /* font-size:30px; */
-  color: #ffffff;
-}
-
-button.owl-next {
-  width: 40px;
-  height: 40px;
-  background-color: #F86F03 !important;
-  display: grid;
-  place-items: center;
-  margin-left: 10px;
-
-}
-
-/* .button.owl-next > img{
-  width: 8px!important;
-} */
-button.owl-next span {
-  /* font-size:30px; */
-  color: #ffffff;
-}
 
 /* *********secton 2******** */
 .button-container {
@@ -603,15 +540,6 @@ button.owl-next span {
 
 }
 
-/* .btn-custom-white{
-   color: var(--primary);
-  border:1px solid #ffffff;
-    border-radius: 8px;
-  padding: 4px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  background-color: white;
-} */
 
 .button-container .btn-custom {
   color: var(--white);
@@ -624,7 +552,6 @@ button.owl-next span {
 
 .button-container .btn-custom:hover {
   background-color: var(--white);
-  /* border: 1px solid ; */
   color: var(--primary);
 }
 
@@ -647,13 +574,9 @@ button.owl-next span {
 
 /* --------medical-borard-section---- */
 
-
-
-
 @media screen and (max-width:991px) {
   .cutom-tab-style {
     padding: 8px;
-
   }
 }
 
@@ -670,40 +593,18 @@ button.owl-next span {
   background: #BDC4D4 !important;
 
 }
-
-
-
-
 .medical-tab-buttons {
   display: flex !important;
   flex-wrap: wrap;
   gap: 15px;
   padding: 0;
   /* margin-bottom:20px */
-
 }
-
-
-
-
-
-
-
 #swiper-wrapper-589cb751887b681d .swiper-slide:last-child {
   width: 270px !important;
 }
 
 
-/* .btn-primary {
-    background: #f97316;
-    color: white;
-}
-
-.btn-outline {
-    border: 1px solid #f97316;
-    color: #f97316;
-    background: transparent;
-} */
 
 .cardiology-card {
   /* padding: 15px; */

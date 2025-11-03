@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap'); */
 
 
 :root {
@@ -54,13 +54,13 @@
 
 :is(h2, h3, h4, .table-header) {
   font-family: "Poppins";
-  font-size: 24px;
+  font-size: 36npx;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
 }
 
-:is( h3, h4) {
+:is(h3, h4) {
   font-family: "Poppins";
   font-size: 20px !important;
   font-style: normal;
@@ -68,8 +68,7 @@
   line-height: normal;
 }
 
-.table-body
-{
+.table-body {
   font-size: 18px !important;
 }
 
@@ -128,27 +127,27 @@ table th {
   transition: all 0.4s ease;
 
 }
+
 .common-btn-3:hover .common-btn-content {
   transform: translate(-8px);
 }
 
 
 
-.classic-button
-{
-height: 40px;
+.classic-button {
+  height: 40px;
   display: flex;
   padding: 16px;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  border-radius:10px;
-  background: var(--button-back-color);;
-  color:#FFF;
-  font-family:var(--heading-font);
+  border-radius: 10px;
+  background: var(--button-back-color);
+  ;
+  color: #FFF;
+  font-family: var(--heading-font);
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: normal
-
+  line-height: normal
 }
